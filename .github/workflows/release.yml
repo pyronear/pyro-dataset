@@ -1,0 +1,20 @@
+name: release
+
+on:
+  release:
+    types: published
+
+jobs:
+  dockerhub-publish:
+    if: "!github.event.release.prerelease"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME}}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+          repository: pyronear/pyro-dataset
+          tag_with_ref: true
