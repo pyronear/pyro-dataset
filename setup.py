@@ -74,6 +74,8 @@ install_requires = [
     deps["pandas"],
     deps["torch"],
     deps["torchvision"],
+    deps["tqdm"],
+    deps["requests"],
 ]
 
 extras = {}
