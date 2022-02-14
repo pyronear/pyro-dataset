@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 import requests
 
-from pyrodataset.datasets import utils
+from pyrodataset import utils
 
 
 class DatasetsUtilsTester(unittest.TestCase):

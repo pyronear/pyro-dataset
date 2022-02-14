@@ -15,7 +15,7 @@ import pandas as pd
 import yaml
 import random
 
-from pyrodataset.datasets import video_utils
+from pyrodataset import video_utils
 
 
 def generate_states_fixture():
