@@ -139,8 +139,7 @@ class WildFireDatasetTester(unittest.TestCase):
         self.assertEqual(observation_3.size(), torch.Size((3, 100, 66)))
 
     def test_dataloader_can_be_init_with_wildfire(self):
-        wildfire = WildFireDataset(metadata=self.wildfire_path,
-                                                     path_to_frames=self.path_to_frames)
+        wildfire = WildFireDataset(metadata=self.wildfire_path, path_to_frames=self.path_to_frames)
         DataLoader(wildfire, batch_size=64)
 
 
@@ -194,8 +193,7 @@ class WildFireDatasetSplitter(unittest.TestCase):
 
         self.wildfire_df = generate_wildfire_dataset_fixture()
 
-        self.wildfire = WildFireDataset(metadata=self.wildfire_df,
-                                                          path_to_frames=self.path_to_frames)
+        self.wildfire = WildFireDataset(metadata=self.wildfire_df, path_to_frames=self.path_to_frames)
 
     def test_consistent_ratios_good_init(self):
         ratios = {'train': 0.7, 'val': 0.15, 'test': 0.15}
