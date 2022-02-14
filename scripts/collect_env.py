@@ -18,10 +18,10 @@ import os
 from collections import namedtuple
 
 try:
-    import pyrovision
-    PYROVISION_AVAILABLE = True
+    import pyrodataset
+    PYRODATASET_AVAILABLE = True
 except (ImportError, NameError, AttributeError):
-    PYROVISION_AVAILABLE = False
+    PYRODATASET_AVAILABLE = False
 
 try:
     import torch
@@ -40,7 +40,7 @@ PY3 = sys.version_info >= (3, 0)
 
 # System Environment Information
 SystemEnv = namedtuple('SystemEnv', [
-    'pyrovision_version',
+    'pyrodataset_version',
     'torch_version',
     'torchvision_version',
     'os',
@@ -216,10 +216,10 @@ def get_os(run_lambda):
 def get_env_info():
     run_lambda = run
 
-    if PYROVISION_AVAILABLE:
-        pyrovision_str = pyrovision.__version__
+    if PYRODATASET_AVAILABLE:
+        pyrodataset_str = pyrodataset.__version__
     else:
-        pyrovision_str = 'N/A'
+        pyrodataset_str = 'N/A'
 
     if TORCH_AVAILABLE:
         torch_str = torch.__version__
@@ -233,7 +233,7 @@ def get_env_info():
         torchvision_str = 'N/A'
 
     return SystemEnv(
-        pyrovision_version=pyrovision_str,
+        pyrodataset_version=pyrodataset_str,
         torch_version=torch_str,
         torchvision_version=torchvision_str,
         python_version='{}.{}'.format(sys.version_info[0], sys.version_info[1]),
@@ -247,7 +247,7 @@ def get_env_info():
 
 
 env_info_fmt = """
-Pyrovision version: {pyrovision_version}
+Pyrodataset version: {pyrodataset_version}
 PyTorch version: {torch_version}
 Torchvision version: {torchvision_version}
 
