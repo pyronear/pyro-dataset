@@ -152,7 +152,7 @@ class AnnotationParser:
     2 	3 	19_seq598_608.mp4 	19.mp4 	25.0 	598.0 	608.0
 
     - keypoints:
-        fname 	fBase 	fps 	splitStart 	splitEnd 	fire 	sequence 	clf_confidence 	loc_confidence 	exploitable 	x 	y 	t 	frame
+        fname 	fBase 	fps 	splitStart 	splitEnd 	fire 	sequence 	clf_confidence 	loc_confidence 	exploitable x y t frame
     1 	10.mp4 	10.mp4 	25.0 	NaN 	NaN 	1 	0 	1 	2 	True 	598.974 	467.692 	1.320 	33.0
     2 	10.mp4 	10.mp4 	25.0 	NaN 	NaN 	1 	0 	1 	2 	True 	609.231 	463.590 	2.826 	71.0
     3 	10.mp4 	10.mp4 	25.0 	NaN 	NaN 	1 	1 	1 	0 	True 	873.846 	500.513 	15.564 	389.0
@@ -164,7 +164,7 @@ class AnnotationParser:
     10 	19_seq0_591.mp4 	19.mp4 	25.0 	0.0 	591.0 	1 	0 	0 	2 	True 	568.205 	358.974 	2.261 	57.0
 
     - states:
-            fname 	fBase 	fps 	fire 	sequence 	clf_confidence 	loc_confidence 	exploitable 	x 	y 	t 	stateStart 	stateEnd
+            fname 	fBase 	fps 	fire sequence clf_confidence 	loc_confidence 	exploitable x 	y 	t stateStart stateEnd
     fname 	sequence
     10.mp4 	0 	1 	10.mp4 	10.mp4 	25.0 	1 	0 	1 	2 	True 	598.974 	467.692 	1.320 	33.0 	71.0
     1 	3 	10.mp4 	10.mp4 	25.0 	1 	1 	1 	0 	True 	873.846 	500.513 	15.564 	389.0 	466.0

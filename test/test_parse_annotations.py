@@ -94,6 +94,7 @@ def setupTester(cls):
     cls.parser_only_exploitable = Parser(inputJson_only_exploitable, inputdir=cls.inputdir)
     cls.parser_only_non_exploitable = Parser(inputJson_only_non_exploitable, inputdir=cls.inputdir)
 
+
 class TestAnnotationParser(unittest.TestCase):
     """
     Test parseAnnotations
