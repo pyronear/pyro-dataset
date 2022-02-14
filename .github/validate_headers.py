@@ -29,7 +29,7 @@ HEADERS = [
 
 
 IGNORED_FILES = ["version.py", "__init__.py"]
-FOLDERS = ["pyrodataset"]
+FOLDERS = ["pyrodataset", "scripts"]
 
 
 def main():
