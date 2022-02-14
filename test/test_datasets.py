@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from torchvision.transforms import transforms
 from torchvision.datasets import VisionDataset
 
-from pyrodataset import wildfire
+from pyrodataset.wildfire import WildFireDataset, WildFireSplitter, computeSubSet
 
 
 def generate_wildfire_dataset_fixture():
@@ -79,7 +79,7 @@ class WildFireDatasetTester(unittest.TestCase):
     def test_wildfire_correctly_init_from_path(self):
 
         for path_to_frames in [self.path_to_frames, self.path_to_frames_str]:
-            wildfire = wildfire.WildFireDataset(
+            wildfire = WildFireDataset(
                 metadata=self.wildfire_path,
                 path_to_frames=path_to_frames
             )
@@ -89,7 +89,7 @@ class WildFireDatasetTester(unittest.TestCase):
 
     def test_wildfire_correctly_init_from_dataframe(self):
         for path_to_frames in [self.path_to_frames, self.path_to_frames_str]:
-            wildfire = wildfire.WildFireDataset(
+            wildfire = WildFireDataset(
                 metadata=self.wildfire_df,
                 path_to_frames=path_to_frames
             )
@@ -105,7 +105,7 @@ class WildFireDatasetTester(unittest.TestCase):
         self.assertTrue(torch.equal(metadata_3, torch.tensor([self.wildfire_df.loc[3]['fire']])))
 
     def test_wildfire_correctly_init_with_multiple_targets(self):
-        wildfire = wildfire.WildFireDataset(
+        wildfire = WildFireDataset(
             metadata=self.wildfire_df,
             path_to_frames=self.path_to_frames,
             transform=transforms.ToTensor(),
@@ -123,13 +123,13 @@ class WildFireDatasetTester(unittest.TestCase):
 
     def test_invalid_csv_path_raises_exception(self):
         with self.assertRaises(ValueError):
-            wildfire.WildFireDataset(
+            WildFireDataset(
                 metadata='bad_path.csv',
                 path_to_frames=self.path_to_frames
             )
 
     def test_wildfire_correctly_init_with_transform(self):
-        wildfire = wildfire.WildFireDataset(
+        wildfire = WildFireDataset(
             metadata=self.wildfire_path,
             path_to_frames=self.path_to_frames,
             transform=transforms.Compose([transforms.Resize((100, 66)), transforms.ToTensor()])
@@ -139,7 +139,7 @@ class WildFireDatasetTester(unittest.TestCase):
         self.assertEqual(observation_3.size(), torch.Size((3, 100, 66)))
 
     def test_dataloader_can_be_init_with_wildfire(self):
-        wildfire = wildfire.WildFireDataset(metadata=self.wildfire_path,
+        wildfire = WildFireDataset(metadata=self.wildfire_path,
                                                      path_to_frames=self.path_to_frames)
         DataLoader(wildfire, batch_size=64)
 
@@ -154,34 +154,34 @@ class WildFireSubSamplerTester(unittest.TestCase):
 
     def test_good_size_after_subsamping(self):
         self.assertEqual(len(self.wildfire_df), 100)
-        metadataSS = wildfire.computeSubSet(self.wildfire_df, 2)
+        metadataSS = computeSubSet(self.wildfire_df, 2)
 
         self.assertEqual(len(metadataSS), 20)
 
     def test_metadata_changes_each_time(self):
-        metadataSS_1 = wildfire.computeSubSet(self.wildfire_df, 2, seed=1)
-        metadataSS_2 = wildfire.computeSubSet(self.wildfire_df, 2, seed=2)
+        metadataSS_1 = computeSubSet(self.wildfire_df, 2, seed=1)
+        metadataSS_2 = computeSubSet(self.wildfire_df, 2, seed=2)
 
         self.assertEqual(len(metadataSS_1), 20)
         self.assertEqual(len(metadataSS_2), 20)
         self.assertFalse(metadataSS_1['imgFile'].values.tolist() == metadataSS_2['imgFile'].values.tolist())
 
     def test_metadata_does_not_changes_with_same_seed(self):
-        metadataSS_1 = wildfire.computeSubSet(self.wildfire_df, 2, seed=1)
-        metadataSS_2 = wildfire.computeSubSet(self.wildfire_df, 2, seed=1)
+        metadataSS_1 = computeSubSet(self.wildfire_df, 2, seed=1)
+        metadataSS_2 = computeSubSet(self.wildfire_df, 2, seed=1)
 
         self.assertEqual(len(metadataSS_1), 20)
         self.assertEqual(len(metadataSS_2), 20)
         self.assertTrue(metadataSS_1['imgFile'].values.tolist() == metadataSS_2['imgFile'].values.tolist())
 
     def test_increase_not_fire_semples(self):
-        metadataSS = wildfire.computeSubSet(self.wildfire_path, 2, 1)
+        metadataSS = computeSubSet(self.wildfire_path, 2, 1)
 
         self.assertGreater(len(metadataSS), 20)
 
     def test_invalid_csv_path_raises_exception(self):
         with self.assertRaises(ValueError):
-            wildfire.computeSubSet(
+            computeSubSet(
                 metadata='bad_path.csv',
                 frame_per_seq=2
             )
@@ -194,23 +194,23 @@ class WildFireDatasetSplitter(unittest.TestCase):
 
         self.wildfire_df = generate_wildfire_dataset_fixture()
 
-        self.wildfire = wildfire.WildFireDataset(metadata=self.wildfire_df,
+        self.wildfire = WildFireDataset(metadata=self.wildfire_df,
                                                           path_to_frames=self.path_to_frames)
 
     def test_consistent_ratios_good_init(self):
         ratios = {'train': 0.7, 'val': 0.15, 'test': 0.15}
-        splitter = wildfire.WildFireSplitter(ratios)
+        splitter = WildFireSplitter(ratios)
         self.assertEqual(ratios, splitter.ratios)
 
     def test_inconsistent_ratios_raise_exception(self):
         ratios = {'train': 0.9, 'val': 0.2, 'test': 0.1}  # sum > 1
         with self.assertRaises(ValueError):
-            wildfire.WildFireSplitter(ratios)
+            WildFireSplitter(ratios)
 
     def test_splitting_with_test_to_zero(self):
         ratios = {'train': 0.8, 'val': 0.2, 'test': 0}
 
-        splitter = wildfire.WildFireSplitter(ratios, seed=42)
+        splitter = WildFireSplitter(ratios, seed=42)
         splitter.fit(self.wildfire)
 
         for (set_, ratio_) in splitter.ratios_.items():
@@ -220,7 +220,7 @@ class WildFireDatasetSplitter(unittest.TestCase):
         n_samples_expected = {'train': 688, 'val': 147, 'test': 139}
         ratios = {'train': 0.7, 'val': 0.15, 'test': 0.15}
 
-        splitter = wildfire.WildFireSplitter(ratios, seed=42)
+        splitter = WildFireSplitter(ratios, seed=42)
         splitter.fit(self.wildfire)
 
         self.assertEqual(splitter.n_samples_, n_samples_expected)
@@ -231,7 +231,7 @@ class WildFireDatasetSplitter(unittest.TestCase):
         ratios = {'train': 0.7, 'val': 0.15, 'test': 0.15}
         transforms_expected = {'train': transforms.RandomCrop(10), 'val': None, 'test': None}
 
-        splitter = wildfire.WildFireSplitter(ratios, transforms=transforms_expected)
+        splitter = WildFireSplitter(ratios, transforms=transforms_expected)
         splitter.fit(self.wildfire)
 
         for (set_, transform_expected) in transforms_expected.items():
@@ -240,7 +240,7 @@ class WildFireDatasetSplitter(unittest.TestCase):
     def test_splitting_with_unavailable_algorithm_raise_exception(self):
         ratios = {'train': 0.7, 'val': 0.15, 'test': 0.15}
 
-        splitter = wildfire.WildFireSplitter(ratios, algorithm='wtf')
+        splitter = WildFireSplitter(ratios, algorithm='wtf')
         with self.assertRaises(ValueError):
             splitter.fit(self.wildfire)
 
