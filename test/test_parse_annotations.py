@@ -55,7 +55,7 @@ class TestFunctions(unittest.TestCase):
                                  'stateStart': [0, 100, 200],
                                  'stateEnd': [99.0, 199.0, 500.0]})
 
-        frames = pd.DataFrame([[0, 49, 99], [100, 149, 199], [200, 350, 500]]).astype('int32')
+        frames = pd.DataFrame([[0, 49, 99], [100, 149, 199], [200, 350, 500]])
         x = states_a.apply(partial(pickFrames, nFrames=3, random=False), axis=1)
         pd.testing.assert_frame_equal(x, frames)
 
