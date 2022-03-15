@@ -46,6 +46,8 @@ _deps = [
     "tqdm>=4.20.0",
     "requests>=2.20.0",
     "ipywidgets>=7.5.1",
+    "moviepy>=1.0.3",
+    "pytesseract>=0.3.4",
     # Testing
     "PyYAML>=5.1.2",
     "youtube-dl>=2020.3.24",
@@ -77,7 +79,9 @@ install_requires = [
     deps["torchvision"],
     deps["tqdm"],
     deps["requests"],
-    deps["ipywidgets"]
+    deps["ipywidgets"],
+    deps["moviepy"],
+    deps["pytesseract"]
 ]
 
 extras = {}
