@@ -15,3 +15,22 @@ stages:
       md5: 2a9e0e40d2b2b3abc4a98060f26e0f39.dir
       size: 140245433
       nfiles: 3764
+  auto_label:
+    cmd: python pipeline/auto_label.py
+    deps:
+    - path: Data/All_Data
+      md5: 2a9e0e40d2b2b3abc4a98060f26e0f39.dir
+      size: 140245433
+      nfiles: 3764
+    - path: Data/Models
+      md5: 0dd9fa796d50b1307bbb3fd60dacfd19.dir
+      size: 28919530
+      nfiles: 2
+    - path: pipeline/auto_label.py
+      md5: 1178ab7a253be2eeab22bc097cae5ca6
+      size: 750
+    outs:
+    - path: Data/Labels
+      md5: e1e09f1a31495e18e43af38e371cd759.dir
+      size: 7424
+      nfiles: 117
