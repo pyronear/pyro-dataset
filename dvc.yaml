@@ -1,0 +1,9 @@
+stages:
+  unzip:
+    cmd: python pipeline/unzip.py
+    deps:
+    - Data/Archive
+    - pipeline/unzip.py
+  
+    outs:
+    - Data/All_Data

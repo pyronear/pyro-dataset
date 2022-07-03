@@ -1,0 +1,17 @@
+schema: '2.0'
+stages:
+  unzip:
+    cmd: python pipeline/unzip.py
+    deps:
+    - path: Data/Archive
+      md5: 6d543a7b8903906a066d1885db9c3f60.dir
+      size: 135949992
+      nfiles: 9
+    - path: pipeline/unzip.py
+      md5: 225d4a30f4e57283f593d00e699dd0a7
+      size: 222
+    outs:
+    - path: Data/All_Data
+      md5: 2a9e0e40d2b2b3abc4a98060f26e0f39.dir
+      size: 140245433
+      nfiles: 3764
