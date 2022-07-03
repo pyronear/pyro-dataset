@@ -1,4 +1,6 @@
 [core]
     remote = pyronear-dvc
+    autostage = true
 ['remote "pyronear-dvc"']
     url = gdrive://1W_cSS4ZZz1Mi3Iny9QJzB-yin6283N13
+    gdrive_trash_only = true
