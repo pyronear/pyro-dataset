@@ -2,3 +2,18 @@ auto_label:
   models: "Data/Models/best_mix1.pt Data/Models/best_mix3.pt"
   img_size: 640
   conf: 0.25
+
+split_dataset:
+  smoke: 
+    Ai_for_mankind: [0.8, 0.1, 0.1]  # train / val / test, sum must be < 1 
+    Random: [0.8, 0.1, 0.1]  # train / val / test, sum must be < 1 
+    Wildfire: [0.5, 0.05, 0.05]  # train / val / test, sum must be < 1 
+  FP:
+    cloud: [0.1, 0.1, 0.1]  # train / val / test, sum must be < 1 
+    fog: [0.8, 0.1, 0.1]  # train / val / test, sum must be < 1 
+    sunrise: [0.8, 0.1, 0.1]  # train / val / test, sum must be < 1 
+    pi: [0.1, 0.01, 0.01]  # train / val / test, sum must be < 1 
+    low_clouds: [0.2, 0.01, 0.01]  # train / val / test, sum must be < 1 
+
+  background_smoke_ratio: 0.05
+

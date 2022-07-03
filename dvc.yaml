@@ -17,3 +17,22 @@ stages:
   
     outs:
     - Data/Labels
+
+  create_dataset:
+    cmd: python pipeline/create_dataset.py
+    deps:
+    - Data/All_Data
+    - Data/Labels
+    - pipeline/create_dataset.py
+  
+    outs:
+    - Data/Dataset_All
+
+  split_dataset:
+    cmd: python pipeline/split_dataset.py
+    deps:
+    - Data/Dataset_All
+    - pipeline/split_dataset.py
+  
+    outs:
+    - Data/Dataset
