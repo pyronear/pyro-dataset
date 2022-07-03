@@ -7,3 +7,13 @@ stages:
   
     outs:
     - Data/All_Data
+
+  auto_label:
+    cmd: python pipeline/auto_label.py
+    deps:
+    - Data/All_Data
+    - Data/Models
+    - pipeline/auto_label.py
+  
+    outs:
+    - Data/Labels

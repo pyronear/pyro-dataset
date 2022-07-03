@@ -1,0 +1,4 @@
+auto_label:
+  models: "Data/Models/best_mix1.pt Data/Models/best_mix3.pt"
+  img_size: 640
+  conf: 0.25
