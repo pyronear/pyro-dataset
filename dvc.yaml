@@ -36,3 +36,20 @@ stages:
   
     outs:
     - Data/Dataset
+
+  train:
+    cmd: python pipeline/train.py
+    deps:
+    - yolov5/train.py
+    - Data/Dataset
+    params:
+    - train.img_size
+    - train.batch_size
+    - train.epochs
+    - train.model
+    outs:
+    - runs/train
+
+    metrics:
+      - metrics.json:
+          cache: false
