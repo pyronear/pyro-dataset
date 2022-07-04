@@ -8,13 +8,13 @@ import random
 def copy_files(imgs, set_folder, copy_label):
     to_copy = []
     for img_file in imgs:
-        img_file2 = f'Data/Dataset/{set_folder}/images/' + img_file.split('images')[1]
+        img_file2 = f'Data/Dataset/images/{set_folder}/' + img_file.split('images')[1]
         os.makedirs(os.path.split(img_file2)[0], exist_ok=True)
         
         if copy_label:
             shutil.copy(img_file, img_file2)
             label_file = img_file.replace('images', 'labels').replace('.jpg', '.txt')
-            label_file2 = f'Data/Dataset/{set_folder}/labels/' + img_file.split('images')[1].replace('.jpg', '.txt')
+            label_file2 = f'Data/Dataset/labels/{set_folder}/' + img_file.split('images')[1].replace('.jpg', '.txt')
             os.makedirs(os.path.split(label_file2)[0], exist_ok=True)
             shutil.copy(label_file, label_file2)
         else:
@@ -45,7 +45,7 @@ for folder in folders:
     copy_files(imgs[nb_train+nb_val:nb_train+nb_val+nb_val], set_folder='test', copy_label=True)
 
 
-nb_smoke = len(glob.glob('Data/Dataset/**/images/*'))
+nb_smoke = len(glob.glob('Data/Dataset/images/**/*'))
 nb_background_required = int(nb_smoke * params["split_dataset"]["background_smoke_ratio"])
 
 # Background Images
@@ -77,7 +77,7 @@ for img_file, img_file2 in to_copy:
 
 
 for set_folder in ['train', 'val', 'test']:
-    print(f"{set_folder} images {len(glob.glob(f'Data/Dataset/{set_folder}/images/*.jpg'))} images")
+    print(f"{set_folder} images {len(glob.glob(f'Data/Dataset/images/{set_folder}/*.jpg'))} images")
 
-print(f"Total images {len(glob.glob(f'Data/Dataset/**/images/*.jpg'))} images")
+print(f"Total images {len(glob.glob(f'Data/Dataset/images/**/*.jpg'))} images")
  
