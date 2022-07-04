@@ -21,16 +21,64 @@
 
 # Pyrodataset: Create dataset about wildfire
 
-We are going to gather here all the necessary elements to create our dataset on wildfire. We propose a classification dataset for the moment but we want to provide an object detection and segmentation dataset soon
+This repository gathers everything needed to create and train our smoke detection model.
+
+We have 4 data sources:
+
+Wildfire containing 20K (around 9K with smoke) images from 1000 videos of North American forest observation
+
+Ardeche containing 20K images but no smoke that we aquired in ardeche this year.
+
+Ai for Mankind, 2934 images of smoke and 1440 without smoke
+
+Random, a dataset of images scraped from the internet 329 with smoke and 605 with low clouds
+
+We use [dvc](https://dvc.org/) to track any changes made during dataset generation
+
+Our detection model is a yolov5, we use [ultralytics](https://github.com/ultralytics/yolov5) repository for training
 
 ## Setup
 
-You can install our package using the folowing lines
+Clone this pyro-dataset and [ultralytics](https://github.com/ultralytics/yolov5) repository using:
 
 ```shell
-git clone https://github.com/pyronear/pyro-dataset.git
-pip install -e pyro-dataset/.
+git clone --recurse-submodules https://github.com/pyronear/pyro-dataset.git
+cd pyro-dataset
+pip install -r requirements.txt
+pip install -r yolov5/requirements.txt
 ```
+
+Then pull data from remote using dvc (you well need to ask access using your google account)
+
+```shell
+dvc pull
+```
+
+Finally, reproduce the dataset generation and training using 
+
+```shell
+dvc repro
+```
+
+At the moment you shall not use dvc push and we can't store all the dvc cache on the remote because we use google drive which is limited. A bucket will be opened soon allowing to use the full power of dvc
+
+## Test
+
+After training you can validate the performances on test dataset using:
+
+```shell
+python yolov5/val.py --task test --weights runs/train/exp/weights/best.pt --img 640  --data yolo.yaml
+```
+
+Or just have a look on predictions using:
+
+```shell
+python yolov5/detect.py --weights runs/train/exp/weights/best.pt --img 640 
+```
+
+For more details please refer to [ultralytics](https://github.com/ultralytics/yolov5) repository
+
+
 
 ## What else
 
