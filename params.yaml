@@ -20,7 +20,7 @@ split_dataset:
 train:
   img_size: 200
   epochs: 1
-  batch_size: 16
+  batch_size: 64
   model: "yolov5n"
   workers: 0
 

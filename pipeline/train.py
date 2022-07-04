@@ -15,13 +15,13 @@ epochs = params["train"]["epochs"]
 model = params["train"]["model"]
 workers = params["train"]["workers"]
 
-cmd = f"python yolov5/train.py --img {img_size} --batch {batch_size} --epochs {epochs} --data ./yolo.yaml --weights {model}.pt --workers {workers}"
+cmd = f"python yolov5/train.py --img {img_size} --batch {batch_size} --epochs {epochs} --data ./yolo.yaml --weights {model}.pt --project runs/train --workers {workers}"
 print(f"* Command:\n{cmd}")
 subprocess.call(cmd, shell=True)
 
 # Log Metrics
 
-df = pd.read_csv("yolov5/runs/train/exp/results.csv")
+df = pd.read_csv("runs/train/exp/results.csv")
 metrics = {}
 for c in df.columns:
     val = df.iloc[-1][c]
