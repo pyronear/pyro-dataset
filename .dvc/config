@@ -1,5 +1,5 @@
 [core]
     remote = pyronear-dvc
 ['remote "pyronear-dvc"']
-    url = gdrive://1xN951lBRhwLLqtoeaDj0ZEHMw7mQxSz5
+    url = gdrive://1jAmkfd7rkWnuOBLfeqaR3BEe6TOZ7HFL
     gdrive_trash_only = true
