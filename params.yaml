@@ -21,6 +21,6 @@ train:
   img_size: 640
   epochs: 50
   batch_size: 64
-  model: "yolov5n"
+  model: "yolov5s"
   workers: 8
 
