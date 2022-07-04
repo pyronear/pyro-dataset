@@ -107,5 +107,5 @@ test/fixtures/videos/
 conda-dist/
 
 # yolov5 files
-yolov5/runs
+runs
 *.pt
