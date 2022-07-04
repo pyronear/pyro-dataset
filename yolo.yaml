@@ -1,0 +1,11 @@
+# Config file for yolo dataset
+# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
+train: ../Data/Dataset/images/train/
+val: ../Data/Dataset/images/val/
+test: ../Data/Dataset/images/test/
+
+# number of classes
+nc: 2
+
+# class names
+names: ['background', 'smoke']

@@ -1,0 +1,55 @@
+stages:
+  unzip:
+    cmd: python pipeline/unzip.py
+    deps:
+    - Data/Archive
+    - pipeline/unzip.py
+  
+    outs:
+    - Data/All_Data
+
+  auto_label:
+    cmd: python pipeline/auto_label.py
+    deps:
+    - Data/All_Data
+    - Data/Models
+    - pipeline/auto_label.py
+  
+    outs:
+    - Data/Labels
+
+  create_dataset:
+    cmd: python pipeline/create_dataset.py
+    deps:
+    - Data/All_Data
+    - Data/Labels
+    - pipeline/create_dataset.py
+  
+    outs:
+    - Data/Dataset_All
+
+  split_dataset:
+    cmd: python pipeline/split_dataset.py
+    deps:
+    - Data/Dataset_All
+    - pipeline/split_dataset.py
+  
+    outs:
+    - Data/Dataset
+
+  train:
+    cmd: python pipeline/train.py
+    deps:
+    - yolov5/train.py
+    - Data/Dataset
+    params:
+    - train.img_size
+    - train.batch_size
+    - train.epochs
+    - train.model
+    outs:
+    - runs/train
+
+    metrics:
+      - metrics.json:
+          cache: false

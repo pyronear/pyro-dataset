@@ -1,0 +1,4 @@
+[core]
+    remote = pyronear-dvc
+['remote "pyronear-dvc"']
+    url = gdrive://1jAmkfd7rkWnuOBLfeqaR3BEe6TOZ7HFL

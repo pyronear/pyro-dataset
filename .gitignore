@@ -71,6 +71,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # pyenv
 .python-version
@@ -102,6 +103,9 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-data/
 test/fixtures/videos/
 conda-dist/
+
+# yolov5 files
+runs
+*.pt
