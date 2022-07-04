@@ -18,9 +18,9 @@ split_dataset:
   background_smoke_ratio: 0.05
 
 train:
-  img_size: 200
-  epochs: 1
+  img_size: 640
+  epochs: 50
   batch_size: 64
   model: "yolov5n"
-  workers: 0
+  workers: 8
 
