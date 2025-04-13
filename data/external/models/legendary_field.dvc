@@ -1,0 +1,6 @@
+outs:
+- md5: a1af93e204bf81b5c34d0232ad082c40.dir
+  size: 140
+  nfiles: 1
+  hash: md5
+  path: legendary_field

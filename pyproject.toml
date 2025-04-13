@@ -1,0 +1,18 @@
+[project]
+name = "pyro-dataset"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Chouffe", email = "arthur@caillau.me" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "dvc>=3.59.1",
+    "jupyterlab>=4.4.0",
+    "ultralytics>=8.3.107",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

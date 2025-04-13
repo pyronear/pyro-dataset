@@ -1,0 +1,6 @@
+outs:
+- md5: b2315192e7f9ec2c619365b054af1d49.dir
+  size: 3284791992
+  nfiles: 67272
+  hash: md5
+  path: pyro-sdis

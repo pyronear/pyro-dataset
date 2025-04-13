@@ -1,0 +1,14 @@
+---
+stages:
+  predictions_wise_wolf_pyro_sdis_val:
+    cmd:
+      - >-
+        uv run ./scripts/predict.py
+        --save-dir ./data/interim/pyro-sdis/val/predictions/wise_wolf/
+        --dir-images "./data/raw/pyro-sdis/images/val/"
+        --filepath-weights ./data/external/models/wise_wolf/weights/yolov11s.pt
+        --loglevel "info"
+    deps:
+      - ./scripts/predict.py
+    outs:
+      - ./data/interim/pyro-sdis/val/predictions/wise_wolf/
