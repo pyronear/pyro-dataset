@@ -17,8 +17,8 @@ stages:
       nfiles: 4099
     - path: ./scripts/predict.py
       hash: md5
-      md5: 4882d5a64cb5a286f64638c3f874e58b
-      size: 3260
+      md5: 6d87c7e59affd8369c95f3f307880f7b
+      size: 3263
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/wise_wolf/
       hash: md5
@@ -37,8 +37,8 @@ stages:
       nfiles: 1
     - path: ./scripts/install_local_huggingface_dataset.py
       hash: md5
-      md5: e9cf6959daf9f5509035431451cdae63
-      size: 3469
+      md5: cc1d183f41bd336c5fe486e5bf433fa6
+      size: 3225
     outs:
     - path: ./data/raw/pyro-sdis-testset/
       hash: md5
@@ -62,8 +62,8 @@ stages:
       nfiles: 4099
     - path: ./scripts/predict.py
       hash: md5
-      md5: 4882d5a64cb5a286f64638c3f874e58b
-      size: 3260
+      md5: 6d87c7e59affd8369c95f3f307880f7b
+      size: 3263
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/legendary_field/
       hash: md5
@@ -72,7 +72,7 @@ stages:
       nfiles: 4099
   crops_wise_wolf_pyro_sdis_val:
     cmd:
-    - uv run ./scripts/crop_with_prediction.py --save-dir ./data/interim/pyro-sdis/val/crops/
+    - uv run ./scripts/crop_with_prediction.py --save-dir ./data/interim/pyro-sdis/val/crops/wise_wolf/
       --target-size 224 --dir-images ./data/raw/pyro-sdis/images/val/ --dir-predictions
       ./data/interim/pyro-sdis/val/predictions/wise_wolf --loglevel "info"
     deps:
@@ -88,11 +88,62 @@ stages:
       nfiles: 4099
     - path: ./scripts/crop_with_prediction.py
       hash: md5
-      md5: 7f882ffa0b869a04c193f1c8d2609c6b
-      size: 7432
+      md5: ebaefa0b94c1ca22e7bc33373c7d86b7
+      size: 7484
     outs:
-    - path: ./data/interim/pyro-sdis/val/crops/
+    - path: ./data/interim/pyro-sdis/val/crops/wise_wolf/
       hash: md5
-      md5: 26f3da86c9013084a13a25f928997bc3.dir
-      size: 34735736
+      md5: c5142e27ac91ff9172b79df703f2667e.dir
+      size: 64094144
       nfiles: 8423
+  predictions_wise_wolf_FP_2024:
+    cmd:
+    - uv run ./scripts/predict.py --save-dir ./data/interim/FP_2024/predictions/wise_wolf/
+      --dir-images ./data/raw/FP_2024/ --filepath-weights ./data/external/models/wise_wolf/weights/yolov11s.pt
+      --loglevel "info"
+    deps:
+    - path: ./data/external/models/wise_wolf/weights/yolov11s.pt
+      hash: md5
+      md5: 1b692922ce755191e20bb29d9ed8fad3
+      size: 19261779
+    - path: ./data/raw/FP_2024/
+      hash: md5
+      md5: 66f296ca12df64fbf69dffbc5ea85b75.dir
+      size: 19970165665
+      nfiles: 137840
+    - path: ./scripts/predict.py
+      hash: md5
+      md5: 6d87c7e59affd8369c95f3f307880f7b
+      size: 3263
+    outs:
+    - path: ./data/interim/FP_2024/predictions/wise_wolf/
+      hash: md5
+      md5: 013c3108623fc8a18df79c6975bee9d4.dir
+      size: 586769
+      nfiles: 136327
+  crops_wise_wolf_FP_2024:
+    cmd:
+    - uv run ./scripts/crop_with_prediction.py --save-dir ./data/interim/FP_2024/crops/wise_wolf/
+      --target-size 224 --dir-images ./data/raw/FP_2024/ --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf
+      --loglevel "info"
+    deps:
+    - path: ./data/interim/FP_2024/predictions/wise_wolf
+      hash: md5
+      md5: 013c3108623fc8a18df79c6975bee9d4.dir
+      size: 586769
+      nfiles: 136327
+    - path: ./data/raw/FP_2024/
+      hash: md5
+      md5: 66f296ca12df64fbf69dffbc5ea85b75.dir
+      size: 19970165665
+      nfiles: 137840
+    - path: ./scripts/crop_with_prediction.py
+      hash: md5
+      md5: ebaefa0b94c1ca22e7bc33373c7d86b7
+      size: 7484
+    outs:
+    - path: ./data/interim/FP_2024/crops/wise_wolf/
+      hash: md5
+      md5: a95b76a27bd701bbab6249fe38636cdd.dir
+      size: 130402686
+      nfiles: 11861
