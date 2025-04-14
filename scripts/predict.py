@@ -74,7 +74,7 @@ def predict_and_save(
     logging.info(f"found {len(filepaths)} images in {dir_images}")
     label_filepaths = []
 
-    for filepath in tqdm(filepaths[:10]):
+    for filepath in tqdm(filepaths):
         results = model.predict(filepath, verbose=False)
         label_content = ultralytics_results_to_yolo_txt(results)
         label_filepath = save_dir / f"{filepath.relative_to(dir_images).stem}.txt"

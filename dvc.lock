@@ -6,13 +6,22 @@ stages:
       --dir-images "./data/raw/pyro-sdis/images/val/" --filepath-weights ./data/external/models/wise_wolf/weights/yolov11s.pt
       --loglevel "info"
     deps:
+    - path: ./data/external/models/wise_wolf/weights/yolov11s.pt
+      hash: md5
+      md5: 1b692922ce755191e20bb29d9ed8fad3
+      size: 19261779
+    - path: ./data/raw/pyro-sdis/images/val/
+      hash: md5
+      md5: 128120c2d9dfc1ac5ad01b0a9f38c0e4.dir
+      size: 390351269
+      nfiles: 4099
     - path: ./scripts/predict.py
       hash: md5
-      md5: bda273588736177387e846e97cfe0c80
-      size: 3239
+      md5: 7e755bb2715ce2555edeca2c1837c920
+      size: 3235
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/wise_wolf/
       hash: md5
-      md5: ec72aec4030a0387ede1dc26e9ee8ded.dir
-      size: 1115
-      nfiles: 10
+      md5: d89f9c0184042778bec688ea70182a32.dir
+      size: 384380
+      nfiles: 4099

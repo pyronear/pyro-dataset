@@ -10,5 +10,7 @@ stages:
         --loglevel "info"
     deps:
       - ./scripts/predict.py
+      - ./data/raw/pyro-sdis/images/val/
+      - ./data/external/models/wise_wolf/weights/yolov11s.pt
     outs:
       - ./data/interim/pyro-sdis/val/predictions/wise_wolf/
