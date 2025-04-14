@@ -60,7 +60,8 @@ only detected fires by the Pyronear System.
 - __pyronear-ds-03-2024__: Dataset of fire smokes as a mix of different public
 datasets and synthetic images. It also includes temporal sequences of fire
 events.
-- __Test_dataset_2025__: built from Test_DS by adding extra false positives
+- [__pyro-sdis-testset__](https://huggingface.co/datasets/pyronear/pyro-sdis-testset): Private dataset used for evaluating the final performances of the ML models.
+- __Test_dataset_2025__: built from Test_DS by adding extra false positives.
 - __Test_DS__: The initial and curated test dataset.
 
 ## Models
