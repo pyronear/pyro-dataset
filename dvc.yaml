@@ -42,3 +42,19 @@ stages:
       - ./data/external/models/legendary_field/weights/legendary-field-19.pt
     outs:
       - ./data/interim/pyro-sdis/val/predictions/legendary_field/
+
+  crops_wise_wolf_pyro_sdis_val:
+    cmd:
+      - >-
+        uv run ./scripts/crop_with_prediction.py
+        --save-dir ./data/interim/pyro-sdis/val/crops/
+        --target-size 224
+        --dir-images ./data/raw/pyro-sdis/images/val/
+        --dir-predictions ./data/interim/pyro-sdis/val/predictions/wise_wolf
+        --loglevel "info"
+    deps:
+      - ./scripts/crop_with_prediction.py
+      - ./data/raw/pyro-sdis/images/val/
+      - ./data/interim/pyro-sdis/val/predictions/wise_wolf
+    outs:
+      - ./data/interim/pyro-sdis/val/crops/

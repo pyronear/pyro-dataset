@@ -22,7 +22,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--save-dir",
         help="directory to save the extracted dataset.",
         type=Path,
-        default=Path("./data/raw/pyro-sdis-foo-bar2/"),
+        default=Path("./data/raw/pyro-sdis/"),
     )
     parser.add_argument(
         "--repo-id",

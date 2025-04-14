@@ -70,3 +70,29 @@ stages:
       md5: 29ae18381c0489c7eb0be60273861907.dir
       size: 321740
       nfiles: 4099
+  crops_wise_wolf_pyro_sdis_val:
+    cmd:
+    - uv run ./scripts/crop_with_prediction.py --save-dir ./data/interim/pyro-sdis/val/crops/
+      --target-size 224 --dir-images ./data/raw/pyro-sdis/images/val/ --dir-predictions
+      ./data/interim/pyro-sdis/val/predictions/wise_wolf --loglevel "info"
+    deps:
+    - path: ./data/interim/pyro-sdis/val/predictions/wise_wolf
+      hash: md5
+      md5: da4df9caec95bf99b333d59321e5b5a8.dir
+      size: 417720
+      nfiles: 4099
+    - path: ./data/raw/pyro-sdis/images/val/
+      hash: md5
+      md5: 128120c2d9dfc1ac5ad01b0a9f38c0e4.dir
+      size: 390351269
+      nfiles: 4099
+    - path: ./scripts/crop_with_prediction.py
+      hash: md5
+      md5: 7f882ffa0b869a04c193f1c8d2609c6b
+      size: 7432
+    outs:
+    - path: ./data/interim/pyro-sdis/val/crops/
+      hash: md5
+      md5: 26f3da86c9013084a13a25f928997bc3.dir
+      size: 34735736
+      nfiles: 8423
