@@ -1,0 +1,6 @@
+outs:
+- md5: 7b9d1f53b6b88d8233a90299969e3602.dir
+  size: 408292029
+  nfiles: 1
+  hash: md5
+  path: pyro-sdis-testset-parquet

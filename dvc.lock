@@ -25,3 +25,23 @@ stages:
       md5: d89f9c0184042778bec688ea70182a32.dir
       size: 384380
       nfiles: 4099
+  data_pyro_sdis_testset:
+    cmd:
+    - uv run ./scripts/install_local_huggingface_dataset.py --save-dir "./data/raw/pyro-sdis-testset/"
+      --data-dir "./data/raw/pyro-sdis-testset-parquet/" --loglevel "info"
+    deps:
+    - path: ./data/raw/pyro-sdis-testset-parquet/
+      hash: md5
+      md5: 7b9d1f53b6b88d8233a90299969e3602.dir
+      size: 408292029
+      nfiles: 1
+    - path: ./scripts/install_local_huggingface_dataset.py
+      hash: md5
+      md5: e9cf6959daf9f5509035431451cdae63
+      size: 3469
+    outs:
+    - path: ./data/raw/pyro-sdis-testset/
+      hash: md5
+      md5: 694357d359cc048f59eeb3b1a85e47ee.dir
+      size: 408834037
+      nfiles: 7780

@@ -1,5 +1,17 @@
 ---
 stages:
+  data_pyro_sdis_testset:
+    cmd:
+      - >-
+        uv run ./scripts/install_local_huggingface_dataset.py
+        --save-dir "./data/raw/pyro-sdis-testset/"
+        --data-dir "./data/raw/pyro-sdis-testset-parquet/"
+        --loglevel "info"
+    deps:
+      - ./scripts/install_local_huggingface_dataset.py
+      - ./data/raw/pyro-sdis-testset-parquet/
+    outs:
+      - ./data/raw/pyro-sdis-testset/
   predictions_wise_wolf_pyro_sdis_val:
     cmd:
       - >-
