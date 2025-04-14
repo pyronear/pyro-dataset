@@ -99,6 +99,8 @@ if __name__ == "__main__":
         dir_images = args["dir_images"]
         filepath_weights = args["filepath_weights"]
         predict_and_save(
-            dir_images=dir_images, filepath_weights=filepath_weights, save_dir=save_dir
+            dir_images=dir_images,
+            filepath_weights=filepath_weights,
+            save_dir=save_dir,
         )
         exit(0)
