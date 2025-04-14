@@ -1,6 +1,7 @@
-from ultralytics import YOLO
-from pathlib import Path
 import logging
+from pathlib import Path
+
+from ultralytics import YOLO
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -44,10 +45,12 @@ def ultralytics_results_to_yolo_txt(ultralytics_results: list) -> str:
     if not ultralytics_results:
         return ""
     else:
-        lines = [f"{int(class_id)} {' '.join(str(c) for c in xywh)} {prob}"
+        lines = [
+            f"{int(class_id)} {' '.join(str(c) for c in xywh)} {prob}"
             for (xywh, prob, class_id) in zip(
                 ultralytics_results[0].boxes.xywh.cpu().tolist(),
                 ultralytics_results[0].boxes.conf.cpu().tolist(),
                 ultralytics_results[0].boxes.cls.cpu().tolist(),
-            )]
+            )
+        ]
         return "\n".join(lines)

@@ -3,10 +3,11 @@ CLI Script to generate predictions using a trained model and save them as
 YOLOv8 TXT format.
 """
 
-from pathlib import Path
-import logging
-from tqdm import tqdm
 import argparse
+import logging
+from pathlib import Path
+
+from tqdm import tqdm
 
 from pyro_dataset.yolo.main import load_model, ultralytics_results_to_yolo_txt
 
@@ -44,9 +45,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
 def validate_parsed_args(args: dict) -> bool:
     """Returns whether the parsed args are valid."""
     if not args["dir_images"].exists():
-        logging.error(
-            f"invalid --dir-images, dir {args['dir_images']} does not exist"
-        )
+        logging.error(f"invalid --dir-images, dir {args['dir_images']} does not exist")
         return False
     elif not args["filepath_weights"].exists():
         logging.error(
@@ -99,5 +98,7 @@ if __name__ == "__main__":
         save_dir = args["save_dir"]
         dir_images = args["dir_images"]
         filepath_weights = args["filepath_weights"]
-        predict_and_save(dir_images=dir_images, filepath_weights=filepath_weights, save_dir=save_dir)
+        predict_and_save(
+            dir_images=dir_images, filepath_weights=filepath_weights, save_dir=save_dir
+        )
         exit(0)
