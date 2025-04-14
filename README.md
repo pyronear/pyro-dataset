@@ -42,6 +42,24 @@ Run the pipeline to build the dataset:
 dvc repro
 ```
 
+## Data Pipeline
+
+The whole repository is organized as a data pipeline that can be run to
+generated the different datasets.
+The Data pipeline is organized with a [dvc.yaml](./dvc.yaml) file.
+
+### DVC stages
+
+This section list and describes all the DVC stages that are defined in the
+[dvc.yaml](./dvc.yaml) file:
+
+- __data_pyro_sdis_testset__: Turn the parquet files of the
+__pyro-sdis-testset__ dataset into a regular ultralytics folder structure.
+- __predictions_wise_wolf_pyro_sdis_val__: Run inference on all images from the
+pyro-sdis val split with the `wise_wolf` model.
+- __predictions_legendary_field_pyro_sdis_val__: Run inference on all images
+from the pyro-sdis val split with the `legendary_field` model.
+
 ## Data
 
 ### Raw
