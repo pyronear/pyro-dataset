@@ -38,7 +38,12 @@ def ultralytics_results_to_yolo_txt(ultralytics_results: list) -> str:
     Turn a ultralytics results into a YOLOv8 TXT format string.
 
     Returns:
-        results (str): YOLOv8 TXT results as a string.
+        results (str): YOLOv8 TXT results as a string. It uses xywhn format to
+        store coordinates.
+
+    Eg.
+        1 0.617 0.3594420600858369 0.114 0.17381974248927037
+        1 0.094 0.38626609442060084 0.156 0.23605150214592274
 
     Documentation: https://roboflow.com/formats/yolov8-pytorch-txt
     """
@@ -46,9 +51,9 @@ def ultralytics_results_to_yolo_txt(ultralytics_results: list) -> str:
         return ""
     else:
         lines = [
-            f"{int(class_id)} {' '.join(str(c) for c in xywh)} {prob}"
-            for (xywh, prob, class_id) in zip(
-                ultralytics_results[0].boxes.xywh.cpu().tolist(),
+            f"{int(class_id)} {' '.join(str(c) for c in xywhn)} {prob}"
+            for (xywhn, prob, class_id) in zip(
+                ultralytics_results[0].boxes.xywhn.cpu().tolist(),
                 ultralytics_results[0].boxes.conf.cpu().tolist(),
                 ultralytics_results[0].boxes.cls.cpu().tolist(),
             )

@@ -22,8 +22,8 @@ stages:
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/wise_wolf/
       hash: md5
-      md5: d89f9c0184042778bec688ea70182a32.dir
-      size: 384380
+      md5: da4df9caec95bf99b333d59321e5b5a8.dir
+      size: 417720
       nfiles: 4099
   data_pyro_sdis_testset:
     cmd:
@@ -67,6 +67,6 @@ stages:
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/legendary_field/
       hash: md5
-      md5: 2db00f834fc30a72b0c6ee48103e0ab6.dir
-      size: 289446
+      md5: 29ae18381c0489c7eb0be60273861907.dir
+      size: 321740
       nfiles: 4099
