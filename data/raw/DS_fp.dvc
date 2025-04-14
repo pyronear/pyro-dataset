@@ -1,0 +1,6 @@
+outs:
+- md5: 5f12177e33a04dc4a7ddf6fd8d177984.dir
+  size: 5153036253
+  nfiles: 108045
+  hash: md5
+  path: DS_fp
