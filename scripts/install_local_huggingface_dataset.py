@@ -10,7 +10,6 @@ __Note__:
 
 import argparse
 import logging
-import os
 from pathlib import Path
 
 from datasets import load_dataset
@@ -61,7 +60,6 @@ def save_ultralytics_format(
         # Save the image to the appropriate folder
         image = example["image"]  # PIL.Image.Image
         image_name = example["image_name"]  # Original file name
-        # output_image_path = os.path.join(dir_images, split, image_name)
         output_image_path = dir_images / split / image_name
 
         # Save the image object to disk
@@ -70,7 +68,6 @@ def save_ultralytics_format(
         # Save label
         annotations = example["annotations"]
         label_name = image_name.replace(".jpg", ".txt").replace(".png", ".txt")
-        # output_label_path = os.path.join(dir_labels, split, label_name)
         output_label_path = dir_labels / split / label_name
 
         with open(output_label_path, "w") as label_file:
@@ -88,7 +85,6 @@ if __name__ == "__main__":
         logging.info(args)
         save_dir = args["save_dir"]
         data_dir = args["data_dir"]
-        # dataset = load_dataset("parquet", data_dir="./data/raw/pyro-sdis-testset/")
         dataset = load_dataset("parquet", data_dir=data_dir)
 
         dir_images = save_dir / "images"
