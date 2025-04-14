@@ -1,0 +1,4 @@
+[core]
+    remote = awspyronear
+['remote "awspyronear"']
+    url = s3://pyro-dataset-dvc/dvc/

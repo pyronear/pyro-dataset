@@ -1,0 +1,6 @@
+outs:
+- md5: 4f8f6d0e5ec5c46f83424e4795a53581.dir
+  size: 145152106
+  nfiles: 632
+  hash: md5
+  path: Test_DS

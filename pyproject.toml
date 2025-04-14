@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.10"
 dependencies = [
     "dvc>=3.59.1",
+    "dvc-s3>=3.2.0",
     "fiftyone>=1.4.1",
     "jupyterlab>=4.4.0",
     "ultralytics>=8.3.107",
