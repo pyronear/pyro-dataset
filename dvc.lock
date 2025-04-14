@@ -17,8 +17,8 @@ stages:
       nfiles: 4099
     - path: ./scripts/predict.py
       hash: md5
-      md5: 7e755bb2715ce2555edeca2c1837c920
-      size: 3235
+      md5: 4882d5a64cb5a286f64638c3f874e58b
+      size: 3260
     outs:
     - path: ./data/interim/pyro-sdis/val/predictions/wise_wolf/
       hash: md5
@@ -45,3 +45,28 @@ stages:
       md5: 694357d359cc048f59eeb3b1a85e47ee.dir
       size: 408834037
       nfiles: 7780
+  predictions_legendary_field_pyro_sdis_val:
+    cmd:
+    - uv run ./scripts/predict.py --save-dir ./data/interim/pyro-sdis/val/predictions/legendary_field/
+      --dir-images "./data/raw/pyro-sdis/images/val/" --filepath-weights ./data/external/models/legendary_field/weights/legendary-field-19.pt
+      --loglevel "info"
+    deps:
+    - path: ./data/external/models/legendary_field/weights/legendary-field-19.pt
+      hash: md5
+      md5: ef2fb126dda23c82745a769e91b2a637
+      size: 22510190
+    - path: ./data/raw/pyro-sdis/images/val/
+      hash: md5
+      md5: 128120c2d9dfc1ac5ad01b0a9f38c0e4.dir
+      size: 390351269
+      nfiles: 4099
+    - path: ./scripts/predict.py
+      hash: md5
+      md5: 4882d5a64cb5a286f64638c3f874e58b
+      size: 3260
+    outs:
+    - path: ./data/interim/pyro-sdis/val/predictions/legendary_field/
+      hash: md5
+      md5: 2db00f834fc30a72b0c6ee48103e0ab6.dir
+      size: 289446
+      nfiles: 4099
