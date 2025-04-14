@@ -70,7 +70,7 @@ def predict_and_save(
     logging.info(f"loading the model from {filepath_weights}")
     model = load_model(filepath_weights)
     logging.info("model loaded ✔️")
-    filepaths = list(dir_images.glob("*.jpg"))
+    filepaths = list(dir_images.glob("**/*.jpg"))
     logging.info(f"found {len(filepaths)} images in {dir_images}")
     label_filepaths = []
 

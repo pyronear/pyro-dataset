@@ -46,6 +46,7 @@ dvc repro
 
 The whole repository is organized as a data pipeline that can be run to
 generated the different datasets.
+
 The Data pipeline is organized with a [dvc.yaml](./dvc.yaml) file.
 
 ### DVC stages
@@ -59,6 +60,12 @@ __pyro-sdis-testset__ dataset into a regular ultralytics folder structure.
 pyro-sdis val split with the `wise_wolf` model.
 - __predictions_legendary_field_pyro_sdis_val__: Run inference on all images
 from the pyro-sdis val split with the `legendary_field` model.
+- __predictions_wise_wolf_FP_2024__: Run inference on all images from the
+FP_2024 dataset with the `wise_wolf` model.
+- __crops_wise_wolf_pyro_sdis_val__: Generate crops from the predictions of the
+`wise_wolf` model on the pyro-sdis val split.
+- __crops_wise_wolf_FP_2024__: Generate crops from the predictions of the
+`wise_wolf` model on the FP_2024 dataset.
 
 ## Data
 
@@ -67,7 +74,8 @@ from the pyro-sdis val split with the `legendary_field` model.
 The datasets below are the foundation of our data pipeline and are the source
 of truth.
 
-- __FIGLIB_ANNOTATED_RESIZED__: re-annotated dataset from the [Fire Ignition images Library](https://www.hpwren.ucsd.edu/FIgLib/)
+- __FIGLIB_ANNOTATED_RESIZED__: re-annotated dataset from the [Fire Ignition
+images Library](https://www.hpwren.ucsd.edu/FIgLib/).
 - __DS_fp__: All the collected false positives of the Pyronear System before 2024.
 - __FP_2024__: All the collected false positives of the Pyronear System in 2024.
 - [__pyro-sdis__](https://huggingface.co/datasets/pyronear/pyro-sdis):
@@ -78,7 +86,8 @@ only detected fires by the Pyronear System.
 - __pyronear-ds-03-2024__: Dataset of fire smokes as a mix of different public
 datasets and synthetic images. It also includes temporal sequences of fire
 events.
-- [__pyro-sdis-testset__](https://huggingface.co/datasets/pyronear/pyro-sdis-testset): Private dataset used for evaluating the final performances of the ML models.
+- [__pyro-sdis-testset__](https://huggingface.co/datasets/pyronear/pyro-sdis-testset):
+Private dataset used for evaluating the final performances of the ML models.
 - __Test_dataset_2025__: built from Test_DS by adding extra false positives.
 - __Test_DS__: The initial and curated test dataset.
 
