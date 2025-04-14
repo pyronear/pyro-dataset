@@ -62,7 +62,7 @@ stages:
     cmd:
       - >-
         uv run ./scripts/crop_with_prediction.py
-        --save-dir ./data/interim/pyro-sdis/val/crops/
+        --save-dir ./data/interim/pyro-sdis/val/crops/wise_wolf/
         --target-size 224
         --dir-images ./data/raw/pyro-sdis/images/val/
         --dir-predictions ./data/interim/pyro-sdis/val/predictions/wise_wolf
@@ -72,13 +72,13 @@ stages:
       - ./data/raw/pyro-sdis/images/val/
       - ./data/interim/pyro-sdis/val/predictions/wise_wolf
     outs:
-      - ./data/interim/pyro-sdis/val/crops/
+      - ./data/interim/pyro-sdis/val/crops/wise_wolf/
 
   crops_wise_wolf_FP_2024:
     cmd:
       - >-
         uv run ./scripts/crop_with_prediction.py
-        --save-dir ./data/interim/FP_2024/crops/
+        --save-dir ./data/interim/FP_2024/crops/wise_wolf/
         --target-size 224
         --dir-images ./data/raw/FP_2024/
         --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf
@@ -88,4 +88,4 @@ stages:
       - ./data/raw/FP_2024/
       - ./data/interim/FP_2024/predictions/wise_wolf
     outs:
-      - ./data/interim/FP_2024/crops/
+      - ./data/interim/FP_2024/crops/wise_wolf/

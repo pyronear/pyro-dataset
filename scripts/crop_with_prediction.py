@@ -85,6 +85,7 @@ if __name__ == "__main__":
         dir_predictions = args["dir_predictions"]
         target_height, target_width = args["target_size"], args["target_size"]
         target_size = (target_width, target_height)
+        save_dir.mkdir(parents=True, exist_ok=True)
 
         # List all nested txt and jpg files in the dir_images and
         # dir_predictions

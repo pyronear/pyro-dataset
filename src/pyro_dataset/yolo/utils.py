@@ -21,7 +21,7 @@ class YOLOObjectDetectionPrediction:
 
 def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     """
-    Convert a xywh bbox into a xyxy bbox format.
+    Convert a xywhn bbox into a xyxyn bbox format.
     """
     y = np.copy(bbox)
     y[..., 0] = bbox[..., 0] - bbox[..., 2] / 2  # top left x
@@ -51,20 +51,6 @@ def parse_yolo_prediction_txt_file(
     return result
 
 
-##
-# txt = "0 0.1 0.2 0.5 0.4 0.999\n1 0.1 0.2 0.5 0.4 0.999"
-# r = parse_yolo_prediction_txt_file(txt)
-# xywhn2xyxyn(r[0].xywhn)
-# r[0].xyxyn
-# r[0]
-# r
-#
-# r[0].xyxyn
-#
-#
-# r[0].xyxyn
-
-
 def clip_xyxy(xyxy: NDArray[np.int_], w: int, h: int) -> NDArray[np.int_]:
     """
     Clip an xyxy bbox onto the actual size (w and h) of the image.
@@ -86,9 +72,6 @@ def xyxyn2xyxy(xyxyn: NDArray[np.float16], w: int, h: int) -> NDArray[np.int_]:
     xyxy[::2] *= w
     xyxy[1::2] *= h
     return xyxy.astype("int")
-
-
-# clip_xyxy(xyxy=r[0].xyxy, w=1280, h=720)
 
 
 def crop_xyxy(
@@ -115,7 +98,6 @@ def expand_xyxy(
     Returns:
       - box (NDArray[np.int_]): new xyxy expanded to match the target size.
     """
-    return xyxy
     h_image, w_image = array_image.shape[:2]
     x_min, y_min, x_max, y_max = xyxy
     w_box = x_max - x_min
