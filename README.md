@@ -45,7 +45,7 @@ dvc repro
 ## Data Pipeline
 
 The whole repository is organized as a data pipeline that can be run to
-generated the different datasets.
+generate the different datasets.
 
 The Data pipeline is organized with a [dvc.yaml](./dvc.yaml) file.
 
