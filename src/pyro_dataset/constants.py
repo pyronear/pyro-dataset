@@ -1,0 +1,1 @@
+DATE_FORMAT_OUTPUT = "%Y-%m-%dT%H-%M-%S"
