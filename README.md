@@ -5,7 +5,7 @@ dataset. This dataset is then used to train our ML models.
 
 ## Setup
 
-### Python dependencies
+### 🐍 Python dependencies
 
 Install `uv` with `pipx`:
 
@@ -25,7 +25,7 @@ Activate the `uv` virutalenv:
 source .venv/bin/activate
 ```
 
-### Data dependencies
+### 🍜 Data dependencies
 
 Pull the data with `dvc`:
 
@@ -121,7 +121,7 @@ Private dataset used for evaluating the final performances of the ML models.
 - __Test_dataset_2025__: built from Test_DS by adding extra false positives.
 - __Test_DS__: The initial and curated test dataset.
 
-## Models
+## 🧠 Models
 
 - __legendary_field__: yolov8s object detection model, first performant model
 trained in 2019. to detect fire smoke.
