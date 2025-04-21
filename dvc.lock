@@ -229,3 +229,34 @@ stages:
       md5: cbf433f52ca543419891ffef35ec7a09.dir
       size: 1351043118
       nfiles: 20344
+  merge_smoke_datasets:
+    cmd:
+    - uv run ./scripts/merge_smoke_datasets.py --save-dir ./data/interim/data-split/smoke/wildfire/
+      --dir-datasets ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/ ./data/interim/filtered/smoke/pyro-sdis/
+      ./data/interim/filtered/smoke/pyronear_ds_03_2024/ --loglevel "info"
+    deps:
+    - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
+      hash: md5
+      md5: cbf433f52ca543419891ffef35ec7a09.dir
+      size: 1351043118
+      nfiles: 20344
+    - path: ./data/interim/filtered/smoke/pyro-sdis/
+      hash: md5
+      md5: aa679d6d979b824a9864839d220c4566.dir
+      size: 2758576581
+      nfiles: 56274
+    - path: ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+      hash: md5
+      md5: fe0e0b734ada24d9199df560618ef78e.dir
+      size: 1064743236
+      nfiles: 18678
+    - path: ./scripts/merge_smoke_datasets.py
+      hash: md5
+      md5: 15bc4092ccc3d46aa717fbfa42289d37
+      size: 4015
+    outs:
+    - path: ./data/interim/data-split/smoke/wildfire/
+      hash: md5
+      md5: 9c812eda9cd8d5ec73e00582b55601a1.dir
+      size: 5174362935
+      nfiles: 95296

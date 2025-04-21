@@ -144,3 +144,18 @@ stages:
       - ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
     outs:
       - ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
+
+  merge_smoke_datasets:
+    cmd:
+      - >-
+        uv run ./scripts/merge_smoke_datasets.py
+        --save-dir ./data/interim/data-split/smoke/wildfire/
+        --dir-datasets ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/ ./data/interim/filtered/smoke/pyro-sdis/ ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+        --loglevel "info"
+    deps:
+      - ./scripts/merge_smoke_datasets.py
+      - ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
+      - ./data/interim/filtered/smoke/pyro-sdis/
+      - ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+    outs:
+      - ./data/interim/data-split/smoke/wildfire/
