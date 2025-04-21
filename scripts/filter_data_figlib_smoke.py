@@ -1,6 +1,6 @@
 """
-CLI Script to filter data from the pyro-sdis dataset to only keep images with
-fire smoke.
+CLI Script to filter data from the FIGLIB-ANNOTATED-RESIZED dataset to only
+keep images with fire smoke.
 
 The folder structure remains the same, only the non smoke images are discarded.
 """
@@ -20,13 +20,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--save-dir",
         help="directory to save the filtered dataset.",
         type=Path,
-        default=Path("./data/interim/filtered/smoke/pyro-sdis/"),
+        default=Path("./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/"),
     )
     parser.add_argument(
         "--dir-dataset",
         help="directory containing the pyro-sdis dataset.",
         type=Path,
-        default=Path("./data/raw/pyro-sdis/"),
+        default=Path("./data/raw/FIGLIB_ANNOTATED_RESIZED/"),
     )
     parser.add_argument(
         "-log",
@@ -55,7 +55,17 @@ def filepath_image_to_filepath_label(filepath_image: Path) -> Path:
     Returns:
         filepath_label (Path): the associated label filepath.
     """
-    return Path(str(filepath_image).replace("images", "labels").replace(".jpg", ".txt"))
+    return filepath_image.parent / "labels" / f"{filepath_image.stem}.txt"
+
+
+def list_dataset_images(dir_dataset: Path) -> list[Path]:
+    """
+    List all images from the `dir_dataset`
+
+    Returns:
+        filepaths (list[Path]): all image filepaths from dir_dataset.
+    """
+    return list(dir_dataset.glob("**/*.jpg"))
 
 
 def has_smoke(filepath_label: Path) -> bool:
@@ -70,31 +80,6 @@ def has_smoke(filepath_label: Path) -> bool:
         and filepath_label.is_file()
         and filepath_label.stat().st_size > 0
     )
-
-
-def list_dataset_images(dir_dataset: Path) -> list[Path]:
-    """
-    List all images from the `dir_dataset`
-
-    Returns:
-        filepaths (list[Path]): all image filepaths from dir_dataset.
-    """
-    return list(dir_dataset.glob("**/*.jpg"))
-
-
-def get_split(filepath_image: Path) -> str:
-    """
-    Get the split name of the filepath_image.
-
-    Returns:
-        split (str): in {val, train}
-
-    Throws:
-        assertError: when the split is not in val, train.
-    """
-    split = filepath_image.parts[-2]
-    assert split in ["val", "train"], "split should be in {'val', 'train'}"
-    return split
 
 
 def filter_dataset(

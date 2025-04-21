@@ -159,11 +159,31 @@ stages:
       nfiles: 67272
     - path: ./scripts/filter_data_pyrosdis_smoke.py
       hash: md5
-      md5: ba7dc5ea12114ae01cc7321dcf3ed357
-      size: 4891
+      md5: 2f4b8d6851ae6856b5df1715971128e6
+      size: 4878
     outs:
     - path: ./data/interim/filtered/smoke/pyro-sdis/
       hash: md5
       md5: aa679d6d979b824a9864839d220c4566.dir
       size: 2758576581
       nfiles: 56274
+  filter_data_figlib_smoke:
+    cmd:
+    - uv run ./scripts/filter_data_figlib_smoke.py --save-dir ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
+      --dir-dataset ./data/raw/FIGLIB_ANNOTATED_RESIZED/ --loglevel "info"
+    deps:
+    - path: ./data/raw/FIGLIB_ANNOTATED_RESIZED/
+      hash: md5
+      md5: f0d52fbcb9869713a0c8c0960b2bef25.dir
+      size: 3317314396
+      nfiles: 49516
+    - path: ./scripts/filter_data_figlib_smoke.py
+      hash: md5
+      md5: cdd9e2d7f8f2996384896e72fde34e0f
+      size: 4549
+    outs:
+    - path: ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
+      hash: md5
+      md5: 5aa650d552c162cfd440daa72d702edf.dir
+      size: 1357857659
+      nfiles: 20436
