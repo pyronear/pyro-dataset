@@ -96,6 +96,8 @@ split into the train/val/test sets.
 
 - __make_train_val_wildfire_dataset__: Make the train/val `wildfire` dataset
 using the previous stages.
+- __make_test_wildfire_dataset__: Make the test `wildfire` dataset using the
+previous stages.
 
 ## Data
 
