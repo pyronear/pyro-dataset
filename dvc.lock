@@ -260,3 +260,29 @@ stages:
       md5: 9c812eda9cd8d5ec73e00582b55601a1.dir
       size: 5174362935
       nfiles: 95296
+  filter_data_false_positives_FP_2024:
+    cmd:
+    - uv run ./scripts/filter_data_false_positives.py --save-dir ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+      --dir-dataset ./data/raw/FP_2024/ --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf/
+      --loglevel "info"
+    deps:
+    - path: ./data/interim/FP_2024/predictions/wise_wolf/
+      hash: md5
+      md5: 013c3108623fc8a18df79c6975bee9d4.dir
+      size: 586769
+      nfiles: 136327
+    - path: ./data/raw/FP_2024/
+      hash: md5
+      md5: 66f296ca12df64fbf69dffbc5ea85b75.dir
+      size: 19970165665
+      nfiles: 137840
+    - path: ./scripts/filter_data_figlib_smoke.py
+      hash: md5
+      md5: 0dce8c19627adab34f1e0ca8fc478825
+      size: 4640
+    outs:
+    - path: ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+      hash: md5
+      md5: 50c15d23e0943c6f16c81308cee768f7.dir
+      size: 765800833
+      nfiles: 5484

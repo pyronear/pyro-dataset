@@ -159,3 +159,18 @@ stages:
       - ./data/interim/filtered/smoke/pyronear_ds_03_2024/
     outs:
       - ./data/interim/data-split/smoke/wildfire/
+
+  filter_data_false_positives_FP_2024:
+    cmd:
+      - >-
+        uv run ./scripts/filter_data_false_positives.py
+        --save-dir ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+        --dir-dataset ./data/raw/FP_2024/
+        --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf/
+        --loglevel "info"
+    deps:
+      - ./scripts/filter_data_figlib_smoke.py
+      - ./data/raw/FP_2024/
+      - ./data/interim/FP_2024/predictions/wise_wolf/
+    outs:
+      - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
