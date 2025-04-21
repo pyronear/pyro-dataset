@@ -89,3 +89,16 @@ stages:
       - ./data/interim/FP_2024/predictions/wise_wolf
     outs:
       - ./data/interim/FP_2024/crops/wise_wolf/
+
+  filter_data_pyrosdis_smoke:
+    cmd:
+      - >-
+        uv run ./scripts/filter_data_pyrosdis_smoke.py
+        --save-dir ./data/interim/filtered/smoke/pyro-sdis/
+        --dir-dataset ./data/raw/pyro-sdis/
+        --loglevel "info"
+    deps:
+      - ./scripts/filter_data_pyrosdis_smoke.py
+      - ./data/raw/pyro-sdis/
+    outs:
+      - ./data/interim/filtered/smoke/pyro-sdis/

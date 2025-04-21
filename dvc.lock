@@ -147,3 +147,23 @@ stages:
       md5: a95b76a27bd701bbab6249fe38636cdd.dir
       size: 130402686
       nfiles: 11861
+  filter_data_pyrosdis_smoke:
+    cmd:
+    - uv run ./scripts/filter_data_pyrosdis_smoke.py --save-dir ./data/interim/filtered/smoke/pyro-sdis/
+      --dir-dataset ./data/raw/pyro-sdis/ --loglevel "info"
+    deps:
+    - path: ./data/raw/pyro-sdis/
+      hash: md5
+      md5: b2315192e7f9ec2c619365b054af1d49.dir
+      size: 3284791992
+      nfiles: 67272
+    - path: ./scripts/filter_data_pyrosdis_smoke.py
+      hash: md5
+      md5: ba7dc5ea12114ae01cc7321dcf3ed357
+      size: 4891
+    outs:
+    - path: ./data/interim/filtered/smoke/pyro-sdis/
+      hash: md5
+      md5: aa679d6d979b824a9864839d220c4566.dir
+      size: 2758576581
+      nfiles: 56274
