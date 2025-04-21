@@ -123,7 +123,7 @@ Private dataset used for evaluating the final performances of the ML models.
 
 ## 🧠 Models
 
-- __legendary_field__: yolov8s object detection model, first performant model
+- 🌈 __legendary_field__: yolov8s object detection model, first performant model
 trained in 2019. to detect fire smoke.
-- __wise_wolf__: yolov11s object detection model, trained on `2024-04-26` using
+- 🐺 __wise_wolf__: yolov11s object detection model, trained on `2024-04-26` using
 a larger dataset.
