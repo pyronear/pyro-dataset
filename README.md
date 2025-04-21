@@ -123,6 +123,23 @@ Private dataset used for evaluating the final performances of the ML models.
 - __Test_dataset_2025__: built from Test_DS by adding extra false positives.
 - __Test_DS__: The initial and curated test dataset.
 
+### Interim
+
+All the folders located in `./data/interim/` are intermediary results needed to
+build up the final datasets. They are versioned with DVC.
+
+Many artifacts and datasets can be found here: from cropped image areas, to
+filtered datasets to focus on false positives for instance.
+
+### Processed
+
+The final datasets are located in `./data/processed/`:
+
+- 🔥 __wildfire__: the train/val dataset used to train our ML models. It
+follows the ultralytics format.
+-  🔦 __wildfire_test__: the test dataset used to evaluate the performance of
+our ML models.
+
 ## 🧠 Models
 
 - 🌈 __legendary_field__: yolov8s object detection model, first performant model
