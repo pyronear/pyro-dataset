@@ -207,3 +207,20 @@ stages:
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
     outs:
       - ./data/processed/wildfire/
+
+  make_test_wildfire_dataset:
+    cmd:
+      - >-
+        uv run ./scripts/make_test_dataset.py
+        --save-dir ./data/processed/wildfire_test/
+        --dir-previous-test-dataset ./data/raw/Test_dataset_2025/
+        --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --random-seed 0
+        --percentage-background-images 0.1
+        --loglevel "info"
+    deps:
+      - ./scripts/make_test_dataset.py
+      - ./data/raw/Test_dataset_2025/
+      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+    outs:
+      - ./data/processed/wildfire_test/

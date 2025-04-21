@@ -334,3 +334,30 @@ stages:
       md5: 1695e1a3e0a01a3fbc67e274ce2a470f.dir
       size: 5811038120
       nfiles: 104274
+  make_test_wildfire_dataset:
+    cmd:
+    - uv run ./scripts/make_test_dataset.py --save-dir ./data/processed/wildfire_test/
+      --dir-previous-test-dataset ./data/raw/Test_dataset_2025/ --dir-data-split-false-positives
+      ./data/interim/data-split/false_positives/FP_2024/wise_wolf/ --random-seed 0
+      --percentage-background-images 0.1 --loglevel "info"
+    deps:
+    - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      hash: md5
+      md5: b56283d65955607a0c30561c0940903c.dir
+      size: 765800833
+      nfiles: 10968
+    - path: ./data/raw/Test_dataset_2025/
+      hash: md5
+      md5: 7783dfe29daf68814cd41989aa997add.dir
+      size: 933790934
+      nfiles: 11629
+    - path: ./scripts/make_test_dataset.py
+      hash: md5
+      md5: 4bc518cc7b50e0324c56e071122513ec
+      size: 9539
+    outs:
+    - path: ./data/processed/wildfire_test/
+      hash: md5
+      md5: 3829ec4c1f377bc571783fc9728de468.dir
+      size: 972191325
+      nfiles: 12826
