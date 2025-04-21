@@ -13,7 +13,8 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from pyro_dataset.constants import CLASS_ID_SMOKE
+from pyro_dataset.constants import CLASS_ID_SMOKE, CLASS_SMOKE_LABEL
+from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import annotation_to_txt, parse_yolo_annotation_txt_file
 
 
@@ -247,6 +248,16 @@ def normalize_class_id(save_dir: Path, class_id: int) -> None:
             fd.write(content_label)
 
 
+def write_data_yaml(yaml_filepath: Path) -> None:
+    """Writes the data.yaml file used by the yolo models."""
+    content = {
+        "test": "./images/test",
+        "nc": 1,
+        "names": [CLASS_SMOKE_LABEL],
+    }
+    yaml_write(to=yaml_filepath, data=content)
+
+
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -296,5 +307,8 @@ if __name__ == "__main__":
         persist_data_split(data_split=data_split, save_dir=save_dir)
         logger.info(f"normalize class id for all annotations to {CLASS_ID_SMOKE}")
         normalize_class_id(save_dir=save_dir, class_id=CLASS_ID_SMOKE)
+        filepath_data_yaml = save_dir / "data.yaml"
+        logger.info(f"save data.yaml in {filepath_data_yaml}")
+        write_data_yaml(save_dir / "data.yaml")
 
         exit(0)

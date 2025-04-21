@@ -326,14 +326,14 @@ stages:
       nfiles: 95296
     - path: ./scripts/make_train_val_dataset.py
       hash: md5
-      md5: d68552443062a393e6cc5866c71794e1
-      size: 9757
+      md5: 0c4111b9de372b3840ea94b350d427a8
+      size: 10284
     outs:
     - path: ./data/processed/wildfire/
       hash: md5
-      md5: 1695e1a3e0a01a3fbc67e274ce2a470f.dir
-      size: 5811038120
-      nfiles: 104274
+      md5: fe129f2ec6008feb67bc91e9428f94ba.dir
+      size: 5811038183
+      nfiles: 104275
   make_test_wildfire_dataset:
     cmd:
     - uv run ./scripts/make_test_dataset.py --save-dir ./data/processed/wildfire_test/
@@ -353,11 +353,11 @@ stages:
       nfiles: 11629
     - path: ./scripts/make_test_dataset.py
       hash: md5
-      md5: 4bc518cc7b50e0324c56e071122513ec
-      size: 9539
+      md5: db1dbbcbf422a67ff4689b9b0bee66a6
+      size: 10099
     outs:
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: 3829ec4c1f377bc571783fc9728de468.dir
-      size: 972191325
-      nfiles: 12826
+      md5: 61e9d66075b3903651f4463504006208.dir
+      size: 972191408
+      nfiles: 12827
