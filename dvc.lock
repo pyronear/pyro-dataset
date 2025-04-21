@@ -299,11 +299,11 @@ stages:
       nfiles: 5484
     - path: ./scripts/split_false_positives.py
       hash: md5
-      md5: 497ba59a8e7eb7c95b0613131ed50d4f
-      size: 6336
+      md5: c8cd13fa655dac39d283b09bf5b80bcd
+      size: 9050
     outs:
     - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
       hash: md5
-      md5: 691e5675161bcf4f5855e2c71ee2f401.dir
-      size: 762750699
-      nfiles: 10922
+      md5: b56283d65955607a0c30561c0940903c.dir
+      size: 765800833
+      nfiles: 10968
