@@ -54,12 +54,12 @@ The Data pipeline is organized with a [dvc.yaml](./dvc.yaml) file.
 This section list and describes all the DVC stages that are defined in the
 [dvc.yaml](./dvc.yaml) file:
 
-#### Data Preparation
+#### ⛱️ Data Preparation
 
 - __data_pyro_sdis_testset__: Turn the parquet files of the
 __pyro-sdis-testset__ dataset into a regular ultralytics folder structure.
 
-#### Model Inference
+#### 🧠 Model Inference
 
 - __predictions_wise_wolf_pyro_sdis_val__: Run inference on all images from the
 pyro-sdis val split with the `wise_wolf` model.
@@ -72,7 +72,7 @@ FP_2024 dataset with the `wise_wolf` model.
 - __crops_wise_wolf_FP_2024__: Generate crops from the predictions of the
 `wise_wolf` model on the FP_2024 dataset.
 
-#### Filtering
+#### 🚭 Filtering
 
 - __filter_data_pyrosdis_smoke__: Keep only the fire smokes from the
 `pyro-sdis` dataset - remove the background images.
@@ -83,7 +83,7 @@ FP_2024 dataset with the `wise_wolf` model.
 - __filter_data_false_positives_FP_2024__: Keep only the false positives that
 the `wise_wolf` has made on the `FP_2024` dataset.
 
-#### Data Splitting
+#### 🍞 Data Splitting
 
 - __split_data_figlib__: Split the `FIGLIB_ANNOTATED_RESIZED` dataset into
 train/val/test sets.
@@ -92,7 +92,7 @@ train/val/test sets.
 - __merge_smoke_datasets__: Merge the different data sources of fire smokes and
 split into the train/val/test sets.
 
-#### Dataset Creation
+#### 🧬 Dataset Creation
 
 - __make_train_val_wildfire_dataset__: Make the train/val `wildfire` dataset
 using the previous stages.
