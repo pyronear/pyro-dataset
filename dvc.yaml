@@ -190,3 +190,20 @@ stages:
       - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
     outs:
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+
+  make_train_val_wildfire_dataset:
+    cmd:
+      - >-
+        uv run ./scripts/make_train_val_dataset.py
+        --save-dir ./data/processed/wildfire/
+        --dir-data-split-smoke ./data/interim/data-split/smoke/wildfire/
+        --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --random-seed 0
+        --percentage-background-images 0.1
+        --loglevel "info"
+    deps:
+      - ./scripts/make_train_val_dataset.py
+      - ./data/interim/data-split/smoke/wildfire/
+      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+    outs:
+      - ./data/processed/wildfire/

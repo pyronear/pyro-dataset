@@ -1,1 +1,2 @@
 DATE_FORMAT_OUTPUT = "%Y-%m-%dT%H-%M-%S"
+CLASS_ID_SMOKE = 0

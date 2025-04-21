@@ -7,7 +7,7 @@ from numpy.typing import NDArray
 @dataclass
 class YOLOObjectDetectionPrediction:
     """
-    Dataclass for representing a YOLO Prediction made by a model
+    Dataclass for representing a YOLO Prediction made by a model.
     """
 
     class_id: int
@@ -17,6 +17,26 @@ class YOLOObjectDetectionPrediction:
 
     def __post_init__(self):
         self.xyxyn = xywhn2xyxyn(self.xywhn)
+
+
+@dataclass
+class YOLOObjectDetectionAnnotation:
+    """
+    Dataclass for representing a YOLO Annotation.
+    """
+
+    class_id: int
+    xywhn: NDArray[np.float16]
+    xyxyn: NDArray[np.float16] = field(init=False)
+
+    def __post_init__(self):
+        self.xyxyn = xywhn2xyxyn(self.xywhn)
+
+
+def annotation_to_txt(annotation: YOLOObjectDetectionAnnotation) -> str:
+    return (
+        f"{annotation.class_id} {' '.join([str(c) for c in annotation.xywhn.tolist()])}"
+    )
 
 
 def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
@@ -46,6 +66,25 @@ def parse_yolo_prediction_txt_file(
             class_id=int(numbers[0]),
             xywhn=numbers[1:-1],
             confidence=numbers[-1].item(),
+        )
+        result.append(yolo_prediction)
+    return result
+
+
+def parse_yolo_annotation_txt_file(
+    txt_content: str,
+) -> list[YOLOObjectDetectionAnnotation]:
+    """
+    Parse the `txt_content` of a YOLOv8 TXT format and return a list of
+    structured yolo annotation.
+    """
+    lines = [line for line in txt_content.split("\n") if line.strip()]
+    result = []
+    for line in lines:
+        numbers = np.array(line.split(" ")).astype("float16")
+        yolo_prediction = YOLOObjectDetectionAnnotation(
+            class_id=int(numbers[0]),
+            xywhn=numbers[1:],
         )
         result.append(yolo_prediction)
     return result

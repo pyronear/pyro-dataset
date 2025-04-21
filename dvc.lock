@@ -307,3 +307,30 @@ stages:
       md5: b56283d65955607a0c30561c0940903c.dir
       size: 765800833
       nfiles: 10968
+  make_train_val_wildfire_dataset:
+    cmd:
+    - uv run ./scripts/make_train_val_dataset.py --save-dir ./data/processed/wildfire/
+      --dir-data-split-smoke ./data/interim/data-split/smoke/wildfire/ --dir-data-split-false-positives
+      ./data/interim/data-split/false_positives/FP_2024/wise_wolf/ --random-seed 0
+      --percentage-background-images 0.1 --loglevel "info"
+    deps:
+    - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      hash: md5
+      md5: b56283d65955607a0c30561c0940903c.dir
+      size: 765800833
+      nfiles: 10968
+    - path: ./data/interim/data-split/smoke/wildfire/
+      hash: md5
+      md5: ca8c6b81485f80139b1f850a6f081b52.dir
+      size: 5174362935
+      nfiles: 95296
+    - path: ./scripts/make_train_val_dataset.py
+      hash: md5
+      md5: d68552443062a393e6cc5866c71794e1
+      size: 9757
+    outs:
+    - path: ./data/processed/wildfire/
+      hash: md5
+      md5: 1695e1a3e0a01a3fbc67e274ce2a470f.dir
+      size: 5811038120
+      nfiles: 104274
