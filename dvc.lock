@@ -286,3 +286,24 @@ stages:
       md5: 50c15d23e0943c6f16c81308cee768f7.dir
       size: 765800833
       nfiles: 5484
+  split_data_false_positives_FP_2024:
+    cmd:
+    - uv run ./scripts/split_false_positives.py --save-dir ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      --dir-dataset ./data/interim/filtered/false_positives/FP_2024/wise_wolf/ --random-seed
+      0 --ratio-train-val 0.9 --ratio-val-test 0.5 --loglevel "info"
+    deps:
+    - path: ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+      hash: md5
+      md5: 50c15d23e0943c6f16c81308cee768f7.dir
+      size: 765800833
+      nfiles: 5484
+    - path: ./scripts/split_false_positives.py
+      hash: md5
+      md5: 497ba59a8e7eb7c95b0613131ed50d4f
+      size: 6336
+    outs:
+    - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      hash: md5
+      md5: 691e5675161bcf4f5855e2c71ee2f401.dir
+      size: 762750699
+      nfiles: 10922

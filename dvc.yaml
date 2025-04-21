@@ -174,3 +174,19 @@ stages:
       - ./data/interim/FP_2024/predictions/wise_wolf/
     outs:
       - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+
+  split_data_false_positives_FP_2024:
+    cmd:
+      - >-
+        uv run ./scripts/split_false_positives.py
+        --save-dir ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --dir-dataset ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+        --random-seed 0
+        --ratio-train-val 0.9
+        --ratio-val-test 0.5
+        --loglevel "info"
+    deps:
+      - ./scripts/split_false_positives.py
+      - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
+    outs:
+      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
