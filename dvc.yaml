@@ -121,6 +121,7 @@ stages:
       - >-
         uv run ./scripts/filter_data_pyronear_ds_smoke.py
         --save-dir ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+        --allowed-dataset-prefixes "pyronear" "awf" "random" "adf"
         --dir-dataset ./data/raw/pyronear_ds_03_2024/
         --loglevel "info"
     deps:

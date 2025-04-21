@@ -190,7 +190,8 @@ stages:
   filter_data_pyronear_ds_smoke:
     cmd:
     - uv run ./scripts/filter_data_pyronear_ds_smoke.py --save-dir ./data/interim/filtered/smoke/pyronear_ds_03_2024/
-      --dir-dataset ./data/raw/pyronear_ds_03_2024/ --loglevel "info"
+      --allowed-dataset-prefixes "pyronear" "awf" "random" "adf" --dir-dataset ./data/raw/pyronear_ds_03_2024/
+      --loglevel "info"
     deps:
     - path: ./data/raw/pyronear_ds_03_2024/
       hash: md5
@@ -199,14 +200,14 @@ stages:
       nfiles: 33527
     - path: ./scripts/filter_data_pyronear_ds_smoke.py
       hash: md5
-      md5: df05c605933c016f7c3f2c5e73ac85ed
-      size: 4631
+      md5: bc8cc48f72e919803fb8594b584426f7
+      size: 5492
     outs:
     - path: ./data/interim/filtered/smoke/pyronear_ds_03_2024/
       hash: md5
-      md5: ae4cfbb960862aa4e20295012dba418e.dir
-      size: 2303601076
-      nfiles: 31994
+      md5: fe0e0b734ada24d9199df560618ef78e.dir
+      size: 1064743236
+      nfiles: 18678
   split_data_figlib:
     cmd:
     - uv run ./scripts/split_figlib.py --save-dir ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/

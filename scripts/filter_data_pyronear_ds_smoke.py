@@ -29,6 +29,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("./data/raw/pyronear_ds_03_2024/"),
     )
     parser.add_argument(
+        "--allowed-dataset-prefixes",
+        help="Set of allowed data prefixes to use.",
+        nargs="+",
+        type=str,
+        default=["pyronear", "awf", "random", "adf"],
+    )
+    parser.add_argument(
         "-log",
         "--loglevel",
         default="info",
@@ -82,8 +89,20 @@ def has_smoke(filepath_label: Path) -> bool:
     )
 
 
+def has_dataset_prefix(filepath_image: Path, allowed_prefixes: list[str]) -> bool:
+    """
+    Does the filepath_image contain the allowed prefix?
+
+    Returns:
+        has_prefix? (bool): whether or not the filepath has the prefix in it.
+    """
+    prefix = filepath_image.name.split("_")[0].lower()
+    return prefix in allowed_prefixes
+
+
 def filter_dataset(
     filepaths_images: list[Path],
+    allowed_dataset_prefixes: list[str],
 ) -> list[Path]:
     """
     Filter the list of images that contain fire smoke.
@@ -94,7 +113,9 @@ def filter_dataset(
     filepaths_images_with_smoke = []
     for filepath_image in tqdm(filepaths_images):
         filepath_label = filepath_image_to_filepath_label(filepath_image)
-        if has_smoke(filepath_label):
+        if has_smoke(filepath_label=filepath_label) and has_dataset_prefix(
+            filepath_image=filepath_image, allowed_prefixes=allowed_dataset_prefixes
+        ):
             filepaths_images_with_smoke.append(filepath_image)
 
     return filepaths_images_with_smoke
@@ -128,12 +149,14 @@ if __name__ == "__main__":
         logging.info(args)
         save_dir = args["save_dir"]
         dir_dataset = args["dir_dataset"]
+        allowed_dataset_prefixes = args["allowed_dataset_prefixes"]
         logger.info(f"filtering smokes and saving results in {save_dir}")
         save_dir.mkdir(parents=True, exist_ok=True)
         filepaths_images = list_dataset_images(dir_dataset)
         logger.info(f"found {len(filepaths_images)} images in {dir_dataset}")
         filepaths_images_with_smoke = filter_dataset(
             filepaths_images=filepaths_images,
+            allowed_dataset_prefixes=allowed_dataset_prefixes,
         )
         logger.info(
             f"found {len(filepaths_images_with_smoke)} images with smoke in {dir_dataset}"
