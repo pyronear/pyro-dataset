@@ -1,7 +1,7 @@
 """
 CLI Script to perform a data split from the FIGLIB-ANNOTATED-RESIZED dataset to assign images into a train, val, test split.
 
-The folder structure remains the same but a split folder is appended.
+The folder structure will follow a ultralytics YOLO scaffolding.
 """
 
 import argparse
@@ -31,7 +31,9 @@ class DataSplit:
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
-    """Makes the CLI parser."""
+    """
+    Make the CLI parser.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--save-dir",
@@ -68,7 +70,9 @@ def make_cli_parser() -> argparse.ArgumentParser:
 
 
 def validate_parsed_args(args: dict) -> bool:
-    """Returns whether the parsed args are valid."""
+    """
+    Return whether the parsed args are valid.
+    """
     if not args["dir_dataset"].exists():
         logging.error(
             f"invalid --dir-dataset, dir {args['dir_dataset']} does not exist"

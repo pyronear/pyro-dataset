@@ -159,8 +159,8 @@ stages:
       nfiles: 67272
     - path: ./scripts/filter_data_pyrosdis_smoke.py
       hash: md5
-      md5: 00b30e4d298f4bd3ac895178566b071a
-      size: 4969
+      md5: d75ffb0eb181e57bba87ad0ba285c2c9
+      size: 4987
     outs:
     - path: ./data/interim/filtered/smoke/pyro-sdis/
       hash: md5
@@ -179,8 +179,8 @@ stages:
       nfiles: 49516
     - path: ./scripts/filter_data_figlib_smoke.py
       hash: md5
-      md5: 0dce8c19627adab34f1e0ca8fc478825
-      size: 4640
+      md5: cc2050978f29ef2b3e6e6ce7f907cc2e
+      size: 4658
     outs:
     - path: ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
@@ -200,8 +200,8 @@ stages:
       nfiles: 33527
     - path: ./scripts/filter_data_pyronear_ds_smoke.py
       hash: md5
-      md5: bc8cc48f72e919803fb8594b584426f7
-      size: 5492
+      md5: ad325080d7e90d8067cbd6bf40333ffe
+      size: 5510
     outs:
     - path: ./data/interim/filtered/smoke/pyronear_ds_03_2024/
       hash: md5
@@ -221,8 +221,8 @@ stages:
       nfiles: 20436
     - path: ./scripts/split_figlib.py
       hash: md5
-      md5: 277edf4e7318507bb3d4ac16a655aa8c
-      size: 5885
+      md5: 628ff2e04534e669a32c9e64c226d8fd
+      size: 5898
     outs:
     - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
@@ -278,8 +278,8 @@ stages:
       nfiles: 137840
     - path: ./scripts/filter_data_figlib_smoke.py
       hash: md5
-      md5: 0dce8c19627adab34f1e0ca8fc478825
-      size: 4640
+      md5: cc2050978f29ef2b3e6e6ce7f907cc2e
+      size: 4658
     outs:
     - path: ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
       hash: md5
