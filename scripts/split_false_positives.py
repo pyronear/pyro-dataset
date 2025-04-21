@@ -14,8 +14,10 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+from pyro_dataset.constants import DATE_FORMAT_OUTPUT
+
 # Date format used in the naming of files in FP_2024
-DATE_FORMAT = "%Y-%m-%dT%H-%M-%S"
+DATE_FORMAT_INPUT = "%Y-%m-%dT%H-%M-%S"
 
 
 @dataclass
@@ -182,7 +184,7 @@ def parse_filepath_image(filepath_image: Path) -> ObservationMetadata:
     datetime_str = filepath_image.stem
     return ObservationMetadata(
         camera_reference=camera_reference,
-        datetime=datetime.strptime(datetime_str, DATE_FORMAT),
+        datetime=datetime.strptime(datetime_str, DATE_FORMAT_INPUT),
         azimuth=int(azimuth_str),
     )
 
@@ -201,9 +203,7 @@ def to_filepath_image_destination(
     """
     observation_metadata = parse_filepath_image(filepath_image)
     filename_prefix = f"pyronear_{observation_metadata.camera_reference}-{observation_metadata.azimuth}".lower()
-    filename = (
-        f"{filename_prefix}_{observation_metadata.datetime.strftime(DATE_FORMAT)}.jpg"
-    )
+    filename = f"{filename_prefix}_{observation_metadata.datetime.strftime(DATE_FORMAT_OUTPUT)}.jpg"
     filepath_image_destination = save_dir / "images" / split / filename
     return filepath_image_destination
 
@@ -222,9 +222,7 @@ def to_filepath_label_destination(
     """
     observation_metadata = parse_filepath_image(filepath_image)
     filename_prefix = f"pyronear_{observation_metadata.camera_reference}-{observation_metadata.azimuth}".lower()
-    filename = (
-        f"{filename_prefix}_{observation_metadata.datetime.strftime(DATE_FORMAT)}.txt"
-    )
+    filename = f"{filename_prefix}_{observation_metadata.datetime.strftime(DATE_FORMAT_OUTPUT)}.txt"
     filepath_label_destination = save_dir / "labels" / split / filename
     return filepath_label_destination
 

@@ -9,9 +9,15 @@ import logging
 import random
 import shutil
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 from tqdm import tqdm
+
+from pyro_dataset.constants import DATE_FORMAT_OUTPUT
+
+# Date format used in the naming of files in FIGLIB_ANNOTATED_RESIZED
+DATE_FORMAT_INPUT = "%Y_%m_%dT%H_%M_%S"
 
 
 @dataclass
@@ -28,6 +34,37 @@ class DataSplit:
     train: list[Path]
     val: list[Path]
     test: list[Path]
+
+
+@dataclass
+class ObservationMetadata:
+    """
+    Simple class to store the metadata of an observation.
+
+    Attributes:
+        reference_id (str): the camera reference (where it was taken)
+        datetime (datetime): when it was taken
+    """
+
+    reference_id: str
+    datetime: datetime
+
+
+def parse_filepath_image(filepath_image: Path) -> ObservationMetadata:
+    """
+    Given a filepath_image, it returns an ObservationMetadata containing some
+    key information about the location and time the picture was taken.
+
+
+    Returns:
+        observation_metadata (ObservationMetadata)
+    """
+    reference_id = "_".join(filepath_image.stem.split("_")[:3])
+    datetime_str = "_".join(filepath_image.stem.split("_")[3:])
+    return ObservationMetadata(
+        reference_id=reference_id,
+        datetime=datetime.strptime(datetime_str, DATE_FORMAT_INPUT),
+    )
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -147,10 +184,10 @@ def persist_data_split(
         for filepath_image in tqdm(split_xs):
             filepath_label = filepath_image_to_filepath_label(filepath_image)
             filepath_image_destination = (
-                save_dir / "images" / split / filepath_image.name.lower()
+                save_dir / "images" / split / filepath_image.name
             )
             filepath_label_destination = (
-                save_dir / "labels" / split / filepath_label.name.lower()
+                save_dir / "labels" / split / filepath_label.name
             )
             filepath_image_destination.parent.mkdir(parents=True, exist_ok=True)
             filepath_label_destination.parent.mkdir(parents=True, exist_ok=True)

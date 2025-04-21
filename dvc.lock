@@ -221,12 +221,12 @@ stages:
       nfiles: 20436
     - path: ./scripts/split_figlib.py
       hash: md5
-      md5: 628ff2e04534e669a32c9e64c226d8fd
-      size: 5898
+      md5: 1aee2fd9e0c5bbbe9404db908df19964
+      size: 6946
     outs:
     - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
-      md5: cbf433f52ca543419891ffef35ec7a09.dir
+      md5: 3fb4cc46ec2cae0c2a6edf3d602d451b.dir
       size: 1351043118
       nfiles: 20344
   merge_smoke_datasets:
@@ -237,7 +237,7 @@ stages:
     deps:
     - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
-      md5: cbf433f52ca543419891ffef35ec7a09.dir
+      md5: 3fb4cc46ec2cae0c2a6edf3d602d451b.dir
       size: 1351043118
       nfiles: 20344
     - path: ./data/interim/filtered/smoke/pyro-sdis/
@@ -257,7 +257,7 @@ stages:
     outs:
     - path: ./data/interim/data-split/smoke/wildfire/
       hash: md5
-      md5: 9c812eda9cd8d5ec73e00582b55601a1.dir
+      md5: ca8c6b81485f80139b1f850a6f081b52.dir
       size: 5174362935
       nfiles: 95296
   filter_data_false_positives_FP_2024:
@@ -299,8 +299,8 @@ stages:
       nfiles: 5484
     - path: ./scripts/split_false_positives.py
       hash: md5
-      md5: c8cd13fa655dac39d283b09bf5b80bcd
-      size: 9050
+      md5: 20c2fa3e257f1ffc89f14a70c445bbe4
+      size: 9099
     outs:
     - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
       hash: md5
