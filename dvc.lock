@@ -207,3 +207,24 @@ stages:
       md5: ae4cfbb960862aa4e20295012dba418e.dir
       size: 2303601076
       nfiles: 31994
+  split_data_figlib:
+    cmd:
+    - uv run ./scripts/split_figlib.py --save-dir ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
+      --dir-dataset ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/ --random-seed
+      0 --ratio-train-val 0.9 --loglevel "info"
+    deps:
+    - path: ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
+      hash: md5
+      md5: 5aa650d552c162cfd440daa72d702edf.dir
+      size: 1357857659
+      nfiles: 20436
+    - path: ./scripts/split_figlib.py
+      hash: md5
+      md5: 277edf4e7318507bb3d4ac16a655aa8c
+      size: 5885
+    outs:
+    - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
+      hash: md5
+      md5: cbf433f52ca543419891ffef35ec7a09.dir
+      size: 1351043118
+      nfiles: 20344
