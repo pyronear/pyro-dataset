@@ -159,8 +159,8 @@ stages:
       nfiles: 67272
     - path: ./scripts/filter_data_pyrosdis_smoke.py
       hash: md5
-      md5: 2f4b8d6851ae6856b5df1715971128e6
-      size: 4878
+      md5: 00b30e4d298f4bd3ac895178566b071a
+      size: 4969
     outs:
     - path: ./data/interim/filtered/smoke/pyro-sdis/
       hash: md5
@@ -179,11 +179,31 @@ stages:
       nfiles: 49516
     - path: ./scripts/filter_data_figlib_smoke.py
       hash: md5
-      md5: cdd9e2d7f8f2996384896e72fde34e0f
-      size: 4549
+      md5: 0dce8c19627adab34f1e0ca8fc478825
+      size: 4640
     outs:
     - path: ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
       md5: 5aa650d552c162cfd440daa72d702edf.dir
       size: 1357857659
       nfiles: 20436
+  filter_data_pyronear_ds_smoke:
+    cmd:
+    - uv run ./scripts/filter_data_pyronear_ds_smoke.py --save-dir ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+      --dir-dataset ./data/raw/pyronear_ds_03_2024/ --loglevel "info"
+    deps:
+    - path: ./data/raw/pyronear_ds_03_2024/
+      hash: md5
+      md5: 6bcff221686ce4f5139eb6089cc31415.dir
+      size: 2487440765
+      nfiles: 33527
+    - path: ./scripts/filter_data_pyronear_ds_smoke.py
+      hash: md5
+      md5: df05c605933c016f7c3f2c5e73ac85ed
+      size: 4631
+    outs:
+    - path: ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+      hash: md5
+      md5: ae4cfbb960862aa4e20295012dba418e.dir
+      size: 2303601076
+      nfiles: 31994

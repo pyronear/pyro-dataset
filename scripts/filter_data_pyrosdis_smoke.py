@@ -115,7 +115,7 @@ def filter_dataset(
     return filepaths_images_with_smoke
 
 
-def copy_over(filepaths_images: list[Path], save_dir: Path) -> None:
+def copy_over(filepaths_images: list[Path], save_dir: Path, dir_dataset: Path) -> None:
     """
     Copy the filepaths_images over to the save dir along with their filepaths labels.
 
@@ -154,5 +154,9 @@ if __name__ == "__main__":
             f"found {len(filepaths_images_with_smoke)} images with smoke in {dir_dataset}"
         )
         logger.info(f"copy over images and labels.")
-        copy_over(filepaths_images=filepaths_images_with_smoke, save_dir=save_dir)
+        copy_over(
+            filepaths_images=filepaths_images_with_smoke,
+            save_dir=save_dir,
+            dir_dataset=dir_dataset,
+        )
         exit(0)

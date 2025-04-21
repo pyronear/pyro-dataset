@@ -115,3 +115,16 @@ stages:
       - ./data/raw/FIGLIB_ANNOTATED_RESIZED/
     outs:
       - ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
+
+  filter_data_pyronear_ds_smoke:
+    cmd:
+      - >-
+        uv run ./scripts/filter_data_pyronear_ds_smoke.py
+        --save-dir ./data/interim/filtered/smoke/pyronear_ds_03_2024/
+        --dir-dataset ./data/raw/pyronear_ds_03_2024/
+        --loglevel "info"
+    deps:
+      - ./scripts/filter_data_pyronear_ds_smoke.py
+      - ./data/raw/pyronear_ds_03_2024/
+    outs:
+      - ./data/interim/filtered/smoke/pyronear_ds_03_2024/

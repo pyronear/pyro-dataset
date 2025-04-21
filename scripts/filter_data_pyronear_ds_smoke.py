@@ -1,5 +1,5 @@
 """
-CLI Script to filter data from the FIGLIB-ANNOTATED-RESIZED dataset to only
+CLI Script to filter data from the pyronear_ds dataset to only
 keep images with fire smoke.
 
 The folder structure remains the same, only the non smoke images are discarded.
@@ -20,13 +20,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--save-dir",
         help="directory to save the filtered dataset.",
         type=Path,
-        default=Path("./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/"),
+        default=Path("./data/interim/filtered/smoke/pyronear_ds_03_2024/"),
     )
     parser.add_argument(
         "--dir-dataset",
         help="directory containing the pyro-sdis dataset.",
         type=Path,
-        default=Path("./data/raw/FIGLIB_ANNOTATED_RESIZED/"),
+        default=Path("./data/raw/pyronear_ds_03_2024/"),
     )
     parser.add_argument(
         "-log",
@@ -55,7 +55,7 @@ def filepath_image_to_filepath_label(filepath_image: Path) -> Path:
     Returns:
         filepath_label (Path): the associated label filepath.
     """
-    return filepath_image.parent / "labels" / f"{filepath_image.stem}.txt"
+    return Path(str(filepath_image).replace("images", "labels").replace(".jpg", ".txt"))
 
 
 def list_dataset_images(dir_dataset: Path) -> list[Path]:
