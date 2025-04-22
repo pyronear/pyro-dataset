@@ -30,7 +30,7 @@ source .venv/bin/activate
 Get the wildfire datasets with `dvc`:
 
 ```sh
-dvc get https://github.com/Chouffe/pyro-dataset data/processed
+dvc get . data/processed
 ```
 
 Pull all the data with `dvc`:
