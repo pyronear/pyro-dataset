@@ -27,7 +27,13 @@ source .venv/bin/activate
 
 ### 🍜 Data dependencies
 
-Pull the data with `dvc`:
+Get the wildfire datasets with `dvc`:
+
+```sh
+dvc get https://github.com/Chouffe/pyro-dataset data/processed
+```
+
+Pull all the data with `dvc`:
 
 ```sh
 dvc pull
