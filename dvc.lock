@@ -353,11 +353,11 @@ stages:
       nfiles: 11629
     - path: ./scripts/make_test_dataset.py
       hash: md5
-      md5: db1dbbcbf422a67ff4689b9b0bee66a6
-      size: 10099
+      md5: d3b7aa371c927e3ebdab7d2cb4ebd58e
+      size: 10033
     outs:
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: 61e9d66075b3903651f4463504006208.dir
-      size: 972191408
+      md5: e40faec415591a4588675636e5188cc5.dir
+      size: 972191368
       nfiles: 12827
