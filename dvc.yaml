@@ -224,3 +224,18 @@ stages:
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
     outs:
       - ./data/processed/wildfire_test/
+
+  analyze_wildfire_dataset:
+    cmd:
+      - >-
+        uv run ./scripts/analyze_processed_dataset.py
+        --save-dir ./data/reporting/wildfire/
+        --filepath-data-yaml-train-val ./data/processed/wildfire/data.yaml
+        --filepath-data-yaml-test ./data/processed/wildfire_test/data.yaml
+        --loglevel "info"
+    deps:
+      - ./scripts/analyze_processed_dataset.py
+      - ./data/processed/wildfire/data.yaml
+      - ./data/processed/wildfire_test/data.yaml
+    outs:
+      - ./data/reporting/wildfire/

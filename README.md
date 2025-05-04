@@ -105,6 +105,11 @@ using the previous stages.
 - __make_test_wildfire_dataset__: Make the test `wildfire` dataset using the
 previous stages.
 
+#### 🔎 Dataset Analysis
+
+- __analyze_wildfire_dataset__: Run some analyses on the generated dataset to
+check for data leakage, data distribution, and background images.
+
 ## Data
 
 ### Raw

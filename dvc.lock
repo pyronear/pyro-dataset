@@ -361,3 +361,27 @@ stages:
       md5: e40faec415591a4588675636e5188cc5.dir
       size: 972191368
       nfiles: 12827
+  analyze_wildfire_dataset:
+    cmd:
+    - uv run ./scripts/analyze_processed_dataset.py --save-dir ./data/reporting/wildfire/
+      --filepath-data-yaml-train-val ./data/processed/wildfire/data.yaml --filepath-data-yaml-test
+      ./data/processed/wildfire_test/data.yaml --loglevel "info"
+    deps:
+    - path: ./data/processed/wildfire/data.yaml
+      hash: md5
+      md5: d32d144bb208539d6321c2078af86a24
+      size: 63
+    - path: ./data/processed/wildfire_test/data.yaml
+      hash: md5
+      md5: 778ac7c756a3a68ff725ef67025917fe
+      size: 43
+    - path: ./scripts/analyze_processed_dataset.py
+      hash: md5
+      md5: c9987d8fa3c5ea5eed52f3c7d446c438
+      size: 20009
+    outs:
+    - path: ./data/reporting/wildfire/
+      hash: md5
+      md5: 8b3e8bac90a60690ea9ea23edd17f607.dir
+      size: 15862
+      nfiles: 1
