@@ -1,16 +1,21 @@
 """
-CLI Script to analyze and make a reporting of the
-generated dataset.
+CLI Script to analyze and make a reporting of the generated dataset.
 """
 
 import argparse
+import hashlib
 import logging
-from pathlib import Path
+import re
+from collections import Counter
 from dataclasses import dataclass
-from typing import Any
-from enum import Enum
 from datetime import datetime
-from pyro_dataset.utils import yaml_read
+from enum import Enum
+from pathlib import Path
+from typing import Any
+
+from tqdm import tqdm
+
+from pyro_dataset.utils import yaml_read, yaml_write
 
 
 class DatasetOrigin(Enum):
@@ -20,6 +25,7 @@ class DatasetOrigin(Enum):
     Note: UNKNOW is used to account for new datasets that have not yet
     been added to this enum.
     """
+
     PYRONEAR = "pyronear"
     ADF = "adf"
     AWF = "awf"
@@ -41,15 +47,76 @@ class DataSplit(Enum):
 @dataclass
 class DetectionDetails:
     dataset_origin: DatasetOrigin
+    stem: str
     details: dict[str, Any]
 
 
 @dataclass
+class DataLeakageSummary:
+    """
+    Simple dataclass to represent data leakage summary.
+    """
+
+    train_val_file_content: list[Path]
+    train_test_file_content: list[Path]
+    val_test_file_content: list[Path]
+
+
+@dataclass
 class SplitSummary:
+    """
+    Generic Split Summary for a given split.
+    """
+
+    children: list["SplitSummary"]
+    name: str
     n_images: int
     n_labels: int
     n_background_images: int
     detection_details: list[DetectionDetails]
+    frequencies_origins: Counter[DatasetOrigin]
+    frequencies_years: Counter[int]
+    frequencies_months: Counter[int]
+    frequencies_year_months: Counter[str]
+
+    def __repr__(self):
+        return f"""SplitSummary(
+        name={self.name},
+        n_images={self.n_images},
+        n_labels={self.n_labels},
+        n_background_images={self.n_background_images},
+        children={self.children})"""
+
+
+@dataclass
+class SplitFilepaths:
+    """
+    list the different Filepaths for a given split.
+    """
+
+    images: list[Path]
+    labels: list[Path]
+    labels_background: list[Path]
+
+
+def compute_file_content_hash(filepath: Path) -> str:
+    """
+    Compute the file content hash of the `filepath`.
+
+    Returns:
+        hexdigest (str)
+    """
+    # Create a hash object
+    hash_sha256 = hashlib.sha256()
+
+    # Open the file in binary mode
+    with open(filepath, "rb") as f:
+        # Read the file in chunks to avoid using too much memory
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_sha256.update(chunk)
+
+    # Return the hexadecimal digest of the hash
+    return hash_sha256.hexdigest()
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -64,7 +131,8 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("./data/reporting/wildfire/"),
     )
     parser.add_argument(
-        "--filepath-data-yaml-train-val", help="filepath containing the data.yaml for the train and val splits of the dataset.",
+        "--filepath-data-yaml-train-val",
+        help="filepath containing the data.yaml for the train and val splits of the dataset.",
         type=Path,
         default=Path("./data/processed/wildfire/data.yaml"),
     )
@@ -114,19 +182,68 @@ def is_background(filepath_label: Path) -> bool:
         and filepath_label.stat().st_size == 0
     )
 
+
+def parse_datetime(stem: str) -> datetime | None:
+    """
+    Parse the datetime from the filepath stem.
+
+    Note: Try different datetime string formats and normalize it.
+    """
+    pattern = (
+        r"(\d{4}[-_]\d{2}[-_]\d{2}T\d{2}[-_]\d{2}[-_]\d{2}|\d{4}[-_]\d{2}[-_]\d{2})"
+    )
+
+    match = re.search(pattern, stem)
+
+    if match:
+        # Extract the matched string
+        datetime_str = match.group(0)
+        # Replace underscores with dashes for consistency
+        datetime_str = datetime_str.replace("_", "-")
+        # Try to parse the datetime
+        try:
+            # Check for full datetime
+            return datetime.strptime(datetime_str, "%Y-%m-%dT%H-%M-%S")
+        except ValueError:
+            return None
+    else:
+        return None
+
+
 def parse_details_pyronear(stem: str) -> dict[str, Any]:
-    return {"test": "pyro"}
+    return {
+        "datetime": parse_datetime(stem),
+    }
+
 
 def parse_details_adf(stem: str) -> dict[str, Any]:
-    return {"test": "adf"}
+    return {
+        "datetime": parse_datetime(stem),
+    }
+
 
 def parse_details_awf(stem: str) -> dict[str, Any]:
-    return {"test": "awf"}
+    return {
+        "datetime": parse_datetime(stem),
+    }
+
+
+def parse_details_hpwren(stem: str) -> dict[str, Any]:
+    return {
+        "datetime": parse_datetime(stem),
+    }
+
 
 def parse_details_random_smoke(stem: str) -> dict[str, Any]:
-    return {"test": "awf"}
+    return {
+        "datetime": parse_datetime(stem),
+    }
+
 
 def parse_details(stem: str, dataset_origin: DatasetOrigin) -> dict[str, Any]:
+    """
+    Parse details from the stem - mostly datetime if possible to extract it.
+    """
     match dataset_origin:
         case DatasetOrigin.PYRONEAR:
             return parse_details_pyronear(stem)
@@ -135,25 +252,36 @@ def parse_details(stem: str, dataset_origin: DatasetOrigin) -> dict[str, Any]:
         case DatasetOrigin.AWF:
             return parse_details_awf(stem)
         case DatasetOrigin.HPWREN:
-            return parse_details_awf(stem)
+            return parse_details_hpwren(stem)
         case DatasetOrigin.RANDOM_SMOKE:
             return parse_details_random_smoke(stem)
         case _:
-          return {}
+            return {"datetime": parse_datetime(stem)}
+
 
 def parse_dataset_origin(stem: str) -> DatasetOrigin:
+    """
+    Parse the dataset origin from a filepath stem.
+    """
     parts = stem.lower().split("_")
     origin_str = parts[0]
     if origin_str in [do.value for do in DatasetOrigin]:
         return DatasetOrigin(value=parts[0])
     # Fix the inconsitencies between the test dataset naming and the val/train naming
-    elif origin_str in ["sdis-77", "sdis-07", "force-06", "marguerite-282", "pyro", "ardeche"]:
+    elif origin_str in [
+        "sdis-77",
+        "sdis-07",
+        "force-06",
+        "marguerite-282",
+        "pyro",
+        "ardeche",
+    ]:
         return DatasetOrigin.PYRONEAR
     # Fix the inconsitencies between the test dataset naming and the val/train naming
     elif origin_str in ["axis", "2023"]:
         return DatasetOrigin.AWF
     else:
-        print(f"unknow: {origin_str}")
+        logging.warning(f"unknown dataset origin: {origin_str}")
         return DatasetOrigin.UNKNOWN
 
 
@@ -167,7 +295,67 @@ def parse_filepath_stem(stem: str) -> DetectionDetails:
     return DetectionDetails(
         dataset_origin=dataset_origin,
         details=dataset_details,
+        stem=stem,
     )
+
+
+def get_summary_frequencies(
+    detection_details: list[DetectionDetails],
+) -> dict[str, Counter]:
+    """
+    Return a dict mapping keys to frequencies Counter.
+
+    Returns:
+      frequencies_year_months (Counter)
+      frequencies_origins (Counter)
+      frequencies_years (Counter)
+      frequencies_months (Counter)
+    """
+    frequencies_origins = Counter([dd.dataset_origin for dd in detection_details])
+    frequencies_year_months = Counter(
+        [
+            dd.details["datetime"].strftime("%Y-%m")
+            for dd in detection_details
+            if dd.details["datetime"]
+        ]
+    )
+    frequencies_years = Counter(
+        [
+            dd.details["datetime"].year
+            for dd in detection_details
+            if dd.details["datetime"]
+        ]
+    )
+    frequencies_months = Counter(
+        [
+            dd.details["datetime"].month
+            for dd in detection_details
+            if dd.details["datetime"]
+        ]
+    )
+    return {
+        "frequencies_origins": frequencies_origins,
+        "frequencies_months": frequencies_months,
+        "frequencies_years": frequencies_years,
+        "frequencies_year_months": frequencies_year_months,
+    }
+
+
+def split_filepaths(filepath_data_yaml: Path, data_split: DataSplit) -> SplitFilepaths:
+    data_yaml = yaml_read(filepath_data_yaml)
+    dir_images = filepath_data_yaml.parent / data_yaml[data_split.value]
+    dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace(
+        "images", "labels"
+    )
+    filepaths_images = list(dir_images.glob("*.jpg"))
+    filepaths_labels = list(dir_labels.glob("*.txt"))
+    filepaths_labels_background = [fp for fp in filepaths_labels if is_background(fp)]
+    return SplitFilepaths(
+        images=filepaths_images,
+        labels=filepaths_images,
+        labels_background=filepaths_labels_background,
+    )
+
 
 def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSummary:
     """
@@ -175,18 +363,235 @@ def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSumma
     """
     data_yaml = yaml_read(filepath_data_yaml)
     dir_images = filepath_data_yaml.parent / data_yaml[data_split.value]
-    dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace("images", "labels")
-    filepaths_images = list(dir_images.glob("*.jpg"))
-    filepaths_labels = list(dir_labels.glob("*.txt"))
-    filepaths_labels_background = [fp for fp in filepaths_labels if is_background(fp)]
-    detection_details = [parse_filepath_stem(fp.stem) for fp in filepaths_images]
+    dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace(
+        "images", "labels"
+    )
+    filepaths = split_filepaths(
+        filepath_data_yaml=filepath_data_yaml,
+        data_split=data_split,
+    )
+    detection_details = [parse_filepath_stem(fp.stem) for fp in filepaths.images]
+    frequencies = get_summary_frequencies(detection_details=detection_details)
+
+    children = []
+    for dataset_origin, _ in frequencies["frequencies_origins"].most_common(n=5):
+        detection_details_filtered = [
+            dd for dd in detection_details if dd.dataset_origin == dataset_origin
+        ]
+        filepaths_labels_filtered = [
+            dir_labels / f"{dd.stem}.txt"
+            for dd in detection_details_filtered
+            if (dir_labels / f"{dd.stem}.txt").exists()
+        ]
+        filepaths_labels_background_filtered = [
+            fp for fp in filepaths_labels_filtered if is_background(fp)
+        ]
+        frequencies_filtered = get_summary_frequencies(
+            detection_details=detection_details_filtered
+        )
+        sub_split_summary = SplitSummary(
+            name=dataset_origin.value,
+            children=[],
+            n_images=len(detection_details_filtered),
+            n_labels=len(filepaths_labels_filtered),
+            n_background_images=len(filepaths_labels_background_filtered),
+            detection_details=detection_details_filtered,
+            frequencies_origins=frequencies_filtered["frequencies_origins"],
+            frequencies_years=frequencies_filtered["frequencies_years"],
+            frequencies_months=frequencies_filtered["frequencies_months"],
+            frequencies_year_months=frequencies_filtered["frequencies_year_months"],
+        )
+        children.append(sub_split_summary)
 
     return SplitSummary(
-        n_images=len(filepaths_images),
-        n_labels=len(filepaths_labels),
-        n_background_images=len(filepaths_labels_background),
+        name="all",
+        children=children,
+        n_images=len(filepaths.images),
+        n_labels=len(filepaths.labels),
+        n_background_images=len(filepaths.labels_background),
         detection_details=detection_details,
+        frequencies_origins=frequencies["frequencies_origins"],
+        frequencies_years=frequencies["frequencies_years"],
+        frequencies_months=frequencies["frequencies_months"],
+        frequencies_year_months=frequencies["frequencies_year_months"],
     )
+
+
+def split_summary_to_dict(split_summary: SplitSummary) -> dict:
+    """
+    Turn a split summary into a python dictionnary that can be saved as yaml
+    for instance.
+    """
+    result = {}
+    result["origin"] = split_summary.name
+    result["statistics"] = {
+        "n_images": split_summary.n_images,
+        "n_labels": split_summary.n_labels,
+        "n_background_images": split_summary.n_background_images,
+    }
+    result["frequencies"] = {
+        "origins": dict(
+            sorted(
+                [
+                    (dataset_origin.value, count)
+                    for dataset_origin, count in split_summary.frequencies_origins.items()
+                ],
+                key=lambda e: e[1],
+                reverse=True,
+            )
+        ),
+        "years": dict(
+            sorted(
+                split_summary.frequencies_years.items(),
+                key=lambda e: e[1],
+                reverse=True,
+            )
+        ),
+        "months": dict(
+            sorted(
+                split_summary.frequencies_months.items(),
+                key=lambda e: e[1],
+                reverse=True,
+            )
+        ),
+        "year_months": dict(
+            sorted(
+                split_summary.frequencies_year_months.items(),
+                key=lambda e: e[1],
+                reverse=True,
+            )
+        ),
+    }
+    result["sub_splits"] = []
+
+    for child in split_summary.children:
+        result_child = split_summary_to_dict(split_summary=child)
+        result["sub_splits"].append(result_child.copy())
+
+    if len(result["sub_splits"]) == 0:
+        del result["sub_splits"]
+
+    return result
+
+
+def to_data_leakage_summary(hashes: dict[str, dict]) -> DataLeakageSummary:
+    hashes_file_content_leakage_train_val = set(hashes["train"].keys()).intersection(
+        set(hashes["val"].keys())
+    )
+    hashes_file_content_leakage_train_test = set(hashes["train"].keys()).intersection(
+        set(hashes["test"].keys())
+    )
+    hashes_file_content_leakage_val_test = set(hashes["val"].keys()).intersection(
+        set(hashes["test"].keys())
+    )
+    train_val_file_content = [
+        v
+        for k, v in hashes["train"].items()
+        if k in hashes_file_content_leakage_train_val
+    ] + [
+        v
+        for k, v in hashes["test"].items()
+        if k in hashes_file_content_leakage_train_val
+    ]
+
+    return DataLeakageSummary(
+        train_val_file_content=train_val_file_content,
+        train_test_file_content=[],
+        val_test_file_content=[],
+    )
+
+
+def write_report_yaml(
+    split_summary_train: SplitSummary,
+    split_summary_val: SplitSummary,
+    split_summary_test: SplitSummary,
+    filepath_output_yaml: Path,
+    data_leakage_summary: DataLeakageSummary,
+) -> None:
+    dict_train = split_summary_to_dict(split_summary_train)
+    dict_val = split_summary_to_dict(split_summary_val)
+    dict_test = split_summary_to_dict(split_summary_test)
+    dict_data = {
+        "data_leakage": {
+            "train_val": {
+                "file_content_hash_check": {
+                    "is_leakage": len(data_leakage_summary.train_val_file_content) > 0,
+                    "filepaths": data_leakage_summary.train_val_file_content,
+                }
+            },
+            "train_test": {
+                "file_content_hash_check": {
+                    "is_leakage": len(data_leakage_summary.train_test_file_content) > 0,
+                    "filepaths": data_leakage_summary.train_test_file_content,
+                }
+            },
+            "val_test": {
+                "file_content_hash_check": {
+                    "is_leakage": len(data_leakage_summary.val_test_file_content) > 0,
+                    "filepaths": data_leakage_summary.val_test_file_content,
+                }
+            },
+        },
+        "summary": {
+            "split": {
+                "train": dict_train,
+                "val": dict_val,
+                "test": dict_test,
+            },
+        },
+    }
+    filepath_output_yaml.parent.mkdir(parents=True, exist_ok=True)
+    yaml_write(to=filepath_output_yaml, data=dict_data)
+
+
+def compute_all_hashes(
+    filepath_data_yaml_train_val: Path,
+    filepath_data_yaml_test: Path,
+) -> dict[str, dict]:
+    """
+    Compute all file content hashes for the images in the different splits.
+
+    Returns:
+        train (dict[str, Path]): hashes for the train images.
+        val (dict[str, Path]): hashes for the val images.
+        test (dict[str, Path]): hashes for the test images.
+    """
+    filepaths_train = split_filepaths(
+        filepath_data_yaml=filepath_data_yaml_train_val,
+        data_split=DataSplit.TRAIN,
+    )
+    filepaths_val = split_filepaths(
+        filepath_data_yaml=filepath_data_yaml_train_val,
+        data_split=DataSplit.VAL,
+    )
+    filepaths_test = split_filepaths(
+        filepath_data_yaml=filepath_data_yaml_test,
+        data_split=DataSplit.TEST,
+    )
+    logging.info(
+        f"compute file content hash for {len(filepaths_train.images)} images in train split"
+    )
+    hashes_train = {
+        compute_file_content_hash(fp): fp for fp in tqdm(filepaths_train.images)
+    }
+    logging.info(
+        f"compute file content hash for {len(filepaths_val.images)} images in val split"
+    )
+    hashes_val = {
+        compute_file_content_hash(fp): fp for fp in tqdm(filepaths_val.images)
+    }
+    logging.info(
+        f"compute file content hash for {len(filepaths_test.images)} images in test split"
+    )
+    hashes_test = {
+        compute_file_content_hash(fp): fp for fp in tqdm(filepaths_test.images)
+    }
+
+    return {
+        "train": hashes_train,
+        "val": hashes_val,
+        "test": hashes_test,
+    }
 
 
 if __name__ == "__main__":
@@ -198,6 +603,7 @@ if __name__ == "__main__":
         exit(1)
     else:
         logging.info(args)
+        save_dir = args["save_dir"]
         filepath_data_yaml_train_val = args["filepath_data_yaml_train_val"]
         filepath_data_yaml_test = args["filepath_data_yaml_test"]
         data_yaml_train_val = yaml_read(filepath_data_yaml_train_val)
@@ -205,20 +611,34 @@ if __name__ == "__main__":
         logger.info(f"data_yaml test split: {data_yaml_test}")
         logger.info(f"data_yaml train and val splits: {data_yaml_train_val}")
 
-        # Train
-        print("TRAIN")
-        split_summary_train = split_summary(filepath_data_yaml_train_val, data_split=DataSplit.TRAIN)
-        # print(split_summary_train)
-        # Val
-        print("VAL")
-        split_summary_val = split_summary(filepath_data_yaml_train_val, data_split=DataSplit.VAL)
-        # print(split_summary_val)
+        split_summary_train = split_summary(
+            filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
+        )
+        split_summary_val = split_summary(
+            filepath_data_yaml_train_val, data_split=DataSplit.VAL
+        )
+        split_summary_test = split_summary(
+            filepath_data_yaml_test, data_split=DataSplit.TEST
+        )
+        logger.info(f"train split summary: {split_summary_train}")
+        logger.info(f"val split summary: {split_summary_val}")
+        logger.info(f"test split summary: {split_summary_test}")
 
-        # Test
-        print("TEST")
-        split_summary_test = split_summary(filepath_data_yaml_test, data_split=DataSplit.TEST)
-        # print(split_summary_test)
+        hashes = compute_all_hashes(
+            filepath_data_yaml_train_val=filepath_data_yaml_train_val,
+            filepath_data_yaml_test=filepath_data_yaml_test,
+        )
 
-        # print(filepaths_train_images[:10])
-        # detection_details = [parse_filepath_stem(fp.stem) for fp in filepaths_train_images]
-        # print(detection_details[:10])
+        data_leakage_summary = to_data_leakage_summary(hashes=hashes)
+        logger.info(f"data leakage summary: {data_leakage_summary}")
+
+        filepath_output_yaml = save_dir / "report.yaml"
+        logger.info(f"Saving report in {filepath_output_yaml}")
+
+        write_report_yaml(
+            split_summary_train=split_summary_train,
+            split_summary_val=split_summary_val,
+            split_summary_test=split_summary_test,
+            filepath_output_yaml=filepath_output_yaml,
+            data_leakage_summary=data_leakage_summary,
+        )
