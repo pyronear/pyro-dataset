@@ -377,11 +377,11 @@ stages:
       size: 43
     - path: ./scripts/analyze_processed_dataset.py
       hash: md5
-      md5: c9987d8fa3c5ea5eed52f3c7d446c438
-      size: 20009
+      md5: ad79f9a7520f0eb56013944e393466fd
+      size: 22278
     outs:
     - path: ./data/reporting/wildfire/
       hash: md5
-      md5: 8b3e8bac90a60690ea9ea23edd17f607.dir
-      size: 15862
-      nfiles: 1
+      md5: 945803d949040530f80ab8c46ac299a5.dir
+      size: 44741
+      nfiles: 3
