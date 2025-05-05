@@ -21,8 +21,12 @@ from tqdm import tqdm
 
 from pyro_dataset.plots.report import (
     make_figure_for_data_splits_breakdown,
+    make_figure_for_data_splits_month_breakdown,
+    make_figure_for_data_splits_year_breakdown,
     make_figure_for_ratio_background_images,
     make_plot_data_for_data_splits_breakdown,
+    make_plot_data_for_data_splits_month_breakdown,
+    make_plot_data_for_data_splits_year_breakdown,
     make_plot_data_for_ratio_background_images,
 )
 from pyro_dataset.utils import yaml_read, yaml_write
@@ -620,10 +624,12 @@ def make_analysis_plots(filepath_report_yaml: Path) -> None:
     logging.info(f"Loading the report to generate visual plots {filepath_report_yaml}")
     report = yaml_read(filepath_report_yaml)
 
-    filepath_data_splits_breakdown = save_dir / "plots" / "data_splits_breakdown.html"
-    filepath_data_splits_breakdown.parent.mkdir(parents=True, exist_ok=True)
+    filepath_data_splits_origin_breakdown = (
+        save_dir / "plots" / "data_splits_origin_breakdown.html"
+    )
+    filepath_data_splits_origin_breakdown.parent.mkdir(parents=True, exist_ok=True)
     logging.info(
-        f"Generating plot for data splits breakdown in {filepath_data_splits_breakdown}"
+        f"Generating plot for data splits origin breakdown in {filepath_data_splits_origin_breakdown}"
     )
     origins = ["pyronear", "hpwren", "awf", "random", "adf", "unknown"]
     data = make_plot_data_for_data_splits_breakdown(
@@ -631,20 +637,33 @@ def make_analysis_plots(filepath_report_yaml: Path) -> None:
         origins=origins,
     )
     figure_data_splits_breakdown = make_figure_for_data_splits_breakdown(data=data)
-    output_file(filepath_data_splits_breakdown)
+    output_file(filepath_data_splits_origin_breakdown)
     show(figure_data_splits_breakdown)
 
     filepath_image_ratios_breakdown = (
-        save_dir / "plots" / "data_splits_background_images_ratios.html"
+        save_dir / "plots" / "data_splits_background_images_ratios_breakdown.html"
     )
     logging.info(
         f"Generating plot for ratio image/background breakdown in {filepath_image_ratios_breakdown}"
     )
     data = make_plot_data_for_ratio_background_images(report)
-    print(data)
     figure_image_ratios_breakdown = make_figure_for_ratio_background_images(data)
     output_file(filepath_image_ratios_breakdown)
     show(figure_image_ratios_breakdown)
+
+    filepath_years_breakdown = save_dir / "plots" / "data_splits_years_breakdown.html"
+    logging.info(f"Generating plot for years breakdown in {filepath_years_breakdown}")
+    data = make_plot_data_for_data_splits_year_breakdown(report)
+    figure_year_breakdown = make_figure_for_data_splits_year_breakdown(data)
+    output_file(filepath_years_breakdown)
+    show(figure_year_breakdown)
+
+    filepath_months_breakdown = save_dir / "plots" / "data_splits_months_breakdown.html"
+    logging.info(f"Generating plot for months breakdown in {filepath_months_breakdown}")
+    data = make_plot_data_for_data_splits_month_breakdown(report)
+    figure_month_breakdown = make_figure_for_data_splits_month_breakdown(data)
+    output_file(filepath_months_breakdown)
+    show(figure_month_breakdown)
 
 
 if __name__ == "__main__":
