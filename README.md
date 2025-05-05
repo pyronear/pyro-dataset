@@ -108,7 +108,8 @@ previous stages.
 #### 🔎 Dataset Analysis
 
 - __analyze_wildfire_dataset__: Run some analyses on the generated dataset to
-check for data leakage, data distribution, and background images.
+check for data leakage, data distribution, and background images. Some
+interactive plots are also generated and exported.
 
 ## Data
 
