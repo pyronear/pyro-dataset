@@ -13,8 +13,22 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
+from bokeh.io import export_png, output_notebook, show
+from bokeh.models import ColumnDataSource
+from bokeh.palettes import HighContrast3, MediumContrast6, Pastel1_6, Sunset10
+from bokeh.plotting import figure, output_file
 from tqdm import tqdm
 
+from pyro_dataset.plots.report import (
+    make_figure_for_data_splits_breakdown,
+    make_figure_for_data_splits_month_breakdown,
+    make_figure_for_data_splits_year_breakdown,
+    make_figure_for_ratio_background_images,
+    make_plot_data_for_data_splits_breakdown,
+    make_plot_data_for_data_splits_month_breakdown,
+    make_plot_data_for_data_splits_year_breakdown,
+    make_plot_data_for_ratio_background_images,
+)
 from pyro_dataset.utils import yaml_read, yaml_write
 
 
@@ -97,6 +111,14 @@ class SplitFilepaths:
     images: list[Path]
     labels: list[Path]
     labels_background: list[Path]
+
+
+def normalize_frequencies(freqs: dict[Any, int]) -> dict[Any, float]:
+    """
+    Normalize a frequency dict.
+    """
+    total = sum(v for v in freqs.values())
+    return {k: v / total for k, v in freqs.items()}
 
 
 def compute_file_content_hash(filepath: Path) -> str:
@@ -594,6 +616,56 @@ def compute_all_hashes(
     }
 
 
+def make_analysis_plots(filepath_report_yaml: Path) -> None:
+    """
+    Generate the different plots for analyzing the generated datasets.
+    """
+
+    logging.info(f"Loading the report to generate visual plots {filepath_report_yaml}")
+    report = yaml_read(filepath_report_yaml)
+
+    filepath_data_splits_origin_breakdown = (
+        save_dir / "plots" / "data_splits_origin_breakdown.html"
+    )
+    filepath_data_splits_origin_breakdown.parent.mkdir(parents=True, exist_ok=True)
+    logging.info(
+        f"Generating plot for data splits origin breakdown in {filepath_data_splits_origin_breakdown}"
+    )
+    origins = ["pyronear", "hpwren", "awf", "random", "adf", "unknown"]
+    data = make_plot_data_for_data_splits_breakdown(
+        report=report,
+        origins=origins,
+    )
+    figure_data_splits_breakdown = make_figure_for_data_splits_breakdown(data=data)
+    output_file(filepath_data_splits_origin_breakdown)
+    show(figure_data_splits_breakdown)
+
+    filepath_image_ratios_breakdown = (
+        save_dir / "plots" / "data_splits_background_images_ratios_breakdown.html"
+    )
+    logging.info(
+        f"Generating plot for ratio image/background breakdown in {filepath_image_ratios_breakdown}"
+    )
+    data = make_plot_data_for_ratio_background_images(report)
+    figure_image_ratios_breakdown = make_figure_for_ratio_background_images(data)
+    output_file(filepath_image_ratios_breakdown)
+    show(figure_image_ratios_breakdown)
+
+    filepath_years_breakdown = save_dir / "plots" / "data_splits_years_breakdown.html"
+    logging.info(f"Generating plot for years breakdown in {filepath_years_breakdown}")
+    data = make_plot_data_for_data_splits_year_breakdown(report)
+    figure_year_breakdown = make_figure_for_data_splits_year_breakdown(data)
+    output_file(filepath_years_breakdown)
+    show(figure_year_breakdown)
+
+    filepath_months_breakdown = save_dir / "plots" / "data_splits_months_breakdown.html"
+    logging.info(f"Generating plot for months breakdown in {filepath_months_breakdown}")
+    data = make_plot_data_for_data_splits_month_breakdown(report)
+    figure_month_breakdown = make_figure_for_data_splits_month_breakdown(data)
+    output_file(filepath_months_breakdown)
+    show(figure_month_breakdown)
+
+
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -642,3 +714,8 @@ if __name__ == "__main__":
             filepath_output_yaml=filepath_output_yaml,
             data_leakage_summary=data_leakage_summary,
         )
+
+        logger.info(
+            f"Make some visualization plots based on the report.yaml file {filepath_output_yaml}"
+        )
+        make_analysis_plots(filepath_report_yaml=filepath_output_yaml)

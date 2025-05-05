@@ -8,10 +8,12 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
+    "bokeh>=3.7.2",
     "clip",
     "datasets>=3.5.0",
     "dvc>=3.59.1",
     "dvc-s3>=3.2.0",
+    "jupyter-bokeh>=4.0.5",
     "open-clip-torch>=2.32.0",
     "torch>=2.6.0",
     "torchvision>=0.21.0",
