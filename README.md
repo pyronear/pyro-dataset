@@ -151,6 +151,15 @@ follows the ultralytics format.
 -  🔦 __wildfire_test__: the test dataset used to evaluate the performance of
 our ML models.
 
+### Reporting
+
+Once the datasets are generated and stored in the `./data/processed/`
+directory, various reports are created to visualize the data. These reports
+break down the datasets across different dimensions, allowing for a quick
+assessment of whether the various data splits are logical and meaningful.
+
+These reports live under `./data/reporting/`.
+
 ## 🧠 Models
 
 - 🌈 __legendary_field__: yolov8s object detection model, first performant model
