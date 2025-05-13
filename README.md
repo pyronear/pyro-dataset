@@ -143,6 +143,9 @@ build up the final datasets. They are versioned with DVC.
 Many artifacts and datasets can be found here: from cropped image areas, to
 filtered datasets to focus on false positives for instance.
 
+- __false_positives__: curated and annotated dataset containing false positives
+from the pyronear systems.
+
 ### Processed
 
 The final datasets are located in `./data/processed/`:
