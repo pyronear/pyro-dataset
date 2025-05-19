@@ -170,3 +170,22 @@ These reports live under `./data/reporting/`.
 trained in 2019. to detect fire smoke.
 - 🐺 __wise_wolf__: yolov11s object detection model, trained on `2024-04-26` using
 a larger dataset.
+
+## 🌎 Release the datasets
+
+The script to release a new version of the model is located in
+`./scripts/release.py`.
+Make sure to set your `GITHUB_ACCESS_TOKEN` as an env variable in your shell
+before running the following script:
+
+```sh
+export GITHUB_ACCESS_TOKEN=XXX
+uv run python ./scripts/release.py \
+  --version v1.0.42 \
+  --github-owner earthtoolsmaker \
+  --github-repo pyronear-mlops
+```
+
+This will create a new release in the github repository with and upload an
+archive of the datasets to a private S3 repository. The link to the dataset is
+displayed in the release summary.

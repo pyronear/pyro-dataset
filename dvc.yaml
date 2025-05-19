@@ -239,3 +239,18 @@ stages:
       - ./data/processed/wildfire_test/data.yaml
     outs:
       - ./data/reporting/wildfire/
+
+  build_manifest_dataset:
+    cmd:
+      - >-
+        uv run ./scripts/build_manifest.py
+        --save-dir ./data/reporting/manifest/
+        --dir-wildfire-dataset-train-val ./data/processed/wildfire/
+        --dir-wildfire-dataset-test ./data/processed/wildfire_test/
+        --loglevel "info"
+    deps:
+      - ./scripts/build_manifest.py
+      - ./data/processed/wildfire/
+      - ./data/processed/wildfire_test/
+    outs:
+      - ./data/reporting/manifest/

@@ -377,11 +377,37 @@ stages:
       size: 43
     - path: ./scripts/analyze_processed_dataset.py
       hash: md5
-      md5: f0c0c0e2a520a64ffb9abbb8733bfbf9
-      size: 23321
+      md5: ccf1480a3a581e416d25d1ef8cd2bd54
+      size: 23163
     outs:
     - path: ./data/reporting/wildfire/
       hash: md5
-      md5: 9d6be7e60f2edb5360f0cb8cc8c3f340.dir
+      md5: 675631a73bd76c6b1ac6f16b1c671372.dir
       size: 120333
       nfiles: 5
+  build_manifest_dataset:
+    cmd:
+    - uv run ./scripts/build_manifest.py --save-dir ./data/reporting/manifest/ --dir-wildfire-dataset-train-val
+      ./data/processed/wildfire/ --dir-wildfire-dataset-test ./data/processed/wildfire_test/
+      --loglevel "info"
+    deps:
+    - path: ./data/processed/wildfire/
+      hash: md5
+      md5: fe129f2ec6008feb67bc91e9428f94ba.dir
+      size: 5811038183
+      nfiles: 104275
+    - path: ./data/processed/wildfire_test/
+      hash: md5
+      md5: e40faec415591a4588675636e5188cc5.dir
+      size: 972191368
+      nfiles: 12827
+    - path: ./scripts/build_manifest.py
+      hash: md5
+      md5: a958cb260c26a0dce741dec150c6171e
+      size: 3635
+    outs:
+    - path: ./data/reporting/manifest/
+      hash: md5
+      md5: 91723ac0709b64e8177f80e2bff5b1e6.dir
+      size: 15390
+      nfiles: 1

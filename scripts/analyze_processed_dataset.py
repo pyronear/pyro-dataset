@@ -13,10 +13,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any
 
-from bokeh.io import export_png, output_notebook, show
-from bokeh.models import ColumnDataSource
-from bokeh.palettes import HighContrast3, MediumContrast6, Pastel1_6, Sunset10
-from bokeh.plotting import figure, output_file
+from bokeh.io import show
+from bokeh.plotting import output_file
 from tqdm import tqdm
 
 from pyro_dataset.plots.report import (
