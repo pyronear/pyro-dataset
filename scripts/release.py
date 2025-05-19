@@ -204,7 +204,16 @@ if __name__ == "__main__":
             bucket_name=s3_bucket,
             s3_folder="github-releases",
         )
-        logger.info(f"uploading associated report and plots")
+        logger.info(f"uploading associated manifest, report and plots")
+        logger.info(f"uploading manifest.yaml")
+        upload_asset(
+            owner=owner,
+            repo=repo,
+            release_id=release_id,
+            filepath_asset=Path("./data/reporting/manifest/manifest.yaml"),
+            name="manifest.yaml",
+            github_access_token=github_access_token,
+        )
         logger.info(f"uploading report.yaml")
         upload_asset(
             owner=owner,
