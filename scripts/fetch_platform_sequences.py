@@ -5,13 +5,18 @@ Environment variables required:
     PLATFORM_API_ENDPOINT (str): API url endpoint. eg https://alertapi.pyronear.org
     PLATFORM_LOGIN (str): login
     PLATFORM_PASSWORD (str): password
+
+TODO:
+- [ ] Use dates instead of datetimes in date_from date_end
 """
+
+
 
 import argparse
 import logging
 import os
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from pathlib import Path
 import shutil
 from tqdm import tqdm
@@ -52,7 +57,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--date-end",
         help='Date in YYYY-MM-DD format, defaults to now.',
         type=valid_date,
-        default=datetime.now(),
+        default=datetime.now().date(),
     )
     parser.add_argument(
         "-log",
@@ -174,7 +179,7 @@ def list_organizations(api_endpoint: str, headers: dict[str, str]) -> list[dict]
     url = f"{api_endpoint}/api/v1/organizations/"
     return api_get(route=url, headers=headers)
 
-def list_sequences_for_date(api_endpoint: str, date: datetime, limit: int, offset: int, headers: dict[str, str]) -> list[dict]:
+def list_sequences_for_date(api_endpoint: str, date: date, limit: int, offset: int, headers: dict[str, str]) -> list[dict]:
     """
     List sequences for a specified date, limit the result to `limit` and
     use an `offset` if the results are paginated."""
@@ -302,31 +307,105 @@ def make_request_headers(access_token: str) -> dict[str, str]:
         "Content-Type": "application/json",
     }
 
-# if __name__ == "__main__":
-#     # start_date = (
-#     #     sys.argv[1] if len(sys.argv) > 1 else datetime.now().strftime("%Y-%m-%d")
-#     # )
-#     start_date = datetime.now() - timedelta(days=10)
-#     print(start_date)
-#     # start_date = .strptime(start_date, "%Y-%m-%d")
-#     # print(start_date)
-#     end_date = datetime.now()
-#     print(end_date)
-#
-#     headers = {
-#         "Authorization": f"Bearer {get_token(api_url, superuser_login, superuser_pwd)}",
-#         "Content-Type": "application/json",
-#     }
-#
-#     while start_date <= end_date:
-#         fetch_sequences_for_date(start_date.strftime("%Y-%m-%d"), api_url, headers)
-#         start_date += timedelta(days=1)
 
 def index_by(xs: list[dict], key: str) -> dict[str, dict]:
     """
     Index a collection of dicts `xs` by the provided `key`.
     """
     return {x[key]: x for x in xs}
+
+
+def get_dates_within(date_from: date, date_end: date) -> list[date]:
+    """
+    Collect all the days between `date_from` and `date_end` as
+    datetimes.
+    """
+    assert date_from <= date_end, f"date_from should be < date_end"
+    result = []
+    date = date_from
+    while date < date_end:
+        result.append(date)
+        date = date + timedelta(days=1)
+    return result
+
+
+def fetch_all_sequences_within(
+        date_from: date,
+        date_end: date,
+        api_endpoint: str,
+        headers: dict[str, str],
+) -> pd.DataFrame:
+    """
+    Fetch all sequences and detections between `date_from` and
+    `date_end`
+
+    Returns
+        df (pd.DataFrame): dataframe containing all the details
+    """
+    cameras = list_cameras(api_endpoint=api_endpoint, headers=headers)
+    indexed_cameras = index_by(cameras, key="id")
+    organizations = list_organizations(api_endpoint=api_endpoint, headers=headers)
+    indexed_organizations = index_by(organizations, key="id")
+
+    logging.info(f"Fetching sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}")
+    sequences = []
+    dates = get_dates_within(date_from=date_from, date_end=date_end)
+    for date in tqdm(dates):
+        xs = list_sequences_for_date(
+            api_endpoint=api_endpoint,
+            date=date,
+            limit=1000,
+            offset=0,
+            headers=headers
+        )
+        sequences.extend(xs)
+
+    logging.info(f"Collected {len(sequences)} sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}")
+
+    # Creating records for making the dataframe
+    records = []
+    for sequence in tqdm(sequences):
+        detections = list_sequence_detections(
+            api_endpoint=api_endpoint,
+            sequence_id=sequence["id"],
+            headers=headers,
+        )
+        for detection in detections:
+            camera = indexed_cameras[sequence["camera_id"]]
+            organization = indexed_organizations[camera["organization_id"]]
+            record = {
+                "sequence_id": sequence["id"],
+                "camera_id": sequence["camera_id"],
+                "camera_name": camera["name"],
+                "organization_id": camera["organization_id"],
+                "organization_name": organization["name"],
+                "camera_lat": camera["lat"],
+                "camera_lon": camera["lon"],
+                "camera_is_trustable": camera["is_trustable"],
+                "camera_angle_of_view": camera["angle_of_view"],
+                "detection_id": detection["id"],
+                "is_wildfire": sequence["camera_id"],
+                "sequence_started_at": sequence["started_at"],
+                "sequence_last_seen_at": sequence["last_seen_at"],
+                "sequence_azimuth": sequence["azimuth"],
+                "detection_azimuth": detection["azimuth"],
+                "detection_url": detection["url"],
+                "detection_bboxes": detection["bboxes"],
+                "detection_bucket_key": detection["bucket_key"],
+            }
+            records.append(record)
+    df = pd.DataFrame(records)
+    logger.info(df.head())
+    return df
+
+
+def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
+    """
+    Process the dataframe of sequences and detections information. Downloading
+    the associated images and creating the yolo txt label files.
+    """
+    return None
+
 
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
@@ -359,53 +438,12 @@ if __name__ == "__main__":
         )
         logger.info("Succesfully fetched an acess token to authenticate API requests ✔️")
         headers = make_request_headers(access_token=access_token)
-        cameras = list_cameras(api_endpoint=platform_api_endpoint, headers=headers)
-        logger.info(cameras)
-        indexed_cameras = index_by(cameras, key="id")
-        # logger.info(indexed_cameras)
-        # fetch_sequences_for_date(date_str=datetime.strptime(date_from, "%Y-%m-%d")
-        sequences = list_sequences_for_date(api_endpoint=platform_api_endpoint, date=date_from, limit=1000, offset=0, headers=headers)
-        logger.info(sequences)
+        df = fetch_all_sequences_within(date_from=date_from, date_end=date_end, api_endpoint=platform_api_endpoint, headers=headers)
 
-        # camera = get_camera(api_endpoint=platform_api_endpoint, headers=headers, camera_id=6)
-        # logger.info(camera)
-        # organizations = list_organizations(api_endpoint=platform_api_endpoint, headers=headers)
-        # logger.info(organizations)
-        # indexed_organizations = index_by(organizations, key="id")
-        # logger.info(indexed_organizations)
-        records = []
-        for sequence in tqdm(sequences[:1]):
-            detections = list_sequence_detections(api_endpoint=platform_api_endpoint, sequence_id=sequence["id"], headers=headers)
-            # detections = get_detections(api_endpoint=platform_api_endpoint, detection_id=sequence["id"], headers=headers)
-            logger.info("DETECTIONS:")
-            logger.info(detections)
-            for detection in detections:
-                camera_name = indexed_cameras[sequence["camera_id"]]["name"]
-                print("CAMERA NAME")
-                print(camera_name)
-                camera = indexed_cameras[sequence["camera_id"]]
-                record = {
-                    "sequence_id": sequence["id"],
-                    "camera_id": sequence["camera_id"],
-                    "camera_name": camera["name"],
-                    "organization_id": camera["organization_id"],
-                    "camera_lat": camera["lat"],
-                    "camera_lon": camera["lon"],
-                    "camera_is_trustable": camera["is_trustable"],
-                    "camera_angle_of_view": camera["angle_of_view"],
-                    "detection_id": detection["id"],
-                    "is_wildfire": sequence["camera_id"],
-                    "sequence_started_at": sequence["started_at"],
-                    "sequence_last_seen_at": sequence["last_seen_at"],
-                    "sequence_azimuth": sequence["azimuth"],
-                    "detection_azimuth": detection["azimuth"],
-                    "detection_url": detection["url"],
-                    "detection_bboxes": detection["bboxes"],
-                    "detection_bucket_key": detection["bucket_key"],
-                }
-                records.append(record)
-        df = pd.DataFrame(records)
-        logger.info(df.head())
-        df.to_csv("output.csv", index=False)
+        save_dir.mkdir(parents=True, exist_ok=True)
+        df.to_csv(save_dir / "results.csv", index=False)
+        logger.info(f"Process the dataframe")
+        process_dataframe(df=df, save_dir=save_dir)
 
-
+        # Download the images into the right folder structure
+        # Create the label files into the right folder stucture (alongside the images?)
