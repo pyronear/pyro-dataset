@@ -5,9 +5,6 @@ Environment variables required:
     PLATFORM_API_ENDPOINT (str): API url endpoint. eg https://alertapi.pyronear.org
     PLATFORM_LOGIN (str): login
     PLATFORM_PASSWORD (str): password
-
-TODO:
-- [ ] Use dates instead of datetimes in date_from date_end
 """
 
 
