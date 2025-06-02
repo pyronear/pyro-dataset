@@ -54,7 +54,7 @@ def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     y[..., 1] = bbox[..., 1] - bbox[..., 3] / 2  # top left y
     y[..., 2] = bbox[..., 0] + bbox[..., 2] / 2  # bottom right x
     y[..., 3] = bbox[..., 1] + bbox[..., 3] / 2  # bottom right y
-    return y.astype("float")
+    return y.astype("float16")
 
 
 def xyxyn2xywhn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
@@ -74,7 +74,7 @@ def xyxyn2xywhn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     # Calculate width and height
     y[..., 2] = bbox[..., 2] - bbox[..., 0]  # width
     y[..., 3] = bbox[..., 3] - bbox[..., 1]  # height
-    return y.astype("float")
+    return y.astype("float16")
 
 
 def parse_yolo_prediction_txt_file(

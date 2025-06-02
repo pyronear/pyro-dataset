@@ -1,5 +1,6 @@
 """
-CLI Script to perform a data split from the FIGLIB-ANNOTATED-RESIZED dataset to assign images into a train, val, test split.
+CLI Script to perform a data split from the FIGLIB-ANNOTATED-RESIZED dataset to
+assign images into a train, val, test split.
 
 The folder structure will follow a ultralytics YOLO scaffolding.
 """
@@ -13,8 +14,6 @@ from datetime import datetime
 from pathlib import Path
 
 from tqdm import tqdm
-
-from pyro_dataset.constants import DATE_FORMAT_OUTPUT
 
 # Date format used in the naming of files in FIGLIB_ANNOTATED_RESIZED
 DATE_FORMAT_INPUT = "%Y_%m_%dT%H_%M_%S"
