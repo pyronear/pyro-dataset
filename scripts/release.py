@@ -1,5 +1,21 @@
 """
 CLI script to release the pyronear datasets.
+
+This script automates the process of creating and publishing new releases of the pyronear
+datasets for early forest fire detection. It performs the following tasks:
+- Creates a compressed archive (.tar.gz) of the processed datasets
+- Uploads the archive to an AWS S3 bucket
+- Creates a new GitHub release with the specified version
+- Attaches relevant documentation (manifest, report, plots) to the GitHub release
+
+Prerequisites:
+- AWS credentials configured for S3 access
+- GitHub access token set as environment variable GITHUB_ACCESS_TOKEN
+- Processed datasets in the ./data/processed/ directory
+- Report files in their respective directories
+
+Usage:
+    python release.py --version X.Y.Z --github-owner USER --github-repo REPO [--s3-bucket BUCKET]
 """
 
 import argparse
