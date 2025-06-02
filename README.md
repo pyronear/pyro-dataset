@@ -222,3 +222,9 @@ uv run python ./scripts/release.py \
 This will create a new release in the github repository with and upload an
 archive of the datasets to a private S3 repository. The link to the dataset is
 displayed in the release summary.
+
+## Run the tests
+
+```bash
+uv run pytest tests/
+```
