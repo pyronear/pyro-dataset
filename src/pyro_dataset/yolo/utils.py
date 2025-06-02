@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 from numpy.typing import NDArray
+# from supervision import BoxAnnotator
 
 
 @dataclass
@@ -167,3 +168,21 @@ def expand_xyxy(
                 y_max = h_image
 
     return np.array([x_min, y_min, x_max, y_max])
+
+
+def overlay_predictions(
+        array_image: np.ndarray,
+        predictions: list[YOLOObjectDetectionPrediction],
+) -> np.ndarray:
+    """
+    Overlay YOLO predictions on top of `array_image`. It returns a new array
+    image with the overlaid bouding boxes.
+    """
+    h, w, _ = array_image.shape
+    result_image = array_image.copy()
+    # FIXME:
+    # annotator = BoxAnnotator()
+    for prediction in predictions:
+        xyxy = xyxyn2xyxy(prediction.xyxyn, w=w, h=h)
+        # annotator.annotate(result_image, boxes=[xyxy], labels=[f"{prediction.confidence:.0f}"])
+    return result_image
