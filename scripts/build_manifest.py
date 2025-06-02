@@ -1,5 +1,26 @@
 """
 CLI script to generate a manifest file for the generated datasets.
+
+This script provides a command-line interface (CLI) for creating a manifest
+file that contains metadata about the wildfire datasets used in training,
+validation, and testing. The manifest includes statistics about the datasets
+and information from the DVC lock file.
+
+Usage:
+    python build_manifest.py --save-dir <directory> \
+        --dir-wildfire-dataset-train-val <train_val_directory> \
+        --dir-wildfire-dataset-test <test_directory> \
+        [--loglevel <level>]
+
+Arguments:
+    --save-dir: Directory to save the generated manifest file.
+    --dir-wildfire-dataset-train-val: Directory containing the wildfire dataset
+        used for training and validation.
+    --dir-wildfire-dataset-test: Directory containing the wildfire test dataset.
+    --loglevel: Set the logging level (default is 'info').
+
+The generated manifest file will be saved as 'manifest.yaml' in the specified
+save directory.
 """
 
 import argparse
