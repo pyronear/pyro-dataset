@@ -15,6 +15,7 @@ dependencies = [
     "dvc-s3>=3.2.0",
     "jupyter-bokeh>=4.0.5",
     "open-clip-torch>=2.32.0",
+    "supervision>=0.25.1",
     "torch>=2.6.0",
     "torchvision>=0.21.0",
     "ultralytics>=8.3.107",

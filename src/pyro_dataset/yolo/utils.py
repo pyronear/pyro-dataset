@@ -1,6 +1,12 @@
+"""
+Utility module containing functions to work with YOLO predictions and
+annotations.
+"""
+
 from dataclasses import dataclass, field
 
 import numpy as np
+import supervision as sv
 from numpy.typing import NDArray
 
 
@@ -48,6 +54,26 @@ def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     y[..., 1] = bbox[..., 1] - bbox[..., 3] / 2  # top left y
     y[..., 2] = bbox[..., 0] + bbox[..., 2] / 2  # bottom right x
     y[..., 3] = bbox[..., 1] + bbox[..., 3] / 2  # bottom right y
+    return y.astype("float")
+
+
+def xyxyn2xywhn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
+    """
+    Convert a xyxyn bbox into a xywhn bbox format.
+
+    Parameters:
+      bbox (NDArray[np.float16]): An array of shape (..., 4) containing bounding boxes in xyxyn format.
+
+    Returns:
+      NDArray[np.float16]: An array of shape (..., 4) containing bounding boxes in xywhn format.
+    """
+    y = np.copy(bbox)
+    # Calculate center x and center y
+    y[..., 0] = (bbox[..., 0] + bbox[..., 2]) / 2  # center x
+    y[..., 1] = (bbox[..., 1] + bbox[..., 3]) / 2  # center y
+    # Calculate width and height
+    y[..., 2] = bbox[..., 2] - bbox[..., 0]  # width
+    y[..., 3] = bbox[..., 3] - bbox[..., 1]  # height
     return y.astype("float")
 
 
@@ -167,3 +193,50 @@ def expand_xyxy(
                 y_max = h_image
 
     return np.array([x_min, y_min, x_max, y_max])
+
+
+def to_supervision_detections(
+    array_image: np.ndarray,
+    predictions: list[YOLOObjectDetectionPrediction],
+    class_id: int = 0,
+) -> sv.Detections:
+    """
+    Turn a list of predictions into a supervision Detections object.
+    """
+    h, w, _ = array_image.shape
+    coll_xyxy = np.array(
+        [xyxyn2xyxy(prediction.xyxyn, w=w, h=h) for prediction in predictions]
+    )
+    coll_confidences = np.array([prediction.confidence for prediction in predictions])
+    coll_class_ids = np.array([class_id for _ in predictions])
+    return sv.Detections(
+        xyxy=coll_xyxy,
+        confidence=coll_confidences,
+        class_id=coll_class_ids,
+    )
+
+
+def overlay_predictions(
+    array_image: np.ndarray,
+    predictions: list[YOLOObjectDetectionPrediction],
+) -> np.ndarray:
+    """
+    Overlay YOLO predictions on top of `array_image`. It returns a new array
+    image with the overlaid bouding boxes.
+    """
+    sv_detections = to_supervision_detections(
+        array_image=array_image,
+        predictions=predictions,
+        class_id=0,
+    )
+    scene = array_image.copy()
+    color = sv.Color.RED
+    box_annotator = sv.BoxAnnotator(color=color)
+    label_annotator = sv.LabelAnnotator(color=color)
+    scene = box_annotator.annotate(scene=scene, detections=sv_detections)
+    scene = label_annotator.annotate(
+        scene=scene,
+        detections=sv_detections,
+        labels=[f"smoke {conf:0.1f}" for conf in sv_detections.confidence],
+    )
+    return scene
