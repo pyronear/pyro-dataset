@@ -57,6 +57,26 @@ def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     return y.astype("float")
 
 
+def xyxyn2xywhn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
+    """
+    Convert a xyxyn bbox into a xywhn bbox format.
+
+    Parameters:
+      bbox (NDArray[np.float16]): An array of shape (..., 4) containing bounding boxes in xyxyn format.
+
+    Returns:
+      NDArray[np.float16]: An array of shape (..., 4) containing bounding boxes in xywhn format.
+    """
+    y = np.copy(bbox)
+    # Calculate center x and center y
+    y[..., 0] = (bbox[..., 0] + bbox[..., 2]) / 2  # center x
+    y[..., 1] = (bbox[..., 1] + bbox[..., 3]) / 2  # center y
+    # Calculate width and height
+    y[..., 2] = bbox[..., 2] - bbox[..., 0]  # width
+    y[..., 3] = bbox[..., 3] - bbox[..., 1]  # height
+    return y.astype("float")
+
+
 def parse_yolo_prediction_txt_file(
     txt_content: str,
 ) -> list[YOLOObjectDetectionPrediction]:

@@ -22,12 +22,17 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import cv2
+import numpy as np
 import pandas as pd
 import requests
 from tqdm import tqdm
 
 import pyro_dataset.platform.api as api
-from pyro_dataset.yolo.utils import overlay_predictions, parse_yolo_prediction_txt_file
+from pyro_dataset.yolo.utils import (
+    overlay_predictions,
+    parse_yolo_prediction_txt_file,
+    xyxyn2xywhn,
+)
 
 
 def valid_date(s: str):
@@ -158,17 +163,10 @@ def fetch_all_sequences_within(
     headers = api.make_request_headers(access_token=access_token)
     headers_admin = api.make_request_headers(access_token=access_token_admin)
     cameras = api.list_cameras(api_endpoint=api_endpoint, headers=headers)
-    print(cameras)
     indexed_cameras = index_by(cameras, key="id")
     organizations = api.list_organizations(
         api_endpoint=api_endpoint, headers=headers_admin
     )
-    # organization_id = cameras[0]["organization_id"]
-    # results = api.get_organization(
-    #     api_endpoint=api_endpoint, organization_id=organization_id, headers=headers
-    # )
-    # print(results)
-    print(organizations)
     indexed_organizations = index_by(organizations, key="id")
 
     logging.info(
@@ -247,7 +245,14 @@ def _format_api_bboxes_ultralytics(detection_bboxes: str, class_id: int = 0) -> 
     Format the bboxes returned by the platform API into ultralytics format.
     """
     xs = eval(detection_bboxes)
-    return "\n".join(f"{class_id} " + " ".join(map(str, bbox)) for bbox in xs)
+
+    def format_bbox(x):
+        conf = x[4]
+        xyxyn = x[0:4]
+        xywhn = xyxyn2xywhn(np.array(xyxyn))
+        return f"{class_id} {' '.join(map(str, xywhn.tolist()))} {conf}"
+
+    return "\n".join(map(format_bbox, xs))
 
 
 def _get_local_filepaths(
