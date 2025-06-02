@@ -1,5 +1,5 @@
 """
-CLI script to fetch sequences from the pyronear platform API.
+CLI script to fetch sequences from the Pyronear platform API.
 
 Parameters:
   --save-dir (Path): directory to save the sequences
