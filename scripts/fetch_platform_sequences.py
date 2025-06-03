@@ -28,6 +28,7 @@ import requests
 from tqdm import tqdm
 
 import pyro_dataset.platform.api as api
+from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import (
     overlay_predictions,
     parse_yolo_prediction_txt_file,
@@ -332,7 +333,7 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     4. Persist the dataframe with added paths to the labels, images and predictions.
     """
     records = []
-    for _, row in df.iterrows():
+    for _, row in tqdm(df.iterrows()):
 
         dict_filepaths = _get_local_filepaths(
             save_dir=save_dir,
@@ -441,4 +442,12 @@ if __name__ == "__main__":
         df.to_csv(filepath_api_results_csv, index=False)
 
         process_dataframe(df=df, save_dir=save_dir)
+        args_content = {
+            "date-from": str(args["date_from"]),
+            "date-end": str(args["date_end"]),
+            "save-dir": str(args["save_dir"]),
+            "platform-login": platform_login,
+            "platform-admin-login": platform_admin_login,
+        }
+        yaml_write(to=save_dir / "args.yaml", data=args_content)
         logger.info(f"Done ✅")
