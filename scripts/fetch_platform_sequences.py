@@ -160,12 +160,11 @@ def fetch_all_sequences_within(
     Returns
         df (pd.DataFrame): dataframe containing all the details
     """
-    headers = api.make_request_headers(access_token=access_token)
-    headers_admin = api.make_request_headers(access_token=access_token_admin)
-    cameras = api.list_cameras(api_endpoint=api_endpoint, headers=headers)
+    cameras = api.list_cameras(api_endpoint=api_endpoint, access_token=access_token)
     indexed_cameras = index_by(cameras, key="id")
     organizations = api.list_organizations(
-        api_endpoint=api_endpoint, headers=headers_admin
+        api_endpoint=api_endpoint,
+        access_token=access_token_admin,
     )
     indexed_organizations = index_by(organizations, key="id")
 
@@ -176,7 +175,11 @@ def fetch_all_sequences_within(
     dates = get_dates_within(date_from=date_from, date_end=date_end)
     for date in tqdm(dates):
         xs = api.list_sequences_for_date(
-            api_endpoint=api_endpoint, date=date, limit=1000, offset=0, headers=headers
+            api_endpoint=api_endpoint,
+            date=date,
+            limit=1000,
+            offset=0,
+            access_token=access_token,
         )
         sequences.extend(xs)
 
@@ -190,11 +193,9 @@ def fetch_all_sequences_within(
         detections = api.list_sequence_detections(
             api_endpoint=api_endpoint,
             sequence_id=sequence["id"],
-            headers=headers,
+            access_token=access_token,
         )
         for detection in detections:
-            print("detection:")
-            print(detection)
             camera = indexed_cameras[sequence["camera_id"]]
             organization = indexed_organizations[camera["organization_id"]]
             record = {
