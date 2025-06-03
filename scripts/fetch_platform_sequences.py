@@ -28,6 +28,7 @@ import requests
 from tqdm import tqdm
 
 import pyro_dataset.platform.api as api
+from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import (
     overlay_predictions,
     parse_yolo_prediction_txt_file,
@@ -160,12 +161,11 @@ def fetch_all_sequences_within(
     Returns
         df (pd.DataFrame): dataframe containing all the details
     """
-    headers = api.make_request_headers(access_token=access_token)
-    headers_admin = api.make_request_headers(access_token=access_token_admin)
-    cameras = api.list_cameras(api_endpoint=api_endpoint, headers=headers)
+    cameras = api.list_cameras(api_endpoint=api_endpoint, access_token=access_token)
     indexed_cameras = index_by(cameras, key="id")
     organizations = api.list_organizations(
-        api_endpoint=api_endpoint, headers=headers_admin
+        api_endpoint=api_endpoint,
+        access_token=access_token_admin,
     )
     indexed_organizations = index_by(organizations, key="id")
 
@@ -176,7 +176,11 @@ def fetch_all_sequences_within(
     dates = get_dates_within(date_from=date_from, date_end=date_end)
     for date in tqdm(dates):
         xs = api.list_sequences_for_date(
-            api_endpoint=api_endpoint, date=date, limit=1000, offset=0, headers=headers
+            api_endpoint=api_endpoint,
+            date=date,
+            limit=1000,
+            offset=0,
+            access_token=access_token,
         )
         sequences.extend(xs)
 
@@ -190,11 +194,9 @@ def fetch_all_sequences_within(
         detections = api.list_sequence_detections(
             api_endpoint=api_endpoint,
             sequence_id=sequence["id"],
-            headers=headers,
+            access_token=access_token,
         )
         for detection in detections:
-            print("detection:")
-            print(detection)
             camera = indexed_cameras[sequence["camera_id"]]
             organization = indexed_organizations[camera["organization_id"]]
             record = {
@@ -331,7 +333,7 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     4. Persist the dataframe with added paths to the labels, images and predictions.
     """
     records = []
-    for _, row in df.iterrows():
+    for _, row in tqdm(df.iterrows()):
 
         dict_filepaths = _get_local_filepaths(
             save_dir=save_dir,
@@ -440,4 +442,12 @@ if __name__ == "__main__":
         df.to_csv(filepath_api_results_csv, index=False)
 
         process_dataframe(df=df, save_dir=save_dir)
+        args_content = {
+            "date-from": str(args["date_from"]),
+            "date-end": str(args["date_end"]),
+            "save-dir": str(args["save_dir"]),
+            "platform-login": platform_login,
+            "platform-admin-login": platform_admin_login,
+        }
+        yaml_write(to=save_dir / "args.yaml", data=args_content)
         logger.info(f"Done ✅")
