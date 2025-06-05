@@ -1,6 +1,15 @@
 """
 CLI Script to generate predictions using a trained model and save them as
 YOLOv8 TXT format.
+
+Usage:
+    python predict.py --save-dir <path_to_save_dir> --dir-images <path_to_images> --filepath-weights <path_to_weights> [-log <loglevel>]
+
+Arguments:
+    --save-dir: Directory to save the predictions. Default is "./data/interim/pyro-sdis/predictions/wise_wolf/".
+    --dir-images: Directory containing the images to run inference on. Default is "./data/raw/pyro-sdis/images/val/".
+    --filepath-weights: Filepath to the model weights. Default is "./data/external/models/wise_wolf/weights/yolov11s.pt".
+    -log, --loglevel: Provide logging level. Example --loglevel debug, default=warning.
 """
 
 import argparse

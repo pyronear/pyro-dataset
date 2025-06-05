@@ -6,6 +6,14 @@ __Note__:
       - image: image byte data
       - image_name: name of the image
       - annotations: yolov8 txt format annotations
+
+__Usage__:
+    python install_local_huggingface_dataset.py --save-dir <directory> --data-dir <directory> --loglevel <level>
+
+__Arguments__:
+    --save-dir: directory to save the extracted dataset (default: ./data/raw/pyro-sdis-testset/).
+    --data-dir: directory where the dataset files are located (default: ./data/raw/pyro-sdis-testset-parquet/).
+    -log, --loglevel: provide logging level (default: info).
 """
 
 import argparse

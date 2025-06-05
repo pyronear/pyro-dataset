@@ -6,6 +6,14 @@ __Note__:
       - image: image byte data
       - image_name: name of the image
       - annotations: yolov8 txt format annotations
+
+__Usage__:
+    python install_huggingface_dataset.py --save-dir <directory> --repo-id <repo_id> [--loglevel <level>]
+
+__Arguments__:
+    --save-dir: Directory to save the extracted dataset. Default is ./data/raw/pyro-sdis/.
+    --repo-id: ID of the HF Dataset Repo. Default is pyronear/pyro-sdis.
+    --loglevel: Provide logging level. Example --loglevel debug, default is info.
 """
 
 import argparse

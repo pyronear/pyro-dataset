@@ -2,6 +2,17 @@
 CLI Script to generate the __test__ wildfire dataset.
 
 The folder structure follows the ultralytics scaffolding template.
+
+Usage:
+    python make_test_dataset.py --save-dir <path> --dir-previous-test-dataset <path> --dir-data-split-false-positives <path> --random-seed <int> [--percentage-background-images <float>] [-log <loglevel>]
+
+Arguments:
+    --save-dir: directory to save the test wildfire dataset.
+    --dir-previous-test-dataset: directory containing the previous test dataset.
+    --dir-data-split-false-positives: directory containing the false positives (only background images).
+    --random-seed: random seed (required).
+    --percentage-background-images: percentage of background images to add to the dataset (default: 0.1).
+    -log, --loglevel: provide logging level (default: info).
 """
 
 import argparse

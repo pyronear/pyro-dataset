@@ -2,6 +2,17 @@
 CLI Script to generate the wildfire dataset (train and val).
 
 The folder structure follows the ultralytics scaffolding template.
+
+Usage:
+    python make_train_val_dataset.py --save-dir <save_directory> --dir-data-split-smoke <smoke_data_directory> --dir-data-split-false-positives <false_positives_directory> --random-seed <seed> [--percentage-background-images <percentage>] [-log <loglevel>]
+
+Arguments:
+    --save-dir: Directory to save the wildfire dataset.
+    --dir-data-split-smoke: Directory containing the part of the wildfire dataset with fire smokes only (no background images).
+    --dir-data-split-false-positives: Directory containing the false positives (only background images).
+    --random-seed: Random seed for reproducibility.
+    --percentage-background-images: Percentage of background images to add to the dataset (default is 0.1).
+    -log, --loglevel: Provide logging level (default is info).
 """
 
 import argparse

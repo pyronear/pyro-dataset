@@ -3,6 +3,16 @@ CLI Script to perform a data split from the FIGLIB-ANNOTATED-RESIZED dataset to
 assign images into a train, val, test split.
 
 The folder structure will follow a ultralytics YOLO scaffolding.
+
+Usage:
+    python split_figlib.py --dir-dataset <dataset_directory> --save-dir <output_directory> --random-seed <seed_value> [--ratio-train-val <split_ratio>] [-log <log_level>]
+
+Arguments:
+    --save-dir: Directory to save the filtered dataset.
+    --dir-dataset: Directory containing the pyro-sdis dataset.
+    --random-seed: Random Seed to perform the data split (required).
+    --ratio-train-val: Ratio for splitting train and val splits (default: 0.9).
+    -log, --loglevel: Provide logging level. Example --loglevel debug, default=warning.
 """
 
 import argparse

@@ -1,6 +1,19 @@
 """
-CLI Script to generate image crops based on the predicted bboxes from the
-models.
+CLI Script to generate image crops based on the predicted bounding boxes from the
+models. This script processes images and their corresponding YOLO prediction files,
+crops the images based on the provided bounding boxes, and saves the crops in specified
+directories. Additionally, it logs the details of the cropping process and generates a
+summary CSV file containing metadata about each crop operation.
+
+Usage:
+    python crop_with_prediction.py [options]
+
+Options:
+    --save-dir          Directory to save the cropped images.
+    --target-size       Size of the crops to generate (default: 224).
+    --dir-images        Directory containing the images to process.
+    --dir-predictions   Directory containing the model predictions.
+    --loglevel          Logging level (default: info).
 """
 
 import argparse

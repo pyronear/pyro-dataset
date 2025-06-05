@@ -2,7 +2,16 @@
 CLI Script to filter data from the pyronear_ds dataset to only
 keep images with fire smoke.
 
-The folder structure remains the same, only the non smoke images are discarded.
+The folder structure remains the same, only the non-smoke images are discarded.
+
+Usage:
+    python filter_data_pyronear_ds_smoke.py --dir-dataset <path_to_dataset> --save-dir <path_to_save_dir> [--allowed-dataset-prefixes <prefix1> <prefix2> ...] [-log <loglevel>]
+
+Arguments:
+    --save-dir: Directory to save the filtered dataset. Default is ./data/interim/filtered/smoke/pyronear_ds_03_2024/.
+    --dir-dataset: Directory containing the pyro-sdis dataset. Default is ./data/raw/pyronear_ds_03_2024/.
+    --allowed-dataset-prefixes: Set of allowed data prefixes to use. Default is ["pyronear", "awf", "random", "adf"].
+    -log, --loglevel: Provide logging level. Example --loglevel debug, default=warning.
 """
 
 import argparse

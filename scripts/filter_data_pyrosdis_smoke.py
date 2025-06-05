@@ -3,6 +3,14 @@ CLI Script to filter data from the pyro-sdis dataset to only keep images with
 fire smoke.
 
 The folder structure remains the same, only the non smoke images are discarded.
+
+Usage:
+    python filter_data_pyrosdis_smoke.py --save-dir <save_directory> --dir-dataset <dataset_directory> [-log <log_level>]
+
+Arguments:
+    --save-dir: Directory to save the filtered dataset. Default is './data/interim/filtered/smoke/pyro-sdis/'.
+    --dir-dataset: Directory containing the pyro-sdis dataset. Default is './data/raw/pyro-sdis/'.
+    -log, --loglevel: Provide logging level (e.g., debug, info, warning). Default is 'info'.
 """
 
 import argparse
