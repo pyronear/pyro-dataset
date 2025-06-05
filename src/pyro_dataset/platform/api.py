@@ -133,7 +133,7 @@ def get_organization(
     api_endpoint: str,
     organization_id: int,
     access_token: str,
-) -> list[dict]:
+) -> dict:
     """
     Fetch the information of a specific organization `organization_id`.
 
@@ -186,6 +186,22 @@ def get_detections(api_endpoint: str, detection_id: int, access_token: str) -> d
         dict: A dictionary containing the detection information.
     """
     url = f"{api_endpoint}/api/v1/detections/{detection_id}"
+    return api_get(route=url, access_token=access_token)
+
+
+def get_sequence(api_endpoint: str, sequence_id: int, access_token: str) -> dict:
+    """
+    Fetch the information of a specific sequence.
+
+    Args:
+        api_endpoint (str): The base URL for the API endpoint.
+        sequence_id (int): The ID of the sequence to fetch.
+        access_token (str): The access token for API authentication.
+
+    Returns:
+        dict: A dictionary containing the sequence information.
+    """
+    url = f"{api_endpoint}/api/v1/sequences/{sequence_id}"
     return api_get(route=url, access_token=access_token)
 
 
