@@ -1,6 +1,18 @@
-import argparse
+"""
+This module provides functions for processing detection data from the API,
+including converting detection and metadata into structured records,
+formatting bounding boxes, downloading images, and saving labels. It also
+handles the creation of file paths for storing images and labels, as well as
+processing dataframes containing sequences and detections.
+
+Key functionalities include:
+- Converting detection metadata into records.
+- Formatting API datetime strings and bounding boxes.
+- Downloading images and saving detection labels.
+- Processing dataframes to generate YOLO formatted labels and overlayed images.
+"""
+
 import logging
-import os
 from pathlib import Path
 
 import cv2
@@ -9,8 +21,6 @@ import pandas as pd
 import requests
 from tqdm import tqdm
 
-import pyro_dataset.platform.api as api
-from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import (
     overlay_predictions,
     parse_yolo_prediction_txt_file,
