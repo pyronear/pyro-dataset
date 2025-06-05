@@ -14,6 +14,7 @@ Functions:
 - get_organization: Fetch information for a specific organization.
 - list_sequences_for_date: List sequences for a specific date.
 - get_detections: Fetch information for a specific detection.
+- get_sequence: Fetch information for a specific sequence.
 - list_sequence_detections: List detections for a specific sequence.
 """
 
