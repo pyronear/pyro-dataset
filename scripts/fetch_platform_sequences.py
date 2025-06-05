@@ -274,18 +274,19 @@ def _get_local_filepaths(
     Returns:
       filepath_image (Path): path to the detection image (raw without bounding boxes)
       filepath_label (Path): path to the detection label txt file
-      filepath_prediction (Path): path to the image with bouding box drawn on top
+      filepath_detection (Path): path to the image with bouding box drawn on top
     """
     dir_sequence = (
         save_dir
         / organization_name
         / f"{_format_api_datetime_str(sequence_started_at)}_{camera_name}-{int(sequence_azimuth)}_sequence-{sequence_id}"
     )
-    filepath_stem = f"{organization_name}_{camera_name}-{int(detection_azimuth)}_{_format_api_datetime_str(detection_created_at)}"
+    dataset_origin = "pyronear"
+    filepath_stem = f"{dataset_origin}_{organization_name}_{camera_name}-{int(detection_azimuth)}_{_format_api_datetime_str(detection_created_at)}"
     return {
         "filepath_image": dir_sequence / "images" / f"{filepath_stem}.jpg",
         "filepath_label": dir_sequence / "labels" / f"{filepath_stem}.txt",
-        "filepath_prediction": dir_sequence / "predictions" / f"{filepath_stem}.jpg",
+        "filepath_detection": dir_sequence / "detections" / f"{filepath_stem}.jpg",
     }
 
 
@@ -362,11 +363,11 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
             array_image_overlayed_with_predictions = overlay_predictions(
                 array_image=array_image, predictions=yolo_predictions
             )
-            dict_filepaths["filepath_prediction"].parent.mkdir(
+            dict_filepaths["filepath_detection"].parent.mkdir(
                 parents=True, exist_ok=True
             )
             cv2.imwrite(
-                str(dict_filepaths["filepath_prediction"]),
+                str(dict_filepaths["filepath_detection"]),
                 array_image_overlayed_with_predictions,
             )
 
