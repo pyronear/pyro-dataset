@@ -76,19 +76,33 @@ def to_record(
 
 def _format_api_datetime_str(datetime_str: str) -> str:
     """
-    Format a datetime string returned by the API in a format that can be
-    used in filepaths for instance.
+    Format a datetime string returned by the API into a format suitable for use in file paths.
 
-    Eg.
-      >>> _format_api_datetime_str(2025-05-30T10:02:55.981732)
-      2025-05-30T10-02-55
+    This function replaces colons with hyphens and removes microseconds, ensuring the resulting
+    string is compliant with typical file naming conventions.
+
+    Example:
+      >>> _format_api_datetime_str("2025-05-30T10:02:55.981732")
+      '2025-05-30T10-02-55'
     """
     return datetime_str.replace(":", "-").split(".")[0]
 
 
 def _format_api_bboxes_ultralytics(detection_bboxes: str, class_id: int = 0) -> str:
     """
-    Format the bboxes returned by the platform API into ultralytics format.
+    Format the bounding boxes (bboxes) returned by the platform API into the
+    ultralytics format, which includes the class ID and normalized coordinates.
+
+    Parameters:
+        detection_bboxes (str): A string representation of the bounding boxes,
+                                typically in a list format where each box
+                                contains coordinates and confidence score.
+        class_id (int, optional): The class identifier for the bounding boxes.
+                                   Defaults to 0.
+
+    Returns:
+        str: A string containing the formatted bounding boxes, each on a new line,
+             ready for use with the ultralytics model.
     """
     xs = eval(detection_bboxes)
 
@@ -135,7 +149,18 @@ def _get_filepaths(
 
 def save_label(bboxes: str, filepath_label: Path) -> None:
     """
-    Persist the label txt files using the bboxes (string) from the API responses
+    Persist the label txt files using the bounding boxes (bboxes) as a string
+    obtained from the API responses. This function formats the bboxes into a
+    suitable structure for YOLO and saves it to the specified file path.
+
+    Parameters:
+        bboxes (str): A string representation of the bounding boxes, typically
+                      in a list format where each box contains coordinates and
+                      a confidence score.
+        filepath_label (Path): The path where the label txt file will be saved.
+
+    Returns:
+        None
     """
     label_content = _format_api_bboxes_ultralytics(bboxes, class_id=0)
     filepath_label.parent.mkdir(parents=True, exist_ok=True)
@@ -146,8 +171,18 @@ def save_label(bboxes: str, filepath_label: Path) -> None:
 def download_image(url: str, filepath_destination: Path, force: bool = False) -> None:
     """
     Download the image located at `url` and save it locally at
-    `filepath_destination`. If already downloaded, it skips it unless the
-    `force` flag is set to True.
+    `filepath_destination`. If the image has already been downloaded, it will
+    skip the download unless the `force` flag is set to True, in which case
+    it will download the image again regardless of its current presence or size.
+
+    Parameters:
+        url (str): The URL from which to download the image.
+        filepath_destination (Path): The local file path where the image will be saved.
+        force (bool, optional): A flag indicating whether to force re-download the image
+                                if it already exists. Defaults to False.
+
+    Returns:
+        None
     """
     if (
         not force
@@ -168,13 +203,20 @@ def download_image(url: str, filepath_destination: Path, force: bool = False) ->
 
 def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     """
-    Process the dataframe of sequences and detections information.
+    Process the dataframe containing sequences and detections information.
 
-    It does the following:
-    1. Downloads the associated images
-    2. Create the yolo txt label files
-    3. Generate the overlaid predictions
-    4. Persist the dataframe with added paths to the labels, images and predictions.
+    This function performs the following tasks:
+    1. Downloads associated images based on the detection URLs.
+    2. Creates YOLO formatted label files using the provided bounding boxes.
+    3. Generates overlaid images with predictions visualized on top of the original images.
+    4. Saves the dataframe with additional paths to the labels, images, and predictions.
+
+    Parameters:
+        df (pd.DataFrame): The input dataframe containing detection and sequence information.
+        save_dir (Path): The directory where images, labels, and predictions will be stored.
+
+    Returns:
+        None
     """
     records = []
     for _, row in tqdm(df.iterrows()):
