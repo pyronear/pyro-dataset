@@ -171,6 +171,27 @@ Scripts are located in the `./scripts` folder.
 Most scripts are connected via the [dvc.yaml](./dvc.yaml) configuration file.
 Others are utility scripts that can be used to perform various tasks.
 
+### [fetch_platform_sequence_id.py](./scripts/fetch_platform_sequence_id.py)
+
+Fetch a detection sequences by its sequence-id directly from the Pyronear
+platform API.
+
+```bash
+export PLATFORM_API_ENDPOINT="https://alertapi.pyronear.org"
+export PLATFORM_LOGIN=sdis-07
+export PLATFORM_PASSWORD=XXX
+export PLATFORM_ADMIN_LOGIN=XXX
+export PLATFORM_ADMIN_PASSWORD=XXX
+
+uv run python ./scripts/fetch_platform_sequence_id.py \
+  --save-dir ./data/raw/pyronear-platform/sequences/my-sequence-5347/ \
+  --sequence-id 5347
+```
+
+__Note__: Make sure to use an admin login/password as well as a regular
+login/password. The admin level access is needed to fetch information about the
+organizations and properly name the detection images locally.
+
 ### [fetch_platform_sequences.py](./scripts/fetch_platform_sequences.py)
 
 Fetch detection sequences directly from the Pyronear platform API.
