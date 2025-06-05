@@ -47,3 +47,10 @@ def yaml_write(to: Path, data: dict, dumper=MyDumper) -> None:
             default_flow_style=False,
             sort_keys=False,
         )
+
+
+def index_by(xs: list[dict], key: str) -> dict[str, dict]:
+    """
+    Index a collection of dicts `xs` by the provided `key`.
+    """
+    return {x[key]: x for x in xs}
