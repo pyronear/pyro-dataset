@@ -2,8 +2,21 @@
 CLI Script to filter data from the FP_2024 dataset to only keep images with
 false positives.
 
-The folder structure remains the same, only the non false positive images are
-discarded.
+This script processes a dataset by filtering out images that do not contain
+false positives as identified by predictions from a model. The resulting
+filtered dataset retains the original folder structure, ensuring that only
+images associated with false positive predictions are saved in the specified
+output directory.
+
+Usage:
+    python filter_data_false_positives.py --save-dir <output_directory>
+    --dir-dataset <input_dataset_directory> --dir-predictions <predictions_directory>
+
+Arguments:
+    --save-dir: Directory where the filtered dataset will be saved.
+    --dir-dataset: Directory containing the raw FP_2024 dataset.
+    --dir-predictions: Directory containing the model predictions.
+    --loglevel: Set the logging level (default: info).
 """
 
 import argparse

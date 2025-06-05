@@ -2,7 +2,15 @@
 CLI Script to filter data from the FIGLIB-ANNOTATED-RESIZED dataset to only
 keep images with fire smoke.
 
-The folder structure remains the same, only the non smoke images are discarded.
+The folder structure remains the same, only the non-smoke images are discarded.
+
+Usage:
+    python filter_data_figlib_smoke.py --dir-dataset <path_to_dataset> --save-dir <path_to_save_directory> [--loglevel <level>]
+
+Arguments:
+    --save-dir: directory to save the filtered dataset.
+    --dir-dataset: directory containing the pyro-sdis dataset.
+    -log, --loglevel: Provide logging level. Example --loglevel debug, default=info.
 """
 
 import argparse

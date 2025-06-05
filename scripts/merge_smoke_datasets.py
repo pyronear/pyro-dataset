@@ -1,9 +1,17 @@
 """
-CLI Script to merge all different data split sources containg fire smoke
+CLI Script to merge all different data split sources containing fire smoke
 without `background` images.
 
 Note:
     A background image is an image without associated detections.
+
+Usage:
+    python merge_smoke_datasets.py --save-dir <path_to_save_directory> --dir-datasets <path_to_dataset_1> <path_to_dataset_2> ... [--loglevel <log_level>]
+
+Arguments:
+    --save-dir: Directory to save the filtered dataset (default: ./data/interim/data-split/smoke/wildfire/).
+    --dir-datasets: Directory containing the datasets in ultralytics format to join (default: a list of predefined paths).
+    -log, --loglevel: Provide logging level (default: info). Example: --loglevel debug.
 """
 
 import argparse

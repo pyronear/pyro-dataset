@@ -2,6 +2,17 @@
 CLI Script to perform a data split from the FP_2024 dataset to assign images into a train, val, test split.
 
 The folder structure will follow a ultralytics YOLO scaffolding.
+
+Usage:
+    python split_false_positives.py --save-dir <save_directory> --dir-dataset <dataset_directory> --random-seed <seed> [--ratio-train-val <ratio>] [--ratio-val-test <ratio>] [-log <loglevel>]
+
+Arguments:
+    --save-dir: Directory to save the splitted dataset.
+    --dir-dataset: Directory containing the false positives dataset.
+    --random-seed: Random Seed to perform the data split (required).
+    --ratio-train-val: Ratio for splitting train and val splits (default: 0.9).
+    --ratio-val-test: Ratio for splitting val and test splits (default: 0.5).
+    -log, --loglevel: Provide logging level. Example --loglevel debug, default=warning.
 """
 
 import argparse

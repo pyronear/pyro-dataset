@@ -1,5 +1,22 @@
 """
-CLI Script to analyze and make a reporting of the generated dataset.
+CLI Script to analyze and generate reports for the processed wildfire dataset.
+
+This script provides functionalities to:
+- Parse command-line arguments for input and output file paths.
+- Compute file content hashes for images in different dataset splits (train, val, test).
+- Summarize dataset statistics, including counts of images, labels, and background images.
+- Detect potential data leakage between dataset splits.
+- Generate visual plots to analyze the dataset breakdown by origin, year, and month.
+
+Usage:
+    python analyze_processed_dataset.py [OPTIONS]
+
+Options:
+    --save-dir                Directory to save the dataset analysis.
+    --filepath-data-yaml-train-val
+                             Path to the data.yaml file for train and val splits.
+    --filepath-data-yaml-test  Path to the data.yaml file for the test split.
+    -log, --loglevel          Set the logging level (default: info).
 """
 
 import argparse

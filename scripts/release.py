@@ -16,6 +16,13 @@ Prerequisites:
 
 Usage:
     python release.py --version X.Y.Z --github-owner USER --github-repo REPO [--s3-bucket BUCKET]
+
+Arguments:
+    --version       : The version of the release, following semantic versioning (e.g., 1.0.0).
+    --github-owner  : The GitHub username or organization that owns the repository.
+    --github-repo   : The name of the GitHub repository.
+    --s3-bucket     : (Optional) The S3 bucket to save the release. Defaults to "pyro-datasets".
+    -log, --loglevel: (Optional) Set the logging level (e.g., debug, info, warning). Defaults to "info".
 """
 
 import argparse
