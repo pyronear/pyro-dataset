@@ -221,8 +221,8 @@ stages:
       nfiles: 20436
     - path: ./scripts/split_figlib.py
       hash: md5
-      md5: 1aee2fd9e0c5bbbe9404db908df19964
-      size: 6946
+      md5: 9920f05d958b2d095e735825e9efd868
+      size: 6891
     outs:
     - path: ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
       hash: md5
@@ -403,11 +403,11 @@ stages:
       nfiles: 12827
     - path: ./scripts/build_manifest.py
       hash: md5
-      md5: a958cb260c26a0dce741dec150c6171e
-      size: 3635
+      md5: 8039497a4390db665345905315ba01b3
+      size: 4546
     outs:
     - path: ./data/reporting/manifest/
       hash: md5
-      md5: 91723ac0709b64e8177f80e2bff5b1e6.dir
-      size: 15390
+      md5: b4f432eea661f301631648bd847fd118.dir
+      size: 16321
       nfiles: 1
