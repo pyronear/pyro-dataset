@@ -39,9 +39,8 @@ def make_cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--sequence-id",
-        help="sequence ids to be fetched",
+        help="sequence id to be fetched",
         type=int,
-        nargs="+",
         required=True,
     )
     parser.add_argument(
