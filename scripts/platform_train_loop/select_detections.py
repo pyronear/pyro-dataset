@@ -111,30 +111,6 @@ def find_true_positive_folders(dir_annotated_sequences: Path) -> list[Path]:
     ]
 
 
-def find_sequence_ids(dir_annotated_sequences: Path) -> set[int]:
-    """
-    Extract and return a set of unique sequence IDs from annotated sequence directories.
-
-    This function searches through the specified directory for subdirectories that
-    contain sequence information. It extracts sequence IDs from directory names
-    that match the pattern '_sequence-<id>', where <id> is a numeric value.
-
-    Args:
-        dir_annotated_sequences (Path): The directory containing annotated sequence
-        subdirectories to search for sequence IDs.
-
-    Returns:
-        set[int]: A set of unique integer sequence IDs found in the directory.
-    """
-    return {
-        int(seq_dir.name.split("_sequence-")[-1])
-        for seq_dir in dir_annotated_sequences.rglob("**/*")
-        if seq_dir.is_dir()
-        and "_sequence-" in seq_dir.name
-        and seq_dir.name.split("_sequence-")[-1].isdigit()
-    }
-
-
 def find_sequence_folders(dir_annotated_sequences: Path) -> list[Path]:
     """
     Extract and return a list of sequence folders from annotated sequence directories.
@@ -175,6 +151,16 @@ def read_file_content(filepath: Path) -> str:
 
 
 def get_filepaths(dir_sequence: Path, stem: str) -> dict[str, Path]:
+    """
+    Construct file paths for labels, images, and detection files based on the provided directory sequence and stem.
+
+    Args:
+        dir_sequence (Path): The directory containing the sequence data.
+        stem (str): The stem of the filename used to construct the paths.
+
+    Returns:
+        dict[str, Path]: A dictionary containing the file paths for labels, images, and detections.
+    """
     return {
         "filepath_label": dir_sequence / "labels" / f"{stem}.txt",
         "filepath_image": dir_sequence / "images" / f"{stem}.jpg",
