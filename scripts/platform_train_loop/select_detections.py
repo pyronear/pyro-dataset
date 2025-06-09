@@ -235,7 +235,6 @@ def select_best_true_positives(
     records_filtered = [
         record for record in records if record["prediction"].confidence > 0
     ]
-    print(records_filtered)
     records_selected = sorted(
         records_filtered, key=lambda x: x["prediction"].confidence, reverse=False
     )[:number_detections_per_sequence]
