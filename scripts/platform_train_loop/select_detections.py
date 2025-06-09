@@ -195,8 +195,11 @@ def select_best_false_positives(
         for fp in (dir_sequence.glob("**/*.txt"))
         for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
+    records_filtered = [
+        record for record in records if record["prediction"].confidence > 0
+    ]
     records_selected = sorted(
-        records, key=lambda x: x["prediction"].confidence, reverse=True
+        records_filtered, key=lambda x: x["prediction"].confidence, reverse=True
     )[:number_detections_per_sequence]
     result = [
         {key: value for key, value in r.items() if key != "prediction"}
