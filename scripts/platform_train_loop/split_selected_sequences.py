@@ -238,6 +238,7 @@ if __name__ == "__main__":
     else:
         logger.info(args)
         random_seed = args["random_seed"]
+        random_seed = 1
         dir_save = args["dir_save"]
         dir_platform_selected_sequences = args["dir_platform_selected_sequences"]
         train_ratio = args["ratio_train"]
@@ -262,7 +263,14 @@ if __name__ == "__main__":
             for split in ["train", "val", "test"]:
                 dirs_sequences = data_split[split]
                 for dir_sequence in dirs_sequences:
-                    dir_dst = dir_save / "false-positives" / split / dir_sequence.name
+                    dir_dst = (
+                        dir_save
+                        / dir_sequence.relative_to(
+                            dir_platform_selected_sequences
+                        ).parent
+                        / split
+                        / dir_sequence.name
+                    )
                     dir_dst.mkdir(parents=True, exist_ok=True)
                     shutil.copytree(src=dir_sequence, dst=dir_dst, dirs_exist_ok=True)
 
@@ -281,7 +289,14 @@ if __name__ == "__main__":
             for split in ["train", "val", "test"]:
                 dirs_sequences = data_split[split]
                 for dir_sequence in dirs_sequences:
-                    dir_dst = dir_save / "true-positives" / split / dir_sequence.name
+                    dir_dst = (
+                        dir_save
+                        / dir_sequence.relative_to(
+                            dir_platform_selected_sequences
+                        ).parent
+                        / split
+                        / dir_sequence.name
+                    )
                     dir_dst.mkdir(parents=True, exist_ok=True)
                     shutil.copytree(src=dir_sequence, dst=dir_dst, dirs_exist_ok=True)
 

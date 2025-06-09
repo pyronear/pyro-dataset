@@ -235,6 +235,7 @@ def select_best_true_positives(
     records_filtered = [
         record for record in records if record["prediction"].confidence > 0
     ]
+    print(records_filtered)
     records_selected = sorted(
         records_filtered, key=lambda x: x["prediction"].confidence, reverse=False
     )[:number_detections_per_sequence]
@@ -337,7 +338,7 @@ if __name__ == "__main__":
             dirs_sequences_tp = find_sequence_folders(dir_tp)
             print(f"Found {len(dirs_sequences_tp)} true positive sequences in {dir_tp}")
             for dir_sequence_tp in dirs_sequences_tp:
-                records = select_best_false_positives(
+                records = select_best_true_positives(
                     dir_sequence_tp,
                     number_detections_per_sequence=number_detections_per_sequence_true_positive,
                 )
