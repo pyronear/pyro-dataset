@@ -75,7 +75,7 @@ def find_sequence_ids(dir_annotated_sequences: Path) -> set[int]:
     """
     return {
         int(seq_dir.name.split("_sequence-")[-1])
-        for seq_dir in dir_annotated_sequences.rglob("*/*/*")
+        for seq_dir in dir_annotated_sequences.rglob("**/*")
         if seq_dir.is_dir()
         and "_sequence-" in seq_dir.name
         and seq_dir.name.split("_sequence-")[-1].isdigit()
