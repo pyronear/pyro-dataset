@@ -198,6 +198,7 @@ stages:
         --save-dir ./data/processed/wildfire/
         --dir-data-split-smoke ./data/interim/data-split/smoke/wildfire/
         --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
         --random-seed 0
         --percentage-background-images 0.1
         --loglevel "info"
@@ -205,6 +206,7 @@ stages:
       - ./scripts/make_train_val_dataset.py
       - ./data/interim/data-split/smoke/wildfire/
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      - ./data/interim/pyronear-platform/sequences-ultralytics/
     outs:
       - ./data/processed/wildfire/
 
@@ -215,6 +217,7 @@ stages:
         --save-dir ./data/processed/wildfire_test/
         --dir-previous-test-dataset ./data/raw/Test_dataset_2025/
         --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
         --random-seed 0
         --percentage-background-images 0.1
         --loglevel "info"
@@ -222,6 +225,7 @@ stages:
       - ./scripts/make_test_dataset.py
       - ./data/raw/Test_dataset_2025/
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      - ./data/interim/pyronear-platform/sequences-ultralytics/
     outs:
       - ./data/processed/wildfire_test/
 
@@ -235,8 +239,8 @@ stages:
         --loglevel "info"
     deps:
       - ./scripts/analyze_processed_dataset.py
-      - ./data/processed/wildfire/data.yaml
-      - ./data/processed/wildfire_test/data.yaml
+      - ./data/processed/wildfire/
+      - ./data/processed/wildfire_test/
     outs:
       - ./data/reporting/wildfire/
 
@@ -254,3 +258,47 @@ stages:
       - ./data/processed/wildfire_test/
     outs:
       - ./data/reporting/manifest/
+
+  select_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/select_detections.py
+        --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences/
+        --dir-save ./data/interim/pyronear-platform/sequences/
+        --number-detections-per-sequence-true-positive 3
+        --number-detections-per-sequence-false-positive 3
+        --loglevel "info"
+    deps:
+      - ./scripts/platform_train_loop/select_detections.py
+      - ./data/raw/pyronear-platform-annotated-sequences/
+    outs:
+      - ./data/interim/pyronear-platform/sequences/
+
+  split_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/split_selected_sequences.py
+        --dir-platform-selected-sequences ./data/interim/pyronear-platform/sequences/
+        --dir-save ./data/interim/pyronear-platform/sequences-data-split/
+        --random-seed 0
+        --ratio-train 0.8
+        --ratio-val-test 0.5
+        --loglevel "info"
+    deps:
+      - ./data/interim/pyronear-platform/sequences/
+      - ./scripts/platform_train_loop/split_selected_sequences.py
+    outs:
+      - ./data/interim/pyronear-platform/sequences-data-split/
+
+  make_ultralytics_dataset_from_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/make_ultralytics_dataset.py
+        --dir-save ./data/interim/pyronear-platform/sequences-ultralytics/
+        --dir-data-split ./data/interim/pyronear-platform/sequences-data-split/
+        --loglevel "info"
+    deps:
+      - ./scripts/platform_train_loop/make_ultralytics_dataset.py
+      - ./data/interim/pyronear-platform/sequences-data-split/
+    outs:
+      - ./data/interim/pyronear-platform/sequences-ultralytics/

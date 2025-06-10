@@ -45,6 +45,12 @@ def annotation_to_txt(annotation: YOLOObjectDetectionAnnotation) -> str:
     )
 
 
+def annotation_to_label_txt(
+    yolo_annotation: list[YOLOObjectDetectionAnnotation],
+) -> str:
+    return "\n".join([annotation_to_txt(x) for x in yolo_annotation])
+
+
 def xywhn2xyxyn(bbox: NDArray[np.float16]) -> NDArray[np.float16]:
     """
     Convert a xywhn bbox into a xyxyn bbox format.
@@ -114,6 +120,15 @@ def parse_yolo_annotation_txt_file(
         )
         result.append(yolo_prediction)
     return result
+
+
+def yolo_prediction_to_annotation(
+    yolo_prediction: list[YOLOObjectDetectionPrediction],
+) -> list[YOLOObjectDetectionAnnotation]:
+    return [
+        YOLOObjectDetectionAnnotation(class_id=pred.class_id, xywhn=pred.xywhn)
+        for pred in yolo_prediction
+    ]
 
 
 def clip_xyxy(xyxy: NDArray[np.int_], w: int, h: int) -> NDArray[np.int_]:
