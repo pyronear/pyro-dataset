@@ -19,6 +19,7 @@ import logging
 import shutil
 from pathlib import Path
 
+from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import (
     annotation_to_label_txt,
     parse_yolo_prediction_txt_file,
@@ -297,3 +298,13 @@ if __name__ == "__main__":
                             is_background=False,  # Set to False for True Positives
                         )
                     )
+        filepath_data_yaml = dir_save / "data.yaml"
+        logger.info(f"Making data.yaml in {filepath_data_yaml}")
+        labelmap = {
+            "train": "./images/train",
+            "val": "./images/val",
+            "test": "./images/test",
+            "nc": 1,
+            "names": ["smoke"],
+        }
+        yaml_write(to=filepath_data_yaml, data=labelmap)
