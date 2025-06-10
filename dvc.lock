@@ -411,3 +411,25 @@ stages:
       md5: 0823577cf626205bd085914a5a634368.dir
       size: 16321
       nfiles: 1
+  select_platform_sequences:
+    cmd:
+    - uv run python ./scripts/platform_train_loop/select_detections.py --dir-platform-annotated-sequences
+      ./data/raw/pyronear-platform-annotated-sequences/ --dir-save ./data/interim/pyronear-platform/sequences/
+      --number-detections-per-sequence-true-positive 3 --number-detections-per-sequence-false-positive
+      3 --loglevel "info"
+    deps:
+    - path: ./data/raw/pyronear-platform-annotated-sequences/
+      hash: md5
+      md5: 3a1c6912619ba13c64284a8334060990.dir
+      size: 156224266
+      nfiles: 1783
+    - path: ./scripts/platform_train_loop/select_detections.py
+      hash: md5
+      md5: 0203d279d22087ab065ac9b1ff51c87b
+      size: 13244
+    outs:
+    - path: ./data/interim/pyronear-platform/sequences/
+      hash: md5
+      md5: b0c69ddd628bca5e031a50250117b816.dir
+      size: 54569551
+      nfiles: 621

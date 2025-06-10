@@ -254,3 +254,18 @@ stages:
       - ./data/processed/wildfire_test/
     outs:
       - ./data/reporting/manifest/
+
+  select_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/select_detections.py
+        --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences/
+        --dir-save ./data/interim/pyronear-platform/sequences/
+        --number-detections-per-sequence-true-positive 3
+        --number-detections-per-sequence-false-positive 3
+        --loglevel "info"
+    deps:
+      - ./scripts/platform_train_loop/select_detections.py
+      - ./data/raw/pyronear-platform-annotated-sequences/
+    outs:
+      - ./data/interim/pyronear-platform/sequences/
