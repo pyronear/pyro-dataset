@@ -235,9 +235,9 @@ before running the following script:
 ```sh
 export GITHUB_ACCESS_TOKEN=XXX
 uv run python ./scripts/release.py \
-  --version v1.0.42 \
+  --version v1.42.0 \
   --github-owner earthtoolsmaker \
-  --github-repo pyronear-mlops
+  --github-repo pyro-dataset
 ```
 
 This will create a new release in the github repository with and upload an
