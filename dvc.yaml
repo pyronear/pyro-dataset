@@ -282,5 +282,19 @@ stages:
         --loglevel "info"
     deps:
       - ./data/interim/pyronear-platform/sequences/
+      - ./scripts/platform_train_loop/split_selected_sequences.py
     outs:
       - ./data/interim/pyronear-platform/sequences-data-split/
+
+  make_ultralytics_dataset_from_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/make_ultralytics_dataset.py
+        --dir-save ./data/interim/pyronear-platform/sequences-ultralytics/
+        --dir-data-split ./data/interim/pyronear-platform/sequences-data-split/
+        --loglevel "info"
+    deps:
+      - ./scripts/platform_train_loop/make_ultralytics_dataset.py
+      - ./data/interim/pyronear-platform/sequences-data-split/
+    outs:
+      - ./data/interim/pyronear-platform/sequences-ultralytics/

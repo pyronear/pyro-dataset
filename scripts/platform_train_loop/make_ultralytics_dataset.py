@@ -36,13 +36,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--dir-save",
         help="Directory to save the ultralytics dataset",
         type=Path,
-        default=Path("./data/interim/pyronear-platform/sequences-ultralytics/"),
+        default="./data/interim/pyronear-platform/sequences-ultralytics/",
     )
     parser.add_argument(
         "--dir-data-split",
         help="Directory for the sequences-data-split",
         type=Path,
-        default=Path("./data/interim/pyronear-platform/sequences-data-split/"),
+        default="./data/interim/pyronear-platform/sequences-data-split/",
     )
     parser.add_argument(
         "-log",

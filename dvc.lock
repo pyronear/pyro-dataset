@@ -444,9 +444,34 @@ stages:
       md5: b0c69ddd628bca5e031a50250117b816.dir
       size: 54569551
       nfiles: 621
+    - path: ./scripts/platform_train_loop/split_selected_sequences.py
+      hash: md5
+      md5: 88c2ac78f4980e788ebfd0b60acc5f7b
+      size: 11394
     outs:
     - path: ./data/interim/pyronear-platform/sequences-data-split/
       hash: md5
       md5: 9aeec126a8c6823392510e1be3c0dec9.dir
       size: 54569551
       nfiles: 621
+  make_ultralytics_dataset_from_platform_sequences:
+    cmd:
+    - uv run python ./scripts/platform_train_loop/make_ultralytics_dataset.py --dir-save
+      ./data/interim/pyronear-platform/sequences-ultralytics/ --dir-data-split ./data/interim/pyronear-platform/sequences-data-split/
+      --loglevel "info"
+    deps:
+    - path: ./data/interim/pyronear-platform/sequences-data-split/
+      hash: md5
+      md5: 9aeec126a8c6823392510e1be3c0dec9.dir
+      size: 54569551
+      nfiles: 621
+    - path: ./scripts/platform_train_loop/make_ultralytics_dataset.py
+      hash: md5
+      md5: 6c83dd7f08415e1ac4bf83b0cfaad529
+      size: 11218
+    outs:
+    - path: ./data/interim/pyronear-platform/sequences-ultralytics/
+      hash: md5
+      md5: 42a679837bbe531b0958c80f7db8a838.dir
+      size: 19492873
+      nfiles: 415
