@@ -365,8 +365,8 @@ stages:
       nfiles: 11629
     - path: ./scripts/make_test_dataset.py
       hash: md5
-      md5: cf64a2b8816417f1fcdd378aa3c621cf
-      size: 11442
+      md5: 4b214de96f85c055d504e54932668efb
+      size: 11581
     outs:
     - path: ./data/processed/wildfire_test/
       hash: md5
@@ -407,14 +407,14 @@ stages:
     deps:
     - path: ./data/processed/wildfire/
       hash: md5
-      md5: 3cef62a9e7847bcbc199fe720605624c.dir
-      size: 5809014799
-      nfiles: 104275
+      md5: 70976f1813c2a17e1a40a9bb235ee62c.dir
+      size: 5825615758
+      nfiles: 104633
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: c53ec0095be34d14024bdebf2e40b38b.dir
-      size: 971845756
-      nfiles: 12823
+      md5: 56ecf0fc8c82b69e839c267da5ebbcc9.dir
+      size: 974737587
+      nfiles: 12879
     - path: ./scripts/build_manifest.py
       hash: md5
       md5: 8039497a4390db665345905315ba01b3
@@ -422,8 +422,8 @@ stages:
     outs:
     - path: ./data/reporting/manifest/
       hash: md5
-      md5: 0823577cf626205bd085914a5a634368.dir
-      size: 16321
+      md5: f5bc9f34e1f901fdf8b673e8d81c9deb.dir
+      size: 19716
       nfiles: 1
   select_platform_sequences:
     cmd:
