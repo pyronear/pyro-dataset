@@ -433,3 +433,20 @@ stages:
       md5: b0c69ddd628bca5e031a50250117b816.dir
       size: 54569551
       nfiles: 621
+  split_platform_sequences:
+    cmd:
+    - uv run python ./scripts/platform_train_loop/split_selected_sequences.py --dir-platform-selected-sequences
+      ./data/interim/pyronear-platform/sequences/ --dir-save ./data/interim/pyronear-platform/sequences-data-split/
+      --random-seed 0 --ratio-train 0.8 --ratio-val-test 0.5 --loglevel "info"
+    deps:
+    - path: ./data/interim/pyronear-platform/sequences/
+      hash: md5
+      md5: b0c69ddd628bca5e031a50250117b816.dir
+      size: 54569551
+      nfiles: 621
+    outs:
+    - path: ./data/interim/pyronear-platform/sequences-data-split/
+      hash: md5
+      md5: 9aeec126a8c6823392510e1be3c0dec9.dir
+      size: 54569551
+      nfiles: 621

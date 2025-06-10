@@ -32,7 +32,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--dir-save",
         help="Directory to save the selection",
         type=Path,
-        default=Path("./data/interim/pyronear-platform/sequences-data-split/"),
+        default="./data/interim/pyronear-platform/sequences-data-split/",
     )
     parser.add_argument(
         "--dir-platform-selected-sequences",

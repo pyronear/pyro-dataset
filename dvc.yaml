@@ -269,3 +269,18 @@ stages:
       - ./data/raw/pyronear-platform-annotated-sequences/
     outs:
       - ./data/interim/pyronear-platform/sequences/
+
+  split_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/split_selected_sequences.py
+        --dir-platform-selected-sequences ./data/interim/pyronear-platform/sequences/
+        --dir-save ./data/interim/pyronear-platform/sequences-data-split/
+        --random-seed 0
+        --ratio-train 0.8
+        --ratio-val-test 0.5
+        --loglevel "info"
+    deps:
+      - ./data/interim/pyronear-platform/sequences/
+    outs:
+      - ./data/interim/pyronear-platform/sequences-data-split/
