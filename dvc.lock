@@ -338,14 +338,20 @@ stages:
     cmd:
     - uv run ./scripts/make_test_dataset.py --save-dir ./data/processed/wildfire_test/
       --dir-previous-test-dataset ./data/raw/Test_dataset_2025/ --dir-data-split-false-positives
-      ./data/interim/data-split/false_positives/FP_2024/wise_wolf/ --random-seed 0
-      --percentage-background-images 0.1 --loglevel "info"
+      ./data/interim/data-split/false_positives/FP_2024/wise_wolf/ --dirs-ultralytics-datasets
+      ./data/interim/pyronear-platform/sequences-ultralytics/ --random-seed 0 --percentage-background-images
+      0.1 --loglevel "info"
     deps:
     - path: ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
       hash: md5
       md5: 6c10828a5427d3669b1a6daf0bb5f3a7.dir
       size: 765215320
       nfiles: 10964
+    - path: ./data/interim/pyronear-platform/sequences-ultralytics/
+      hash: md5
+      md5: 42a679837bbe531b0958c80f7db8a838.dir
+      size: 19492873
+      nfiles: 415
     - path: ./data/raw/Test_dataset_2025/
       hash: md5
       md5: 7783dfe29daf68814cd41989aa997add.dir
@@ -353,14 +359,14 @@ stages:
       nfiles: 11629
     - path: ./scripts/make_test_dataset.py
       hash: md5
-      md5: a7581475202be7f261de4c49e52b9950
-      size: 10714
+      md5: cf64a2b8816417f1fcdd378aa3c621cf
+      size: 11442
     outs:
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: c53ec0095be34d14024bdebf2e40b38b.dir
-      size: 971845756
-      nfiles: 12823
+      md5: 56ecf0fc8c82b69e839c267da5ebbcc9.dir
+      size: 974737587
+      nfiles: 12879
   analyze_wildfire_dataset:
     cmd:
     - uv run ./scripts/analyze_processed_dataset.py --save-dir ./data/reporting/wildfire/

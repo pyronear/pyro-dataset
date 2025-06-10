@@ -215,6 +215,7 @@ stages:
         --save-dir ./data/processed/wildfire_test/
         --dir-previous-test-dataset ./data/raw/Test_dataset_2025/
         --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
         --random-seed 0
         --percentage-background-images 0.1
         --loglevel "info"
@@ -222,6 +223,7 @@ stages:
       - ./scripts/make_test_dataset.py
       - ./data/raw/Test_dataset_2025/
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      - ./data/interim/pyronear-platform/sequences-ultralytics/
     outs:
       - ./data/processed/wildfire_test/
 
