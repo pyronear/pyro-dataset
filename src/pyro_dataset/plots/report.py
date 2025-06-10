@@ -272,7 +272,7 @@ def make_figure_for_data_splits_year_breakdown(data: dict) -> figure:
         tooltips="$name @splits: @$name{0.0%}",
     )
 
-    color = Category10[len(data.keys()) - 1]
+    color = Category20[len(data.keys()) - 1]
 
     p.vbar_stack(
         stacks,

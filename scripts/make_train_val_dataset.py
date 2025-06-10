@@ -25,7 +25,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 from pyro_dataset.constants import CLASS_ID_SMOKE, CLASS_SMOKE_LABEL
-from pyro_dataset.utils import yaml_write
+from pyro_dataset.utils import combine_ultralytics_datasets, yaml_write
 from pyro_dataset.yolo.utils import annotation_to_txt, parse_yolo_annotation_txt_file
 
 
@@ -69,6 +69,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("./data/interim/data-split/false_positives/FP_2024/wise_wolf/"),
     )
     parser.add_argument(
+        "--dirs-ultralytics-datasets",
+        help="list of directories containing ultralytics datasets to incorporate.",
+        type=Path,
+        nargs="+",
+        default=[],
+    )
+    parser.add_argument(
         "--random-seed",
         help="random seed",
         type=int,
@@ -104,8 +111,15 @@ def validate_parsed_args(args: dict) -> bool:
             f"invalid --dir-data-split-false-positives, dir {args['dir_data_split_false_positives']} does not exist"
         )
         return False
-    else:
-        return True
+
+    for dir_dataset in args["dirs_ultralytics_datasets"]:
+        if not dir_dataset.exists() and dir_dataset.is_dir():
+            logging.error(
+                f"The provided ultralytics dataset dir is invalid {dir_dataset}"
+            )
+            return False
+
+    return True
 
 
 def list_ultralytics_images(dir_dataset: Path) -> list[Path]:
@@ -289,6 +303,7 @@ if __name__ == "__main__":
         save_dir = args["save_dir"]
         dir_data_split_smoke = args["dir_data_split_smoke"]
         dir_data_split_false_positives = args["dir_data_split_false_positives"]
+        dirs_ultralytics_datasets = args["dirs_ultralytics_datasets"]
         random_seed = args["random_seed"]
         percentage_background_images = args["percentage_background_images"]
 
@@ -324,5 +339,11 @@ if __name__ == "__main__":
         filepath_data_yaml = save_dir / "data.yaml"
         logger.info(f"save data.yaml in {filepath_data_yaml}")
         write_data_yaml(save_dir / "data.yaml")
+
+        combine_ultralytics_datasets(
+            dirs_dataset=dirs_ultralytics_datasets,
+            dir_save=save_dir,
+            splits=["train", "val"],
+        )
 
         exit(0)

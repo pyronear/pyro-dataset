@@ -198,6 +198,7 @@ stages:
         --save-dir ./data/processed/wildfire/
         --dir-data-split-smoke ./data/interim/data-split/smoke/wildfire/
         --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
         --random-seed 0
         --percentage-background-images 0.1
         --loglevel "info"
@@ -205,6 +206,7 @@ stages:
       - ./scripts/make_train_val_dataset.py
       - ./data/interim/data-split/smoke/wildfire/
       - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
+      - ./data/interim/pyronear-platform/sequences-ultralytics/
     outs:
       - ./data/processed/wildfire/
 
@@ -237,8 +239,8 @@ stages:
         --loglevel "info"
     deps:
       - ./scripts/analyze_processed_dataset.py
-      - ./data/processed/wildfire/data.yaml
-      - ./data/processed/wildfire_test/data.yaml
+      - ./data/processed/wildfire/
+      - ./data/processed/wildfire_test/
     outs:
       - ./data/reporting/wildfire/
 
