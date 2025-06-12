@@ -33,6 +33,7 @@ from pathlib import Path
 
 import boto3
 import requests
+import tqdm
 from botocore.exceptions import NoCredentialsError
 
 
@@ -107,23 +108,26 @@ def create_archive(source_folder: Path, archive_name: str) -> Path:
 
 def upload_to_s3(filepath: Path, bucket_name: str, s3_folder: str) -> None:
     """
-    Upload the filepath to the `bucket_name/s3_folder/`
+    Upload a file to S3 with a progress bar.
     """
     s3_client = boto3.client("s3")
+    file_size = filepath.stat().st_size
     s3_key = f"{s3_folder}/{filepath.name}"
-    logging.info(f"S3 key: {s3_key}")
-    try:
-        s3_client.upload_file(
-            filepath,
-            bucket_name,
-            s3_key,
-            ExtraArgs={"ACL": "private"},
-        )
-        logging.info(f"Uploaded {filepath} to s3://{s3_key}")
-    except FileNotFoundError:
-        logging.error(f"The file {filepath} was not found.")
-    except NoCredentialsError:
-        logging.error("Credentials not available.")
+
+    with tqdm.tqdm(
+        total=file_size, unit="B", unit_scale=True, desc=filepath.name
+    ) as pbar:
+        try:
+            s3_client.upload_file(
+                Filename=filepath,
+                Bucket=bucket_name,
+                Key=s3_key,
+                Callback=lambda bytes_transferred: pbar.update(bytes_transferred),
+            )
+        except FileNotFoundError:
+            logging.error(f"The file {filepath} was not found.")
+        except NoCredentialsError:
+            logging.error("Credentials not available.")
 
 
 def create_release(
