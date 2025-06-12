@@ -45,6 +45,32 @@ If you are unsure about a sequence, do not copy it over. Focus first on the
 false positives that seem easy for the model to fix, avoid the low clouds for
 instance.
 
+Once you have added the new sequences, run the following script to keep track
+of some metadata of the sequences - this will add to the `sequences.csv` file
+the sequences that were selected.
+
+```bash
+uv run python ./scripts/platform_train_loop/copy_annotated_sequences_details.py \
+  --dir-save ./data/raw/pyronear-platform-annotated-sequences \
+  --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences \
+  --dir-platform-sequences ./data/raw/pyronear-platform/sequences/
+```
+
+Use dvc to commit the new data change:
+
+```bash
+dvc commit ./data/raw/pyronear-platform-annotated-sequences
+```
+
+Regenerate a dataset which includes the new sequences:
+
+```bash
+dvc repro
+```
+
+__Note__: One can check beforehand which stages will be rerun with the followin
+dvc command `dvc status`
+
 ## Retraining the model with a new dataset
 
 Create a new git branch named: `<username>/train-best-dataset-<dataset-version>`
