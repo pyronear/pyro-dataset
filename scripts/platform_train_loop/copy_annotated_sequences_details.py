@@ -178,4 +178,21 @@ if __name__ == "__main__":
         )
         logger.info(df_sequences.head())
         dir_save.mkdir(parents=True, exist_ok=True)
-        df_sequences.to_csv(dir_save / "sequences.csv", index=False)
+        filepath_current_sequences_csv = Path(dir_save / "sequences.csv")
+        if filepath_current_sequences_csv.exists():
+            logger.info(f"Concatenating existing sequences.csv with the new entries.")
+            df_current_sequences = pd.read_csv(filepath_current_sequences_csv)
+            df_concat_sequences = (
+                pd.concat([df_current_sequences, df_sequences])
+                .drop_duplicates()
+                .reset_index(drop=True)
+            )
+            logger.info(
+                f"Number of entries in current sequences.csv: {len(df_current_sequences)}"
+            )
+            logger.info(
+                f"Number of entries in new sequences.csv: {len(df_concat_sequences)}"
+            )
+            df_concat_sequences.to_csv(dir_save / "sequences.csv", index=False)
+        else:
+            df_sequences.to_csv(dir_save / "sequences.csv", index=False)
