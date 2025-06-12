@@ -6,6 +6,45 @@ the dataset with current bad predictions from the running model. The goal being
 that retraining the model on a dataset that includes its current mistakes will
 make it a more performant model that generates fewer false positives.
 
+## Incorporating new sequences into the dataset
+
+### Using data from the Pyronear Platform
+
+Use the python scripts `fetch_platform_sequences` and
+`fetch_platform_sequence_id` to fetch full sequences with label files.
+
+Eg. Fetch the sequences for 10 days between 2025-05-01 and 2025-05-10 for `sdis-07`:
+
+```bash
+export PLATFORM_API_ENDPOINT="https://alertapi.pyronear.org"
+export PLATFORM_LOGIN=sdis-07
+export PLATFORM_PASSWORD=XXX
+export PLATFORM_ADMIN_LOGIN=XXX
+export PLATFORM_ADMIN_PASSWORD=XXX
+
+uv run python ./scripts/fetch_platform_sequences.py \
+  --save-dir ./data/raw/pyronear-platform/sequences/sdis-07/ \
+  --date-from 2025-05-01 \
+  --date-end 2025-05-10
+```
+
+__Note__: Make sure to use an admin login/password as well as a regular
+login/password. The admin level access is needed to fetch information about the
+organizations and properly name the detection images locally.
+
+It will automatically name and organize sequences that can be added to our
+train/val/test datasets.
+
+Open a file browser to check the sequences you downloaded and add them
+following the folder structure outlined in
+`data/raw/pyronear-platform-annotated-sequences/sdis-template/`
+
+Make sure to add diversity and do not repeat the same false positives too
+frequently in your selection. Also keep track of some true positives.
+If you are unsure about a sequence, do not copy it over. Focus first on the
+false positives that seem easy for the model to fix, avoid the low clouds for
+instance.
+
 ## Retraining the model with a new dataset
 
 Create a new git branch named: `<username>/train-best-dataset-<dataset-version>`
