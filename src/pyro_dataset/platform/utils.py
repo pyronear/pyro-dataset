@@ -22,7 +22,7 @@ import requests
 from tqdm import tqdm
 
 from pyro_dataset.yolo.utils import (
-    overlay_predictions,
+    overlay_detections,
     parse_yolo_prediction_txt_file,
     xyxyn2xywhn,
 )
@@ -132,7 +132,7 @@ def _get_filepaths(
     Returns:
       filepath_image (Path): path to the detection image (raw without bounding boxes)
       filepath_label (Path): path to the detection label txt file
-      filepath_prediction (Path): path to the image with bouding box drawn on top
+      filepath_detection (Path): path to the image with bouding box drawn on top
     """
     dir_sequence = (
         save_dir
@@ -143,7 +143,7 @@ def _get_filepaths(
     return {
         "filepath_image": dir_sequence / "images" / f"{filepath_stem}.jpg",
         "filepath_label": dir_sequence / "labels" / f"{filepath_stem}.txt",
-        "filepath_prediction": dir_sequence / "predictions" / f"{filepath_stem}.jpg",
+        "filepath_detection": dir_sequence / "detections" / f"{filepath_stem}.jpg",
     }
 
 
@@ -208,12 +208,12 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     This function performs the following tasks:
     1. Downloads associated images based on the detection URLs.
     2. Creates YOLO formatted label files using the provided bounding boxes.
-    3. Generates overlaid images with predictions visualized on top of the original images.
-    4. Saves the dataframe with additional paths to the labels, images, and predictions.
+    3. Generates overlaid images with detections visualized on top of the original images.
+    4. Saves the dataframe with additional paths to the labels, images, and detections.
 
     Parameters:
         df (pd.DataFrame): The input dataframe containing detection and sequence information.
-        save_dir (Path): The directory where images, labels, and predictions will be stored.
+        save_dir (Path): The directory where images, labels, and detections will be stored.
 
     Returns:
         None
@@ -244,16 +244,16 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
 
         with open(dict_filepaths["filepath_label"], "r") as file:
             txt_content = file.read()
-            yolo_predictions = parse_yolo_prediction_txt_file(txt_content)
-            array_image_overlayed_with_predictions = overlay_predictions(
-                array_image=array_image, predictions=yolo_predictions
+            yolo_detections = parse_yolo_prediction_txt_file(txt_content)
+            array_image_overlayed_with_detections = overlay_detections(
+                array_image=array_image, detections=yolo_detections
             )
-            dict_filepaths["filepath_prediction"].parent.mkdir(
+            dict_filepaths["filepath_detection"].parent.mkdir(
                 parents=True, exist_ok=True
             )
             cv2.imwrite(
-                str(dict_filepaths["filepath_prediction"]),
-                array_image_overlayed_with_predictions,
+                str(dict_filepaths["filepath_detection"]),
+                array_image_overlayed_with_detections,
             )
 
         record = {**row, **dict_filepaths}

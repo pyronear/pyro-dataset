@@ -231,9 +231,9 @@ def to_supervision_detections(
     )
 
 
-def overlay_predictions(
+def overlay_detections(
     array_image: np.ndarray,
-    predictions: list[YOLOObjectDetectionPrediction],
+    detections: list[YOLOObjectDetectionPrediction],
 ) -> np.ndarray:
     """
     Overlay YOLO predictions on top of `array_image`. It returns a new array
@@ -241,7 +241,7 @@ def overlay_predictions(
     """
     sv_detections = to_supervision_detections(
         array_image=array_image,
-        predictions=predictions,
+        predictions=detections,
         class_id=0,
     )
     scene = array_image.copy()
