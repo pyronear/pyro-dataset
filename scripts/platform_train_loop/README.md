@@ -68,8 +68,8 @@ Regenerate a dataset which includes the new sequences:
 dvc repro
 ```
 
-__Note__: One can check beforehand which stages will be rerun with the followin
-dvc command `dvc status`
+__Note__: One can check beforehand which stages will be rerun with the
+following dvc command `dvc status`
 
 Check that the reports that are generated from the wildfire datasets look good
 (HTML plots) and once you are happy with it, you can push the dvc data to the
