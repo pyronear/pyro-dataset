@@ -139,7 +139,7 @@ def _get_filepaths(
         / organization_name
         / f"{_format_api_datetime_str(sequence_started_at)}_{camera_name}-{int(sequence_azimuth)}_sequence-{sequence_id}"
     )
-    filepath_stem = f"{organization_name}_{camera_name}-{int(detection_azimuth)}_{_format_api_datetime_str(detection_created_at)}"
+    filepath_stem = f"pyronear_{organization_name}_{camera_name}-{int(detection_azimuth)}_{_format_api_datetime_str(detection_created_at)}"
     return {
         "filepath_image": dir_sequence / "images" / f"{filepath_stem}.jpg",
         "filepath_label": dir_sequence / "labels" / f"{filepath_stem}.txt",
