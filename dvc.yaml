@@ -302,3 +302,18 @@ stages:
       - ./data/interim/pyronear-platform/sequences-data-split/
     outs:
       - ./data/interim/pyronear-platform/sequences-ultralytics/
+
+  make_temporal_dataset_from_platform_sequences:
+    cmd:
+      - >-
+        uv run python ./scripts/platform_train_loop/make_temporal_dataset.py
+        --dir-save ./data/interim/pyronear-platform/sequences-temporal/
+        --dir-sequences-data-split ./data/interim/pyronear-platform/sequences-data-split/
+        --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences/
+        --loglevel "info"
+    deps:
+      - ./scripts/platform_train_loop/make_temporal_dataset.py
+      - ./data/interim/pyronear-platform/sequences-data-split/
+      - ./data/raw/pyronear-platform-annotated-sequences/
+    outs:
+      - ./data/interim/pyronear-platform/sequences-temporal/
