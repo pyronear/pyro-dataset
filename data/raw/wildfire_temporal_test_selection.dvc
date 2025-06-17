@@ -1,0 +1,6 @@
+outs:
+- md5: fdfee2f74003767a64d6526dc4d0d4e1.dir
+  size: 254324569
+  nfiles: 4140
+  hash: md5
+  path: wildfire_temporal_test_selection
