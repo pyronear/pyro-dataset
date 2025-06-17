@@ -489,3 +489,30 @@ stages:
       md5: db7af2bb6faacb4a2582e7afe02e07f1.dir
       size: 170645089
       nfiles: 3297
+  make_temporal_dataset_from_platform_sequences:
+    cmd:
+    - uv run python ./scripts/platform_train_loop/make_temporal_dataset.py --dir-save
+      ./data/interim/pyronear-platform/sequences-temporal/ --dir-sequences-data-split
+      ./data/interim/pyronear-platform/sequences-data-split/ --dir-platform-annotated-sequences
+      ./data/raw/pyronear-platform-annotated-sequences/ --loglevel "info"
+    deps:
+    - path: ./data/interim/pyronear-platform/sequences-data-split/
+      hash: md5
+      md5: da5229015fcf154a62d16e5d28ef9e97.dir
+      size: 478462525
+      nfiles: 4944
+    - path: ./data/raw/pyronear-platform-annotated-sequences/
+      hash: md5
+      md5: 6eecfb9d5b76e34a2e84ccfa14bb44c0.dir
+      size: 1482958308
+      nfiles: 15217
+    - path: ./scripts/platform_train_loop/make_temporal_dataset.py
+      hash: md5
+      md5: 73ff4d5120007a7be87f86170ccb86ad
+      size: 8707
+    outs:
+    - path: ./data/interim/pyronear-platform/sequences-temporal/
+      hash: md5
+      md5: 3ec0c2d8a3381422e906a60eda2bb636.dir
+      size: 527365641
+      nfiles: 10144
