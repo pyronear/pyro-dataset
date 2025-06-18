@@ -326,9 +326,10 @@ stages:
         --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
         --dir-selection-sequence-temporal ./data/raw/wildfire_temporal_test_selection/
         --ratio-background 0.5
+        --random-seed 0
         --loglevel "info"
     deps:
-      - ./scripts/make_temporal_dataset.py
+      - ./scripts/make_temporal_test_dataset.py
       - ./data/raw/wildfire_temporal_test_selection/
       - ./data/interim/pyronear-platform/sequences-temporal/
     outs:
@@ -340,11 +341,11 @@ stages:
         uv run python ./scripts/make_temporal_train_val_dataset.py
         --dir-save ./data/processed/wildfire_temporal/
         --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
-        --dir-selection-sequence-temporal ./data/raw/wildfire_temporal_test_selection/
+        --ratio-background 0.5
+        --random-seed 0
         --loglevel "info"
     deps:
       - ./scripts/make_temporal_train_val_dataset.py
-      - ./data/raw/wildfire_temporal_test_selection/
       - ./data/interim/pyronear-platform/sequences-temporal/
     outs:
       - ./data/processed/wildfire_temporal/
