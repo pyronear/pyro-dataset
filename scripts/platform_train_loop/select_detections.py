@@ -318,7 +318,7 @@ def copy_over(
             dst=filepath_destination_label_prediction,
         )
 
-        if filepath_destination_label_ground_truth.exists():
+        if filepath_source_label_ground_truth.exists():
             shutil.copy(
                 src=filepath_source_label_ground_truth,
                 dst=filepath_destination_label_ground_truth,
@@ -348,7 +348,7 @@ if __name__ == "__main__":
         logger.info(f"Selecting the false positives from {dirs_fp}")
         for dir_fp in dirs_fp:
             dirs_sequences_fp = find_sequence_folders(dir_fp)
-            print(
+            logger.info(
                 f"Found {len(dirs_sequences_fp)} false positive sequences in {dir_fp}"
             )
             for dir_sequence_fp in dirs_sequences_fp:
@@ -366,7 +366,9 @@ if __name__ == "__main__":
         logger.info(f"Selecting the true positives from {dirs_tp}")
         for dir_tp in dirs_tp:
             dirs_sequences_tp = find_sequence_folders(dir_tp)
-            print(f"Found {len(dirs_sequences_tp)} true positive sequences in {dir_tp}")
+            logger.info(
+                f"Found {len(dirs_sequences_tp)} true positive sequences in {dir_tp}"
+            )
             for dir_sequence_tp in dirs_sequences_tp:
                 records = select_best_true_positives(
                     dir_sequence_tp,
