@@ -516,3 +516,51 @@ stages:
       md5: fbf3fe90fdedf127e74e3c67b86ac8ff.dir
       size: 527365641
       nfiles: 10144
+  make_temporal_test_dataset:
+    cmd:
+    - uv run python ./scripts/make_temporal_test_dataset.py --dir-save ./data/processed/wildfire_temporal_test/
+      --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
+      --dir-selection-sequence-temporal ./data/raw/wildfire_temporal_test_selection/
+      --ratio-background 0.5 --random-seed 0 --loglevel "info"
+    deps:
+    - path: ./data/interim/pyronear-platform/sequences-temporal/
+      hash: md5
+      md5: fbf3fe90fdedf127e74e3c67b86ac8ff.dir
+      size: 527365641
+      nfiles: 10144
+    - path: ./data/raw/wildfire_temporal_test_selection/
+      hash: md5
+      md5: a7815c74b06bf1b191136a5a65950b74.dir
+      size: 202628719
+      nfiles: 3750
+    - path: ./scripts/make_temporal_test_dataset.py
+      hash: md5
+      md5: 11edd0dc6c40219bae1c7440bf87b8e7
+      size: 3775
+    outs:
+    - path: ./data/processed/wildfire_temporal_test/
+      hash: md5
+      md5: a7815c74b06bf1b191136a5a65950b74.dir
+      size: 202628719
+      nfiles: 3750
+  make_temporal_train_val_dataset:
+    cmd:
+    - uv run python ./scripts/make_temporal_train_val_dataset.py --dir-save ./data/processed/wildfire_temporal/
+      --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
+      --ratio-background 0.5 --random-seed 0 --loglevel "info"
+    deps:
+    - path: ./data/interim/pyronear-platform/sequences-temporal/
+      hash: md5
+      md5: fbf3fe90fdedf127e74e3c67b86ac8ff.dir
+      size: 527365641
+      nfiles: 10144
+    - path: ./scripts/make_temporal_train_val_dataset.py
+      hash: md5
+      md5: d335285d4393a8db4b27478d1cad083b
+      size: 4758
+    outs:
+    - path: ./data/processed/wildfire_temporal/
+      hash: md5
+      md5: 069e99367e228ecb1d6e0a3b12cd9295.dir
+      size: 263482587
+      nfiles: 4922
