@@ -434,19 +434,19 @@ stages:
     deps:
     - path: ./data/raw/pyronear-platform-annotated-sequences/
       hash: md5
-      md5: 3fc0e1d726646763d14f20b5c2ed0dac.dir
-      size: 1483240395
-      nfiles: 15217
+      md5: e9cb84ab57ea8159a2c7106565c5c68f.dir
+      size: 1483247254
+      nfiles: 15313
     - path: ./scripts/platform_train_loop/select_detections.py
       hash: md5
-      md5: faaf3f3ec211ae4298ac32d0e7a80059
-      size: 14523
+      md5: af4f940bf6cff0f1aa338a214cc59522
+      size: 14560
     outs:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
-      md5: e60c867d5a203de37c461dce8be812a9.dir
-      size: 478430592
-      nfiles: 4944
+      md5: 4169d7343628c22e83c663a8a6063d42.dir
+      size: 478432930
+      nfiles: 4974
   split_platform_sequences:
     cmd:
     - uv run python ./scripts/platform_train_loop/split_selected_sequences.py --dir-platform-selected-sequences
@@ -455,9 +455,9 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
-      md5: e60c867d5a203de37c461dce8be812a9.dir
-      size: 478430592
-      nfiles: 4944
+      md5: 4169d7343628c22e83c663a8a6063d42.dir
+      size: 478432930
+      nfiles: 4974
     - path: ./scripts/platform_train_loop/split_selected_sequences.py
       hash: md5
       md5: 7a24fa5ed1bc9266af14bcda3704aaf9
@@ -465,9 +465,9 @@ stages:
     outs:
     - path: ./data/interim/pyronear-platform/sequences-data-split/
       hash: md5
-      md5: 08ca4cc10ce2314c5a9efaec89eb8942.dir
-      size: 478430592
-      nfiles: 4944
+      md5: 41227249e1f7dc7d5c4168a2e6eab3a3.dir
+      size: 478432930
+      nfiles: 4974
   make_ultralytics_dataset_from_platform_sequences:
     cmd:
     - uv run python ./scripts/platform_train_loop/make_ultralytics_dataset.py --dir-save
@@ -476,13 +476,13 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences-data-split/
       hash: md5
-      md5: 08ca4cc10ce2314c5a9efaec89eb8942.dir
-      size: 478430592
-      nfiles: 4944
+      md5: 41227249e1f7dc7d5c4168a2e6eab3a3.dir
+      size: 478432930
+      nfiles: 4974
     - path: ./scripts/platform_train_loop/make_ultralytics_dataset.py
       hash: md5
-      md5: 6c83dd7f08415e1ac4bf83b0cfaad529
-      size: 11218
+      md5: 162d6707ee5289743f6b25825f869858
+      size: 11340
     outs:
     - path: ./data/interim/pyronear-platform/sequences-ultralytics/
       hash: md5
@@ -498,14 +498,14 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences-data-split/
       hash: md5
-      md5: 08ca4cc10ce2314c5a9efaec89eb8942.dir
-      size: 478430592
-      nfiles: 4944
+      md5: 41227249e1f7dc7d5c4168a2e6eab3a3.dir
+      size: 478432930
+      nfiles: 4974
     - path: ./data/raw/pyronear-platform-annotated-sequences/
       hash: md5
-      md5: 3fc0e1d726646763d14f20b5c2ed0dac.dir
-      size: 1483240395
-      nfiles: 15217
+      md5: e9cb84ab57ea8159a2c7106565c5c68f.dir
+      size: 1483247254
+      nfiles: 15313
     - path: ./scripts/platform_train_loop/make_temporal_dataset.py
       hash: md5
       md5: a490cfbaccc1e6cafa5327cb3fd1af04
@@ -513,9 +513,9 @@ stages:
     outs:
     - path: ./data/interim/pyronear-platform/sequences-temporal/
       hash: md5
-      md5: afef2864ce5bdd58293985acbd322580.dir
-      size: 362977293
-      nfiles: 7222
+      md5: 9f205c9c1a792006fb3c446cacbccd28.dir
+      size: 372616592
+      nfiles: 7414
   make_temporal_test_dataset:
     cmd:
     - uv run python ./scripts/make_temporal_test_dataset.py --dir-save ./data/processed/wildfire_temporal_test/
@@ -525,9 +525,9 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences-temporal/
       hash: md5
-      md5: afef2864ce5bdd58293985acbd322580.dir
-      size: 362977293
-      nfiles: 7222
+      md5: 9f205c9c1a792006fb3c446cacbccd28.dir
+      size: 372616592
+      nfiles: 7414
     - path: ./data/raw/wildfire_temporal_test_selection/
       hash: md5
       md5: a7815c74b06bf1b191136a5a65950b74.dir
@@ -551,9 +551,9 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences-temporal/
       hash: md5
-      md5: afef2864ce5bdd58293985acbd322580.dir
-      size: 362977293
-      nfiles: 7222
+      md5: 9f205c9c1a792006fb3c446cacbccd28.dir
+      size: 372616592
+      nfiles: 7414
     - path: ./scripts/make_temporal_train_val_dataset.py
       hash: md5
       md5: 5cfe7141318d08985603df9318594b5b
@@ -561,6 +561,6 @@ stages:
     outs:
     - path: ./data/processed/wildfire_temporal/
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 99f3bc1ba4aeb023a7cbe072b1bba7f4.dir
+      size: 14000323
+      nfiles: 274
