@@ -97,31 +97,41 @@ if __name__ == "__main__":
         dir_platform_sequence_temporal = args["dir_platform_sequence_temporal"]
         rng = random.Random(random_seed)
 
+        dir_save.mkdir(exist_ok=True, parents=True)
+
         for split in ["train", "val"]:
             logger.info(f"Handling split {split}")
             dir_smoke = dir_platform_sequence_temporal / "images" / split / "smoke"
             dir_background = (
                 dir_platform_sequence_temporal / "images" / split / "background"
             )
-            dir_smoke_sequences = list(dir_smoke.iterdir())
-            n_smoke = len(dir_smoke_sequences)
-            dir_background_sequences = list(dir_background.iterdir())
-            n_background = len(dir_background_sequences)
-            k = int((1 - ratio_background) / ratio_background * n_smoke)
-            dir_selected_background_sequences = rng.sample(
-                population=dir_background_sequences,
-                k=k,
-            )
-            logger.info(
-                f"{split} split: {len(dir_smoke_sequences)} smoke sequences - {len(dir_background_sequences)} background sequences"
-            )
-            logger.info(
-                f"selecting randomly {k} background sequences to account for ratio-background of {ratio_background}"
-            )
-            for dir in dir_smoke_sequences:
-                handle_sequence(dir=dir, split=split, is_smoke=True, dir_save=dir_save)
 
-            for dir in dir_selected_background_sequences:
-                handle_sequence(dir=dir, split=split, is_smoke=False, dir_save=dir_save)
+            if not dir_smoke.exists():
+                logging.warning(f"No smoke sequences for split {split} - Skipping")
+            else:
+                dir_smoke_sequences = list(dir_smoke.iterdir())
+                n_smoke = len(dir_smoke_sequences)
+                dir_background_sequences = list(dir_background.iterdir())
+                n_background = len(dir_background_sequences)
+                k = int((1 - ratio_background) / ratio_background * n_smoke)
+                dir_selected_background_sequences = rng.sample(
+                    population=dir_background_sequences,
+                    k=k,
+                )
+                logger.info(
+                    f"{split} split: {len(dir_smoke_sequences)} smoke sequences - {len(dir_background_sequences)} background sequences"
+                )
+                logger.info(
+                    f"selecting randomly {k} background sequences to account for ratio-background of {ratio_background}"
+                )
+                for dir in dir_smoke_sequences:
+                    handle_sequence(
+                        dir=dir, split=split, is_smoke=True, dir_save=dir_save
+                    )
+
+                for dir in dir_selected_background_sequences:
+                    handle_sequence(
+                        dir=dir, split=split, is_smoke=False, dir_save=dir_save
+                    )
 
         logger.info(f"Done generating temporal dataset in {dir_save} ✅")

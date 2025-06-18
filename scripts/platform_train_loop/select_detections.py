@@ -162,7 +162,12 @@ def get_filepaths(dir_sequence: Path, stem: str) -> dict[str, Path]:
         dict[str, Path]: A dictionary containing the file paths for labels, images, and detections.
     """
     return {
-        "filepath_label": dir_sequence / "labels" / f"{stem}.txt",
+        "filepath_label_ground_truth": dir_sequence
+        / "labels_ground_truth"
+        / f"{stem}.txt",
+        "filepath_label_prediction": dir_sequence
+        / "labels_predictions"
+        / f"{stem}.txt",
         "filepath_image": dir_sequence / "images" / f"{stem}.jpg",
         "filepath_detection": dir_sequence / "detections" / f"{stem}.jpg",
     }
@@ -192,7 +197,7 @@ def select_best_false_positives(
             "prediction": prediction,
             **(get_filepaths(dir_sequence=dir_sequence, stem=fp.stem)),
         }
-        for fp in (dir_sequence.glob("**/*.txt"))
+        for fp in (dir_sequence.glob("**/labels_predictions/*.txt"))
         for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
     records_filtered = [
@@ -227,12 +232,14 @@ def select_best_true_positives(
         list[dict[str, Path]]: A list of dictionaries containing the file paths
         for the selected detections, excluding the prediction details.
     """
+    # TODO: leverage the labels_ground_truth to pick the ones that have not
+    # been at all detected instead or pick the lowest scores as we do now
     records = [
         {
             "prediction": prediction,
             **(get_filepaths(dir_sequence=dir_sequence, stem=fp.stem)),
         }
-        for fp in (dir_sequence.glob("**/*.txt"))
+        for fp in (dir_sequence.glob("**/labels_predictions/*.txt"))
         for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
     records_filtered = [
@@ -282,19 +289,40 @@ def copy_over(
             / "detections"
             / filepath_source_detection.name
         )
-        filepath_source_label = record["filepath_label"]
-        filepath_destination_label = (
+        filepath_source_label_prediction = record["filepath_label_prediction"]
+        filepath_destination_label_prediction = (
             dir_save
             / dir_sequence.relative_to(dir_platform_annotated_sequences)
-            / "labels"
-            / filepath_source_label.name
+            / "labels_predictions"
+            / filepath_source_label_prediction.name
+        )
+        filepath_source_label_ground_truth = record["filepath_label_ground_truth"]
+        filepath_destination_label_ground_truth = (
+            dir_save
+            / dir_sequence.relative_to(dir_platform_annotated_sequences)
+            / "labels_ground_truth"
+            / filepath_source_label_ground_truth.name
         )
         filepath_destination_image.parent.mkdir(parents=True, exist_ok=True)
         filepath_destination_detection.parent.mkdir(parents=True, exist_ok=True)
-        filepath_destination_label.parent.mkdir(parents=True, exist_ok=True)
+        # filepath_destination_label.parent.mkdir(parents=True, exist_ok=True)
+        filepath_destination_label_prediction.parent.mkdir(parents=True, exist_ok=True)
+        filepath_destination_label_ground_truth.parent.mkdir(
+            parents=True, exist_ok=True
+        )
         shutil.copy(src=filepath_source_image, dst=filepath_destination_image)
         shutil.copy(src=filepath_source_detection, dst=filepath_destination_detection)
-        shutil.copy(src=filepath_source_label, dst=filepath_destination_label)
+        # shutil.copy(src=filepath_source_label, dst=filepath_destination_label)
+        shutil.copy(
+            src=filepath_source_label_prediction,
+            dst=filepath_destination_label_prediction,
+        )
+
+        if filepath_destination_label_ground_truth.exists():
+            shutil.copy(
+                src=filepath_source_label_ground_truth,
+                dst=filepath_destination_label_ground_truth,
+            )
 
 
 if __name__ == "__main__":
