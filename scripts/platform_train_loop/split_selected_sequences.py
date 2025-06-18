@@ -210,24 +210,6 @@ def train_val_test_split(
     }
 
 
-def get_filepaths(dir_sequence: Path, stem: str) -> dict[str, Path]:
-    """
-    Construct file paths for labels, images, and detection files based on the provided directory sequence and stem.
-
-    Args:
-        dir_sequence (Path): The directory containing the sequence data.
-        stem (str): The stem of the filename used to construct the paths.
-
-    Returns:
-        dict[str, Path]: A dictionary containing the file paths for labels, images, and detections.
-    """
-    return {
-        "filepath_label": dir_sequence / "labels" / f"{stem}.txt",
-        "filepath_image": dir_sequence / "images" / f"{stem}.jpg",
-        "filepath_detection": dir_sequence / "detections" / f"{stem}.jpg",
-    }
-
-
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())

@@ -455,17 +455,17 @@ stages:
     deps:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
-      md5: 106a41d87739880257943f2aff1c69b0.dir
+      md5: e60c867d5a203de37c461dce8be812a9.dir
       size: 478430592
       nfiles: 4944
     - path: ./scripts/platform_train_loop/split_selected_sequences.py
       hash: md5
-      md5: 88c2ac78f4980e788ebfd0b60acc5f7b
-      size: 11394
+      md5: 7a24fa5ed1bc9266af14bcda3704aaf9
+      size: 10691
     outs:
     - path: ./data/interim/pyronear-platform/sequences-data-split/
       hash: md5
-      md5: 8b3f9021b39c6e3de118762e3cb7fdb1.dir
+      md5: 08ca4cc10ce2314c5a9efaec89eb8942.dir
       size: 478430592
       nfiles: 4944
   make_ultralytics_dataset_from_platform_sequences:
