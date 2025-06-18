@@ -162,7 +162,6 @@ def get_filepaths(dir_sequence: Path, stem: str) -> dict[str, Path]:
         dict[str, Path]: A dictionary containing the file paths for labels, images, and detections.
     """
     return {
-        # "filepath_label": dir_sequence / "labels" / f"{stem}.txt",
         "filepath_label_ground_truth": dir_sequence
         / "labels_ground_truth"
         / f"{stem}.txt",
@@ -198,7 +197,7 @@ def select_best_false_positives(
             "prediction": prediction,
             **(get_filepaths(dir_sequence=dir_sequence, stem=fp.stem)),
         }
-        for fp in (dir_sequence.glob("**/*.txt"))
+        for fp in (dir_sequence.glob("**/labels_predictions/*.txt"))
         for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
     records_filtered = [
@@ -238,7 +237,7 @@ def select_best_true_positives(
             "prediction": prediction,
             **(get_filepaths(dir_sequence=dir_sequence, stem=fp.stem)),
         }
-        for fp in (dir_sequence.glob("**/*.txt"))
+        for fp in (dir_sequence.glob("**/labels_predictions/*.txt"))
         for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
     records_filtered = [

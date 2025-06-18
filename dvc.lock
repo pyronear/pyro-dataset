@@ -439,8 +439,8 @@ stages:
       nfiles: 15217
     - path: ./scripts/platform_train_loop/select_detections.py
       hash: md5
-      md5: c13314d1000dcaa9c30e8c475c80d2eb
-      size: 14602
+      md5: 5b85c6681d10a94e80eb578bd097c5a1
+      size: 14373
     outs:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
