@@ -100,10 +100,19 @@ split into the train/val/test sets.
 
 #### 🧬 Dataset Creation
 
+##### Wildfire Dataset
+
 - __make_train_val_wildfire_dataset__: Make the train/val `wildfire` dataset
 using the previous stages.
 - __make_test_wildfire_dataset__: Make the test `wildfire` dataset using the
 previous stages.
+
+##### Temporal Dataset
+
+- __make_temporal_train_val_dataset__: Make the train/val temporal `wildfire`
+dataset using the previous stages.
+- __make_temporal_test_dataset__: Make the test temporal `wildfire` dataset
+using the previous stages.
 
 #### 🔎 Dataset Analysis
 
