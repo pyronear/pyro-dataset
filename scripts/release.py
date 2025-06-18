@@ -28,7 +28,7 @@ Arguments:
 import argparse
 import logging
 import os
-import shutil
+import tarfile
 from pathlib import Path
 
 import boto3
@@ -100,9 +100,18 @@ def create_archive(source_folder: Path, archive_name: str) -> Path:
     """
     # Create a tar.gz archive of the source folder
     archive_path = Path("/tmp") / archive_name
-    shutil.make_archive(
-        str(archive_path).replace(".tar.gz", ""), "gztar", source_folder
-    )
+    with tarfile.open(archive_path, "w:gz") as tar:
+        total_files = sum(len(files) for _, _, files in os.walk(source_folder))
+        with tqdm.tqdm(total=total_files, desc="Creating archive") as pbar:
+            for root, _, files in os.walk(source_folder):
+                for file in files:
+                    tar.add(
+                        os.path.join(root, file),
+                        arcname=os.path.relpath(
+                            os.path.join(root, file), source_folder
+                        ),
+                    )
+                    pbar.update(1)
     return archive_path
 
 
