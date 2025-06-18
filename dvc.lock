@@ -434,17 +434,17 @@ stages:
     deps:
     - path: ./data/raw/pyronear-platform-annotated-sequences/
       hash: md5
-      md5: 3cef8c47b6256567ce62b1a955f2c50e.dir
-      size: 1483148307
+      md5: 3fc0e1d726646763d14f20b5c2ed0dac.dir
+      size: 1483240395
       nfiles: 15217
     - path: ./scripts/platform_train_loop/select_detections.py
       hash: md5
-      md5: 0203d279d22087ab065ac9b1ff51c87b
-      size: 13244
+      md5: c13314d1000dcaa9c30e8c475c80d2eb
+      size: 14602
     outs:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
-      md5: 106a41d87739880257943f2aff1c69b0.dir
+      md5: e60c867d5a203de37c461dce8be812a9.dir
       size: 478430592
       nfiles: 4944
   split_platform_sequences:
