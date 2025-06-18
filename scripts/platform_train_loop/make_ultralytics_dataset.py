@@ -191,7 +191,8 @@ def make_ultralytics_format(
     Returns:
         dict: A dictionary containing the formatted dataset with images and labels.
     """
-    filepaths_labels = list(dir_sequence.glob("**/*.txt"))
+    # TODO: use the labels_ground_truth instead of the labels_predictions once everything is annotated
+    filepaths_labels = list(dir_sequence.glob("**/labels_predictions/*.txt"))
     filepaths_images = [
         fp for fp in dir_sequence.glob("**/*.jpg") if "images" in str(fp)
     ]
