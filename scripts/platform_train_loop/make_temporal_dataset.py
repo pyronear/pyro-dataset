@@ -185,23 +185,41 @@ def handle_dir_sequence(dir_sequence: Path, split: str, is_smoke: bool = True) -
         )
         dir_sequence_images = dirs["dir_images"]
         dir_sequence_labels = dirs["dir_labels"]
-        dir_sequence_images.mkdir(exist_ok=True, parents=True)
-        dir_sequence_labels.mkdir(exist_ok=True, parents=True)
 
-        for filepath_image in (dir_annotated_sequence / "images").glob("*.jpg"):
-            shutil.copy(
-                src=filepath_image,
-                dst=dir_sequence_images / filepath_image.name,
+        filepaths_images = list((dir_annotated_sequence / "images").glob("*.jpg"))
+        filepaths_labels_ground_truth = list(
+            (dir_annotated_sequence / "labels_ground_truth").glob("*.txt")
+        )
+        filepaths_labels_predictions = list(
+            (dir_annotated_sequence / "labels_predictions").glob("*.txt")
+        )
+        if len(filepaths_labels_ground_truth) != len(filepaths_images) and is_smoke:
+            logging.warning(
+                f"Missing ground truth labels for smoke sequence {sequence_reference} - Skipping"
             )
+        else:
 
-            # FIXME: this should look into ground truth instead of labels
-            for filepath_label in (dir_annotated_sequence / "labels").glob("*.txt"):
-                if is_smoke:
+            # Creating the directories
+            dir_sequence_images.mkdir(exist_ok=True, parents=True)
+            dir_sequence_labels.mkdir(exist_ok=True, parents=True)
+
+            # Handling images
+            for filepath_image in filepaths_images:
+                shutil.copy(
+                    src=filepath_image,
+                    dst=dir_sequence_images / filepath_image.name,
+                )
+
+            # Handling labels
+            if is_smoke:
+                for filepath_label in filepaths_labels_ground_truth:
                     shutil.copy(
                         src=filepath_label,
                         dst=dir_sequence_labels / filepath_label.name,
                     )
-                else:
+            else:
+                # Background, set to empty files
+                for filepath_label in filepaths_labels_predictions:
                     (dir_sequence_labels / filepath_label.name).touch()
 
 

@@ -232,6 +232,8 @@ def select_best_true_positives(
         list[dict[str, Path]]: A list of dictionaries containing the file paths
         for the selected detections, excluding the prediction details.
     """
+    # TODO: leverage the labels_ground_truth to pick the ones that have not
+    # been at all detected instead or pick the lowest scores as we do now
     records = [
         {
             "prediction": prediction,
