@@ -17,6 +17,7 @@ Environment variables required:
 import argparse
 import logging
 import os
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -205,8 +206,11 @@ if __name__ == "__main__":
         args_content = {
             "sequence-id": args["sequence_id"],
             "save-dir": str(args["save_dir"]),
+            "date-now": datetime.now().strftime("%Y-%m-%d"),
             "platform-login": platform_login,
             "platform-admin-login": platform_admin_login,
         }
-        yaml_write(to=save_dir / "args.yaml", data=args_content)
+        filepath_args_yaml = save_dir / "args.yaml"
+        logger.info(f"Saving args run in {filepath_args_yaml}")
+        platform_utils.append_yaml_run(filepath=filepath_args_yaml, data=args_content)
         logger.info(f"Done ✅")

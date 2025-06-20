@@ -26,7 +26,7 @@ from tqdm import tqdm
 
 import pyro_dataset.platform.api as api
 import pyro_dataset.platform.utils as platform_utils
-from pyro_dataset.utils import index_by, yaml_write
+from pyro_dataset.utils import index_by, yaml_read, yaml_write
 
 
 def valid_date(s: str):
@@ -268,15 +268,20 @@ if __name__ == "__main__":
         filepath_api_results_csv = save_dir / "api_results.csv"
         logger.info(f"Save API results to {filepath_api_results_csv}")
         save_dir.mkdir(parents=True, exist_ok=True)
-        df.to_csv(filepath_api_results_csv, index=False)
+        platform_utils.append_dataframe_to_csv(
+            df=df, filepath_csv=filepath_api_results_csv
+        )
 
         platform_utils.process_dataframe(df=df, save_dir=save_dir)
         args_content = {
             "date-from": str(args["date_from"]),
             "date-end": str(args["date_end"]),
+            "date-now": datetime.now().strftime("%Y-%m-%d"),
             "save-dir": str(args["save_dir"]),
             "platform-login": platform_login,
             "platform-admin-login": platform_admin_login,
         }
-        yaml_write(to=save_dir / "args.yaml", data=args_content)
+        filepath_args_yaml = save_dir / "args.yaml"
+        logger.info(f"Saving args run in {filepath_args_yaml}")
+        platform_utils.append_yaml_run(filepath=filepath_args_yaml, data=args_content)
         logger.info(f"Done ✅")
