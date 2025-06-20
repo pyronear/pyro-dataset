@@ -21,6 +21,7 @@ import pandas as pd
 import requests
 from tqdm import tqdm
 
+from pyro_dataset.utils import yaml_read, yaml_write
 from pyro_dataset.yolo.utils import (
     overlay_detections,
     parse_yolo_prediction_txt_file,
@@ -201,6 +202,47 @@ def download_image(url: str, filepath_destination: Path, force: bool = False) ->
             logging.warning(f"failed to download image from {url}")
 
 
+def append_dataframe_to_csv(df: pd.DataFrame, filepath_csv: Path) -> None:
+    """
+    Append the contents of a DataFrame to a CSV file. If the file does not exist, it creates one.
+    It also removes duplicate rows from the CSV before saving.
+
+    Parameters:
+        df (pd.DataFrame): The DataFrame to append to the CSV.
+        filepath_csv (Path): The path to the CSV file.
+    """
+    if filepath_csv.exists():
+        existing_df = pd.read_csv(filepath_csv)
+        combined_df = pd.concat([existing_df, df]).drop_duplicates()
+        combined_df.to_csv(filepath_csv, index=False)
+    else:
+        df.to_csv(filepath_csv, index=False)
+
+
+def append_yaml_run(filepath: Path, data: dict) -> None:
+    """
+    Append new run data to the 'runs' key in a YAML file.
+
+    Parameters:
+        filepath (Path): The path to the YAML file.
+        data (dict): The run data to append.
+    """
+
+    # Read existing data
+    content = {}
+    if filepath.exists() and filepath.is_file():
+        content = yaml_read(filepath)
+    else:
+        content = {}
+
+    # Append the new run data under the 'runs' key
+    if "runs" not in content:
+        content["runs"] = []
+    content["runs"].append(data)
+
+    yaml_write(to=filepath, data=content)
+
+
 def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     """
     Process the dataframe containing sequences and detections information.
@@ -262,4 +304,4 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     df_extra = pd.DataFrame(records)
     filepath_dataframe = save_dir / "sequences.csv"
     logging.info(f"Saving the generated dataframe in {filepath_dataframe}")
-    df_extra.to_csv(filepath_dataframe, index=False)
+    append_dataframe_to_csv(df=df_extra, filepath_csv=filepath_dataframe)
