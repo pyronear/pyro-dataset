@@ -151,6 +151,7 @@ if __name__ == "__main__":
         n_smoke_platform = len(dirs_sequences_smoke_platform)
         n_smoke_total = n_smoke_selected + n_smoke_platform
         n_total = n_background_total + n_smoke_total
+
         print(
             "\n"
             f"{'Sequence Type':<20} {'Selected':<10} {'Platform':<10} {'Total':<10}\n"
@@ -159,7 +160,15 @@ if __name__ == "__main__":
             f"{'Smoke Sequences':<20} {n_smoke_selected:<10} {n_smoke_platform:<10} {n_smoke_total:<10}\n"
             f"{'Total':<20} {n_background_selected + n_smoke_selected:<10} {n_background_platform + n_smoke_platform:<10} {n_total:<10}\n"
         )
-        # TODO: handle the ratio_background
+
+        # TODO: handle the ratio_background by sampling from the dir_platform_sequence_temporal
         shutil.copytree(
-            src=dir_platform_sequence_temporal, dst=dir_save, dirs_exist_ok=True
+            src=dir_platform_sequence_temporal / "images" / "test",
+            dst=dir_save / "images" / "test",
+            dirs_exist_ok=True,
+        )
+        shutil.copytree(
+            src=dir_platform_sequence_temporal / "labels" / "test",
+            dst=dir_save / "labels" / "test",
+            dirs_exist_ok=True,
         )
