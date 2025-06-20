@@ -536,8 +536,8 @@ stages:
       nfiles: 3750
     - path: ./scripts/make_temporal_test_dataset.py
       hash: md5
-      md5: 0700161f622e3bbcb028a31edd8ccf47
-      size: 6820
+      md5: 45bb3f386dd0ead18c0d8b4cd7219736
+      size: 6874
     outs:
     - path: ./data/processed/wildfire_temporal_test/
       hash: md5
