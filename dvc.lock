@@ -417,13 +417,13 @@ stages:
       nfiles: 14159
     - path: ./scripts/build_manifest.py
       hash: md5
-      md5: 8039497a4390db665345905315ba01b3
-      size: 4546
+      md5: a4beadc4370c78259301b118c03ac8ca
+      size: 8906
     outs:
     - path: ./data/reporting/manifest/
       hash: md5
-      md5: b0894e57e196f88d01dbf87f3797fe29.dir
-      size: 22990
+      md5: 4466af6d6d6de0f9ea51f3aec6a262ae.dir
+      size: 23988
       nfiles: 1
   select_platform_sequences:
     cmd:
