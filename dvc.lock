@@ -439,14 +439,14 @@ stages:
       nfiles: 16638
     - path: ./scripts/platform_train_loop/select_detections.py
       hash: md5
-      md5: af4f940bf6cff0f1aa338a214cc59522
-      size: 14560
+      md5: ba22c1a2b0949a772278befa2454a2e4
+      size: 15715
     outs:
     - path: ./data/interim/pyronear-platform/sequences/
       hash: md5
-      md5: fb84f60e36cd247a2a534903a9168dc1.dir
-      size: 477677718
-      nfiles: 5380
+      md5: 3289b94500293cef75dd46be6cdd4104.dir
+      size: 493515752
+      nfiles: 5592
   split_platform_sequences:
     cmd:
     - uv run python ./scripts/platform_train_loop/split_selected_sequences.py --dir-platform-selected-sequences

@@ -21,10 +21,14 @@ Arguments:
 
 import argparse
 import logging
+import random
 import shutil
 from pathlib import Path
 
-from pyro_dataset.yolo.utils import parse_yolo_prediction_txt_file
+from pyro_dataset.yolo.utils import (
+    parse_yolo_annotation_txt_file,
+    parse_yolo_prediction_txt_file,
+)
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -55,6 +59,12 @@ def make_cli_parser() -> argparse.ArgumentParser:
         help="Number of detections per sequence for false positives",
         type=int,
         default=3,
+    )
+    parser.add_argument(
+        "--random-seed",
+        help="Random seed",
+        type=int,
+        default=0,
     )
     parser.add_argument(
         "-log",
@@ -216,40 +226,66 @@ def select_best_false_positives(
 def select_best_true_positives(
     dir_sequence: Path,
     number_detections_per_sequence: int,
+    rng: random.Random,
 ) -> list[dict[str, Path]]:
     """
     Select the best true positives from the detection records.
 
-    This function processes the detection records for a given sequence,
-    filtering them based on confidence scores and selecting the top
-    results according to the specified number of detections.
+    This function selects the files for which there is a low prediction score
+    or no prediction at all, while ensuring that a ground truth label is associated
+    that is not empty.
 
     Args:
         dir_sequence (Path): The directory containing the sequence data.
         number_detections_per_sequence (int): The number of top detections to select.
+        rng (random.Random): random number generator
 
     Returns:
         list[dict[str, Path]]: A list of dictionaries containing the file paths
         for the selected detections, excluding the prediction details.
     """
-    # TODO: leverage the labels_ground_truth to pick the ones that have not
-    # been at all detected instead or pick the lowest scores as we do now
     records = [
         {
-            "prediction": prediction,
+            "predictions": parse_yolo_prediction_txt_file(read_file_content(fp)),
             **(get_filepaths(dir_sequence=dir_sequence, stem=fp.stem)),
         }
         for fp in (dir_sequence.glob("**/labels_predictions/*.txt"))
-        for prediction in parse_yolo_prediction_txt_file(read_file_content(fp))
     ]
-    records_filtered = [
-        record for record in records if record["prediction"].confidence > 0
+
+    for r in records:
+        if filepath_ground_truth := r["filepath_label_ground_truth"]:
+            annotations = parse_yolo_annotation_txt_file(
+                read_file_content(filepath_ground_truth)
+            )
+            r["annotations"] = annotations
+    # Remove records that do not have ground truth annotations
+    records_filtered = [record for record in records if len(record["annotations"]) > 0]
+    records_with_predictions_filtered = [
+        record for record in records_filtered if len(record["predictions"]) > 0
     ]
-    records_selected = sorted(
-        records_filtered, key=lambda x: x["prediction"].confidence, reverse=False
-    )[:number_detections_per_sequence]
+    records_with_predictions_sorted = sorted(
+        records_with_predictions_filtered,
+        key=lambda x: min([pred.confidence for pred in x["predictions"]]),
+        reverse=False,
+    )
+    records_without_predictions_filtered = [
+        record for record in records if len(record["predictions"]) == 0
+    ]
+
+    k = number_detections_per_sequence
+    # Select a mix of low prediction confidences and files with a ground truth
+    # but no detection on it
+    records_selected = rng.sample(
+        population=records_with_predictions_sorted[: int(k * 2)]
+        + records_without_predictions_filtered[:k],
+        k=k,
+    )
     result = [
-        {key: value for key, value in r.items() if key != "prediction"}
+        {
+            key: value
+            for key, value in r.items()
+            if key not in ["predictions", "annotations"]
+        }
         for r in records_selected
     ]
     return result
@@ -334,6 +370,8 @@ if __name__ == "__main__":
         exit(1)
     else:
         logger.info(args)
+        random_seed = args["random_seed"]
+        rng = random.Random(random_seed)
         dir_save = args["dir_save"]
         dir_platform_annotated_sequences = args["dir_platform_annotated_sequences"]
         number_detections_per_sequence_false_positive = args[
@@ -373,6 +411,7 @@ if __name__ == "__main__":
                 records = select_best_true_positives(
                     dir_sequence_tp,
                     number_detections_per_sequence=number_detections_per_sequence_true_positive,
+                    rng=rng,
                 )
                 copy_over(
                     dir_sequence=dir_sequence_tp,
