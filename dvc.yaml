@@ -281,8 +281,10 @@ stages:
         --dir-platform-selected-sequences ./data/interim/pyronear-platform/sequences/
         --dir-save ./data/interim/pyronear-platform/sequences-data-split/
         --random-seed 0
-        --ratio-train 0.8
-        --ratio-val-test 0.5
+        --ratio-background-train 0.7
+        --ratio-background-val-test 0.1
+        --ratio-smoke-train 0.1
+        --ratio-smoke-val-test 0.2
         --loglevel "info"
     deps:
       - ./data/interim/pyronear-platform/sequences/
