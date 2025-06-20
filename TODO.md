@@ -11,3 +11,5 @@
 - [ ] Add a new ratio parameter for splitting the sequences into train/val/test (one for smoke and one for backgrounds)
   - We want many smoke sequences in test to have a balanced dataset
   - We do not need that many smoke sequences in train or val
+- [ ] Generate reports for the temporal dataset as well. 
+- [ ] Include a manifest.yaml for the temporal dataset too

@@ -82,6 +82,30 @@ def validate_parsed_args(args: dict) -> bool:
     return True
 
 
+def find_sequence_folders(dir: Path) -> list[Path]:
+    """
+    Extract and return a list of sequence folders from annotated sequence directories.
+
+    This function searches through the specified directory for subdirectories that
+    contain sequence information. It includes directories that match the pattern '_sequence-<id>',
+    where <id> is a numeric value.
+
+    Args:
+        dir_annotated_sequences (Path): The directory containing annotated sequence
+        subdirectories to search for sequence folders.
+
+    Returns:
+        set[Path]: A set of unique Path objects representing the directories found in the directory.
+    """
+    return [
+        seq_dir
+        for seq_dir in dir.rglob("**/*")
+        if seq_dir.is_dir()
+        and "_sequence-" in seq_dir.name
+        and seq_dir.name.split("_sequence-")[-1].isdigit()
+    ]
+
+
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -97,5 +121,54 @@ if __name__ == "__main__":
         dir_platform_sequence_temporal = args["dir_platform_sequence_temporal"]
         dir_selection_sequence_temporal = args["dir_selection_sequence_temporal"]
         shutil.copytree(src=dir_selection_sequence_temporal, dst=dir_save)
-        # TODO: add the sequences from dir_platform_sequence_temporal
-        logger.info(f"Done generating the temporal dataset in {dir_save} ✅")
+        dirs_sequences_background_platform = find_sequence_folders(
+            dir=dir_platform_sequence_temporal / "images" / "test" / "background"
+        )
+        print(
+            (
+                dir_selection_sequence_temporal / "images" / "test" / "background"
+            ).exists()
+        )
+        print(
+            find_sequence_folders(
+                dir_selection_sequence_temporal / "images" / "test" / "background"
+            )
+        )
+        dirs_sequences_background_selected = find_sequence_folders(
+            dir=dir_selection_sequence_temporal / "images" / "test" / "background"
+        )
+        dirs_sequences_smoke_platform = find_sequence_folders(
+            dir=dir_platform_sequence_temporal / "images" / "test" / "smoke"
+        )
+        dirs_sequences_smoke_selected = find_sequence_folders(
+            dir=dir_selection_sequence_temporal / "images" / "test" / "smoke"
+        )
+
+        n_background_selected = len(dirs_sequences_background_selected)
+        n_background_platform = len(dirs_sequences_background_platform)
+        n_background_total = n_background_selected + n_background_platform
+        n_smoke_selected = len(dirs_sequences_smoke_selected)
+        n_smoke_platform = len(dirs_sequences_smoke_platform)
+        n_smoke_total = n_smoke_selected + n_smoke_platform
+        n_total = n_background_total + n_smoke_total
+
+        print(
+            "\n"
+            f"{'Sequence Type':<20} {'Selected':<10} {'Platform':<10} {'Total':<10}\n"
+            f"{'-' * 20} {'-' * 10} {'-' * 10} {'-' * 10}\n"
+            f"{'Background Sequences':<20} {n_background_selected:<10} {n_background_platform:<10} {n_background_total:<10}\n"
+            f"{'Smoke Sequences':<20} {n_smoke_selected:<10} {n_smoke_platform:<10} {n_smoke_total:<10}\n"
+            f"{'Total':<20} {n_background_selected + n_smoke_selected:<10} {n_background_platform + n_smoke_platform:<10} {n_total:<10}\n"
+        )
+
+        # TODO: handle the ratio_background by sampling from the dir_platform_sequence_temporal
+        shutil.copytree(
+            src=dir_platform_sequence_temporal / "images" / "test",
+            dst=dir_save / "images" / "test",
+            dirs_exist_ok=True,
+        )
+        shutil.copytree(
+            src=dir_platform_sequence_temporal / "labels" / "test",
+            dst=dir_save / "labels" / "test",
+            dirs_exist_ok=True,
+        )

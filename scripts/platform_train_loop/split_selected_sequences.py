@@ -47,14 +47,26 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=0,
     )
     parser.add_argument(
-        "--ratio-train",
-        help="Training ratio",
+        "--ratio-background-train",
+        help="Training ratio for the background class",
         type=float,
         default=0.8,
     )
     parser.add_argument(
-        "--ratio-val-test",
-        help="Validation and test ratio",
+        "--ratio-background-val-test",
+        help="Validation and test ratio for the background class",
+        type=float,
+        default=0.5,
+    )
+    parser.add_argument(
+        "--ratio-smoke-train",
+        help="Training ratio for the smoke class",
+        type=float,
+        default=0.8,
+    )
+    parser.add_argument(
+        "--ratio-smoke-val-test",
+        help="Validation and test ratio for the smoke class",
         type=float,
         default=0.5,
     )
@@ -140,8 +152,8 @@ def find_sequence_folders(dir: Path) -> list[Path]:
 def train_val_test_split(
     dir: Path,
     random_seed: int,
-    train_ratio: float,
-    val_test_ratio: float,
+    ratio_train: float,
+    ratio_val_test: float,
 ) -> dict[str, list[Path]]:
     """
     Split the sequence folders into training, validation, and test sets.
@@ -159,8 +171,8 @@ def train_val_test_split(
         dict[str, list[Path]]: A dictionary containing three keys: 'train', 'val', and 'test',
         each mapping to a list of Path objects representing the corresponding directories.
     """
-    assert 0 <= train_ratio <= 1, "train_ratio must be between 0 and 1."
-    assert 0 <= val_test_ratio <= 1, "val_test_ratio must be between 0 and 1."
+    assert 0 <= ratio_train <= 1, "train_ratio must be between 0 and 1."
+    assert 0 <= ratio_val_test <= 1, "val_test_ratio must be between 0 and 1."
 
     dirs_sequences = find_sequence_folders(dir)
 
@@ -169,8 +181,8 @@ def train_val_test_split(
     dirs_sequences_shuffled = rgn.sample(dirs_sequences, len(dirs_sequences))
 
     # Calculate the split indices
-    train_size = int(len(dirs_sequences) * train_ratio)
-    val_size = int(len(dirs_sequences) * (1 - train_ratio) * val_test_ratio)
+    train_size = int(len(dirs_sequences) * ratio_train)
+    val_size = int(len(dirs_sequences) * (1 - ratio_train) * ratio_val_test)
     test_size = len(dirs_sequences) - train_size - val_size
 
     # Assert check to ensure all directories are used in train_dirs, val_dirs, and test_dirs
@@ -223,14 +235,16 @@ if __name__ == "__main__":
         random_seed = 1
         dir_save = args["dir_save"]
         dir_platform_selected_sequences = args["dir_platform_selected_sequences"]
-        train_ratio = args["ratio_train"]
-        val_test_ratio = args["ratio_val_test"]
+        ratio_background_train = args["ratio_background_train"]
+        ratio_background_val_test = args["ratio_background_val_test"]
+        ratio_smoke_train = args["ratio_smoke_train"]
+        ratio_smoke_val_test = args["ratio_smoke_val_test"]
 
         dirs_fp = find_false_positive_folders(dir_platform_selected_sequences)
         dirs_tp = find_true_positive_folders(dir_platform_selected_sequences)
 
         logger.info(f"ramdom Seed: {random_seed}")
-        logger.info(f"Handling the false positives from {dirs_fp}")
+        logger.info(f"Handling the false positives (backgrounds) from {dirs_fp}")
         for dir_fp in dirs_fp:
             dirs_sequences_fp = find_sequence_folders(dir_fp)
             logger.info(
@@ -239,8 +253,8 @@ if __name__ == "__main__":
             data_split = train_val_test_split(
                 dir=dir_fp,
                 random_seed=random_seed,
-                train_ratio=train_ratio,
-                val_test_ratio=val_test_ratio,
+                ratio_train=ratio_background_train,
+                ratio_val_test=ratio_background_val_test,
             )
             for split in ["train", "val", "test"]:
                 dirs_sequences = data_split[split]
@@ -256,7 +270,7 @@ if __name__ == "__main__":
                     dir_dst.mkdir(parents=True, exist_ok=True)
                     shutil.copytree(src=dir_sequence, dst=dir_dst, dirs_exist_ok=True)
 
-        logger.info(f"Handling the true positives from {dirs_tp}")
+        logger.info(f"Handling the true positives (smoke) from {dirs_tp}")
         for dir_tp in dirs_tp:
             dirs_sequences_tp = find_sequence_folders(dir_tp)
             logger.info(
@@ -265,8 +279,8 @@ if __name__ == "__main__":
             data_split = train_val_test_split(
                 dir=dir_tp,
                 random_seed=random_seed,
-                train_ratio=train_ratio,
-                val_test_ratio=val_test_ratio,
+                ratio_train=ratio_smoke_train,
+                ratio_val_test=ratio_smoke_val_test,
             )
             for split in ["train", "val", "test"]:
                 dirs_sequences = data_split[split]
