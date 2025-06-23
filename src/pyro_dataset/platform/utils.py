@@ -13,6 +13,7 @@ Key functionalities include:
 """
 
 import logging
+from multiprocessing import Pool
 from pathlib import Path
 
 import cv2
@@ -243,6 +244,45 @@ def append_yaml_run(filepath: Path, data: dict) -> None:
     yaml_write(to=filepath, data=content)
 
 
+def _process_row(row: pd.Series, save_dir: Path) -> dict:
+    # Similar logic to process each row as in the original function
+    # This function will return the dictionary of file paths and metadata for each detection
+    dict_filepaths = _get_filepaths(
+        save_dir=save_dir,
+        organization_name=row["organization_name"],
+        camera_name=row["camera_name"],
+        sequence_id=row["sequence_id"],
+        sequence_azimuth=row["sequence_azimuth"],
+        sequence_started_at=row["sequence_started_at"],
+        detection_created_at=row["detection_created_at"],
+        detection_azimuth=row["detection_azimuth"],
+    )
+    save_label(
+        bboxes=row["detection_bboxes"],
+        filepath_label=dict_filepaths["filepath_label"],
+    )
+    download_image(
+        url=row["detection_url"],
+        filepath_destination=dict_filepaths["filepath_image"],
+        force=False,
+    )
+    array_image = cv2.imread(str(dict_filepaths["filepath_image"]))
+
+    with open(dict_filepaths["filepath_label"], "r") as file:
+        txt_content = file.read()
+        yolo_detections = parse_yolo_prediction_txt_file(txt_content)
+        array_image_overlayed_with_detections = overlay_detections(
+            array_image=array_image, detections=yolo_detections
+        )
+        dict_filepaths["filepath_detection"].parent.mkdir(parents=True, exist_ok=True)
+        cv2.imwrite(
+            str(dict_filepaths["filepath_detection"]),
+            array_image_overlayed_with_detections,
+        )
+
+    return {**row.to_dict(), **dict_filepaths}
+
+
 def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
     """
     Process the dataframe containing sequences and detections information.
@@ -261,45 +301,15 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
         None
     """
     records = []
-    for _, row in tqdm(df.iterrows()):
-
-        dict_filepaths = _get_filepaths(
-            save_dir=save_dir,
-            organization_name=row["organization_name"],
-            camera_name=row["camera_name"],
-            sequence_id=row["sequence_id"],
-            sequence_azimuth=row["sequence_azimuth"],
-            sequence_started_at=row["sequence_started_at"],
-            detection_created_at=row["detection_created_at"],
-            detection_azimuth=row["detection_azimuth"],
-        )
-        save_label(
-            bboxes=row["detection_bboxes"],
-            filepath_label=dict_filepaths["filepath_label"],
-        )
-        download_image(
-            url=row["detection_url"],
-            filepath_destination=dict_filepaths["filepath_image"],
-            force=False,
-        )
-        array_image = cv2.imread(str(dict_filepaths["filepath_image"]))
-
-        with open(dict_filepaths["filepath_label"], "r") as file:
-            txt_content = file.read()
-            yolo_detections = parse_yolo_prediction_txt_file(txt_content)
-            array_image_overlayed_with_detections = overlay_detections(
-                array_image=array_image, detections=yolo_detections
+    with Pool() as pool:
+        records = list(
+            tqdm(
+                pool.starmap(
+                    _process_row, [(row, save_dir) for _, row in df.iterrows()]
+                ),
+                total=len(df),
             )
-            dict_filepaths["filepath_detection"].parent.mkdir(
-                parents=True, exist_ok=True
-            )
-            cv2.imwrite(
-                str(dict_filepaths["filepath_detection"]),
-                array_image_overlayed_with_detections,
-            )
-
-        record = {**row, **dict_filepaths}
-        records.append(record)
+        )
 
     df_extra = pd.DataFrame(records)
     filepath_dataframe = save_dir / "sequences.csv"
