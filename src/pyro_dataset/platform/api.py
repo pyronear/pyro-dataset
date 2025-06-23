@@ -60,7 +60,7 @@ def api_get(route: str, access_token: str):
         Exception: when the API request fails
     """
     headers = make_request_headers(access_token=access_token)
-    logging.info(f"Making an HTTP request to route {route}")
+    logging.debug(f"Making an HTTP request to route {route}")
     response = requests.get(route, headers=headers)
     try:
         return response.json()

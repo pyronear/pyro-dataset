@@ -16,6 +16,7 @@ Environment variables required:
 """
 
 import argparse
+import concurrent.futures
 import logging
 import os
 from datetime import date, datetime, timedelta
@@ -26,7 +27,7 @@ from tqdm import tqdm
 
 import pyro_dataset.platform.api as api
 import pyro_dataset.platform.utils as platform_utils
-from pyro_dataset.utils import index_by, yaml_read, yaml_write
+from pyro_dataset.utils import index_by
 
 
 def valid_date(s: str):
@@ -77,7 +78,7 @@ def validate_parsed_args(args: dict) -> bool:
     Return whether the parsed args are valid.
     """
     if args["date_from"] > args["date_end"]:
-        logging.error(f"Invalid combination of --date-from and --date-end parameters")
+        logging.error("Invalid combination of --date-from and --date-end parameters")
         return False
     return True
 
@@ -100,20 +101,20 @@ def validate_available_env_variables() -> bool:
     platform_admin_password = os.getenv("PLATFORM_ADMIN_PASSWORD")
     if not platform_api_endpoint:
         logging.error(
-            f"PLATFORM_API_ENDPOINT is not set. eg. https://alertapi.pyronear.org"
+            "PLATFORM_API_ENDPOINT is not set. eg. https://alertapi.pyronear.org"
         )
         return False
     elif not platform_login:
-        logging.error(f"PLATFORM_LOGIN is not set")
+        logging.error("PLATFORM_LOGIN is not set")
         return False
     elif not platform_password:
-        logging.error(f"PLATFORM_PASSWORD is not set")
+        logging.error("PLATFORM_PASSWORD is not set")
         return False
     elif not platform_admin_login:
-        logging.error(f"PLATFORM_ADMIN_LOGIN is not set")
+        logging.error("PLATFORM_ADMIN_LOGIN is not set")
         return False
     elif not platform_admin_password:
-        logging.error(f"PLATFORM_ADMIN_PASSWORD is not set")
+        logging.error("PLATFORM_ADMIN_PASSWORD is not set")
         return False
     else:
         return True
@@ -135,13 +136,73 @@ def get_dates_within(date_from: date, date_end: date) -> list[date]:
     Raises:
         AssertionError: If `date_from` is greater than `date_end`.
     """
-    assert date_from <= date_end, f"date_from should be < date_end"
+    assert date_from <= date_end, "date_from should be < date_end"
     result = []
     date = date_from
     while date < date_end:
         result.append(date)
         date = date + timedelta(days=1)
     return result
+
+
+def _process_sequence(
+    api_endpoint: str,
+    sequence: dict,
+    indexed_cameras: dict,
+    indexed_organizations: dict,
+    access_token: str,
+):
+    """
+    Process a single sequence to extract detections and convert them into records.
+
+    Parameters:
+        api_endpoint (str): The API endpoint to fetch data from.
+        sequence (dict): The sequence data containing information about the sequence.
+        indexed_cameras (dict): A dictionary of indexed cameras for easy access.
+        indexed_organizations (dict): A dictionary of indexed organizations for easy access.
+        access_token (str): The access token for authenticating API requests.
+
+    Returns:
+        list: A list of records extracted from the sequence detections.
+    """
+    detections = api.list_sequence_detections(
+        api_endpoint=api_endpoint,
+        sequence_id=sequence["id"],
+        access_token=access_token,
+    )
+    records = []
+    for detection in detections:
+        camera = indexed_cameras[sequence["camera_id"]]
+        organization = indexed_organizations[camera["organization_id"]]
+        record = platform_utils.to_record(
+            detection=detection,
+            camera=camera,
+            organization=organization,
+            sequence=sequence,
+        )
+        records.append(record)
+    return records
+
+
+def _fetch_sequences_for_date(api_endpoint: str, date: date, access_token: str) -> list:
+    """
+    Fetch sequences for a specific date.
+
+    Parameters:
+        api_endpoint (str): The API endpoint to fetch data from.
+        date (date): The specific date to fetch sequences for.
+        access_token (str): The access token for authenticating API requests.
+
+    Returns:
+        list: A list of sequences fetched for the specified date.
+    """
+    return api.list_sequences_for_date(
+        api_endpoint=api_endpoint,
+        date=date,
+        limit=1000,
+        offset=0,
+        access_token=access_token,
+    )
 
 
 def fetch_all_sequences_within(
@@ -171,38 +232,49 @@ def fetch_all_sequences_within(
     )
     sequences = []
     dates = get_dates_within(date_from=date_from, date_end=date_end)
-    for date in tqdm(dates):
-        xs = api.list_sequences_for_date(
-            api_endpoint=api_endpoint,
-            date=date,
-            limit=1000,
-            offset=0,
-            access_token=access_token,
-        )
-        sequences.extend(xs)
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        future_to_date = {
+            executor.submit(
+                _fetch_sequences_for_date, api_endpoint, mdate, access_token
+            ): mdate
+            for mdate in dates
+        }
+        for future in tqdm(
+            concurrent.futures.as_completed(future_to_date), total=len(future_to_date)
+        ):
+            sequences.extend(future.result())
 
     logging.info(
         f"Collected {len(sequences)} sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}"
     )
 
+    logging.info(
+        f"Fetching all detections for the {len(sequences)} sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}"
+    )
     # Creating records for making the dataframe
     records = []
-    for sequence in tqdm(sequences):
-        detections = api.list_sequence_detections(
-            api_endpoint=api_endpoint,
-            sequence_id=sequence["id"],
-            access_token=access_token,
-        )
-        for detection in detections:
-            camera = indexed_cameras[sequence["camera_id"]]
-            organization = indexed_organizations[camera["organization_id"]]
-            record = platform_utils.to_record(
-                detection=detection,
-                camera=camera,
-                organization=organization,
-                sequence=sequence,
-            )
-            records.append(record)
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        future_to_sequence = {
+            executor.submit(
+                _process_sequence,
+                api_endpoint,
+                sequence,
+                indexed_cameras,
+                indexed_organizations,
+                access_token,
+            ): sequence
+            for sequence in sequences
+        }
+        for future in tqdm(
+            concurrent.futures.as_completed(future_to_sequence),
+            total=len(future_to_sequence),
+        ):
+            records.extend(future.result())
+
+    logging.info(f"Processed {len(records)} detections")
+
     df = pd.DataFrame(records)
     logger.info(df.head())
     return df
@@ -247,14 +319,16 @@ if __name__ == "__main__":
             username=platform_login,
             password=platform_password,
         )
-        logger.info("Succesfully fetched an acess token to authenticate API requests ✔️")
+        logger.info(
+            "Succesfully fetched an access token to authenticate API requests ✔️"
+        )
         access_token_admin = api.get_api_access_token(
             api_endpoint=platform_api_endpoint,
             username=platform_admin_login,
             password=platform_admin_password,
         )
         logger.info(
-            "Succesfully fetched an admin acess token to authenticate API requests ✔️"
+            "Succesfully fetched an admin access token to authenticate API requests ✔️"
         )
         headers = api.make_request_headers(access_token=access_token)
         df = fetch_all_sequences_within(
@@ -272,6 +346,7 @@ if __name__ == "__main__":
             df=df, filepath_csv=filepath_api_results_csv
         )
 
+        logger.info("Processing all the detections")
         platform_utils.process_dataframe(df=df, save_dir=save_dir)
         args_content = {
             "date-from": str(args["date_from"]),
@@ -284,4 +359,4 @@ if __name__ == "__main__":
         filepath_args_yaml = save_dir / "args.yaml"
         logger.info(f"Saving args run in {filepath_args_yaml}")
         platform_utils.append_yaml_run(filepath=filepath_args_yaml, data=args_content)
-        logger.info(f"Done ✅")
+        logger.info("Done ✅")
