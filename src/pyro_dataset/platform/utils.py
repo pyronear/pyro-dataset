@@ -192,7 +192,7 @@ def download_image(url: str, filepath_destination: Path, force: bool = False) ->
         and filepath_destination.is_file()
         and filepath_destination.stat().st_size > 0
     ):
-        logging.info(f"skipping downloading again {url}")
+        logging.debug(f"skipping downloading again {url}")
     else:
         filepath_destination.parent.mkdir(parents=True, exist_ok=True)
         response = requests.get(url)

@@ -184,6 +184,27 @@ def _process_sequence(
     return records
 
 
+def _fetch_sequences_for_date(api_endpoint: str, date: date, access_token: str) -> list:
+    """
+    Fetch sequences for a specific date.
+
+    Parameters:
+        api_endpoint (str): The API endpoint to fetch data from.
+        date (date): The specific date to fetch sequences for.
+        access_token (str): The access token for authenticating API requests.
+
+    Returns:
+        list: A list of sequences fetched for the specified date.
+    """
+    return api.list_sequences_for_date(
+        api_endpoint=api_endpoint,
+        date=date,
+        limit=1000,
+        offset=0,
+        access_token=access_token,
+    )
+
+
 def fetch_all_sequences_within(
     date_from: date,
     date_end: date,
@@ -211,20 +232,26 @@ def fetch_all_sequences_within(
     )
     sequences = []
     dates = get_dates_within(date_from=date_from, date_end=date_end)
-    for mdate in tqdm(dates):
-        xs = api.list_sequences_for_date(
-            api_endpoint=api_endpoint,
-            date=mdate,
-            limit=1000,
-            offset=0,
-            access_token=access_token,
-        )
-        sequences.extend(xs)
+
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        future_to_date = {
+            executor.submit(
+                _fetch_sequences_for_date, api_endpoint, mdate, access_token
+            ): mdate
+            for mdate in dates
+        }
+        for future in tqdm(
+            concurrent.futures.as_completed(future_to_date), total=len(future_to_date)
+        ):
+            sequences.extend(future.result())
 
     logging.info(
         f"Collected {len(sequences)} sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}"
     )
 
+    logging.info(
+        f"Fetching all detections for the {len(sequences)} sequences between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}"
+    )
     # Creating records for making the dataframe
     records = []
 
@@ -245,6 +272,8 @@ def fetch_all_sequences_within(
             total=len(future_to_sequence),
         ):
             records.extend(future.result())
+
+    logging.info(f"Processed {len(records)} detections")
 
     df = pd.DataFrame(records)
     logger.info(df.head())
@@ -290,14 +319,16 @@ if __name__ == "__main__":
             username=platform_login,
             password=platform_password,
         )
-        logger.info("Succesfully fetched an acess token to authenticate API requests ✔️")
+        logger.info(
+            "Succesfully fetched an access token to authenticate API requests ✔️"
+        )
         access_token_admin = api.get_api_access_token(
             api_endpoint=platform_api_endpoint,
             username=platform_admin_login,
             password=platform_admin_password,
         )
         logger.info(
-            "Succesfully fetched an admin acess token to authenticate API requests ✔️"
+            "Succesfully fetched an admin access token to authenticate API requests ✔️"
         )
         headers = api.make_request_headers(access_token=access_token)
         df = fetch_all_sequences_within(
@@ -315,6 +346,7 @@ if __name__ == "__main__":
             df=df, filepath_csv=filepath_api_results_csv
         )
 
+        logger.info("Processing all the detections")
         platform_utils.process_dataframe(df=df, save_dir=save_dir)
         args_content = {
             "date-from": str(args["date_from"]),
