@@ -312,6 +312,7 @@ def process_dataframe(df: pd.DataFrame, save_dir: Path) -> None:
         )
 
     df_extra = pd.DataFrame(records)
-    filepath_dataframe = save_dir / "sequences.csv"
-    logging.info(f"Saving the generated dataframe in {filepath_dataframe}")
-    append_dataframe_to_csv(df=df_extra, filepath_csv=filepath_dataframe)
+    if len(df_extra) > 0:
+        filepath_dataframe = save_dir / "sequences.csv"
+        logging.info(f"Saving the generated dataframe in {filepath_dataframe}")
+        append_dataframe_to_csv(df=df_extra, filepath_csv=filepath_dataframe)
