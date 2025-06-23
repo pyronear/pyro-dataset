@@ -1,6 +1,6 @@
 outs:
-- md5: a35f31d9919ede4c7914b05e85131b35.dir
-  size: 1480705118
-  nfiles: 16638
+- md5: a166598233a6e1783d973cd3250871dc.dir
+  size: 1994825669
+  nfiles: 21378
   hash: md5
   path: pyronear-platform-annotated-sequences

@@ -54,7 +54,12 @@ def read_csv_files_to_dataframe(filepaths: list[Path]) -> pd.DataFrame:
     Returns:
         pd.DataFrame: A DataFrame containing the concatenated data from all CSV files.
     """
-    df_list = [pd.read_csv(filepath) for filepath in filepaths]
+    df_list = []
+    for filepath in filepaths:
+        logging.info(f"parsing file: {filepath}")
+        if filepath.exists() and filepath.is_file() and filepath.stat().st_size > 0:
+            logging.info(f"adding {filepath} to csv")
+            df_list.append(pd.read_csv(filepath))
     return pd.concat(df_list, ignore_index=True)
 
 
