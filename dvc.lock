@@ -327,8 +327,8 @@ stages:
       nfiles: 95296
     - path: ./data/interim/pyronear-platform/sequences-ultralytics/
       hash: md5
-      md5: 2011fb78a900777e848cb8a45ce37587.dir
-      size: 238262027
+      md5: f760df58b7e49bc72c820c6e5f6d1966.dir
+      size: 238286389
       nfiles: 4475
     - path: ./scripts/make_train_val_dataset.py
       hash: md5
@@ -337,8 +337,8 @@ stages:
     outs:
     - path: ./data/processed/wildfire/
       hash: md5
-      md5: 0dbff0584033eac1686149d1263d524f.dir
-      size: 5938131388
+      md5: 54c59b805b5442f2a85633a53500d137.dir
+      size: 5938137421
       nfiles: 106741
   make_test_wildfire_dataset:
     cmd:
@@ -355,8 +355,8 @@ stages:
       nfiles: 10964
     - path: ./data/interim/pyronear-platform/sequences-ultralytics/
       hash: md5
-      md5: 2011fb78a900777e848cb8a45ce37587.dir
-      size: 238262027
+      md5: f760df58b7e49bc72c820c6e5f6d1966.dir
+      size: 238286389
       nfiles: 4475
     - path: ./data/raw/Test_dataset_2025/
       hash: md5
@@ -370,8 +370,8 @@ stages:
     outs:
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: 8692e4d3166aa54ec6e197d57fdef97c.dir
-      size: 1080991111
+      md5: c8091f8366c1ef3f63374d2a42c67886.dir
+      size: 1081009440
       nfiles: 14831
   analyze_wildfire_dataset:
     cmd:
@@ -381,13 +381,13 @@ stages:
     deps:
     - path: ./data/processed/wildfire/
       hash: md5
-      md5: 0dbff0584033eac1686149d1263d524f.dir
-      size: 5938131388
+      md5: 54c59b805b5442f2a85633a53500d137.dir
+      size: 5938137421
       nfiles: 106741
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: 8692e4d3166aa54ec6e197d57fdef97c.dir
-      size: 1080991111
+      md5: c8091f8366c1ef3f63374d2a42c67886.dir
+      size: 1081009440
       nfiles: 14831
     - path: ./scripts/analyze_processed_dataset.py
       hash: md5
@@ -396,7 +396,7 @@ stages:
     outs:
     - path: ./data/reporting/wildfire/
       hash: md5
-      md5: 32862a20cb9584e151df43cbd77d2e99.dir
+      md5: 165b72e2b0c216f0caca3953a308c584.dir
       size: 124621
       nfiles: 5
   build_manifest_dataset:
@@ -407,13 +407,13 @@ stages:
     deps:
     - path: ./data/processed/wildfire/
       hash: md5
-      md5: 0dbff0584033eac1686149d1263d524f.dir
-      size: 5938131388
+      md5: 54c59b805b5442f2a85633a53500d137.dir
+      size: 5938137421
       nfiles: 106741
     - path: ./data/processed/wildfire_test/
       hash: md5
-      md5: 8692e4d3166aa54ec6e197d57fdef97c.dir
-      size: 1080991111
+      md5: c8091f8366c1ef3f63374d2a42c67886.dir
+      size: 1081009440
       nfiles: 14831
     - path: ./scripts/build_manifest.py
       hash: md5
@@ -422,8 +422,8 @@ stages:
     outs:
     - path: ./data/reporting/manifest/
       hash: md5
-      md5: 8c3a522415dac66be61fa3ac503291c8.dir
-      size: 23989
+      md5: 6014a724371d72c7f3dfe2bc54d57340.dir
+      size: 23990
       nfiles: 1
   select_platform_sequences:
     cmd:
@@ -482,13 +482,13 @@ stages:
       nfiles: 7524
     - path: ./scripts/platform_train_loop/make_ultralytics_dataset.py
       hash: md5
-      md5: 162d6707ee5289743f6b25825f869858
-      size: 11340
+      md5: 35438faffd276e0bb106b96870f9e1f9
+      size: 11167
     outs:
     - path: ./data/interim/pyronear-platform/sequences-ultralytics/
       hash: md5
-      md5: 2011fb78a900777e848cb8a45ce37587.dir
-      size: 238262027
+      md5: f760df58b7e49bc72c820c6e5f6d1966.dir
+      size: 238286389
       nfiles: 4475
   make_temporal_dataset_from_platform_sequences:
     cmd:

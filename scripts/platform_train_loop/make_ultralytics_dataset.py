@@ -22,8 +22,7 @@ from pathlib import Path
 from pyro_dataset.utils import yaml_write
 from pyro_dataset.yolo.utils import (
     annotation_to_label_txt,
-    parse_yolo_prediction_txt_file,
-    yolo_prediction_to_annotation,
+    parse_yolo_annotation_txt_file,
 )
 
 
@@ -191,25 +190,21 @@ def make_ultralytics_format(
     Returns:
         dict: A dictionary containing the formatted dataset with images and labels.
     """
-    # TODO: use the labels_ground_truth instead of the labels_predictions once everything is annotated
-    filepaths_labels = list(dir_sequence.glob("**/labels_predictions/*.txt"))
     filepaths_images = [
         fp for fp in dir_sequence.glob("**/*.jpg") if "images" in str(fp)
     ]
 
     dict_labels = {}
-    for filepath_label in filepaths_labels:
+    for filepath_image in filepaths_images:
+        filepath_label_ground_truth = Path(str(filepath_image).replace("images", "labels_ground_truth").replace("jpg", "txt"))
         if is_background:
-            dict_labels[filepath_label] = ""
+            dict_labels[filepath_label_ground_truth] = ""
         else:
-            yolo_prediction = parse_yolo_prediction_txt_file(
-                read_file_content(filepath=filepath_label)
-            )
-            yolo_annotation = yolo_prediction_to_annotation(
-                yolo_prediction=yolo_prediction
+            yolo_annotation = parse_yolo_annotation_txt_file(
+                read_file_content(filepath=filepath_label_ground_truth)
             )
             label_content = annotation_to_label_txt(yolo_annotation=yolo_annotation)
-            dict_labels[filepath_label] = label_content
+            dict_labels[filepath_label_ground_truth] = label_content
 
     return {
         "images": [
@@ -272,7 +267,7 @@ if __name__ == "__main__":
 
         dir_save.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Handling the false positives and setting them as backgrounds")
+        logger.info("Handling the false positives and setting them as backgrounds")
         for dir_fp in dirs_fp:
             dict_dirs_sequences = find_train_val_test_dirs_sequences(dir=dir_fp)
             for split in dict_dirs_sequences.keys():
@@ -286,7 +281,7 @@ if __name__ == "__main__":
                         )
                     )
 
-        logger.info(f"Handling the true positives")
+        logger.info("Handling the true positives")
         for dir_tp in dirs_tp:
             dict_dirs_sequences = find_train_val_test_dirs_sequences(dir=dir_tp)
             for split in dict_dirs_sequences.keys():
