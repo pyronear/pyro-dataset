@@ -161,8 +161,12 @@ The final datasets are located in `./data/processed/`:
 
 - 🔥 __wildfire__: the train/val dataset used to train our ML models. It
 follows the ultralytics format.
--  🔦 __wildfire_test__: the test dataset used to evaluate the performance of
+- 🔥 __wildfire_test__: the test dataset used to evaluate the performance of
 our ML models.
+- ⏰ __wildfire_temporal__: the train/val dataset used to train our temporal ML
+models.
+- ⏰ __wildfire_temporal_test__: the test dataset used to evaluate the performance of
+our temporal ML models and the pyronear engine.
 
 ### Reporting
 
