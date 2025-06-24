@@ -232,6 +232,9 @@ def fetch_all_sequences_within(
     )
     sequences = []
     dates = get_dates_within(date_from=date_from, date_end=date_end)
+    logging.info(
+        f"Found {len(dates)} days between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}: [{dates[0]:%Y-%m-%d}, {dates[1]:%Y-%m-%d},..., {dates[-2]:%Y-%m-%d}, {dates[-1]:%Y-%m-%d}]"
+    )
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         future_to_date = {
