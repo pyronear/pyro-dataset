@@ -247,7 +247,7 @@ before running the following script:
 ```sh
 export GITHUB_ACCESS_TOKEN=XXX
 uv run python ./scripts/release.py \
-  --version v1.3.4 \
+  --version v1.3.5 \
   --github-owner earthtoolsmaker \
   --github-repo pyro-dataset
 ```
