@@ -161,8 +161,12 @@ The final datasets are located in `./data/processed/`:
 
 - 🔥 __wildfire__: the train/val dataset used to train our ML models. It
 follows the ultralytics format.
--  🔦 __wildfire_test__: the test dataset used to evaluate the performance of
+- 🔥 __wildfire_test__: the test dataset used to evaluate the performance of
 our ML models.
+- ⏰ __wildfire_temporal__: the train/val dataset used to train our temporal ML
+models.
+- ⏰ __wildfire_temporal_test__: the test dataset used to evaluate the performance of
+our temporal ML models and the pyronear engine.
 
 ### Reporting
 
@@ -192,7 +196,7 @@ export PLATFORM_PASSWORD=XXX
 export PLATFORM_ADMIN_LOGIN=XXX
 export PLATFORM_ADMIN_PASSWORD=XXX
 
-uv run python ./scripts/fetch_platform_sequence_id.py \
+uv run python ./scripts/platform_train_loop/fetch_platform_sequence_id.py \
   --save-dir ./data/raw/pyronear-platform/sequences/my-sequence-5347/ \
   --sequence-id 5347
 ```
@@ -215,7 +219,7 @@ export PLATFORM_PASSWORD=XXX
 export PLATFORM_ADMIN_LOGIN=XXX
 export PLATFORM_ADMIN_PASSWORD=XXX
 
-uv run python ./scripts/fetch_platform_sequences.py \
+uv run python ./scripts/platform_train_loop/fetch_platform_sequences.py \
   --save-dir ./data/raw/pyronear-platform/sequences/sdis-07/ \
   --date-from 2025-05-01 \
   --date-end 2025-06-01
@@ -224,7 +228,6 @@ uv run python ./scripts/fetch_platform_sequences.py \
 __Note__: Make sure to use an admin login/password as well as a regular
 login/password. The admin level access is needed to fetch information about the
 organizations and properly name the detection images locally.
-
 
 
 ## 🧠 Models
