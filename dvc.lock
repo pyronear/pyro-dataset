@@ -482,8 +482,8 @@ stages:
       nfiles: 7524
     - path: ./scripts/platform_train_loop/make_ultralytics_dataset.py
       hash: md5
-      md5: 35438faffd276e0bb106b96870f9e1f9
-      size: 11167
+      md5: 9ec7087b893416d111507cb70a697bd7
+      size: 11165
     outs:
     - path: ./data/interim/pyronear-platform/sequences-ultralytics/
       hash: md5
