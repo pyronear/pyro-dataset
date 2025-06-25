@@ -35,6 +35,26 @@ organizations and properly name the detection images locally.
 It will automatically name and organize sequences that can be added to our
 train/val/test datasets.
 
+```sh
+$ tree -L 3 pyronear-platform/sequences/chile-biobio
+
+pyronear-platform/sequences/chile-biobio
+├── api_results.csv
+├── args.yaml
+├── biobio
+│   ├── 2025-05-15T14-09-36_tetasur--1-180_sequence-754
+│   │   ├── detections
+│   │   ├── images
+│   │   └── labels_predictions
+.   .
+.   .
+│   └── 2025-05-15T18-04-35_tetasur--1-90_sequence-757
+│       ├── detections
+│       ├── images
+│       └── labels_predictions
+└── sequences.csv
+```
+
 Open a file browser to check the sequences you downloaded and add them
 following the folder structure outlined in
 `data/raw/pyronear-platform-annotated-sequences/sdis-template/`
@@ -83,19 +103,21 @@ dvc push
 
 Create a new git branch named: `<username>/train-best-dataset-<dataset-version>`
 
-Copy the generated `wildfire` into the `mlops` repository into `./data/01_raw/` - Remove the old one if necessary.
-Tell dvc to track the new dataset with 
+Copy the generated `wildfire` into the `mlops` repository into
+`./data/01_raw/`. Remove the old one if necessary.
+
+Tell dvc to track the new dataset with:
 
 ```bash
 dvc commit ./data/01_raw/wildfire
 ```
 
 
-Run all the `yolo_best` stages with the dvc command:
+Repro the full train pipeline:
 
 
 ```bash
-dvc repro --glob "*yolo_best"
+dvc repro
 ```
 
 
@@ -103,6 +125,14 @@ Push the new best model with dvc if you are happy with the result:
 
 ```bash
 dvc push
+```
+
+Commit your changes (dvc.lock):
+
+```bash
+git add dvc.lock
+git commit -m "feat: train yolo best vX.X.X"
+git push origin
 ```
 
 Open a Github PR and merge to main when accepted.
