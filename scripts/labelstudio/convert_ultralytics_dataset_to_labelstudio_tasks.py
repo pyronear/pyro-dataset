@@ -45,6 +45,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("./data/raw/Test_dataset_2025/"),
     )
     parser.add_argument(
+        "--split-ultralytics",
+        help="split to export",
+        choices=["train", "val", "test", "all"],
+        type=str,
+        default="test",
+    )
+    parser.add_argument(
         "--url-root-images",
         help="Root of the url that serves the images, can be an s3 url, a local server url, etc.",
         type=str,
@@ -156,11 +163,21 @@ if __name__ == "__main__":
         logger.info(args)
         dir_save = args["dir_save"]
         dir_ultralytics_dataset = args["dir_ultralytics_dataset"]
+        split_ultralytics = args["split_ultralytics"]
         url_root_images = args["url_root_images"]
-        filepaths_images = list(dir_ultralytics_dataset.rglob("*.jpg"))
-        logger.info(
-            f"Found {len(filepaths_images)} images in {dir_ultralytics_dataset}"
-        )
+        filepath_images = []
+        if split_ultralytics == "all":
+            filepaths_images = list(dir_ultralytics_dataset.rglob("*.jpg"))
+            logger.info(
+                f"Found {len(filepaths_images)} in {dir_ultralytics_dataset} for all splits"
+            )
+        else:
+            filepaths_images = list(
+                dir_ultralytics_dataset.glob(f"images/{split_ultralytics}/*.jpg")
+            )
+            logger.info(
+                f"Found {len(filepaths_images)} images in {dir_ultralytics_dataset} for split {split_ultralytics}"
+            )
         dir_save.mkdir(parents=True, exist_ok=True)
         class_id_to_name_mapping = {0: "smoke", 1: "smoke"}
 
