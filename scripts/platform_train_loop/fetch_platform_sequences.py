@@ -1,10 +1,15 @@
 """
 CLI script to fetch sequences from the Pyronear platform API.
 
-Parameters:
+Usage:
+  python fetch_platform_sequences.py --save-dir <path> --date-from <date> --date-end <date> --detections-limit <int> --detections-order-by <str> --loglevel <str>
+
+Arguments:
   --save-dir (Path): directory to save the sequences
   --date-from (date): date in YYYY-MM-DD format to start the sequence fetching
   --date-end (date): date in YYYY-MM-DD format to end the sequence fetching, defaults to now()
+  --detections-limit (int): maximum number of detections to fetch, defaults to 10
+  --detections-order-by (str): whether to order the detections by created_at in descending or ascending order, defaults to ascending
   --loglevel (str): provide logging level for the script
 
 Environment variables required:
@@ -57,6 +62,19 @@ def make_cli_parser() -> argparse.ArgumentParser:
         help="Date in YYYY-MM-DD format",
         type=valid_date,
         required=True,
+    )
+    parser.add_argument(
+        "--detections-limit",
+        help="Maximum number of detections to fetch",
+        type=int,
+        default=10,
+    )
+    parser.add_argument(
+        "--detections-order-by",
+        help="Whether to order the detections by created_at in descending or ascending order",
+        choices=["desc", "asc"],
+        type=str,
+        default="asc",
     )
     parser.add_argument(
         "--date-end",
@@ -148,6 +166,8 @@ def get_dates_within(date_from: date, date_end: date) -> list[date]:
 def _process_sequence(
     api_endpoint: str,
     sequence: dict,
+    detections_limit: int,
+    detections_order_by: str,
     indexed_cameras: dict,
     indexed_organizations: dict,
     access_token: str,
@@ -169,6 +189,8 @@ def _process_sequence(
         api_endpoint=api_endpoint,
         sequence_id=sequence["id"],
         access_token=access_token,
+        limit=detections_limit,
+        desc=True if detections_order_by == "desc" else False,
     )
     records = []
     for detection in detections:
@@ -208,6 +230,8 @@ def _fetch_sequences_for_date(api_endpoint: str, date: date, access_token: str) 
 def fetch_all_sequences_within(
     date_from: date,
     date_end: date,
+    detections_limit: int,
+    detections_order_by: str,
     api_endpoint: str,
     access_token: str,
     access_token_admin: str,
@@ -232,9 +256,12 @@ def fetch_all_sequences_within(
     )
     sequences = []
     dates = get_dates_within(date_from=date_from, date_end=date_end)
-    logging.info(
-        f"Found {len(dates)} days between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}: [{dates[0]:%Y-%m-%d}, {dates[1]:%Y-%m-%d},..., {dates[-2]:%Y-%m-%d}, {dates[-1]:%Y-%m-%d}]"
-    )
+    if len(dates) < 2:
+        logging.info(f"Found {len(dates)} days: {dates}")
+    else:
+        logging.info(
+            f"Found {len(dates)} days between {date_from:%Y-%m-%d} and {date_end:%Y-%m-%d}: [{dates[0]:%Y-%m-%d}, {dates[1]:%Y-%m-%d},..., {dates[-2]:%Y-%m-%d}, {dates[-1]:%Y-%m-%d}]"
+        )
 
     with concurrent.futures.ProcessPoolExecutor() as executor:
         future_to_date = {
@@ -264,6 +291,8 @@ def fetch_all_sequences_within(
                 _process_sequence,
                 api_endpoint,
                 sequence,
+                detections_limit,
+                detections_order_by,
                 indexed_cameras,
                 indexed_organizations,
                 access_token,
@@ -313,6 +342,8 @@ if __name__ == "__main__":
         save_dir = args["save_dir"]
         date_from = args["date_from"]
         date_end = args["date_end"]
+        detections_limit = args["detections_limit"]
+        detections_order_by = args["detections_order_by"]
         logger.info(
             f"Fetching sequences from {date_from:%Y-%m-%d} until {date_end:%Y-%m-%d} and storing data in {save_dir} from the platform API {api_url}"
         )
@@ -337,6 +368,8 @@ if __name__ == "__main__":
         df = fetch_all_sequences_within(
             date_from=date_from,
             date_end=date_end,
+            detections_limit=detections_limit,
+            detections_order_by=detections_order_by,
             api_endpoint=platform_api_endpoint,
             access_token=access_token,
             access_token_admin=access_token_admin,

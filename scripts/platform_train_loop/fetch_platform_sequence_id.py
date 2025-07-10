@@ -1,17 +1,22 @@
 """
 CLI script to fetch one sequence from the Pyronear platform API.
 
-Parameters:
-  --save-dir (Path): directory to save the sequences
-  --sequence-id (int): sequence id to fetch
-  --loglevel (str): provide logging level for the script
+Usage:
+  fetch_platform_sequence_id.py --save-dir <directory> --sequence-id <int> [--detections-limit <int>] [--detections-order-by <asc|desc>] [-log <loglevel>]
+
+Arguments:
+  --save-dir (Path): Directory to save the sequences.
+  --sequence-id (int): Sequence ID to fetch.
+  --detections-limit (int): Maximum number of detections to fetch (default: 10).
+  --detections-order-by (str): Order the detections by created_at in descending or ascending order (default: asc).
+  -log, --loglevel (str): Provide logging level for the script (default: info).
 
 Environment variables required:
   PLATFORM_API_ENDPOINT (str): API url endpoint. eg https://alertapi.pyronear.org
-  PLATFORM_LOGIN (str): login
-  PLATFORM_PASSWORD (str): password
-  PLATFORM_ADMIN_LOGIN (str): admin login - useful to access /api/v1/organizations endpoints
-  PLATFORM_ADMIN_PASSWORD (str): admin password - useful to access /api/v1/organizations endpoints
+  PLATFORM_LOGIN (str): Login.
+  PLATFORM_PASSWORD (str): Password.
+  PLATFORM_ADMIN_LOGIN (str): Admin login - useful to access /api/v1/organizations endpoints.
+  PLATFORM_ADMIN_PASSWORD (str): Admin password - useful to access /api/v1/organizations endpoints.
 """
 
 import argparse
@@ -24,7 +29,6 @@ import pandas as pd
 
 import pyro_dataset.platform.api as api
 import pyro_dataset.platform.utils as platform_utils
-from pyro_dataset.utils import yaml_write
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -43,6 +47,19 @@ def make_cli_parser() -> argparse.ArgumentParser:
         help="sequence id to be fetched",
         type=int,
         required=True,
+    )
+    parser.add_argument(
+        "--detections-limit",
+        help="Maximum number of detections to fetch",
+        type=int,
+        default=10,
+    )
+    parser.add_argument(
+        "--detections-order-by",
+        help="Whether to order the detections by created_at in descending or ascending order",
+        choices=["desc", "asc"],
+        type=str,
+        default="asc",
     )
     parser.add_argument(
         "-log",
@@ -78,20 +95,20 @@ def validate_available_env_variables() -> bool:
     platform_admin_password = os.getenv("PLATFORM_ADMIN_PASSWORD")
     if not platform_api_endpoint:
         logging.error(
-            f"PLATFORM_API_ENDPOINT is not set. eg. https://alertapi.pyronear.org"
+            "PLATFORM_API_ENDPOINT is not set. eg. https://alertapi.pyronear.org"
         )
         return False
     elif not platform_login:
-        logging.error(f"PLATFORM_LOGIN is not set")
+        logging.error("PLATFORM_LOGIN is not set")
         return False
     elif not platform_password:
-        logging.error(f"PLATFORM_PASSWORD is not set")
+        logging.error("PLATFORM_PASSWORD is not set")
         return False
     elif not platform_admin_login:
-        logging.error(f"PLATFORM_ADMIN_LOGIN is not set")
+        logging.error("PLATFORM_ADMIN_LOGIN is not set")
         return False
     elif not platform_admin_password:
-        logging.error(f"PLATFORM_ADMIN_PASSWORD is not set")
+        logging.error("PLATFORM_ADMIN_PASSWORD is not set")
         return False
     else:
         return True
@@ -99,6 +116,8 @@ def validate_available_env_variables() -> bool:
 
 def fetch_sequence(
     sequence_id: int,
+    detections_limit: int,
+    detections_order_by: str,
     api_endpoint: str,
     access_token: str,
     access_token_admin: str,
@@ -124,6 +143,8 @@ def fetch_sequence(
         api_endpoint=api_endpoint,
         sequence_id=sequence_id,
         access_token=access_token,
+        limit=detections_limit,
+        desc=True if detections_order_by == "desc" else False,
     )
     camera = api.get_camera(
         api_endpoint=api_endpoint,
@@ -175,6 +196,8 @@ if __name__ == "__main__":
 
         save_dir = args["save_dir"]
         sequence_id = args["sequence_id"]
+        detections_limit = args["detections_limit"]
+        detections_order_by = args["detections_order_by"]
         logger.info(
             f"Fetching sequence id {sequence_id}  and storing data in {save_dir} from the platform API {api_url}"
         )
@@ -197,6 +220,8 @@ if __name__ == "__main__":
         df = pd.DataFrame(
             fetch_sequence(
                 sequence_id=sequence_id,
+                detections_limit=detections_limit,
+                detections_order_by=detections_order_by,
                 api_endpoint=platform_api_endpoint,
                 access_token=access_token,
                 access_token_admin=access_token_admin,
@@ -213,4 +238,4 @@ if __name__ == "__main__":
         filepath_args_yaml = save_dir / "args.yaml"
         logger.info(f"Saving args run in {filepath_args_yaml}")
         platform_utils.append_yaml_run(filepath=filepath_args_yaml, data=args_content)
-        logger.info(f"Done ✅")
+        logger.info("Done ✅")
