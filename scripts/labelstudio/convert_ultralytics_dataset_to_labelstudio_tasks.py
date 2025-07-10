@@ -2,12 +2,13 @@
 CLI script to generate LS tasks from a Ultralytics Dataset.
 
 Usage:
-    python convert_ultralytics_dataset_to_labelstudio_tasks.py --dir-save <directory> --dir-ultralytics-dataset <directory> --url-root-images <url> --loglevel <level>
+    python convert_ultralytics_dataset_to_labelstudio_tasks.py --dir-save <directory> --dir-ultralytics-dataset <directory> --url-root-images <url> --loglevel <level> --split-ultralytics <split>
 
 Arguments:
     --dir-save: Directory to save the LS tasks.
     --dir-ultralytics-dataset: Directory containing a Ultralytics dataset.
     --url-root-images: Root of the URL that serves the images, can be an S3 URL, a local server URL, etc.
+    --split-ultralytics: split to export, choices are "train", "val", "test", "all".
     -log, --loglevel: Provide logging level. Example --loglevel debug, default=warning.
 """
 
