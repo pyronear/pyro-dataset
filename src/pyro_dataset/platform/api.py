@@ -210,6 +210,8 @@ def list_sequence_detections(
     api_endpoint: str,
     sequence_id: int,
     access_token: str,
+    limit: int = 10,
+    desc: bool = True,
 ) -> list[dict]:
     """
     List all detections for a given sequence ID using the platform API.
@@ -218,9 +220,12 @@ def list_sequence_detections(
         api_endpoint (str): The base URL for the API endpoint.
         sequence_id (int): The ID of the sequence for which to list detections.
         access_token (str): The access token for API authentication.
+        limit (int): Maximum number of detections to fetch
+        desc (bool): Whether to order the detections by created_at in descending order
 
     Returns:
         list[dict]: A list of dictionaries containing detection information.
     """
-    url = f"{api_endpoint}/api/v1/sequences/{sequence_id}/detections"
+    desc_str = "true" if desc else "false"
+    url = f"{api_endpoint}/api/v1/sequences/{sequence_id}/detections?limit={limit}&desc={desc_str}"
     return api_get(route=url, access_token=access_token)
