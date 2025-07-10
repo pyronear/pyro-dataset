@@ -25,7 +25,9 @@ export PLATFORM_ADMIN_PASSWORD=XXX
 uv run python ./scripts/fetch_platform_sequences.py \
   --save-dir ./data/raw/pyronear-platform/sequences/sdis-07/ \
   --date-from 2025-05-01 \
-  --date-end 2025-05-10
+  --date-end 2025-05-10 \
+  --detections-limit 10 \
+  --detections-order-by asc
 ```
 
 __Note__: Make sure to use an admin login/password as well as a regular
