@@ -45,22 +45,7 @@ from pyro_dataset.plots.report import (
     make_plot_data_for_ratio_background_images,
 )
 from pyro_dataset.utils import yaml_read, yaml_write
-
-
-class DatasetOrigin(Enum):
-    """
-    All the possible dataset origins.
-
-    Note: UNKNOW is used to account for new datasets that have not yet
-    been added to this enum.
-    """
-
-    PYRONEAR = "pyronear"
-    ADF = "adf"
-    AWF = "awf"
-    HPWREN = "hpwren"
-    RANDOM_SMOKE = "random"
-    UNKNOWN = "unknown"
+import pyro_dataset.parsers as parsers
 
 
 class DataSplit(Enum):
@@ -71,13 +56,6 @@ class DataSplit(Enum):
     TRAIN = "train"
     VAL = "val"
     TEST = "test"
-
-
-@dataclass
-class DetectionDetails:
-    dataset_origin: DatasetOrigin
-    stem: str
-    details: dict[str, Any]
 
 
 @dataclass
@@ -102,8 +80,8 @@ class SplitSummary:
     n_images: int
     n_labels: int
     n_background_images: int
-    detection_details: list[DetectionDetails]
-    frequencies_origins: Counter[DatasetOrigin]
+    detection_details: list[parsers.DetectionDetails]
+    frequencies_origins: Counter[parsers.DatasetOrigin]
     frequencies_years: Counter[int]
     frequencies_months: Counter[int]
     frequencies_year_months: Counter[str]
@@ -220,124 +198,8 @@ def is_background(filepath_label: Path) -> bool:
     )
 
 
-def parse_datetime(stem: str) -> datetime | None:
-    """
-    Parse the datetime from the filepath stem.
-
-    Note: Try different datetime string formats and normalize it.
-    """
-    pattern = (
-        r"(\d{4}[-_]\d{2}[-_]\d{2}T\d{2}[-_]\d{2}[-_]\d{2}|\d{4}[-_]\d{2}[-_]\d{2})"
-    )
-
-    match = re.search(pattern, stem)
-
-    if match:
-        # Extract the matched string
-        datetime_str = match.group(0)
-        # Replace underscores with dashes for consistency
-        datetime_str = datetime_str.replace("_", "-")
-        # Try to parse the datetime
-        try:
-            # Check for full datetime
-            return datetime.strptime(datetime_str, "%Y-%m-%dT%H-%M-%S")
-        except ValueError:
-            return None
-    else:
-        return None
-
-
-def parse_details_pyronear(stem: str) -> dict[str, Any]:
-    return {
-        "datetime": parse_datetime(stem),
-    }
-
-
-def parse_details_adf(stem: str) -> dict[str, Any]:
-    return {
-        "datetime": parse_datetime(stem),
-    }
-
-
-def parse_details_awf(stem: str) -> dict[str, Any]:
-    return {
-        "datetime": parse_datetime(stem),
-    }
-
-
-def parse_details_hpwren(stem: str) -> dict[str, Any]:
-    return {
-        "datetime": parse_datetime(stem),
-    }
-
-
-def parse_details_random_smoke(stem: str) -> dict[str, Any]:
-    return {
-        "datetime": parse_datetime(stem),
-    }
-
-
-def parse_details(stem: str, dataset_origin: DatasetOrigin) -> dict[str, Any]:
-    """
-    Parse details from the stem - mostly datetime if possible to extract it.
-    """
-    match dataset_origin:
-        case DatasetOrigin.PYRONEAR:
-            return parse_details_pyronear(stem)
-        case DatasetOrigin.ADF:
-            return parse_details_adf(stem)
-        case DatasetOrigin.AWF:
-            return parse_details_awf(stem)
-        case DatasetOrigin.HPWREN:
-            return parse_details_hpwren(stem)
-        case DatasetOrigin.RANDOM_SMOKE:
-            return parse_details_random_smoke(stem)
-        case _:
-            return {"datetime": parse_datetime(stem)}
-
-
-def parse_dataset_origin(stem: str) -> DatasetOrigin:
-    """
-    Parse the dataset origin from a filepath stem.
-    """
-    parts = stem.lower().split("_")
-    origin_str = parts[0]
-    if origin_str in [do.value for do in DatasetOrigin]:
-        return DatasetOrigin(value=parts[0])
-    # Fix the inconsitencies between the test dataset naming and the val/train naming
-    elif origin_str in [
-        "sdis-77",
-        "sdis-07",
-        "force-06",
-        "marguerite-282",
-        "pyro",
-        "ardeche",
-    ]:
-        return DatasetOrigin.PYRONEAR
-    # Fix the inconsitencies between the test dataset naming and the val/train naming
-    elif origin_str in ["axis", "2023"]:
-        return DatasetOrigin.AWF
-    else:
-        logging.warning(f"unknown dataset origin: {origin_str}")
-        return DatasetOrigin.UNKNOWN
-
-
-def parse_filepath_stem(stem: str) -> DetectionDetails:
-    """
-    Parse the filepath stem and return a Detection Details with as much
-    extracted details as possible.
-    """
-    dataset_origin = parse_dataset_origin(stem=stem)
-    dataset_details = parse_details(stem=stem, dataset_origin=dataset_origin)
-    return DetectionDetails(
-        dataset_origin=dataset_origin,
-        details=dataset_details,
-        stem=stem,
-    )
-
-
 def get_summary_frequencies(
-    detection_details: list[DetectionDetails],
+    detection_details: list[parsers.DetectionDetails],
 ) -> dict[str, Counter]:
     """
     Return a dict mapping keys to frequencies Counter.
@@ -399,7 +261,6 @@ def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSumma
     Create the split summary for a given data_yaml filepath and a DataSplit.
     """
     data_yaml = yaml_read(filepath_data_yaml)
-    dir_images = filepath_data_yaml.parent / data_yaml[data_split.value]
     dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace(
         "images", "labels"
     )
@@ -407,7 +268,9 @@ def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSumma
         filepath_data_yaml=filepath_data_yaml,
         data_split=data_split,
     )
-    detection_details = [parse_filepath_stem(fp.stem) for fp in filepaths.images]
+    detection_details = [
+        parsers.parse_filepath_stem(fp.stem) for fp in filepaths.images
+    ]
     frequencies = get_summary_frequencies(detection_details=detection_details)
 
     children = []
@@ -531,6 +394,7 @@ def to_data_leakage_summary(hashes: dict[str, dict]) -> DataLeakageSummary:
         if k in hashes_file_content_leakage_train_val
     ]
 
+    # TODO: finish implementing leakage from other splits
     return DataLeakageSummary(
         train_val_file_content=train_val_file_content,
         train_test_file_content=[],
@@ -734,3 +598,55 @@ if __name__ == "__main__":
             f"Make some visualization plots based on the report.yaml file {filepath_output_yaml}"
         )
         make_analysis_plots(filepath_report_yaml=filepath_output_yaml)
+
+
+## REPL DRIVEN
+# args = {
+#     "save_dir": Path("data/reporting/wildfire"),
+#     "filepath_data_yaml_train_val": Path("data/processed/wildfire/data.yaml"),
+#     "filepath_data_yaml_test": Path("data/processed/wildfire_test/data.yaml"),
+#     "loglevel": "info",
+# }
+#
+# save_dir = args["save_dir"]
+# filepath_data_yaml_train_val = args["filepath_data_yaml_train_val"]
+# filepath_data_yaml_test = args["filepath_data_yaml_test"]
+# data_yaml_train_val = yaml_read(filepath_data_yaml_train_val)
+# data_yaml_test = yaml_read(filepath_data_yaml_test)
+#
+# data_yaml_train_val
+# data_yaml_test
+#
+# split_summary_train = split_summary(
+#     filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
+# )
+# split_summary_val = split_summary(
+#     filepath_data_yaml_train_val, data_split=DataSplit.VAL
+# )
+# split_summary_test = split_summary(filepath_data_yaml_test, data_split=DataSplit.TEST)
+# split_summary_test
+#
+# parse_details(
+#     stem="pyronear_valbonne_3_2023_11_02T07_05_56.jpg",
+#     dataset_origin=DatasetOrigin.PYRONEAR,
+# )
+# parse_details(
+#     stem="pyronear_serre-de-barre-310_2024-09-02T13-12-23.jpg",
+#     dataset_origin=DatasetOrigin.PYRONEAR,
+# )
+# parse_details(
+#     stem="pyronear_serre-de-barre-250_2024-08-25T11-19-22.jpg",
+#     dataset_origin=DatasetOrigin.PYRONEAR,
+# )
+#
+# s1 = "pyronear_valbonne_3_2023_11_02T07_05_56.jpg"
+# s2 = "pyronear_serre-de-barre-310_2024-09-02T13-12-23.jpg"
+# s3 = "pyronear_serre-de-barre-250_2024-08-25T11-19-22.jpg"
+# s4 = "Pyronear_test_DS_00000328.jpg"
+# s5 = "pyronear_st_peray_2_2023_07_12T13_24_14.jpg"
+#
+# parse_pyronear_camera_details(s1)
+# parse_pyronear_camera_details(s2)
+# parse_pyronear_camera_details(s3)
+# parse_pyronear_camera_details(s4)
+# parse_pyronear_camera_details(s5)
