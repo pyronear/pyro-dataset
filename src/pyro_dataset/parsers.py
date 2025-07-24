@@ -30,7 +30,7 @@ class DatasetOrigin(Enum):
 @dataclass
 class DetectionDetails:
     dataset_origin: DatasetOrigin
-    stem: str
+    filepath: Path
     details: dict[str, Any]
 
 
@@ -166,19 +166,6 @@ def parse_details(stem: str, dataset_origin: DatasetOrigin) -> dict[str, Any]:
             return {"datetime": parse_datetime(stem)}
 
 
-def parse_filepath_stem(stem: str) -> DetectionDetails:
-    """
-    Parse the filepath stem and return a Detection Details with as much
-    extracted details as possible.
-    """
-    dataset_origin = parse_dataset_origin(stem=stem)
-    dataset_details = parse_details(stem=stem, dataset_origin=dataset_origin)
-    return DetectionDetails(
-        dataset_origin=dataset_origin,
-        details=dataset_details,
-        stem=stem,
-    )
-
 def parse_filepath(filepath: Path) -> DetectionDetails:
     """
     Parse the filepath stem and return a Detection Details with as much
@@ -189,5 +176,5 @@ def parse_filepath(filepath: Path) -> DetectionDetails:
     return DetectionDetails(
         dataset_origin=dataset_origin,
         details=dataset_details,
-        stem=filepath.stem,
+        filepath=filepath,
     )

@@ -269,7 +269,7 @@ def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSumma
         data_split=data_split,
     )
     detection_details = [
-        parsers.parse_filepath_stem(fp.stem) for fp in filepaths.images
+        parsers.parse_filepath(fp) for fp in filepaths.images
     ]
     frequencies = get_summary_frequencies(detection_details=detection_details)
 
@@ -279,9 +279,9 @@ def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSumma
             dd for dd in detection_details if dd.dataset_origin == dataset_origin
         ]
         filepaths_labels_filtered = [
-            dir_labels / f"{dd.stem}.txt"
+            dir_labels / f"{dd.filepath.stem}.txt"
             for dd in detection_details_filtered
-            if (dir_labels / f"{dd.stem}.txt").exists()
+            if (dir_labels / f"{dd.filepath.stem}.txt").exists()
         ]
         filepaths_labels_background_filtered = [
             fp for fp in filepaths_labels_filtered if is_background(fp)
