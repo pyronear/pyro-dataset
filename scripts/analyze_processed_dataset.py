@@ -22,10 +22,8 @@ Options:
 import argparse
 import hashlib
 import logging
-import re
 from collections import Counter
 from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from typing import Any
@@ -45,7 +43,8 @@ from pyro_dataset.plots.report import (
     make_plot_data_for_ratio_background_images,
 )
 from pyro_dataset.utils import yaml_read, yaml_write
-import pyro_dataset.parsers as parsers
+import pyro_dataset.filepaths.parsers as fp_parsers
+import pyro_dataset.filepaths.utils as fp_utils
 
 
 class DataSplit(Enum):
@@ -80,11 +79,12 @@ class SplitSummary:
     n_images: int
     n_labels: int
     n_background_images: int
-    detection_details: list[parsers.DetectionDetails]
-    frequencies_origins: Counter[parsers.DatasetOrigin]
+    detection_details_list: list[fp_parsers.DetectionDetails]
+    frequencies_origins: Counter[fp_parsers.DatasetOrigin]
     frequencies_years: Counter[int]
     frequencies_months: Counter[int]
     frequencies_year_months: Counter[str]
+    frequencies_platform_camera_origins: Counter[str]
 
     def __repr__(self):
         return f"""SplitSummary(
@@ -104,6 +104,7 @@ class SplitFilepaths:
     images: list[Path]
     labels: list[Path]
     labels_background: list[Path]
+    filepath_image_detection_details_mapping: dict[Path, fp_parsers.DetectionDetails]
 
 
 def normalize_frequencies(freqs: dict[Any, int]) -> dict[Any, float]:
@@ -184,22 +185,8 @@ def validate_parsed_args(args: dict) -> bool:
         return True
 
 
-def is_background(filepath_label: Path) -> bool:
-    """
-    Is the `filepath_label` a background image - no smokes in it.
-
-    Returns:
-        is_background? (bool): whether or not the filepath has a smoke detected in it.
-    """
-    return (
-        filepath_label.exists()
-        and filepath_label.is_file()
-        and filepath_label.stat().st_size == 0
-    )
-
-
 def get_summary_frequencies(
-    detection_details: list[parsers.DetectionDetails],
+    detection_details_list: list[fp_parsers.DetectionDetails],
 ) -> dict[str, Counter]:
     """
     Return a dict mapping keys to frequencies Counter.
@@ -209,26 +196,34 @@ def get_summary_frequencies(
       frequencies_origins (Counter)
       frequencies_years (Counter)
       frequencies_months (Counter)
+      frequencies_platform_camera_origins (Counter)
     """
-    frequencies_origins = Counter([dd.dataset_origin for dd in detection_details])
+    frequencies_origins = Counter([dd.dataset_origin for dd in detection_details_list])
+    frequencies_platform_camera_origins = Counter(
+        [
+            get_camera_key(dd.details["camera"])
+            for dd in detection_details_list
+            if dd.details and dd.details.get("camera", None)
+        ]
+    )
     frequencies_year_months = Counter(
         [
             dd.details["datetime"].strftime("%Y-%m")
-            for dd in detection_details
+            for dd in detection_details_list
             if dd.details["datetime"]
         ]
     )
     frequencies_years = Counter(
         [
             dd.details["datetime"].year
-            for dd in detection_details
+            for dd in detection_details_list
             if dd.details["datetime"]
         ]
     )
     frequencies_months = Counter(
         [
             dd.details["datetime"].month
-            for dd in detection_details
+            for dd in detection_details_list
             if dd.details["datetime"]
         ]
     )
@@ -237,10 +232,39 @@ def get_summary_frequencies(
         "frequencies_months": frequencies_months,
         "frequencies_years": frequencies_years,
         "frequencies_year_months": frequencies_year_months,
+        "frequencies_platform_camera_origins": frequencies_platform_camera_origins,
     }
 
 
-def split_filepaths(filepath_data_yaml: Path, data_split: DataSplit) -> SplitFilepaths:
+def get_camera_key(camera_details: dict) -> str | None:
+    """
+    Get a human readable key for the camera_details information parsed from the
+    image filepath.
+
+    Returns None if the key cannot be generated from the camera details.
+    """
+    name = camera_details.get("name", None)
+    number = camera_details.get("number", None)
+    azimuth = camera_details.get("azimuth", None)
+    if name and azimuth is not None:
+        return f"{name}__azimuth:{azimuth}"
+    elif name and number is not None:
+        return f"{name}__number:{number}"
+    else:
+        logging.warning(
+            f"Cannot generate camera key for camera details {camera_details}"
+        )
+        return None
+
+
+def get_split_filepaths(
+    filepath_data_yaml: Path,
+    data_split: DataSplit,
+) -> SplitFilepaths:
+    """
+    Make a SplitFilepaths from the `filepath_data_yaml` filepath and the
+    `data_split`.
+    """
     data_yaml = yaml_read(filepath_data_yaml)
     dir_images = filepath_data_yaml.parent / data_yaml[data_split.value]
     dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace(
@@ -248,72 +272,80 @@ def split_filepaths(filepath_data_yaml: Path, data_split: DataSplit) -> SplitFil
     )
     filepaths_images = list(dir_images.glob("*.jpg"))
     filepaths_labels = list(dir_labels.glob("*.txt"))
-    filepaths_labels_background = [fp for fp in filepaths_labels if is_background(fp)]
+    filepaths_labels_background = [
+        fp for fp in filepaths_labels if fp_utils.is_background(fp)
+    ]
     return SplitFilepaths(
         images=filepaths_images,
         labels=filepaths_images,
         labels_background=filepaths_labels_background,
+        filepath_image_detection_details_mapping={
+            fp_image: fp_parsers.parse_filepath(fp_image)
+            for fp_image in filepaths_images
+        },
     )
 
 
-def split_summary(filepath_data_yaml: Path, data_split: DataSplit) -> SplitSummary:
+def get_split_summary(split_filepaths: SplitFilepaths) -> SplitSummary:
     """
     Create the split summary for a given data_yaml filepath and a DataSplit.
     """
-    data_yaml = yaml_read(filepath_data_yaml)
-    dir_labels = filepath_data_yaml.parent / data_yaml[data_split.value].replace(
-        "images", "labels"
+    detection_details_list = list(
+        split_filepaths.filepath_image_detection_details_mapping.values()
     )
-    filepaths = split_filepaths(
-        filepath_data_yaml=filepath_data_yaml,
-        data_split=data_split,
-    )
-    detection_details = [
-        parsers.parse_filepath(fp) for fp in filepaths.images
-    ]
-    frequencies = get_summary_frequencies(detection_details=detection_details)
+    frequencies = get_summary_frequencies(detection_details_list=detection_details_list)
 
     children = []
     for dataset_origin, _ in frequencies["frequencies_origins"].most_common(n=5):
-        detection_details_filtered = [
-            dd for dd in detection_details if dd.dataset_origin == dataset_origin
+        detection_details_list_filtered = [
+            dd for dd in detection_details_list if dd.dataset_origin == dataset_origin
         ]
         filepaths_labels_filtered = [
-            dir_labels / f"{dd.filepath.stem}.txt"
-            for dd in detection_details_filtered
-            if (dir_labels / f"{dd.filepath.stem}.txt").exists()
+            Path(str(dd.filepath.parent).replace("images", "labels"))
+            / f"{dd.filepath.stem}.txt"
+            for dd in detection_details_list_filtered
+            if (
+                Path(str(dd.filepath.parent).replace("images", "labels"))
+                / f"{dd.filepath.stem}.txt"
+            ).exists()
         ]
         filepaths_labels_background_filtered = [
-            fp for fp in filepaths_labels_filtered if is_background(fp)
+            fp for fp in filepaths_labels_filtered if fp_utils.is_background(fp)
         ]
         frequencies_filtered = get_summary_frequencies(
-            detection_details=detection_details_filtered
+            detection_details_list=detection_details_list_filtered
         )
         sub_split_summary = SplitSummary(
             name=dataset_origin.value,
             children=[],
-            n_images=len(detection_details_filtered),
+            n_images=len(detection_details_list_filtered),
             n_labels=len(filepaths_labels_filtered),
             n_background_images=len(filepaths_labels_background_filtered),
-            detection_details=detection_details_filtered,
+            detection_details_list=detection_details_list_filtered,
             frequencies_origins=frequencies_filtered["frequencies_origins"],
             frequencies_years=frequencies_filtered["frequencies_years"],
             frequencies_months=frequencies_filtered["frequencies_months"],
             frequencies_year_months=frequencies_filtered["frequencies_year_months"],
+            frequencies_platform_camera_origins=frequencies_filtered[
+                "frequencies_platform_camera_origins"
+            ],
         )
         children.append(sub_split_summary)
 
     return SplitSummary(
         name="all",
         children=children,
-        n_images=len(filepaths.images),
-        n_labels=len(filepaths.labels),
-        n_background_images=len(filepaths.labels_background),
-        detection_details=detection_details,
+        n_images=len(split_filepaths.images),
+        n_labels=len(split_filepaths.labels),
+        n_background_images=len(split_filepaths.labels_background),
+        detection_details_list=detection_details_list,
         frequencies_origins=frequencies["frequencies_origins"],
         frequencies_years=frequencies["frequencies_years"],
         frequencies_months=frequencies["frequencies_months"],
         frequencies_year_months=frequencies["frequencies_year_months"],
+        frequencies_platform_camera_origins=frequencies[
+            "frequencies_platform_camera_origins"
+        ],
     )
 
 
@@ -336,6 +368,13 @@ def split_summary_to_dict(split_summary: SplitSummary) -> dict:
                     (dataset_origin.value, count)
                     for dataset_origin, count in split_summary.frequencies_origins.items()
                 ],
+                key=lambda e: e[1],
+                reverse=True,
+            )
+        ),
+        "pyronear_platform_camera_origins": dict(
+            sorted(
+                split_summary.frequencies_platform_camera_origins.items(),
                 key=lambda e: e[1],
                 reverse=True,
             )
@@ -457,15 +496,15 @@ def compute_all_hashes(
         val (dict[str, Path]): hashes for the val images.
         test (dict[str, Path]): hashes for the test images.
     """
-    filepaths_train = split_filepaths(
+    filepaths_train = get_split_filepaths(
         filepath_data_yaml=filepath_data_yaml_train_val,
         data_split=DataSplit.TRAIN,
     )
-    filepaths_val = split_filepaths(
+    filepaths_val = get_split_filepaths(
         filepath_data_yaml=filepath_data_yaml_train_val,
         data_split=DataSplit.VAL,
     )
-    filepaths_test = split_filepaths(
+    filepaths_test = get_split_filepaths(
         filepath_data_yaml=filepath_data_yaml_test,
         data_split=DataSplit.TEST,
     )
@@ -562,15 +601,20 @@ if __name__ == "__main__":
         logger.info(f"data_yaml test split: {data_yaml_test}")
         logger.info(f"data_yaml train and val splits: {data_yaml_train_val}")
 
-        split_summary_train = split_summary(
-            filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
+        split_filepaths_train = get_split_filepaths(
+            filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
         )
-        split_summary_val = split_summary(
-            filepath_data_yaml_train_val, data_split=DataSplit.VAL
+        split_filepaths_val = get_split_filepaths(
+            filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.VAL
         )
-        split_summary_test = split_summary(
-            filepath_data_yaml_test, data_split=DataSplit.TEST
+        split_filepaths_test = get_split_filepaths(
+            filepath_data_yaml=filepath_data_yaml_test, data_split=DataSplit.TEST
         )
+
+        split_summary_train = get_split_summary(split_filepaths_train)
+        split_summary_val = get_split_summary(split_filepaths_val)
+        split_summary_test = get_split_summary(split_filepaths_test)
+
         logger.info(f"train split summary: {split_summary_train}")
         logger.info(f"val split summary: {split_summary_val}")
         logger.info(f"test split summary: {split_summary_test}")

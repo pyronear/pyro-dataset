@@ -62,6 +62,10 @@ def parse_datetime(stem: str) -> datetime | None:
 
 
 def parse_pyronear_camera_details(stem: str) -> dict | None:
+    """
+    Parse the camera details from a pyronear platform stem.
+    Returns None if no camera details can be parsed.
+    """
     try:
         has_datetime = parse_datetime(stem)
         if not has_datetime:
