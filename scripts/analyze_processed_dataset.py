@@ -29,22 +29,24 @@ from pathlib import Path
 from typing import Any
 
 from bokeh.io import show
+from bokeh.layouts import column, row
 from bokeh.plotting import output_file
 from tqdm import tqdm
 
+import pyro_dataset.filepaths.parsers as fp_parsers
+import pyro_dataset.filepaths.utils as fp_utils
 from pyro_dataset.plots.report import (
     make_figure_for_data_splits_breakdown,
+    make_figure_for_data_splits_camera_origins_breakdown,
     make_figure_for_data_splits_month_breakdown,
     make_figure_for_data_splits_year_breakdown,
     make_figure_for_ratio_background_images,
     make_plot_data_for_data_splits_breakdown,
+    make_plot_data_for_data_splits_camera_origins_breakdown_top_k_split,
     make_plot_data_for_data_splits_month_breakdown,
     make_plot_data_for_data_splits_year_breakdown,
-    make_plot_data_for_ratio_background_images,
-)
+    make_plot_data_for_ratio_background_images)
 from pyro_dataset.utils import yaml_read, yaml_write
-import pyro_dataset.filepaths.parsers as fp_parsers
-import pyro_dataset.filepaths.utils as fp_utils
 
 
 class DataSplit(Enum):
@@ -105,14 +107,6 @@ class SplitFilepaths:
     labels: list[Path]
     labels_background: list[Path]
     filepath_image_detection_details_mapping: dict[Path, fp_parsers.DetectionDetails]
-
-
-def normalize_frequencies(freqs: dict[Any, int]) -> dict[Any, float]:
-    """
-    Normalize a frequency dict.
-    """
-    total = sum(v for v in freqs.values())
-    return {k: v / total for k, v in freqs.items()}
 
 
 def compute_file_content_hash(filepath: Path) -> str:
@@ -542,46 +536,66 @@ def make_analysis_plots(filepath_report_yaml: Path) -> None:
     logging.info(f"Loading the report to generate visual plots {filepath_report_yaml}")
     report = yaml_read(filepath_report_yaml)
 
-    filepath_data_splits_origin_breakdown = (
-        save_dir / "plots" / "data_splits_origin_breakdown.html"
-    )
-    filepath_data_splits_origin_breakdown.parent.mkdir(parents=True, exist_ok=True)
-    logging.info(
-        f"Generating plot for data splits origin breakdown in {filepath_data_splits_origin_breakdown}"
-    )
+    filepath_dataset_overall_report = save_dir / "plots" / "report.html"
+    filepath_dataset_overall_report.parent.mkdir(parents=True, exist_ok=True)
+    logging.info(f"Generating plot for data splits origin breakdown")
     origins = ["pyronear", "hpwren", "awf", "random", "adf", "unknown"]
     data = make_plot_data_for_data_splits_breakdown(
         report=report,
         origins=origins,
     )
     figure_data_splits_breakdown = make_figure_for_data_splits_breakdown(data=data)
-    output_file(filepath_data_splits_origin_breakdown)
-    show(figure_data_splits_breakdown)
 
-    filepath_image_ratios_breakdown = (
-        save_dir / "plots" / "data_splits_background_images_ratios_breakdown.html"
-    )
-    logging.info(
-        f"Generating plot for ratio image/background breakdown in {filepath_image_ratios_breakdown}"
-    )
+    logging.info(f"Generating plot for background/objects ratios breakdown")
     data = make_plot_data_for_ratio_background_images(report)
-    figure_image_ratios_breakdown = make_figure_for_ratio_background_images(data)
-    output_file(filepath_image_ratios_breakdown)
-    show(figure_image_ratios_breakdown)
+    figure_image_background_ratios_breakdown = make_figure_for_ratio_background_images(
+        data
+    )
 
-    filepath_years_breakdown = save_dir / "plots" / "data_splits_years_breakdown.html"
-    logging.info(f"Generating plot for years breakdown in {filepath_years_breakdown}")
+    logging.info(f"Generating plot for years breakdown")
     data = make_plot_data_for_data_splits_year_breakdown(report)
     figure_year_breakdown = make_figure_for_data_splits_year_breakdown(data)
-    output_file(filepath_years_breakdown)
-    show(figure_year_breakdown)
 
-    filepath_months_breakdown = save_dir / "plots" / "data_splits_months_breakdown.html"
-    logging.info(f"Generating plot for months breakdown in {filepath_months_breakdown}")
+    logging.info(f"Generating plot for months breakdown")
     data = make_plot_data_for_data_splits_month_breakdown(report)
     figure_month_breakdown = make_figure_for_data_splits_month_breakdown(data)
-    output_file(filepath_months_breakdown)
-    show(figure_month_breakdown)
+
+    logging.info(f"Generating plots for camera origins breakdown")
+    data_train = make_plot_data_for_data_splits_camera_origins_breakdown_top_k_split(
+        report, split="train", k=20
+    )
+    data_val = make_plot_data_for_data_splits_camera_origins_breakdown_top_k_split(
+        report, split="val", k=20
+    )
+    data_test = make_plot_data_for_data_splits_camera_origins_breakdown_top_k_split(
+        report, split="test", k=20
+    )
+
+    figure_train_camera_origins = make_figure_for_data_splits_camera_origins_breakdown(
+        data_train, split="train"
+    )
+    figure_val_camera_origins = make_figure_for_data_splits_camera_origins_breakdown(
+        data_val, split="val"
+    )
+    figure_test_camera_origins = make_figure_for_data_splits_camera_origins_breakdown(
+        data_test, split="test"
+    )
+
+    logging.info(
+        f"Generating the report.html file in {filepath_dataset_overall_report}"
+    )
+    output_file(filepath_dataset_overall_report)
+    show(
+        column(
+            row(figure_data_splits_breakdown, figure_image_background_ratios_breakdown),
+            row(figure_month_breakdown, figure_year_breakdown),
+            row(
+                figure_train_camera_origins,
+                figure_val_camera_origins,
+                figure_test_camera_origins,
+            ),
+        )
+    )
 
 
 if __name__ == "__main__":
@@ -598,99 +612,47 @@ if __name__ == "__main__":
         filepath_data_yaml_test = args["filepath_data_yaml_test"]
         data_yaml_train_val = yaml_read(filepath_data_yaml_train_val)
         data_yaml_test = yaml_read(filepath_data_yaml_test)
-        logger.info(f"data_yaml test split: {data_yaml_test}")
-        logger.info(f"data_yaml train and val splits: {data_yaml_train_val}")
-
-        split_filepaths_train = get_split_filepaths(
-            filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
-        )
-        split_filepaths_val = get_split_filepaths(
-            filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.VAL
-        )
-        split_filepaths_test = get_split_filepaths(
-            filepath_data_yaml=filepath_data_yaml_test, data_split=DataSplit.TEST
-        )
-
-        split_summary_train = get_split_summary(split_filepaths_train)
-        split_summary_val = get_split_summary(split_filepaths_val)
-        split_summary_test = get_split_summary(split_filepaths_test)
-
-        logger.info(f"train split summary: {split_summary_train}")
-        logger.info(f"val split summary: {split_summary_val}")
-        logger.info(f"test split summary: {split_summary_test}")
-
-        hashes = compute_all_hashes(
-            filepath_data_yaml_train_val=filepath_data_yaml_train_val,
-            filepath_data_yaml_test=filepath_data_yaml_test,
-        )
-
-        data_leakage_summary = to_data_leakage_summary(hashes=hashes)
-        logger.info(f"data leakage summary: {data_leakage_summary}")
-
+        # logger.info(f"data_yaml test split: {data_yaml_test}")
+        # logger.info(f"data_yaml train and val splits: {data_yaml_train_val}")
+        #
+        # split_filepaths_train = get_split_filepaths(
+        #     filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
+        # )
+        # split_filepaths_val = get_split_filepaths(
+        #     filepath_data_yaml=filepath_data_yaml_train_val, data_split=DataSplit.VAL
+        # )
+        # split_filepaths_test = get_split_filepaths(
+        #     filepath_data_yaml=filepath_data_yaml_test, data_split=DataSplit.TEST
+        # )
+        #
+        # split_summary_train = get_split_summary(split_filepaths_train)
+        # split_summary_val = get_split_summary(split_filepaths_val)
+        # split_summary_test = get_split_summary(split_filepaths_test)
+        #
+        # logger.info(f"train split summary: {split_summary_train}")
+        # logger.info(f"val split summary: {split_summary_val}")
+        # logger.info(f"test split summary: {split_summary_test}")
+        #
+        # hashes = compute_all_hashes(
+        #     filepath_data_yaml_train_val=filepath_data_yaml_train_val,
+        #     filepath_data_yaml_test=filepath_data_yaml_test,
+        # )
+        #
+        # data_leakage_summary = to_data_leakage_summary(hashes=hashes)
+        # logger.info(f"data leakage summary: {data_leakage_summary}")
+        #
         filepath_output_yaml = save_dir / "report.yaml"
-        logger.info(f"Saving report in {filepath_output_yaml}")
-
-        write_report_yaml(
-            split_summary_train=split_summary_train,
-            split_summary_val=split_summary_val,
-            split_summary_test=split_summary_test,
-            filepath_output_yaml=filepath_output_yaml,
-            data_leakage_summary=data_leakage_summary,
-        )
+        # logger.info(f"Saving report in {filepath_output_yaml}")
+        #
+        # write_report_yaml(
+        #     split_summary_train=split_summary_train,
+        #     split_summary_val=split_summary_val,
+        #     split_summary_test=split_summary_test,
+        #     filepath_output_yaml=filepath_output_yaml,
+        #     data_leakage_summary=data_leakage_summary,
+        # )
 
         logger.info(
             f"Make some visualization plots based on the report.yaml file {filepath_output_yaml}"
         )
         make_analysis_plots(filepath_report_yaml=filepath_output_yaml)
-
-
-## REPL DRIVEN
-# args = {
-#     "save_dir": Path("data/reporting/wildfire"),
-#     "filepath_data_yaml_train_val": Path("data/processed/wildfire/data.yaml"),
-#     "filepath_data_yaml_test": Path("data/processed/wildfire_test/data.yaml"),
-#     "loglevel": "info",
-# }
-#
-# save_dir = args["save_dir"]
-# filepath_data_yaml_train_val = args["filepath_data_yaml_train_val"]
-# filepath_data_yaml_test = args["filepath_data_yaml_test"]
-# data_yaml_train_val = yaml_read(filepath_data_yaml_train_val)
-# data_yaml_test = yaml_read(filepath_data_yaml_test)
-#
-# data_yaml_train_val
-# data_yaml_test
-#
-# split_summary_train = split_summary(
-#     filepath_data_yaml_train_val, data_split=DataSplit.TRAIN
-# )
-# split_summary_val = split_summary(
-#     filepath_data_yaml_train_val, data_split=DataSplit.VAL
-# )
-# split_summary_test = split_summary(filepath_data_yaml_test, data_split=DataSplit.TEST)
-# split_summary_test
-#
-# parse_details(
-#     stem="pyronear_valbonne_3_2023_11_02T07_05_56.jpg",
-#     dataset_origin=DatasetOrigin.PYRONEAR,
-# )
-# parse_details(
-#     stem="pyronear_serre-de-barre-310_2024-09-02T13-12-23.jpg",
-#     dataset_origin=DatasetOrigin.PYRONEAR,
-# )
-# parse_details(
-#     stem="pyronear_serre-de-barre-250_2024-08-25T11-19-22.jpg",
-#     dataset_origin=DatasetOrigin.PYRONEAR,
-# )
-#
-# s1 = "pyronear_valbonne_3_2023_11_02T07_05_56.jpg"
-# s2 = "pyronear_serre-de-barre-310_2024-09-02T13-12-23.jpg"
-# s3 = "pyronear_serre-de-barre-250_2024-08-25T11-19-22.jpg"
-# s4 = "Pyronear_test_DS_00000328.jpg"
-# s5 = "pyronear_st_peray_2_2023_07_12T13_24_14.jpg"
-#
-# parse_pyronear_camera_details(s1)
-# parse_pyronear_camera_details(s2)
-# parse_pyronear_camera_details(s3)
-# parse_pyronear_camera_details(s4)
-# parse_pyronear_camera_details(s5)
