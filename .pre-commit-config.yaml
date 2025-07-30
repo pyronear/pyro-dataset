@@ -1,0 +1,31 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(infra/|\.dvc/|\.gitignore|README\.md|.*\.lock$)
+      - id: end-of-file-fixer
+        exclude: ^(infra/|\.dvc/|.*\.lock$)
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: debug-statements
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.12.7
+    hooks:
+      # Run the linter.
+      - id: ruff-check
+        args: [ --fix, --select, I]
+      # Run the formatter.
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: no-commit-to-branch
+        name: Don't commit to main branch
+        entry: bash -c 'if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]]; then echo "Direct commits to main branch are not allowed"; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true

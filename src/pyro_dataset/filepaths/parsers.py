@@ -2,11 +2,11 @@
 Parser utils to parse filepaths and stems from the datasets.
 """
 
+import logging
 import re
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-import logging
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
