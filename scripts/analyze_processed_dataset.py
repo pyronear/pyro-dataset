@@ -45,7 +45,8 @@ from pyro_dataset.plots.report import (
     make_plot_data_for_data_splits_camera_origins_breakdown_top_k_split,
     make_plot_data_for_data_splits_month_breakdown,
     make_plot_data_for_data_splits_year_breakdown,
-    make_plot_data_for_ratio_background_images)
+    make_plot_data_for_ratio_background_images,
+)
 from pyro_dataset.utils import yaml_read, yaml_write
 
 
