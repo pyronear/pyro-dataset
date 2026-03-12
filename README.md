@@ -48,216 +48,95 @@ Run the pipeline to build the dataset:
 dvc repro
 ```
 
-## Data Pipeline
+## Adding Data
 
-The whole repository is organized as a data pipeline that can be run to
-generate the different datasets.
+Before running the DVC pipeline, you can add new sequences to the raw datasets.
 
-The Data pipeline is organized with a [dvc.yaml](./dvc.yaml) file.
-
-### DVC stages
-
-This section list and describes all the DVC stages that are defined in the
-[dvc.yaml](./dvc.yaml) file:
-
-#### ⛱️ Data Preparation
-
-- __data_pyro_sdis_testset__: Turn the parquet files of the
-__pyro-sdis-testset__ dataset into a regular ultralytics folder structure.
-
-#### 🧠 Model Inference
-
-- __predictions_wise_wolf_pyro_sdis_val__: Run inference on all images from the
-pyro-sdis val split with the `wise_wolf` model.
-- __predictions_legendary_field_pyro_sdis_val__: Run inference on all images
-from the pyro-sdis val split with the `legendary_field` model.
-- __predictions_wise_wolf_FP_2024__: Run inference on all images from the
-FP_2024 dataset with the `wise_wolf` model.
-- __crops_wise_wolf_pyro_sdis_val__: Generate crops from the predictions of the
-`wise_wolf` model on the pyro-sdis val split.
-- __crops_wise_wolf_FP_2024__: Generate crops from the predictions of the
-`wise_wolf` model on the FP_2024 dataset.
-
-#### 🚭 Filtering
-
-- __filter_data_pyrosdis_smoke__: Keep only the fire smokes from the
-`pyro-sdis` dataset - remove the background images.
-- __filter_data_figlib_smoke__: Keep only the fire smokes from the
-`FIGLIB_ANNOTATED_RESIZED` dataset - remove the background images.
-- __filter_data_pyronear_ds_smoke__: Keep only the fire smokes from the
-`pyronear-ds-03-2024` dataset - remove the background images.
-- __filter_data_false_positives_FP_2024__: Keep only the false positives that
-the `wise_wolf` has made on the `FP_2024` dataset.
-
-#### 🍞 Data Splitting
-
-- __split_data_figlib__: Split the `FIGLIB_ANNOTATED_RESIZED` dataset into
-train/val/test sets.
-- __split_data_false_positives_FP_2024__: Split the false postives dataset into
-train/val/test sets.
-- __merge_smoke_datasets__: Merge the different data sources of fire smokes and
-split into the train/val/test sets.
-
-#### 🧬 Dataset Creation
-
-##### Wildfire Dataset
-
-- __make_train_val_wildfire_dataset__: Make the train/val `wildfire` dataset
-using the previous stages.
-- __make_test_wildfire_dataset__: Make the test `wildfire` dataset using the
-previous stages.
-
-##### Temporal Dataset
-
-- __make_temporal_train_val_dataset__: Make the train/val temporal `wildfire`
-dataset using the previous stages.
-- __make_temporal_test_dataset__: Make the test temporal `wildfire` dataset
-using the previous stages.
-
-#### 🔎 Dataset Analysis
-
-- __analyze_wildfire_dataset__: Run some analyses on the generated dataset to
-check for data leakage, data distribution, and background images. Some
-interactive plots are also generated and exported.
-
-## Data
-
-### Raw
-
-The datasets below are the foundation of our data pipeline and are the source
-of truth.
-
-- __FIGLIB_ANNOTATED_RESIZED__: re-annotated dataset from the [Fire Ignition
-images Library](https://www.hpwren.ucsd.edu/FIgLib/).
-- __DS_fp__: All the collected false positives of the Pyronear System before 2024.
-- __FP_2024__: All the collected false positives of the Pyronear System in 2024.
-- [__pyro-sdis__](https://huggingface.co/datasets/pyronear/pyro-sdis):
-Pyro-SDIS is a dataset designed for wildfire smoke detection using AI models.
-It is developed in collaboration with the Fire and Rescue Services (SDIS) in
-France and the dedicated volunteers of the Pyronear association. It contains
-only detected fires by the Pyronear System.
-- __pyronear-ds-03-2024__: Dataset of fire smokes as a mix of different public
-datasets and synthetic images. It also includes temporal sequences of fire
-events.
-- [__pyro-sdis-testset__](https://huggingface.co/datasets/pyronear/pyro-sdis-testset):
-Private dataset used for evaluating the final performances of the ML models.
-- __Test_dataset_2025__: built from Test_DS by adding extra false positives.
-- __Test_DS__: The initial and curated test dataset.
-
-### Interim
-
-All the folders located in `./data/interim/` are intermediary results needed to
-build up the final datasets. They are versioned with DVC.
-
-Many artifacts and datasets can be found here: from cropped image areas, to
-filtered datasets to focus on false positives for instance.
-
-- __false_positives__: curated and annotated dataset containing false positives
-from the pyronear systems.
-
-### Processed
-
-The final datasets are located in `./data/processed/`:
-
-- 🔥 __wildfire__: the train/val dataset used to train our ML models. It
-follows the ultralytics format.
-- 🔥 __wildfire_test__: the test dataset used to evaluate the performance of
-our ML models.
-- ⏰ __wildfire_temporal__: the train/val dataset used to train our temporal ML
-models.
-- ⏰ __wildfire_temporal_test__: the test dataset used to evaluate the performance of
-our temporal ML models and the pyronear engine.
-
-### Reporting
-
-Once the datasets are generated and stored in the `./data/processed/`
-directory, various reports are created to visualize the data. These reports
-break down the datasets across different dimensions, allowing for a quick
-assessment of whether the various data splits are logical and meaningful.
-
-These reports live under `./data/reporting/`.
-
-## Scripts
-
-Scripts are located in the `./scripts` folder.
-
-Most scripts are connected via the [dvc.yaml](./dvc.yaml) configuration file.
-Others are utility scripts that can be used to perform various tasks.
-
-### [fetch_platform_sequence_id.py](./scripts/fetch_platform_sequence_id.py)
-
-Fetch a detection sequences by its sequence-id directly from the Pyronear
-platform API.
-
-```bash
-export PLATFORM_API_ENDPOINT="https://alertapi.pyronear.org"
-export PLATFORM_LOGIN=sdis-07
-export PLATFORM_PASSWORD=XXX
-export PLATFORM_ADMIN_LOGIN=XXX
-export PLATFORM_ADMIN_PASSWORD=XXX
-
-uv run python ./scripts/platform_train_loop/fetch_platform_sequence_id.py \
-  --save-dir ./data/raw/pyronear-platform/sequences/my-sequence-5347/ \
-  --sequence-id 5347
-```
-
-__Note__: Make sure to use an admin login/password as well as a regular
-login/password. The admin level access is needed to fetch information about the
-organizations and properly name the detection images locally.
-
-### [fetch_platform_sequences.py](./scripts/fetch_platform_sequences.py)
-
-Fetch detection sequences directly from the Pyronear platform API.
-
-Fetch all the detection sequences for `sdis-07` and save them in the specified
-directory:
-
-```bash
-export PLATFORM_API_ENDPOINT="https://alertapi.pyronear.org"
-export PLATFORM_LOGIN=sdis-07
-export PLATFORM_PASSWORD=XXX
-export PLATFORM_ADMIN_LOGIN=XXX
-export PLATFORM_ADMIN_PASSWORD=XXX
-
-uv run python ./scripts/platform_train_loop/fetch_platform_sequences.py \
-  --save-dir ./data/raw/pyronear-platform/sequences/sdis-07/ \
-  --date-from 2025-05-01 \
-  --date-end 2025-06-01
-```
-
-__Note__: Make sure to use an admin login/password as well as a regular
-login/password. The admin level access is needed to fetch information about the
-organizations and properly name the detection images locally.
-
-
-## 🧠 Models
-
-- 🌈 __legendary_field__: yolov8s object detection model, first performant model
-trained in 2019. to detect fire smoke.
-- 🐺 __wise_wolf__: yolov11s object detection model, trained on `2024-04-26` using
-a larger dataset.
-
-## 🌎 Release the datasets
-
-The script to release a new version of the model is located in
-`./scripts/release.py`.
-Make sure to set your `GITHUB_ACCESS_TOKEN` as an env variable in your shell
-before running the following script:
+### 1. Pull existing raw data
 
 ```sh
-export GITHUB_ACCESS_TOKEN=XXX
-uv run python ./scripts/release.py \
-  --version v1.3.5 \
-  --github-owner earthtoolsmaker \
-  --github-repo pyro-dataset
+dvc pull
 ```
 
-This will create a new release in the github repository with and upload an
-archive of the datasets to a private S3 repository. The link to the dataset is
-displayed in the release summary.
+### 2. Add new sequences
 
-## Run the tests
+```sh
+# Add new wildfire sequences
+uv run python scripts/add_data.py --src /path/to/new/wildfire/sequences --type wildfire
 
-```bash
-uv run pytest tests/
+# Add new false positive sequences
+uv run python scripts/add_data.py --src /path/to/new/fp/sequences --type fp
 ```
+
+This copies the folders into `data/raw/<type>/data/`, validates naming and structure, assigns stable train/val/test splits (80/10/10 per camera), and updates `data/raw/<type>/registry.json`.
+
+Use `--dry-run` to preview without writing anything.
+
+### 3. Track and push the new data
+
+Re-add the updated folder(s) to DVC and push to remote storage:
+
+```sh
+# For wildfire
+uv run dvc add data/raw/wildfire
+git add data/raw/wildfire.dvc
+dvc push data/raw/wildfire
+
+# For false positives
+uv run dvc add data/raw/fp
+git add data/raw/fp.dvc
+dvc push data/raw/fp
+```
+
+### 4. Run the pipeline
+
+```sh
+dvc repro
+```
+
+---
+
+## Data Pipeline
+
+### Stages
+
+- **build_wf_yolo_dataset**: Samples up to 10 labeled images per wildfire sequence and copies them into a YOLO-format dataset (`data/processed/wildfire_yolo/`), split into train/val/test according to `registry.json`.
+- **build_fp_yolo_dataset**: Samples false positive images using round-robin by max detection score. Quotas: 10% FP for train/val, 50% FP for test. Outputs to `data/processed/fp_yolo/`.
+- **merge_yolo_dataset**: Merges wildfire and FP images into two final datasets — `data/processed/yolo_train_val/` and `data/processed/yolo_test/`.
+
+---
+
+## Dataset Versioning
+
+All dataset versions are tracked via Git tags. Each tag points to a specific `dvc.lock`, which records the exact content hashes of every output.
+
+### Release a new version
+
+```sh
+# 1. Produce datasets
+uv run dvc repro
+
+# 2. Push data to remote
+uv run dvc push
+
+# 3. Commit and tag
+git add dvc.lock data/raw/wildfire.dvc data/raw/fp.dvc
+git commit -m "dataset: release v1.0.0"
+git tag v1.0.0
+git push && git push --tags
+```
+
+### Use a specific version in another repo
+
+```sh
+# Import locked to a tag (reproducible, updatable)
+dvc import https://github.com/pyronear/pyro-dataset data/processed/yolo_train_val --rev v1.0.0
+dvc import https://github.com/pyronear/pyro-dataset data/processed/yolo_test --rev v1.0.0
+
+# Update to latest
+dvc update yolo_train_val.dvc
+dvc update yolo_test.dvc
+```
+
+---
+
