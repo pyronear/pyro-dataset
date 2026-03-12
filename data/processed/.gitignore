@@ -2,3 +2,9 @@
 /wildfire_test
 /wildfire_temporal_test
 /wildfire_temporal
+/wildfire_yolo
+/fp_yolo
+/yolo_train_val
+/yolo_test
+/sequential_train_val
+/sequential_test

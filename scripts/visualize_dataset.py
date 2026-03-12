@@ -36,13 +36,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--dir-save",
         help="directory to save the filtered dataset.",
         type=Path,
-        default=Path("./data/reporting/viz/wildfire_test/"),
+        default=Path("./data/reporting/viz/yolo_train_val/"),
     )
     parser.add_argument(
         "--dir-dataset",
         help="directory containing the dataset to visualize.",
         type=Path,
-        default=Path("./data/processed/wildfire_test"),
+        default=Path("./data/processed/yolo_train_val"),
     )
     parser.add_argument(
         "-log",
