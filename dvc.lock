@@ -565,3 +565,124 @@ stages:
       md5: eabf92be918e4074c8b4464c73be9816.dir
       size: 67820000
       nfiles: 1266
+  build_wf_yolo_dataset:
+    cmd: uv run python scripts/build_wf_yolo_dataset.py --registry data/raw/wildfire/registry.json
+      --data-dir data/raw/wildfire/data --output data/processed/wildfire_yolo --max-per-seq
+      10 --random-seed 0
+    deps:
+    - path: data/raw/wildfire/data
+      hash: md5
+      md5: 55c1a6f711b7fd0264c6c83df284c671.dir
+      size: 5477459928
+      nfiles: 99286
+    - path: data/raw/wildfire/registry.json
+      hash: md5
+      md5: e8351f5f63bc681a39e1961187a5182f
+      size: 311100
+    - path: scripts/build_wf_yolo_dataset.py
+      hash: md5
+      md5: 6a3dfd83e1cd778b1427735e274d7cb5
+      size: 4771
+    outs:
+    - path: data/processed/wildfire_yolo
+      hash: md5
+      md5: 002431ee89345e9412bf67fbd3b7e399.dir
+      size: 1710081554
+      nfiles: 29220
+  build_fp_yolo_dataset:
+    cmd: uv run python scripts/build_fp_yolo_dataset.py --registry data/raw/fp/registry.json
+      --data-dir data/raw/fp/data --wf-dataset data/processed/wildfire_yolo --output
+      data/processed/fp_yolo --random-seed 0
+    deps:
+    - path: data/processed/wildfire_yolo
+      hash: md5
+      md5: 002431ee89345e9412bf67fbd3b7e399.dir
+      size: 1710081554
+      nfiles: 29220
+    - path: data/raw/fp/data
+      hash: md5
+      md5: 9e107af21109c9169c0f043ad3a2b643.dir
+      size: 11114620594
+      nfiles: 203968
+    - path: data/raw/fp/registry.json
+      hash: md5
+      md5: b0633256eaae6a932a930bab55d2a1a0
+      size: 1278759
+    - path: scripts/build_fp_yolo_dataset.py
+      hash: md5
+      md5: 98768808e66c4f24d2df1f6e86e63627
+      size: 7459
+    outs:
+    - path: data/processed/fp_yolo
+      hash: md5
+      md5: aee3e53e754be6843da671965bc15b8b.dir
+      size: 289633658
+      nfiles: 5518
+  merge_yolo_dataset:
+    cmd: uv run python scripts/merge_yolo_dataset.py --wf-dataset data/processed/wildfire_yolo
+      --fp-dataset data/processed/fp_yolo --output-train-val data/processed/yolo_train_val
+      --output-test data/processed/yolo_test
+    deps:
+    - path: data/processed/fp_yolo
+      hash: md5
+      md5: aee3e53e754be6843da671965bc15b8b.dir
+      size: 289633658
+      nfiles: 5518
+    - path: data/processed/wildfire_yolo
+      hash: md5
+      md5: 002431ee89345e9412bf67fbd3b7e399.dir
+      size: 1710081554
+      nfiles: 29220
+    - path: scripts/merge_yolo_dataset.py
+      hash: md5
+      md5: 3400403c037cc93fed4a9ab9ddde42a9
+      size: 4001
+    outs:
+    - path: data/processed/yolo_test
+      hash: md5
+      md5: d692e631dd0169e8e9dc919a73e19886.dir
+      size: 264199484
+      nfiles: 5113
+    - path: data/processed/yolo_train_val
+      hash: md5
+      md5: fdfd35a4ac94ba1468938f7e173cfc6c.dir
+      size: 1735515846
+      nfiles: 29627
+  visualize_yolo_train_val:
+    cmd: uv run python scripts/visualize_dataset.py --dir-dataset data/processed/yolo_train_val
+      --dir-save data/reporting/viz/yolo_train_val
+    deps:
+    - path: data/processed/yolo_train_val
+      hash: md5
+      md5: fdfd35a4ac94ba1468938f7e173cfc6c.dir
+      size: 1735515846
+      nfiles: 29627
+    - path: scripts/visualize_dataset.py
+      hash: md5
+      md5: 63de03fbd853783380afb2588ad2e5da
+      size: 5463
+    outs:
+    - path: data/reporting/viz/yolo_train_val
+      hash: md5
+      md5: 11d1930b16213eaba7e53cda15507628.dir
+      size: 3134620505
+      nfiles: 14813
+  visualize_yolo_test:
+    cmd: uv run python scripts/visualize_dataset.py --dir-dataset data/processed/yolo_test
+      --dir-save data/reporting/viz/yolo_test
+    deps:
+    - path: data/processed/yolo_test
+      hash: md5
+      md5: d692e631dd0169e8e9dc919a73e19886.dir
+      size: 264199484
+      nfiles: 5113
+    - path: scripts/visualize_dataset.py
+      hash: md5
+      md5: 63de03fbd853783380afb2588ad2e5da
+      size: 5463
+    outs:
+    - path: data/reporting/viz/yolo_test
+      hash: md5
+      md5: 3cc746771547082da95369e57be7d444.dir
+      size: 477640710
+      nfiles: 2556

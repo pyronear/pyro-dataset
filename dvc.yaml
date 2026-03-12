@@ -1,353 +1,69 @@
 ---
 stages:
-  data_pyro_sdis_testset:
-    cmd:
-      - >-
-        uv run ./scripts/install_local_huggingface_dataset.py
-        --save-dir "./data/raw/pyro-sdis-testset/"
-        --data-dir "./data/raw/pyro-sdis-testset-parquet/"
-        --loglevel "info"
+  build_wf_yolo_dataset:
+    cmd: >-
+      uv run python scripts/build_wf_yolo_dataset.py
+      --registry data/raw/wildfire/registry.json
+      --data-dir data/raw/wildfire/data
+      --output data/processed/wildfire_yolo
+      --max-per-seq 10
+      --random-seed 0
     deps:
-      - ./scripts/install_local_huggingface_dataset.py
-      - ./data/raw/pyro-sdis-testset-parquet/
+      - scripts/build_wf_yolo_dataset.py
+      - data/raw/wildfire/registry.json
+      - data/raw/wildfire/data
     outs:
-      - ./data/raw/pyro-sdis-testset/
+      - data/processed/wildfire_yolo
 
-  predictions_wise_wolf_pyro_sdis_val:
-    cmd:
-      - >-
-        uv run ./scripts/predict.py
-        --save-dir ./data/interim/pyro-sdis/val/predictions/wise_wolf/
-        --dir-images "./data/raw/pyro-sdis/images/val/"
-        --filepath-weights ./data/external/models/wise_wolf/weights/yolov11s.pt
-        --loglevel "info"
+  build_fp_yolo_dataset:
+    cmd: >-
+      uv run python scripts/build_fp_yolo_dataset.py
+      --registry data/raw/fp/registry.json
+      --data-dir data/raw/fp/data
+      --wf-dataset data/processed/wildfire_yolo
+      --output data/processed/fp_yolo
+      --random-seed 0
     deps:
-      - ./scripts/predict.py
-      - ./data/raw/pyro-sdis/images/val/
-      - ./data/external/models/wise_wolf/weights/yolov11s.pt
+      - scripts/build_fp_yolo_dataset.py
+      - data/raw/fp/registry.json
+      - data/raw/fp/data
+      - data/processed/wildfire_yolo
     outs:
-      - ./data/interim/pyro-sdis/val/predictions/wise_wolf/
+      - data/processed/fp_yolo
 
-  predictions_legendary_field_pyro_sdis_val:
-    cmd:
-      - >-
-        uv run ./scripts/predict.py
-        --save-dir ./data/interim/pyro-sdis/val/predictions/legendary_field/
-        --dir-images "./data/raw/pyro-sdis/images/val/"
-        --filepath-weights ./data/external/models/legendary_field/weights/legendary-field-19.pt
-        --loglevel "info"
+  merge_yolo_dataset:
+    cmd: >-
+      uv run python scripts/merge_yolo_dataset.py
+      --wf-dataset data/processed/wildfire_yolo
+      --fp-dataset data/processed/fp_yolo
+      --output-train-val data/processed/yolo_train_val
+      --output-test data/processed/yolo_test
     deps:
-      - ./scripts/predict.py
-      - ./data/raw/pyro-sdis/images/val/
-      - ./data/external/models/legendary_field/weights/legendary-field-19.pt
+      - scripts/merge_yolo_dataset.py
+      - data/processed/wildfire_yolo
+      - data/processed/fp_yolo
     outs:
-      - ./data/interim/pyro-sdis/val/predictions/legendary_field/
+      - data/processed/yolo_train_val
+      - data/processed/yolo_test
 
-  predictions_wise_wolf_FP_2024:
-    cmd:
-      - >-
-        uv run ./scripts/predict.py
-        --save-dir ./data/interim/FP_2024/predictions/wise_wolf/
-        --dir-images ./data/raw/FP_2024/
-        --filepath-weights ./data/external/models/wise_wolf/weights/yolov11s.pt
-        --loglevel "info"
+  visualize_yolo_train_val:
+    cmd: >-
+      uv run python scripts/visualize_dataset.py
+      --dir-dataset data/processed/yolo_train_val
+      --dir-save data/reporting/viz/yolo_train_val
     deps:
-      - ./scripts/predict.py
-      - ./data/raw/FP_2024/
-      - ./data/external/models/wise_wolf/weights/yolov11s.pt
+      - scripts/visualize_dataset.py
+      - data/processed/yolo_train_val
     outs:
-      - ./data/interim/FP_2024/predictions/wise_wolf/
+      - data/reporting/viz/yolo_train_val
 
-  crops_wise_wolf_pyro_sdis_val:
-    cmd:
-      - >-
-        uv run ./scripts/crop_with_prediction.py
-        --save-dir ./data/interim/pyro-sdis/val/crops/wise_wolf/
-        --target-size 224
-        --dir-images ./data/raw/pyro-sdis/images/val/
-        --dir-predictions ./data/interim/pyro-sdis/val/predictions/wise_wolf
-        --loglevel "info"
+  visualize_yolo_test:
+    cmd: >-
+      uv run python scripts/visualize_dataset.py
+      --dir-dataset data/processed/yolo_test
+      --dir-save data/reporting/viz/yolo_test
     deps:
-      - ./scripts/crop_with_prediction.py
-      - ./data/raw/pyro-sdis/images/val/
-      - ./data/interim/pyro-sdis/val/predictions/wise_wolf
+      - scripts/visualize_dataset.py
+      - data/processed/yolo_test
     outs:
-      - ./data/interim/pyro-sdis/val/crops/wise_wolf/
-
-  crops_wise_wolf_FP_2024:
-    cmd:
-      - >-
-        uv run ./scripts/crop_with_prediction.py
-        --save-dir ./data/interim/FP_2024/crops/wise_wolf/
-        --target-size 224
-        --dir-images ./data/raw/FP_2024/
-        --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf
-        --loglevel "info"
-    deps:
-      - ./scripts/crop_with_prediction.py
-      - ./data/raw/FP_2024/
-      - ./data/interim/FP_2024/predictions/wise_wolf
-    outs:
-      - ./data/interim/FP_2024/crops/wise_wolf/
-
-  filter_data_pyrosdis_smoke:
-    cmd:
-      - >-
-        uv run ./scripts/filter_data_pyrosdis_smoke.py
-        --save-dir ./data/interim/filtered/smoke/pyro-sdis/
-        --dir-dataset ./data/raw/pyro-sdis/
-        --loglevel "info"
-    deps:
-      - ./scripts/filter_data_pyrosdis_smoke.py
-      - ./data/raw/pyro-sdis/
-    outs:
-      - ./data/interim/filtered/smoke/pyro-sdis/
-
-  filter_data_figlib_smoke:
-    cmd:
-      - >-
-        uv run ./scripts/filter_data_figlib_smoke.py
-        --save-dir ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
-        --dir-dataset ./data/raw/FIGLIB_ANNOTATED_RESIZED/
-        --loglevel "info"
-    deps:
-      - ./scripts/filter_data_figlib_smoke.py
-      - ./data/raw/FIGLIB_ANNOTATED_RESIZED/
-    outs:
-      - ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
-
-  filter_data_pyronear_ds_smoke:
-    cmd:
-      - >-
-        uv run ./scripts/filter_data_pyronear_ds_smoke.py
-        --save-dir ./data/interim/filtered/smoke/pyronear_ds_03_2024/
-        --allowed-dataset-prefixes "pyronear" "awf" "random" "adf"
-        --dir-dataset ./data/raw/pyronear_ds_03_2024/
-        --loglevel "info"
-    deps:
-      - ./scripts/filter_data_pyronear_ds_smoke.py
-      - ./data/raw/pyronear_ds_03_2024/
-    outs:
-      - ./data/interim/filtered/smoke/pyronear_ds_03_2024/
-
-  split_data_figlib:
-    cmd:
-      - >-
-        uv run ./scripts/split_figlib.py
-        --save-dir ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
-        --dir-dataset ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
-        --random-seed 0
-        --ratio-train-val 0.9
-        --loglevel "info"
-    deps:
-      - ./scripts/split_figlib.py
-      - ./data/interim/filtered/smoke/FIGLIB_ANNOTATED_RESIZED/
-    outs:
-      - ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
-
-  merge_smoke_datasets:
-    cmd:
-      - >-
-        uv run ./scripts/merge_smoke_datasets.py
-        --save-dir ./data/interim/data-split/smoke/wildfire/
-        --dir-datasets ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/ ./data/interim/filtered/smoke/pyro-sdis/ ./data/interim/filtered/smoke/pyronear_ds_03_2024/
-        --loglevel "info"
-    deps:
-      - ./scripts/merge_smoke_datasets.py
-      - ./data/interim/data-split/smoke/FIGLIB_ANNOTATED_RESIZED/
-      - ./data/interim/filtered/smoke/pyro-sdis/
-      - ./data/interim/filtered/smoke/pyronear_ds_03_2024/
-    outs:
-      - ./data/interim/data-split/smoke/wildfire/
-
-  filter_data_false_positives_FP_2024:
-    cmd:
-      - >-
-        uv run ./scripts/filter_data_false_positives.py
-        --save-dir ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
-        --dir-dataset ./data/raw/FP_2024/
-        --dir-predictions ./data/interim/FP_2024/predictions/wise_wolf/
-        --loglevel "info"
-    deps:
-      - ./scripts/filter_data_figlib_smoke.py
-      - ./data/raw/FP_2024/
-      - ./data/interim/FP_2024/predictions/wise_wolf/
-    outs:
-      - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
-
-  split_data_false_positives_FP_2024:
-    cmd:
-      - >-
-        uv run ./scripts/split_false_positives.py
-        --save-dir ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-        --dir-dataset ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
-        --random-seed 0
-        --ratio-train-val 0.9
-        --ratio-val-test 0.5
-        --loglevel "info"
-    deps:
-      - ./scripts/split_false_positives.py
-      - ./data/interim/filtered/false_positives/FP_2024/wise_wolf/
-    outs:
-      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-
-  make_train_val_wildfire_dataset:
-    cmd:
-      - >-
-        uv run ./scripts/make_train_val_dataset.py
-        --save-dir ./data/processed/wildfire/
-        --dir-data-split-smoke ./data/interim/data-split/smoke/wildfire/
-        --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
-        --random-seed 0
-        --percentage-background-images 0.1
-        --loglevel "info"
-    deps:
-      - ./scripts/make_train_val_dataset.py
-      - ./data/interim/data-split/smoke/wildfire/
-      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-      - ./data/interim/pyronear-platform/sequences-ultralytics/
-    outs:
-      - ./data/processed/wildfire/
-
-  make_test_wildfire_dataset:
-    cmd:
-      - >-
-        uv run ./scripts/make_test_dataset.py
-        --save-dir ./data/processed/wildfire_test/
-        --dir-previous-test-dataset ./data/raw/Test_dataset_2025/
-        --dir-data-split-false-positives ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-        --dirs-ultralytics-datasets ./data/interim/pyronear-platform/sequences-ultralytics/
-        --random-seed 0
-        --percentage-background-images 0.1
-        --loglevel "info"
-    deps:
-      - ./scripts/make_test_dataset.py
-      - ./data/raw/Test_dataset_2025/
-      - ./data/interim/data-split/false_positives/FP_2024/wise_wolf/
-      - ./data/interim/pyronear-platform/sequences-ultralytics/
-    outs:
-      - ./data/processed/wildfire_test/
-
-  analyze_wildfire_dataset:
-    cmd:
-      - >-
-        uv run ./scripts/analyze_processed_dataset.py
-        --save-dir ./data/reporting/wildfire/
-        --filepath-data-yaml-train-val ./data/processed/wildfire/data.yaml
-        --filepath-data-yaml-test ./data/processed/wildfire_test/data.yaml
-        --loglevel "info"
-    deps:
-      - ./scripts/analyze_processed_dataset.py
-      - ./data/processed/wildfire/
-      - ./data/processed/wildfire_test/
-    outs:
-      - ./data/reporting/wildfire/
-
-  build_manifest_dataset:
-    cmd:
-      - >-
-        uv run ./scripts/build_manifest.py
-        --save-dir ./data/reporting/manifest/
-        --dir-wildfire-dataset-train-val ./data/processed/wildfire/
-        --dir-wildfire-dataset-test ./data/processed/wildfire_test/
-        --loglevel "info"
-    deps:
-      - ./scripts/build_manifest.py
-      - ./data/processed/wildfire/
-      - ./data/processed/wildfire_test/
-    outs:
-      - ./data/reporting/manifest/
-
-  select_platform_sequences:
-    cmd:
-      - >-
-        uv run python ./scripts/platform_train_loop/select_detections.py
-        --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences/
-        --dir-save ./data/interim/pyronear-platform/sequences/
-        --number-detections-per-sequence-true-positive 3
-        --number-detections-per-sequence-false-positive 3
-        --loglevel "info"
-    deps:
-      - ./scripts/platform_train_loop/select_detections.py
-      - ./data/raw/pyronear-platform-annotated-sequences/
-    outs:
-      - ./data/interim/pyronear-platform/sequences/
-
-  split_platform_sequences:
-    cmd:
-      - >-
-        uv run python ./scripts/platform_train_loop/split_selected_sequences.py
-        --dir-platform-selected-sequences ./data/interim/pyronear-platform/sequences/
-        --dir-save ./data/interim/pyronear-platform/sequences-data-split/
-        --random-seed 0
-        --ratio-background-train 0.7
-        --ratio-background-val-test 0.1
-        --ratio-smoke-train 0.1
-        --ratio-smoke-val-test 0.2
-        --loglevel "info"
-    deps:
-      - ./data/interim/pyronear-platform/sequences/
-      - ./scripts/platform_train_loop/split_selected_sequences.py
-    outs:
-      - ./data/interim/pyronear-platform/sequences-data-split/
-
-  make_ultralytics_dataset_from_platform_sequences:
-    cmd:
-      - >-
-        uv run python ./scripts/platform_train_loop/make_ultralytics_dataset.py
-        --dir-save ./data/interim/pyronear-platform/sequences-ultralytics/
-        --dir-data-split ./data/interim/pyronear-platform/sequences-data-split/
-        --loglevel "info"
-    deps:
-      - ./scripts/platform_train_loop/make_ultralytics_dataset.py
-      - ./data/interim/pyronear-platform/sequences-data-split/
-    outs:
-      - ./data/interim/pyronear-platform/sequences-ultralytics/
-
-  make_temporal_dataset_from_platform_sequences:
-    cmd:
-      - >-
-        uv run python ./scripts/platform_train_loop/make_temporal_dataset.py
-        --dir-save ./data/interim/pyronear-platform/sequences-temporal/
-        --dir-sequences-data-split ./data/interim/pyronear-platform/sequences-data-split/
-        --dir-platform-annotated-sequences ./data/raw/pyronear-platform-annotated-sequences/
-        --loglevel "info"
-    deps:
-      - ./scripts/platform_train_loop/make_temporal_dataset.py
-      - ./data/interim/pyronear-platform/sequences-data-split/
-      - ./data/raw/pyronear-platform-annotated-sequences/
-    outs:
-      - ./data/interim/pyronear-platform/sequences-temporal/
-
-  make_temporal_test_dataset:
-    cmd:
-      - >-
-        uv run python ./scripts/make_temporal_test_dataset.py
-        --dir-save ./data/processed/wildfire_temporal_test/
-        --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
-        --dir-selection-sequence-temporal ./data/raw/wildfire_temporal_test_selection/
-        --ratio-background 0.5
-        --random-seed 0
-        --loglevel "info"
-    deps:
-      - ./scripts/make_temporal_test_dataset.py
-      - ./data/raw/wildfire_temporal_test_selection/
-      - ./data/interim/pyronear-platform/sequences-temporal/
-    outs:
-      - ./data/processed/wildfire_temporal_test/
-
-  make_temporal_train_val_dataset:
-    cmd:
-      - >-
-        uv run python ./scripts/make_temporal_train_val_dataset.py
-        --dir-save ./data/processed/wildfire_temporal/
-        --dir-platform-sequence-temporal ./data/interim/pyronear-platform/sequences-temporal/
-        --ratio-background 0.5
-        --random-seed 0
-        --loglevel "info"
-    deps:
-      - ./scripts/make_temporal_train_val_dataset.py
-      - ./data/interim/pyronear-platform/sequences-temporal/
-    outs:
-      - ./data/processed/wildfire_temporal/
+      - data/reporting/viz/yolo_test
