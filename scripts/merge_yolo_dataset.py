@@ -86,6 +86,9 @@ if __name__ == "__main__":
     splits_test = ["test"]
 
     if not dry_run:
+        for out in (out_tv, out_test):
+            if out.exists():
+                shutil.rmtree(out)
         for split in splits_tv:
             (out_tv / "images" / split).mkdir(parents=True, exist_ok=True)
             (out_tv / "labels" / split).mkdir(parents=True, exist_ok=True)

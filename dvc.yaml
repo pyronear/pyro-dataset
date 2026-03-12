@@ -66,6 +66,23 @@ stages:
       - data/processed/sequential_train_val
       - data/processed/sequential_test
 
+  build_toy_dataset:
+    cmd: >-
+      uv run python scripts/build_toy_dataset.py
+      --yolo-src data/processed/yolo_train_val
+      --seq-src data/processed/sequential_train_val
+      --yolo-output data/processed/yolo_toy
+      --seq-output data/processed/sequential_toy
+      --ratio 0.05
+      --random-seed 0
+    deps:
+      - scripts/build_toy_dataset.py
+      - data/processed/yolo_train_val
+      - data/processed/sequential_train_val
+    outs:
+      - data/processed/yolo_toy
+      - data/processed/sequential_toy
+
   visualize_yolo_train_val:
     cmd: >-
       uv run python scripts/visualize_dataset.py

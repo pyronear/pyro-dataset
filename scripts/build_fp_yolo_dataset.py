@@ -186,6 +186,8 @@ if __name__ == "__main__":
         by_split[split].append(candidates)
 
     if not dry_run:
+        if output.exists():
+            shutil.rmtree(output)
         for split in SPLITS:
             (output / "images" / split).mkdir(parents=True, exist_ok=True)
             (output / "labels" / split).mkdir(parents=True, exist_ok=True)

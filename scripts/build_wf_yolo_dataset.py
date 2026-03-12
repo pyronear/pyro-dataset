@@ -104,6 +104,8 @@ if __name__ == "__main__":
     skipped = 0
 
     if not dry_run:
+        if output.exists():
+            shutil.rmtree(output)
         for split in splits:
             (output / "images" / split).mkdir(parents=True, exist_ok=True)
             (output / "labels" / split).mkdir(parents=True, exist_ok=True)

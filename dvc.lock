@@ -581,8 +581,8 @@ stages:
       size: 311100
     - path: scripts/build_wf_yolo_dataset.py
       hash: md5
-      md5: 6a3dfd83e1cd778b1427735e274d7cb5
-      size: 4771
+      md5: 2ae369eb051990ed11268f40fe0cba42
+      size: 4833
     outs:
     - path: data/processed/wildfire_yolo
       hash: md5
@@ -610,8 +610,8 @@ stages:
       size: 1278759
     - path: scripts/build_fp_yolo_dataset.py
       hash: md5
-      md5: 98768808e66c4f24d2df1f6e86e63627
-      size: 7459
+      md5: a4138aa3ebf25a67521590bc966929a7
+      size: 7521
     outs:
     - path: data/processed/fp_yolo
       hash: md5
@@ -635,8 +635,8 @@ stages:
       nfiles: 29220
     - path: scripts/merge_yolo_dataset.py
       hash: md5
-      md5: 3400403c037cc93fed4a9ab9ddde42a9
-      size: 4001
+      md5: d663221ed657bad88c40690092277942
+      size: 4104
     outs:
     - path: data/processed/yolo_test
       hash: md5
@@ -725,3 +725,33 @@ stages:
       md5: c6bdd86c63a7d32a2b4c170320c5f108.dir
       size: 7652814446
       nfiles: 145588
+  build_toy_dataset:
+    cmd: uv run python scripts/build_toy_dataset.py --yolo-src data/processed/yolo_train_val
+      --seq-src data/processed/sequential_train_val --yolo-output data/processed/yolo_toy
+      --seq-output data/processed/sequential_toy --ratio 0.05 --random-seed 0
+    deps:
+    - path: data/processed/sequential_train_val
+      hash: md5
+      md5: c6bdd86c63a7d32a2b4c170320c5f108.dir
+      size: 7652814446
+      nfiles: 145588
+    - path: data/processed/yolo_train_val
+      hash: md5
+      md5: fdfd35a4ac94ba1468938f7e173cfc6c.dir
+      size: 1735515846
+      nfiles: 29627
+    - path: scripts/build_toy_dataset.py
+      hash: md5
+      md5: 98fd6bf91c151e9ce4013a688bdc6656
+      size: 5655
+    outs:
+    - path: data/processed/sequential_toy
+      hash: md5
+      md5: 29be5095fb2de33d298f3ffa372f4223.dir
+      size: 371266353
+      nfiles: 7296
+    - path: data/processed/yolo_toy
+      hash: md5
+      md5: b93feaa20ddb51e7f9be3dece60d10e7.dir
+      size: 90656352
+      nfiles: 1483
