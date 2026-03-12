@@ -1,0 +1,6 @@
+outs:
+- md5: eab1ed84b3b3a0fb1fa764dabe0b4c31.dir
+  size: 5477777176
+  nfiles: 99288
+  hash: md5
+  path: wildfire
