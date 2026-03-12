@@ -6,3 +6,5 @@
 /fp_yolo
 /yolo_train_val
 /yolo_test
+/sequential_train_val
+/sequential_test

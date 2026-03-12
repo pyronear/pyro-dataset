@@ -686,3 +686,42 @@ stages:
       md5: 3cc746771547082da95369e57be7d444.dir
       size: 477640710
       nfiles: 2556
+  build_sequential_dataset:
+    cmd: uv run python scripts/build_sequential_dataset.py --wf-registry data/raw/wildfire/registry.json
+      --wf-data-dir data/raw/wildfire/data --fp-registry data/raw/fp/registry.json
+      --fp-data-dir data/raw/fp/data --output-train-val data/processed/sequential_train_val
+      --output-test data/processed/sequential_test --random-seed 0
+    deps:
+    - path: data/raw/fp/data
+      hash: md5
+      md5: 9e107af21109c9169c0f043ad3a2b643.dir
+      size: 11114620594
+      nfiles: 203968
+    - path: data/raw/fp/registry.json
+      hash: md5
+      md5: b0633256eaae6a932a930bab55d2a1a0
+      size: 1278759
+    - path: data/raw/wildfire/data
+      hash: md5
+      md5: 55c1a6f711b7fd0264c6c83df284c671.dir
+      size: 5477459928
+      nfiles: 99286
+    - path: data/raw/wildfire/registry.json
+      hash: md5
+      md5: e8351f5f63bc681a39e1961187a5182f
+      size: 311100
+    - path: scripts/build_sequential_dataset.py
+      hash: md5
+      md5: 112c8039142cfcb6813cc8e5ee685078
+      size: 7294
+    outs:
+    - path: data/processed/sequential_test
+      hash: md5
+      md5: b0bc051efce8015ff870d696774ff6bd.dir
+      size: 790646840
+      nfiles: 16142
+    - path: data/processed/sequential_train_val
+      hash: md5
+      md5: c6bdd86c63a7d32a2b4c170320c5f108.dir
+      size: 7652814446
+      nfiles: 145588

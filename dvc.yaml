@@ -46,6 +46,26 @@ stages:
       - data/processed/yolo_train_val
       - data/processed/yolo_test
 
+  build_sequential_dataset:
+    cmd: >-
+      uv run python scripts/build_sequential_dataset.py
+      --wf-registry data/raw/wildfire/registry.json
+      --wf-data-dir data/raw/wildfire/data
+      --fp-registry data/raw/fp/registry.json
+      --fp-data-dir data/raw/fp/data
+      --output-train-val data/processed/sequential_train_val
+      --output-test data/processed/sequential_test
+      --random-seed 0
+    deps:
+      - scripts/build_sequential_dataset.py
+      - data/raw/wildfire/registry.json
+      - data/raw/wildfire/data
+      - data/raw/fp/registry.json
+      - data/raw/fp/data
+    outs:
+      - data/processed/sequential_train_val
+      - data/processed/sequential_test
+
   visualize_yolo_train_val:
     cmd: >-
       uv run python scripts/visualize_dataset.py
