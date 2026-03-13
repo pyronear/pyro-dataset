@@ -44,7 +44,8 @@ stages:
       - data/processed/fp_yolo
     outs:
       - data/processed/yolo_train_val
-      - data/processed/yolo_test
+      - data/processed/yolo_test:
+          remote: awspyronear-private
 
   build_sequential_dataset:
     cmd: >-
@@ -64,7 +65,8 @@ stages:
       - data/raw/fp/data
     outs:
       - data/processed/sequential_train_val
-      - data/processed/sequential_test
+      - data/processed/sequential_test:
+          remote: awspyronear-private
 
   build_toy_dataset:
     cmd: >-
