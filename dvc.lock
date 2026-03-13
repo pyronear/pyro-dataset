@@ -722,9 +722,9 @@ stages:
       nfiles: 16142
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: c6bdd86c63a7d32a2b4c170320c5f108.dir
-      size: 7652814446
-      nfiles: 145588
+      md5: 55a788ed9220e2700e8742b94e39003e.dir
+      size: 7652709990
+      nfiles: 145586
   build_toy_dataset:
     cmd: uv run python scripts/build_toy_dataset.py --yolo-src data/processed/yolo_train_val
       --seq-src data/processed/sequential_train_val --yolo-output data/processed/yolo_toy
@@ -732,9 +732,9 @@ stages:
     deps:
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: c6bdd86c63a7d32a2b4c170320c5f108.dir
-      size: 7652814446
-      nfiles: 145588
+      md5: 55a788ed9220e2700e8742b94e39003e.dir
+      size: 7652709990
+      nfiles: 145586
     - path: data/processed/yolo_train_val
       hash: md5
       md5: fdfd35a4ac94ba1468938f7e173cfc6c.dir

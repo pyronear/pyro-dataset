@@ -1,4 +1,5 @@
 [core]
     remote = awspyronear
+    autostage = true
 ['remote "awspyronear"']
-    url = s3://pyro-dataset-dvc/dvc/
+    url = s3://pyro-dataset-dvc-v2/dvc/
