@@ -68,6 +68,18 @@ stages:
       - data/processed/sequential_test:
           remote: awspyronear-private
 
+  test_data_leakage:
+    cmd: >-
+      uv run pytest tests/test_data_leakage.py -v
+      --junit-xml=data/reporting/leakage_results.xml
+    deps:
+      - tests/test_data_leakage.py
+      - data/processed/wildfire_yolo
+      - data/processed/yolo_train_val
+      - data/processed/yolo_test
+      - data/processed/sequential_train_val
+      - data/processed/sequential_test
+
   build_toy_dataset:
     cmd: >-
       uv run python scripts/build_toy_dataset.py

@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  check-leakage-results:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check leakage test results
+        run: |
+          python3 - <<'EOF'
+          import sys
+          import xml.etree.ElementTree as ET
+
+          path = "data/reporting/leakage_results.xml"
+          try:
+              tree = ET.parse(path)
+          except FileNotFoundError:
+              print(f"ERROR: {path} not found. Run `dvc repro test_data_leakage` and commit the result.")
+              sys.exit(1)
+
+          suite = tree.getroot()
+          failures = int(suite.attrib.get("failures", 0))
+          errors = int(suite.attrib.get("errors", 0))
+          tests = int(suite.attrib.get("tests", 0))
+          skipped = int(suite.attrib.get("skipped", 0))
+
+          print(f"Tests: {tests}, Skipped: {skipped}, Failures: {failures}, Errors: {errors}")
+
+          if failures or errors:
+              for tc in suite.iter("testcase"):
+                  for bad in list(tc.iter("failure")) + list(tc.iter("error")):
+                      print(f"FAIL {tc.attrib.get('name')}: {bad.text}")
+              sys.exit(1)
+
+          print("All leakage tests passed.")
+          EOF
