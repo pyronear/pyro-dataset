@@ -4,7 +4,7 @@ Tests for the parser utility functions.
 
 import pytest
 
-from pyro_dataset.parsers import parse_pyronear_camera_details
+from pyro_dataset.filepaths.parsers import parse_pyronear_camera_details
 
 s1 = "pyronear_valbonne_3_2023_11_02T07_05_56.jpg"
 s2 = "pyronear_serre-de-barre-310_2024-09-02T13-12-23.jpg"
