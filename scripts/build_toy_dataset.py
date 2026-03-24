@@ -13,10 +13,14 @@ Output structure:
       data.yaml
 
     <sequential-output>/    (mirrors sequential_train_val)
-      train/<sequence>/
+      train/wildfire/<sequence>/
         images/
         labels/
-      val/<sequence>/
+      train/fp/<sequence>/
+        ...
+      val/wildfire/<sequence>/
+        ...
+      val/fp/<sequence>/
         ...
 
 Usage:
@@ -99,18 +103,21 @@ def build_seq_toy(src: Path, output: Path, ratio: float, rng: random.Random, dry
         split_dir = src / split
         if not split_dir.is_dir():
             continue
-        sequences = sorted(d for d in split_dir.iterdir() if d.is_dir())
-        selected = sample(sequences, ratio, rng)
-        counters[split] = len(selected)
-        if dry_run:
-            continue
-        for seq in selected:
-            dst = output / split / seq.name
-            dst.mkdir(parents=True, exist_ok=True)
-            for subdir in ("images", "labels"):
-                src_sub = seq / subdir
-                if src_sub.is_dir():
-                    shutil.copytree(src_sub, dst / subdir, dirs_exist_ok=True)
+        total_selected = 0
+        for class_dir in sorted(d for d in split_dir.iterdir() if d.is_dir()):
+            sequences = sorted(d for d in class_dir.iterdir() if d.is_dir())
+            selected = sample(sequences, ratio, rng)
+            total_selected += len(selected)
+            if dry_run:
+                continue
+            for seq in selected:
+                dst = output / split / class_dir.name / seq.name
+                dst.mkdir(parents=True, exist_ok=True)
+                for subdir in ("images", "labels"):
+                    src_sub = seq / subdir
+                    if src_sub.is_dir():
+                        shutil.copytree(src_sub, dst / subdir, dirs_exist_ok=True)
+        counters[split] = total_selected
 
     return counters
 

@@ -7,17 +7,22 @@ FP sequences are balanced to 50% per split at the sequence level.
 Output structure:
     <output-train-val>/
       train/
-        <wf_sequence>/
-          images/
-          labels/
-        <fp_sequence>/
-          ...
+        wildfire/
+          <wf_sequence>/
+            images/
+            labels/
+        fp/
+          <fp_sequence>/
+            ...
       val/
         ...
 
     <output-test>/
       test/
-        ...
+        wildfire/
+          ...
+        fp/
+          ...
 
 Sampling strategy for FP (by max sequence score):
   Pick the top-N FP sequences by max detection score, with random shuffle
@@ -183,10 +188,10 @@ if __name__ == "__main__":
                 logging.warning(f"WF sequence folder not found: {src}")
                 wf_missing += 1
                 continue
-            copy_sequence(src, out / split / seq["folder"], dry_run)
+            copy_sequence(src, out / split / "wildfire" / seq["folder"], dry_run)
 
         for seq_path in selected_fp:
-            copy_sequence(seq_path, out / split / seq_path.name, dry_run)
+            copy_sequence(seq_path, out / split / "fp" / seq_path.name, dry_run)
 
         counters[split] = {"wf": n_wf - wf_missing, "fp": n_fp}
 
