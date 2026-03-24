@@ -116,7 +116,7 @@ def parse_yolo_annotation_txt_file(
         numbers = np.array(line.split(" ")).astype("float16")
         yolo_prediction = YOLOObjectDetectionAnnotation(
             class_id=int(numbers[0]),
-            xywhn=numbers[1:],
+            xywhn=numbers[1:5],
         )
         result.append(yolo_prediction)
     return result
