@@ -79,8 +79,6 @@ stages:
       - data/processed/yolo_test
       - data/processed/sequential_train_val
       - data/processed/sequential_test
-    outs:
-      - data/reporting/leakage_results.xml
 
   build_toy_dataset:
     cmd: >-

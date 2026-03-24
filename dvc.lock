@@ -787,8 +787,3 @@ stages:
       hash: md5
       md5: e3a98eb02997d75b5094f96b7ae6a22e
       size: 5737
-    outs:
-    - path: data/reporting/leakage_results.xml
-      hash: md5
-      md5: 2aba4bda27134d1949410fe01a0e4268
-      size: 2421
