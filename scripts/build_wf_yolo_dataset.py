@@ -84,6 +84,20 @@ def labeled_images(seq_path: Path) -> list[Path]:
     return sorted(result)
 
 
+def copy_label_normalized(src: Path, dst: Path) -> None:
+    """Copy a YOLO label file keeping only the 5 required columns (class x y w h).
+
+    Raw label files may contain a 6th confidence column from model predictions.
+    YOLO training requires exactly 5 columns, so any extra columns are stripped.
+    """
+    lines = []
+    for line in src.read_text().splitlines():
+        parts = line.strip().split()
+        if parts:
+            lines.append(" ".join(parts[:5]))
+    dst.write_text("\n".join(lines))
+
+
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -135,7 +149,7 @@ if __name__ == "__main__":
             logging.debug(f"  {split}: {img.name}")
             if not dry_run:
                 shutil.copy2(img, dst_img)
-                shutil.copy2(label, dst_label)
+                copy_label_normalized(label, dst_label)
             counters[split] += 1
 
     total = sum(counters.values())
