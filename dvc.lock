@@ -572,8 +572,8 @@ stages:
     deps:
     - path: data/raw/wildfire/data
       hash: md5
-      md5: b6db3b5bbd8c3abc449b5dbf2bce07cd.dir
-      size: 5838040933
+      md5: efb6418aa0b39c9ac6ad9f659f1ef3be.dir
+      size: 5838063461
       nfiles: 105113
     - path: data/raw/wildfire/registry.json
       hash: md5
@@ -601,13 +601,13 @@ stages:
       nfiles: 31790
     - path: data/raw/fp/data
       hash: md5
-      md5: f6bcf8aa2f71147f083ff84562041f73.dir
+      md5: 73bfd5c37a6b76aee8e3a1e3b1481724.dir
       size: 11331409112
       nfiles: 208028
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 97b2bc068530041208f6b1453ffd755e
-      size: 1306609
+      md5: c1f217ffec0ba39cb199f379c7ddd26f
+      size: 1306667
     - path: scripts/build_fp_yolo_dataset.py
       hash: md5
       md5: a4138aa3ebf25a67521590bc966929a7
@@ -615,7 +615,7 @@ stages:
     outs:
     - path: data/processed/fp_yolo
       hash: md5
-      md5: d73544289179e49c777750844e2278cc.dir
+      md5: 5841a20fdec0ad7364b454100f0bf1d8.dir
       size: 310158668
       nfiles: 5876
   merge_yolo_dataset:
@@ -625,7 +625,7 @@ stages:
     deps:
     - path: data/processed/fp_yolo
       hash: md5
-      md5: d73544289179e49c777750844e2278cc.dir
+      md5: 5841a20fdec0ad7364b454100f0bf1d8.dir
       size: 310158668
       nfiles: 5876
     - path: data/processed/wildfire_yolo
@@ -640,12 +640,12 @@ stages:
     outs:
     - path: data/processed/yolo_test
       hash: md5
-      md5: 870bbeeba54042fb5e3d8e04f17996db.dir
+      md5: 05d650a014bfbeac8eb7c77ec2032631.dir
       size: 272010284
       nfiles: 5281
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: 05a75f4dac48d6ad9b623b5bc270bfa1.dir
+      md5: 88328a1cbf6df40441c8dea80f96db0c.dir
       size: 1912811441
       nfiles: 32387
   visualize_yolo_train_val:
@@ -654,7 +654,7 @@ stages:
     deps:
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: 05a75f4dac48d6ad9b623b5bc270bfa1.dir
+      md5: 88328a1cbf6df40441c8dea80f96db0c.dir
       size: 1912811441
       nfiles: 32387
     - path: scripts/visualize_dataset.py
@@ -664,7 +664,7 @@ stages:
     outs:
     - path: data/reporting/viz/yolo_train_val
       hash: md5
-      md5: c4368a6061394dbd1cc886da6387881b.dir
+      md5: 5b51d0731f9ef229979ede76a268dcdb.dir
       size: 3452118011
       nfiles: 16193
   visualize_yolo_test:
@@ -673,7 +673,7 @@ stages:
     deps:
     - path: data/processed/yolo_test
       hash: md5
-      md5: 870bbeeba54042fb5e3d8e04f17996db.dir
+      md5: 05d650a014bfbeac8eb7c77ec2032631.dir
       size: 272010284
       nfiles: 5281
     - path: scripts/visualize_dataset.py
@@ -683,7 +683,7 @@ stages:
     outs:
     - path: data/reporting/viz/yolo_test
       hash: md5
-      md5: 3f95ec0c331ff8bd3178990bbe965441.dir
+      md5: b42d6491bfd32a0f5ed1426ff08832a9.dir
       size: 491909660
       nfiles: 2640
   build_sequential_dataset:
@@ -694,17 +694,17 @@ stages:
     deps:
     - path: data/raw/fp/data
       hash: md5
-      md5: f6bcf8aa2f71147f083ff84562041f73.dir
+      md5: 73bfd5c37a6b76aee8e3a1e3b1481724.dir
       size: 11331409112
       nfiles: 208028
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 97b2bc068530041208f6b1453ffd755e
-      size: 1306609
+      md5: c1f217ffec0ba39cb199f379c7ddd26f
+      size: 1306667
     - path: data/raw/wildfire/data
       hash: md5
-      md5: b6db3b5bbd8c3abc449b5dbf2bce07cd.dir
-      size: 5838040933
+      md5: efb6418aa0b39c9ac6ad9f659f1ef3be.dir
+      size: 5838063461
       nfiles: 105113
     - path: data/raw/wildfire/registry.json
       hash: md5
@@ -717,12 +717,12 @@ stages:
     outs:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 4c08a891e654943188a1df69646f6b4c.dir
+      md5: 118536a2d9d45cea10b2c759bb1ea2e4.dir
       size: 802254456
       nfiles: 16408
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: 5f3f271ad08e8f0e21454e4c8af8c89e.dir
+      md5: c1c95685a9e8e6e7949a2fda38e7b986.dir
       size: 8211429112
       nfiles: 155096
   build_toy_dataset:
@@ -732,12 +732,12 @@ stages:
     deps:
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: 5f3f271ad08e8f0e21454e4c8af8c89e.dir
+      md5: c1c95685a9e8e6e7949a2fda38e7b986.dir
       size: 8211429112
       nfiles: 155096
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: 05a75f4dac48d6ad9b623b5bc270bfa1.dir
+      md5: 88328a1cbf6df40441c8dea80f96db0c.dir
       size: 1912811441
       nfiles: 32387
     - path: scripts/build_toy_dataset.py
@@ -747,25 +747,25 @@ stages:
     outs:
     - path: data/processed/sequential_toy
       hash: md5
-      md5: 3c0b35110a21663b219033b4ce4f9675.dir
-      size: 441224461
-      nfiles: 8034
+      md5: 0f7e19ceb2c87000101221f30858a638.dir
+      size: 439008393
+      nfiles: 8062
     - path: data/processed/yolo_toy
       hash: md5
-      md5: 80eb9f3380c679aaeb3fee1ced3a71ee.dir
-      size: 97420176
+      md5: 6a5e7e59e546a2d776911d590d646a2a.dir
+      size: 97159759
       nfiles: 1619
   test_data_leakage:
     cmd: uv run pytest tests/test_data_leakage.py -v --junit-xml=data/reporting/leakage_results.xml
     deps:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 4c08a891e654943188a1df69646f6b4c.dir
+      md5: 118536a2d9d45cea10b2c759bb1ea2e4.dir
       size: 802254456
       nfiles: 16408
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: 5f3f271ad08e8f0e21454e4c8af8c89e.dir
+      md5: c1c95685a9e8e6e7949a2fda38e7b986.dir
       size: 8211429112
       nfiles: 155096
     - path: data/processed/wildfire_yolo
@@ -775,12 +775,12 @@ stages:
       nfiles: 31790
     - path: data/processed/yolo_test
       hash: md5
-      md5: 870bbeeba54042fb5e3d8e04f17996db.dir
+      md5: 05d650a014bfbeac8eb7c77ec2032631.dir
       size: 272010284
       nfiles: 5281
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: 05a75f4dac48d6ad9b623b5bc270bfa1.dir
+      md5: 88328a1cbf6df40441c8dea80f96db0c.dir
       size: 1912811441
       nfiles: 32387
     - path: tests/test_data_leakage.py
