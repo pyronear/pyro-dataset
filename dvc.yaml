@@ -15,19 +15,40 @@ stages:
     outs:
       - data/processed/wildfire_yolo
 
+  compute_fp_embeddings:
+    cmd: >-
+      uv run python scripts/embed_fp_for_selection.py
+      --registry data/raw/fp/registry.json
+      --data-dir data/raw/fp/data
+      --output data/interim/fp_sequence_embeddings
+      --splits val train test
+    deps:
+      - scripts/embed_fp_for_selection.py
+      - src/pyro_dataset/fp/selection.py
+      - data/raw/fp/registry.json
+      - data/raw/fp/data
+    outs:
+      - data/interim/fp_sequence_embeddings/val
+      - data/interim/fp_sequence_embeddings/train
+      - data/interim/fp_sequence_embeddings/test
+
   build_fp_yolo_dataset:
     cmd: >-
       uv run python scripts/build_fp_yolo_dataset.py
       --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data
       --wf-dataset data/processed/wildfire_yolo
+      --embeddings-dir data/interim/fp_sequence_embeddings
       --output data/processed/fp_yolo
       --random-seed 0
     deps:
       - scripts/build_fp_yolo_dataset.py
+      - src/pyro_dataset/fp/selection.py
       - data/raw/fp/registry.json
       - data/raw/fp/data
       - data/processed/wildfire_yolo
+      - data/interim/fp_sequence_embeddings/val
+      - data/interim/fp_sequence_embeddings/train
     outs:
       - data/processed/fp_yolo
 
@@ -54,15 +75,20 @@ stages:
       --wf-data-dir data/raw/wildfire/data
       --fp-registry data/raw/fp/registry.json
       --fp-data-dir data/raw/fp/data
+      --embeddings-dir data/interim/fp_sequence_embeddings
       --output-train-val data/processed/sequential_train_val
       --output-test data/processed/sequential_test
       --random-seed 0
     deps:
       - scripts/build_sequential_dataset.py
+      - src/pyro_dataset/fp/selection.py
       - data/raw/wildfire/registry.json
       - data/raw/wildfire/data
       - data/raw/fp/registry.json
       - data/raw/fp/data
+      - data/interim/fp_sequence_embeddings/val
+      - data/interim/fp_sequence_embeddings/train
+      - data/interim/fp_sequence_embeddings/test
     outs:
       - data/processed/sequential_train_val
       - data/processed/sequential_test:

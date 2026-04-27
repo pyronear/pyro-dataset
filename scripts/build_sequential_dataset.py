@@ -24,9 +24,12 @@ Output structure:
         fp/
           ...
 
-Sampling strategy for FP (by max sequence score):
-  Pick the top-N FP sequences by max detection score, with random shuffle
-  for tie-breaking.
+Sampling strategy for FP (all 3 splits): two-stage clustering
+  Stage 1 — bbox-overlap atoms per camera (NMS top-1 main bbox; intra-camera
+            union-find with IoU > match_iou).
+  Stage 2 — KMeans(k = quota) on the DINOv2 embedding of each atom rep.
+            Per cluster, pick the atom rep closest to the cluster centroid.
+  Requires per-split DINOv2 embeddings produced by embed_fp_for_selection.py.
 
 Usage:
     python build_sequential_dataset.py
@@ -37,9 +40,12 @@ Arguments:
     --wf-data-dir       Path to wildfire sequence folders (default: data/raw/wildfire/data).
     --fp-registry       Path to fp registry.json (default: data/raw/fp/registry.json).
     --fp-data-dir       Path to fp sequence folders (default: data/raw/fp/data).
+    --embeddings-dir    Per-split DINOv2 embeddings root (default: data/interim/fp_sequence_embeddings).
     --output-train-val  Output directory for train+val (default: data/processed/sequential_train_val).
     --output-test       Output directory for test (default: data/processed/sequential_test).
-    --random-seed       Random seed for tie-breaking (default: 0).
+    --random-seed       Random seed for KMeans init (default: 0).
+    --nms-iou           NMS IoU for intra-sequence main bbox (default: 0.3).
+    --match-iou         IoU threshold for intra-camera atoms (default: 0.7).
     --dry-run           Print plan without writing anything.
     -log, --loglevel    Logging level (default: info).
 """
@@ -47,9 +53,10 @@ Arguments:
 import argparse
 import json
 import logging
-import random
 import shutil
 from pathlib import Path
+
+from pyro_dataset.fp.selection import load_embeddings, two_stage_select
 
 
 SPLITS = ["train", "val", "test"]
@@ -63,9 +70,17 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--wf-data-dir", type=Path, default=Path("data/raw/wildfire/data"))
     parser.add_argument("--fp-registry", type=Path, default=Path("data/raw/fp/registry.json"))
     parser.add_argument("--fp-data-dir", type=Path, default=Path("data/raw/fp/data"))
+    parser.add_argument(
+        "--embeddings-dir",
+        type=Path,
+        default=Path("data/interim/fp_sequence_embeddings"),
+        help="Per-split DINOv2 embeddings root (read for the two-stage FP selection).",
+    )
     parser.add_argument("--output-train-val", type=Path, default=Path("data/processed/sequential_train_val"))
     parser.add_argument("--output-test", type=Path, default=Path("data/processed/sequential_test"))
     parser.add_argument("--random-seed", type=int, default=0)
+    parser.add_argument("--nms-iou", type=float, default=0.3)
+    parser.add_argument("--match-iou", type=float, default=0.7)
     parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument("-log", "--loglevel", default="info")
     return parser
@@ -74,38 +89,6 @@ def make_cli_parser() -> argparse.ArgumentParser:
 def load_registry(registry_path: Path) -> list[dict]:
     with registry_path.open() as f:
         return json.load(f)["sequences"]
-
-
-def seq_max_score(seq_path: Path) -> float:
-    """Return the max detection score across all label files in a sequence."""
-    labels_dir = seq_path / "labels"
-    if not labels_dir.is_dir():
-        return 0.0
-    best = 0.0
-    for label_file in labels_dir.iterdir():
-        if label_file.suffix != ".txt":
-            continue
-        try:
-            for line in label_file.read_text().splitlines():
-                parts = line.strip().split()
-                if len(parts) >= 6:
-                    best = max(best, float(parts[5]))
-        except Exception:
-            pass
-    return best
-
-
-def sample_fp_sequences(
-    sequences: list[tuple[float, Path]],
-    quota: int,
-    rng: random.Random,
-) -> list[Path]:
-    """Pick top-N FP sequences by max detection score, random shuffle for ties."""
-    # Shuffle first for tie-breaking, then stable sort by score descending
-    indices = list(range(len(sequences)))
-    rng.shuffle(indices)
-    indices.sort(key=lambda i: -sequences[i][0])
-    return [sequences[i][1] for i in indices[:quota]]
 
 
 def copy_sequence(src: Path, dst: Path, dry_run: bool) -> None:
@@ -129,10 +112,13 @@ if __name__ == "__main__":
     wf_data_dir: Path = args["wf_data_dir"]
     fp_registry_path: Path = args["fp_registry"]
     fp_data_dir: Path = args["fp_data_dir"]
+    embeddings_dir: Path = args["embeddings_dir"]
     output_train_val: Path = args["output_train_val"]
     output_test: Path = args["output_test"]
     dry_run: bool = args["dry_run"]
-    rng = random.Random(args["random_seed"])
+    nms_iou: float = args["nms_iou"]
+    match_iou: float = args["match_iou"]
+    seed: int = args["random_seed"]
 
     if not dry_run:
         for out in (output_train_val, output_test):
@@ -148,19 +134,6 @@ if __name__ == "__main__":
     for seq in wf_sequences:
         wf_by_split[seq["split"]].append(seq)
 
-    # Group FP sequences by split and score them
-    fp_by_split: dict[str, list[tuple[float, Path]]] = {s: [] for s in SPLITS}
-    fp_missing = 0
-    for seq in fp_sequences:
-        split = seq["split"]
-        seq_path = fp_data_dir / seq["folder"]
-        if not seq_path.is_dir():
-            logging.warning(f"FP sequence folder not found: {seq_path}")
-            fp_missing += 1
-            continue
-        score = seq_max_score(seq_path)
-        fp_by_split[split].append((score, seq_path))
-
     # Map split → output root
     split_output = {
         "train": output_train_val,
@@ -168,7 +141,7 @@ if __name__ == "__main__":
         "test": output_test,
     }
 
-    # Process each split
+    fp_missing_total = 0
     counters: dict[str, dict[str, int]] = {}
     for split in SPLITS:
         wf_seqs = wf_by_split[split]
@@ -176,10 +149,35 @@ if __name__ == "__main__":
         quota = n_wf  # 50/50 balance at sequence level
         out = split_output[split]
 
-        selected_fp = sample_fp_sequences(fp_by_split[split], quota, rng)
-        n_fp = len(selected_fp)
+        # Load DINOv2 embeddings + per-sequence metadata for this split.
+        emb, items = load_embeddings(embeddings_dir, split)
+        # Filter to items whose folder still exists on disk; preserve alignment.
+        keep_mask = []
+        items_kept: list[dict] = []
+        for it in items:
+            ok = (fp_data_dir / it["sequence_folder"]).is_dir()
+            keep_mask.append(ok)
+            if not ok:
+                fp_missing_total += 1
+            else:
+                items_kept.append(it)
+        if not all(keep_mask):
+            import numpy as _np
+            emb = emb[_np.asarray(keep_mask)]
 
-        logging.info(f"{split}: {n_wf} WF + {n_fp} FP sequences → {out}/{split}/")
+        selected_idx = two_stage_select(
+            items=items_kept,
+            embeddings=emb,
+            data_dir=fp_data_dir,
+            quota=quota,
+            nms_iou=nms_iou,
+            match_iou=match_iou,
+            seed=seed,
+        )
+        selected_fp_paths = [fp_data_dir / items_kept[i]["sequence_folder"] for i in selected_idx]
+        n_fp = len(selected_fp_paths)
+
+        logging.info(f"{split}: {n_wf} WF + {n_fp} FP sequences → {out}/{split}/  (two_stage)")
 
         wf_missing = 0
         for seq in wf_seqs:
@@ -190,10 +188,11 @@ if __name__ == "__main__":
                 continue
             copy_sequence(src, out / split / "wildfire" / seq["folder"], dry_run)
 
-        for seq_path in selected_fp:
+        for seq_path in selected_fp_paths:
             copy_sequence(seq_path, out / split / "fp" / seq_path.name, dry_run)
 
         counters[split] = {"wf": n_wf - wf_missing, "fp": n_fp}
+    fp_missing = fp_missing_total
 
     print(f"\n{'='*55}")
     print(f"{'DRY RUN — ' if dry_run else ''}Sequential dataset")

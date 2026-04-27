@@ -5,14 +5,25 @@ FP images are background images (empty labels). Their label files contain model
 predictions (class x y w h score) used only for scoring/ranking — the output label
 files are empty (no smoke annotation).
 
-Quota per split:
+Quota per split (in IMAGES, computed from wildfire image counts):
   train / val : FP = 10% of total  →  n_fp = n_wf / 9
   test        : FP = 50% of total  →  n_fp = n_wf
 
-Sampling strategy (round-robin by max score):
-  Each round, from every sequence pick the unselected image with the highest
-  max detection score. Sequences exhausted early are skipped. Stops when quota
-  is reached.
+Sampling strategy:
+  • train, val — TWO-STAGE clustering (selects diverse sequences):
+      1. Bbox-overlap grouping per camera (NMS top-1 main bbox; intra-camera
+         union-find with IoU > 0.7) → "atoms" (each ≡ same recurring artefact
+         on the same camera).
+      2. KMeans(k = quota) on the DINOv2 embedding of each atom's representative
+         (closest to the atom's embedding centroid). For each KMeans cluster,
+         pick the atom whose rep is closest to the cluster centroid; output the
+         highest-scoring frame of that rep sequence as the FP image.
+      Requires per-split DINOv2 embeddings produced by embed_fp_for_selection.py.
+
+  • test — round-robin by max score (legacy). Each round, from every sequence
+      pick the unselected image with the highest max detection score. Used
+      because test quota typically exceeds the number of FP sequences, making
+      diversity-based selection moot.
 
 Output structure:
     <output>/
@@ -28,14 +39,18 @@ Usage:
     python build_fp_yolo_dataset.py --dry-run
 
 Arguments:
-    --registry      Path to fp registry.json (default: data/raw/fp/registry.json).
-    --data-dir      Path to fp sequence folders (default: data/raw/fp/data).
-    --wf-dataset    Path to wildfire_yolo dataset to read WF counts from
-                    (default: data/processed/wildfire_yolo).
-    --output        Output directory (default: data/processed/fp_yolo).
-    --random-seed   Random seed for tie-breaking (default: 0).
-    --dry-run       Print plan without writing anything.
-    -log, --loglevel  Logging level (default: info).
+    --registry         Path to fp registry.json (default: data/raw/fp/registry.json).
+    --data-dir         Path to fp sequence folders (default: data/raw/fp/data).
+    --wf-dataset       Path to wildfire_yolo dataset to read WF counts from
+                       (default: data/processed/wildfire_yolo).
+    --embeddings-dir   Per-split DINOv2 embeddings root for train/val
+                       (default: data/interim/fp_sequence_embeddings).
+    --output           Output directory (default: data/processed/fp_yolo).
+    --random-seed      Random seed for KMeans init + round-robin tie-break (default: 0).
+    --nms-iou          NMS IoU for intra-sequence main bbox extraction (default: 0.3).
+    --match-iou        IoU threshold for intra-camera bbox-overlap atoms (default: 0.7).
+    --dry-run          Print plan without writing anything.
+    -log, --loglevel   Logging level (default: info).
 """
 
 import argparse
@@ -45,9 +60,12 @@ import random
 import shutil
 from pathlib import Path
 
+from pyro_dataset.fp.selection import load_embeddings, two_stage_select
+
 
 SPLITS = ["train", "val", "test"]
 FP_RATIO = {"train": 0.1, "val": 0.1, "test": 0.5}
+TWO_STAGE_SPLITS = {"train", "val"}  # test stays on round-robin
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -57,8 +75,18 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--registry", type=Path, default=Path("data/raw/fp/registry.json"))
     parser.add_argument("--data-dir", type=Path, default=Path("data/raw/fp/data"))
     parser.add_argument("--wf-dataset", type=Path, default=Path("data/processed/wildfire_yolo"))
+    parser.add_argument(
+        "--embeddings-dir",
+        type=Path,
+        default=Path("data/interim/fp_sequence_embeddings"),
+        help="Per-split DINOv2 embeddings root (read for train/val two-stage selection).",
+    )
     parser.add_argument("--output", type=Path, default=Path("data/processed/fp_yolo"))
     parser.add_argument("--random-seed", type=int, default=0)
+    parser.add_argument("--nms-iou", type=float, default=0.3,
+                        help="NMS IoU threshold for intra-sequence main bbox.")
+    parser.add_argument("--match-iou", type=float, default=0.7,
+                        help="IoU threshold for intra-camera bbox-overlap grouping.")
     parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument("-log", "--loglevel", default="info")
     return parser
@@ -144,6 +172,9 @@ def round_robin_sample(
     return selected
 
 
+# Two-stage helpers live in src/pyro_dataset/fp/selection.py and are imported above.
+
+
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -152,9 +183,13 @@ if __name__ == "__main__":
     registry_path: Path = args["registry"]
     data_dir: Path = args["data_dir"]
     wf_dataset: Path = args["wf_dataset"]
+    embeddings_dir: Path = args["embeddings_dir"]
     output: Path = args["output"]
     dry_run: bool = args["dry_run"]
-    rng = random.Random(args["random_seed"])
+    nms_iou: float = args["nms_iou"]
+    match_iou: float = args["match_iou"]
+    seed: int = args["random_seed"]
+    rng = random.Random(seed)
 
     sequences = load_registry(registry_path)
     logging.info(f"Loaded {len(sequences)} FP sequences from registry")
@@ -167,8 +202,9 @@ if __name__ == "__main__":
     logging.info(f"WF counts: {wf_counts}")
     logging.info(f"FP quotas: {quotas}")
 
-    # Group sequences by split and build scored candidate lists
-    by_split: dict[str, list[list[tuple[float, Path]]]] = {s: [] for s in SPLITS}
+    # Group sequences by split for round-robin (test) and metadata lookups
+    by_split_seqs: dict[str, list[dict]] = {s: [] for s in SPLITS}
+    by_split_candidates: dict[str, list[list[tuple[float, Path]]]] = {s: [] for s in SPLITS}
     missing = 0
     for seq in sequences:
         folder = seq["folder"]
@@ -178,12 +214,11 @@ if __name__ == "__main__":
             logging.warning(f"Sequence folder not found: {seq_path}")
             missing += 1
             continue
+        by_split_seqs[split].append(seq)
         candidates = scored_images(seq_path)
-        if not candidates:
-            continue
-        # Sort descending by score
-        candidates.sort(key=lambda x: -x[0])
-        by_split[split].append(candidates)
+        if candidates:
+            candidates.sort(key=lambda x: -x[0])
+            by_split_candidates[split].append(candidates)
 
     if not dry_run:
         if output.exists():
@@ -192,10 +227,29 @@ if __name__ == "__main__":
             (output / "images" / split).mkdir(parents=True, exist_ok=True)
             (output / "labels" / split).mkdir(parents=True, exist_ok=True)
 
-    counters = {}
+    counters: dict[str, int] = {}
+    strategies: dict[str, str] = {}
     for split in SPLITS:
         quota = quotas[split]
-        selected = round_robin_sample(by_split[split], quota, rng)
+        if split in TWO_STAGE_SPLITS:
+            emb, items = load_embeddings(embeddings_dir, split)
+            selected_idx = two_stage_select(
+                items=items,
+                embeddings=emb,
+                data_dir=data_dir,
+                quota=quota,
+                nms_iou=nms_iou,
+                match_iou=match_iou,
+                seed=seed,
+            )
+            selected = [
+                data_dir / items[i]["sequence_folder"] / "images" / items[i]["image_name"]
+                for i in selected_idx
+            ]
+            strategies[split] = "two_stage"
+        else:
+            selected = round_robin_sample(by_split_candidates[split], quota, rng)
+            strategies[split] = "round_robin"
         counters[split] = len(selected)
         for img in selected:
             dst_img = output / "images" / split / img.name
@@ -206,14 +260,17 @@ if __name__ == "__main__":
                 dst_label.touch()  # empty label = background
 
     total = sum(counters.values())
-    print(f"\n{'='*50}")
+    print(f"\n{'='*60}")
     print(f"{'DRY RUN — ' if dry_run else ''}FP images: {total}")
     for split in SPLITS:
         ratio = FP_RATIO[split] * 100
-        print(f"  {split:<6}: {counters[split]:>5}  (target {ratio:.0f}% FP, quota {quotas[split]})")
+        print(
+            f"  {split:<6}: {counters[split]:>5}  "
+            f"(target {ratio:.0f}% FP, quota {quotas[split]}, strategy={strategies[split]})"
+        )
     if missing:
         print(f"  missing sequence folders: {missing}")
-    print(f"{'='*50}\n")
+    print(f"{'='*60}\n")
 
     if dry_run:
         print("Dry run — nothing written.")
