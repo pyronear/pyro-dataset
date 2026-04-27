@@ -128,73 +128,77 @@ def two_stage_select(
     if n == 0 or quota <= 0:
         return []
 
-    # Stage 1: bbox-overlap atoms per camera
-    main_boxes: dict[int, tuple] = {}
-    cameras: dict[int, str] = {}
-    for idx, it in enumerate(items):
-        seq_dir = data_dir / it["sequence_folder"]
-        mb = nms_top1(load_seq_boxes(seq_dir), nms_iou)
-        if mb is None:
-            continue
-        main_boxes[idx] = mb
-        cameras[idx] = it["camera"]
+    # Suppress noisy float32 BLAS FP-flag warnings raised inside numpy/sklearn
+    # matmul for normalized embeddings (results are valid, no NaN/Inf).
+    with np.errstate(divide="ignore", over="ignore", invalid="ignore"):
+        # Stage 1: bbox-overlap atoms per camera
+        main_boxes: dict[int, tuple] = {}
+        cameras: dict[int, str] = {}
+        for idx, it in enumerate(items):
+            seq_dir = data_dir / it["sequence_folder"]
+            mb = nms_top1(load_seq_boxes(seq_dir), nms_iou)
+            if mb is None:
+                continue
+            main_boxes[idx] = mb
+            cameras[idx] = it["camera"]
 
-    by_cam: dict[str, list[int]] = defaultdict(list)
-    for idx, c in cameras.items():
-        by_cam[c].append(idx)
+        by_cam: dict[str, list[int]] = defaultdict(list)
+        for idx, c in cameras.items():
+            by_cam[c].append(idx)
 
-    valid = sorted(main_boxes.keys())
-    pos_of = {i: p for p, i in enumerate(valid)}
-    uf = UnionFind(len(valid))
-    for idxs in by_cam.values():
-        for i in range(len(idxs)):
-            for j in range(i + 1, len(idxs)):
-                a, b = idxs[i], idxs[j]
-                if iou_xyxyn(main_boxes[a], main_boxes[b]) > match_iou:
-                    uf.union(pos_of[a], pos_of[b])
+        valid = sorted(main_boxes.keys())
+        pos_of = {i: p for p, i in enumerate(valid)}
+        uf = UnionFind(len(valid))
+        for idxs in by_cam.values():
+            for i in range(len(idxs)):
+                for j in range(i + 1, len(idxs)):
+                    a, b = idxs[i], idxs[j]
+                    if iou_xyxyn(main_boxes[a], main_boxes[b]) > match_iou:
+                        uf.union(pos_of[a], pos_of[b])
 
-    members_by_atom: dict[int, list[int]] = defaultdict(list)
-    for idx in valid:
-        members_by_atom[uf.find(pos_of[idx])].append(idx)
-    next_aid = (max(members_by_atom.keys()) + 1) if members_by_atom else 0
-    for idx in range(n):
-        if idx not in main_boxes:
-            members_by_atom[next_aid] = [idx]
-            next_aid += 1
+        members_by_atom: dict[int, list[int]] = defaultdict(list)
+        for idx in valid:
+            members_by_atom[uf.find(pos_of[idx])].append(idx)
+        next_aid = (max(members_by_atom.keys()) + 1) if members_by_atom else 0
+        for idx in range(n):
+            if idx not in main_boxes:
+                members_by_atom[next_aid] = [idx]
+                next_aid += 1
 
-    # Atom rep = closest-to-centroid sequence within the atom
-    atom_rep: dict[int, int] = {}
-    for aid, mem in members_by_atom.items():
-        if len(mem) == 1:
-            atom_rep[aid] = mem[0]
-            continue
-        sub = embeddings[mem]
-        c = sub.mean(axis=0)
-        c = c / max(np.linalg.norm(c), 1e-12)
-        atom_rep[aid] = int(mem[int(np.argmax(sub @ c))])
-    rep_indices = list(atom_rep.values())
-    rep_emb = embeddings[rep_indices]
+        # Atom rep = closest-to-centroid sequence within the atom
+        atom_rep: dict[int, int] = {}
+        for aid, mem in members_by_atom.items():
+            if len(mem) == 1:
+                atom_rep[aid] = mem[0]
+                continue
+            sub = embeddings[mem]
+            c = sub.mean(axis=0)
+            c = c / max(np.linalg.norm(c), 1e-12)
+            atom_rep[aid] = int(mem[int(np.argmax(sub @ c))])
+        rep_indices = list(atom_rep.values())
+        rep_emb = embeddings[rep_indices].astype(np.float64, copy=False)
 
-    # Stage 2: KMeans on rep embeddings
-    n_clusters = int(min(quota, len(rep_indices)))
-    km = KMeans(n_clusters=n_clusters, n_init=10, random_state=seed)
-    labels = km.fit_predict(rep_emb)
-    centroids = km.cluster_centers_
+        # Stage 2: KMeans on rep embeddings (cast to float64 to avoid float32
+        # BLAS FP-flag noise inside sklearn).
+        n_clusters = int(min(quota, len(rep_indices)))
+        km = KMeans(n_clusters=n_clusters, n_init=10, random_state=seed)
+        labels = km.fit_predict(rep_emb)
+        centroids = km.cluster_centers_
 
-    # Pick one final rep per cluster (closest to cluster centroid)
-    selected: list[int] = []
-    seen: set[int] = set()
-    for cid in range(n_clusters):
-        pos = np.where(labels == cid)[0]
-        if len(pos) == 0:
-            continue
-        c = centroids[cid] / max(np.linalg.norm(centroids[cid]), 1e-12)
-        sims = rep_emb[pos] @ c
-        chosen = rep_indices[int(pos[int(np.argmax(sims))])]
-        if chosen in seen:
-            continue
-        seen.add(chosen)
-        selected.append(chosen)
+        # Pick one final rep per cluster (closest to cluster centroid)
+        selected: list[int] = []
+        seen: set[int] = set()
+        for cid in range(n_clusters):
+            pos = np.where(labels == cid)[0]
+            if len(pos) == 0:
+                continue
+            c = centroids[cid] / max(np.linalg.norm(centroids[cid]), 1e-12)
+            sims = rep_emb[pos] @ c
+            chosen = rep_indices[int(pos[int(np.argmax(sims))])]
+            if chosen in seen:
+                continue
+            seen.add(chosen)
+            selected.append(chosen)
     return selected
 
 
