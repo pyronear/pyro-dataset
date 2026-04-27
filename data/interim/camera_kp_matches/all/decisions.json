@@ -1,0 +1,576 @@
+{
+  "pyronear-sdis-12_pouncho-agast|250|300": {
+    "status": "accepted",
+    "kept_azimuth": 250,
+    "discarded_azimuth": 300,
+    "n_inliers": 1171,
+    "decided_at": "2026-04-27T11:38:16"
+  },
+  "pyronear-sdis-12_pouncho-agast|112|150": {
+    "status": "accepted",
+    "kept_azimuth": 112,
+    "discarded_azimuth": 150,
+    "n_inliers": 295,
+    "decided_at": "2026-04-27T13:57:29"
+  },
+  "pyronear-sdis-07_brison|110|127": {
+    "status": "accepted",
+    "kept_azimuth": 127,
+    "discarded_azimuth": 110,
+    "n_inliers": 268,
+    "decided_at": "2026-04-27T13:57:30"
+  },
+  "pyronear-sdis-77_nemours|300|340": {
+    "status": "accepted",
+    "kept_azimuth": 340,
+    "discarded_azimuth": 300,
+    "n_inliers": 221,
+    "decided_at": "2026-04-27T13:57:33"
+  },
+  "pyronear-sdis-12_pouncho-agast|250|346": {
+    "status": "accepted",
+    "kept_azimuth": 346,
+    "discarded_azimuth": 250,
+    "n_inliers": 202,
+    "decided_at": "2026-04-27T11:38:38"
+  },
+  "pyronear-sis-67_bischwiller|160|250": {
+    "status": "accepted",
+    "kept_azimuth": 160,
+    "discarded_azimuth": 250,
+    "n_inliers": 162,
+    "decided_at": "2026-04-27T11:38:39"
+  },
+  "pyronear-sis-67_bischwiller|12|150": {
+    "status": "accepted",
+    "kept_azimuth": 12,
+    "discarded_azimuth": 150,
+    "n_inliers": 156,
+    "decided_at": "2026-04-27T11:38:41"
+  },
+  "pyronear-sdis-07_serre-de-barre|108|300": {
+    "status": "accepted",
+    "kept_azimuth": 108,
+    "discarded_azimuth": 300,
+    "n_inliers": 146,
+    "decided_at": "2026-04-27T11:39:25"
+  },
+  "pyronear-sis-67_bischwiller|50|277": {
+    "status": "accepted",
+    "kept_azimuth": 277,
+    "discarded_azimuth": 50,
+    "n_inliers": 134,
+    "decided_at": "2026-04-27T11:39:28"
+  },
+  "pyronear-sdis-12_pouncho-agast|337|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 112,
+    "decided_at": "2026-04-27T11:39:44"
+  },
+  "pyronear-sdis-12_pouncho-agast|112|136": {
+    "status": "accepted",
+    "kept_azimuth": 136,
+    "discarded_azimuth": 112,
+    "n_inliers": 106,
+    "decided_at": "2026-04-27T11:39:53"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|250": {
+    "status": "accepted",
+    "kept_azimuth": 0,
+    "discarded_azimuth": 250,
+    "n_inliers": 92,
+    "decided_at": "2026-04-27T11:39:57"
+  },
+  "pyronear-sis-67_bischwiller|254|277": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 87,
+    "decided_at": "2026-04-27T11:40:03"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|346": {
+    "status": "accepted",
+    "kept_azimuth": 346,
+    "discarded_azimuth": 0,
+    "n_inliers": 77,
+    "decided_at": "2026-04-27T11:40:07"
+  },
+  "pyronear-sdis-12_pouncho-agast|64|83": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 75,
+    "decided_at": "2026-04-27T11:40:10"
+  },
+  "pyronear-sis-67_haguenau|125|200": {
+    "status": "accepted",
+    "kept_azimuth": 125,
+    "discarded_azimuth": 200,
+    "n_inliers": 71,
+    "decided_at": "2026-04-27T11:40:15"
+  },
+  "pyronear-sis-67_bischwiller|59|150": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 67,
+    "decided_at": "2026-04-27T11:40:24"
+  },
+  "pyronear-sdis-12_pouncho-agast|50|83": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 63,
+    "decided_at": "2026-04-27T11:40:26"
+  },
+  "pyronear-sdis-12_pouncho-agast|70|83": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 60,
+    "decided_at": "2026-04-27T11:40:27"
+  },
+  "pyronear-sis-67_bischwiller|113|200": {
+    "status": "accepted",
+    "kept_azimuth": 113,
+    "discarded_azimuth": 200,
+    "n_inliers": 57,
+    "decided_at": "2026-04-27T11:40:36"
+  },
+  "pyronear-sis-67_haguenau|150|200": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 55,
+    "decided_at": "2026-04-27T11:40:38"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|83": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 53,
+    "decided_at": "2026-04-27T11:40:42"
+  },
+  "pyronear-sis-67_bischwiller|12|59": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 49,
+    "decided_at": "2026-04-27T11:40:48"
+  },
+  "pyronear-sdis-12_pouncho-agast|64|246": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 47,
+    "decided_at": "2026-04-27T11:40:50"
+  },
+  "pyronear-sis-67_bischwiller|100|277": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 44,
+    "decided_at": "2026-04-27T11:40:52"
+  },
+  "pyronear-sdis-77_croix-augas|246|250": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 41,
+    "decided_at": "2026-04-27T11:40:58"
+  },
+  "pyronear-sdis-77_nemours|147|150": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 37,
+    "decided_at": "2026-04-27T11:41:01"
+  },
+  "pyronear-sis-67_betschdorf|0|50": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 34,
+    "decided_at": "2026-04-27T11:41:10"
+  },
+  "pyronear-sis-67_bischwiller|207|254": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 32,
+    "decided_at": "2026-04-27T11:41:12"
+  },
+  "pyronear-sdis-12_pouncho-agast|337|350": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 31,
+    "decided_at": "2026-04-27T11:41:37"
+  },
+  "pyronear-sdis-07_serre-de-barre|257|350": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 31,
+    "decided_at": "2026-04-27T11:41:38"
+  },
+  "pyronear-sdis-77_nemours|200|246": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 33,
+    "decided_at": "2026-04-27T11:41:43"
+  },
+  "pyronear-force-06_cabanelle|291|327": {
+    "status": "accepted",
+    "kept_azimuth": 291,
+    "discarded_azimuth": 327,
+    "n_inliers": 34,
+    "decided_at": "2026-04-27T11:41:48"
+  },
+  "pyronear-sdis-12_pouncho-agast|315|337": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 38,
+    "decided_at": "2026-04-27T11:41:49"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|315": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 42,
+    "decided_at": "2026-04-27T11:41:52"
+  },
+  "pyronear-sdis-07_serre-de-barre|55|250": {
+    "status": "accepted",
+    "kept_azimuth": 250,
+    "discarded_azimuth": 55,
+    "n_inliers": 44,
+    "decided_at": "2026-04-27T11:41:56"
+  },
+  "pyronear-force-06_valbonne|67|138": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 47,
+    "decided_at": "2026-04-27T11:41:58"
+  },
+  "pyronear-sdis-12_pouncho-agast|250|337": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 52,
+    "decided_at": "2026-04-27T11:42:13"
+  },
+  "pyronear-sdis-77_nemours|150|194": {
+    "status": "accepted",
+    "kept_azimuth": 194,
+    "discarded_azimuth": 150,
+    "n_inliers": 54,
+    "decided_at": "2026-04-27T11:42:22"
+  },
+  "pyronear-sis-67_bischwiller|277|350": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 57,
+    "decided_at": "2026-04-27T11:42:26"
+  },
+  "pyronear-sdis-12_pouncho-agast|300|337": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 58,
+    "decided_at": "2026-04-27T11:42:31"
+  },
+  "pyronear-sdis-07_marguerite|185|339": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 60,
+    "decided_at": "2026-04-27T11:42:33"
+  },
+  "pyronear-sis-67_bischwiller|207|300": {
+    "status": "accepted",
+    "kept_azimuth": 207,
+    "discarded_azimuth": 300,
+    "n_inliers": 66,
+    "decided_at": "2026-04-27T11:42:35"
+  },
+  "pyronear-sis-67_haguenau|79|150": {
+    "status": "accepted",
+    "kept_azimuth": 79,
+    "discarded_azimuth": 150,
+    "n_inliers": 69,
+    "decided_at": "2026-04-27T11:42:38"
+  },
+  "pyronear-sdis-12_pouncho-agast|200|213": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 71,
+    "decided_at": "2026-04-27T11:42:39"
+  },
+  "pyronear-sdis-77_nemours|291|300": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 77,
+    "decided_at": "2026-04-27T11:42:41"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|350": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 81,
+    "decided_at": "2026-04-27T11:42:43"
+  },
+  "pyronear-sdis-12_pouncho-agast|337|346": {
+    "status": "accepted",
+    "kept_azimuth": 337,
+    "discarded_azimuth": 346,
+    "n_inliers": 90,
+    "decided_at": "2026-04-27T11:42:49"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|300": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 99,
+    "decided_at": "2026-04-27T11:42:50"
+  },
+  "pyronear-sis-67_bischwiller|254|350": {
+    "status": "accepted",
+    "kept_azimuth": 254,
+    "discarded_azimuth": 350,
+    "n_inliers": 110,
+    "decided_at": "2026-04-27T11:42:52"
+  },
+  "pyronear-sdis-12_pouncho-agast|28|83": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 114,
+    "decided_at": "2026-04-27T11:42:54"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 146,
+    "decided_at": "2026-04-27T11:42:57"
+  },
+  "pyronear-sdis-12_pouncho-agast|136|150": {
+    "status": "accepted",
+    "kept_azimuth": 136,
+    "discarded_azimuth": 150,
+    "n_inliers": 148,
+    "decided_at": "2026-04-27T11:43:01"
+  },
+  "pyronear-sdis-77_moret-sur-loing|90|350": {
+    "status": "accepted",
+    "kept_azimuth": 350,
+    "discarded_azimuth": 90,
+    "n_inliers": 161,
+    "decided_at": "2026-04-27T11:43:03"
+  },
+  "pyronear-sis-67_haguenau|267|350": {
+    "status": "accepted",
+    "kept_azimuth": 267,
+    "discarded_azimuth": 350,
+    "n_inliers": 183,
+    "decided_at": "2026-04-27T11:43:06"
+  },
+  "pyronear-sdis-12_pouncho-agast|300|346": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 220,
+    "decided_at": "2026-04-27T11:43:11"
+  },
+  "pyronear-sdis-12_pouncho-agast|218|254": {
+    "status": "accepted",
+    "kept_azimuth": 254,
+    "discarded_azimuth": 218,
+    "n_inliers": 265,
+    "decided_at": "2026-04-27T13:57:32"
+  },
+  "pyronear-sdis-12_pouncho-agast|50|70": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 272,
+    "decided_at": "2026-04-27T11:43:21"
+  },
+  "pyronear-sdis-12_pouncho-agast|0|337": {
+    "status": "accepted",
+    "kept_azimuth": 337,
+    "discarded_azimuth": 0,
+    "n_inliers": 399,
+    "decided_at": "2026-04-27T13:57:26"
+  },
+  "awf-nvseismolab_snowvalley|12|358": {
+    "status": "accepted",
+    "kept_azimuth": 358,
+    "discarded_azimuth": 12,
+    "n_inliers": 600,
+    "decided_at": "2026-04-27T13:50:05"
+  },
+  "awf_axis-mtdanaher|251|322": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 286,
+    "decided_at": "2026-04-27T13:50:10"
+  },
+  "pyronear-sdis-77_moret-sur-loing|300|359": {
+    "status": "accepted",
+    "kept_azimuth": 359,
+    "discarded_azimuth": 300,
+    "n_inliers": 227,
+    "decided_at": "2026-04-27T13:50:17"
+  },
+  "awf-nvseismolab_bighill|15|334": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 168,
+    "decided_at": "2026-04-27T13:50:19"
+  },
+  "awf-nvseismolab_baldca|25|61": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 157,
+    "decided_at": "2026-04-27T13:50:21"
+  },
+  "awf-nvseismolab_bighill|237|331": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 146,
+    "decided_at": "2026-04-27T13:50:26"
+  },
+  "pyronear-sdis-12_pouncho-agast|300|350": {
+    "status": "accepted",
+    "kept_azimuth": 300,
+    "discarded_azimuth": 350,
+    "n_inliers": 27,
+    "decided_at": "2026-04-27T13:53:19"
+  },
+  "pyronear-sdis-12_pouncho-agast|250|350": {
+    "status": "accepted",
+    "kept_azimuth": 250,
+    "discarded_azimuth": 350,
+    "n_inliers": 23,
+    "decided_at": "2026-04-27T13:53:20"
+  },
+  "pyronear-sdis-12_pouncho-agast|250|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 21,
+    "decided_at": "2026-04-27T13:53:22"
+  },
+  "pyronear-sdis-77_nemours|250|291": {
+    "status": "accepted",
+    "kept_azimuth": 291,
+    "discarded_azimuth": 250,
+    "n_inliers": 20,
+    "decided_at": "2026-04-27T13:53:30"
+  },
+  "pyronear-sdis-77_croix-augas|212|300": {
+    "status": "accepted",
+    "kept_azimuth": 300,
+    "discarded_azimuth": 212,
+    "n_inliers": 18,
+    "decided_at": "2026-04-27T13:53:33"
+  },
+  "pyronear-sdis-12_pouncho-agast|28|30": {
+    "status": "accepted",
+    "kept_azimuth": 30,
+    "discarded_azimuth": 28,
+    "n_inliers": 16,
+    "decided_at": "2026-04-27T13:53:35"
+  },
+  "pyronear-sdis-77_croix-augas|100|310": {
+    "status": "accepted",
+    "kept_azimuth": 310,
+    "discarded_azimuth": 100,
+    "n_inliers": 15,
+    "decided_at": "2026-04-27T13:53:38"
+  },
+  "pyronear-sdis-12_pouncho-agast|346|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 13,
+    "decided_at": "2026-04-27T13:53:39"
+  },
+  "pyronear-sdis-77_videlles|0|250": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 10,
+    "decided_at": "2026-04-27T13:53:41"
+  },
+  "pyronear-sdis-77_croix-augas|30|100": {
+    "status": "accepted",
+    "kept_azimuth": 100,
+    "discarded_azimuth": 30,
+    "n_inliers": 10,
+    "decided_at": "2026-04-27T13:53:44"
+  },
+  "pyronear-sdis-12_pouncho-agast|50|64": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 14,
+    "decided_at": "2026-04-27T13:53:46"
+  },
+  "pyronear-sdis-12_pouncho-agast|70|246": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 16,
+    "decided_at": "2026-04-27T13:53:47"
+  },
+  "pyronear-sdis-77_videlles|50|300": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 18,
+    "decided_at": "2026-04-27T13:53:51"
+  },
+  "pyronear-sdis-07_brison|20|39": {
+    "status": "accepted",
+    "kept_azimuth": 39,
+    "discarded_azimuth": 20,
+    "n_inliers": 19,
+    "decided_at": "2026-04-27T13:53:55"
+  },
+  "pyronear-sdis-12_pouncho-agast|300|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 20,
+    "decided_at": "2026-04-27T13:53:56"
+  },
+  "pyronear-sdis-12_pouncho-agast|64|70": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 22,
+    "decided_at": "2026-04-27T13:53:57"
+  },
+  "pyronear-sdis-12_pouncho-agast|350|357": {
+    "status": "rejected",
+    "kept_azimuth": null,
+    "discarded_azimuth": null,
+    "n_inliers": 27,
+    "decided_at": "2026-04-27T13:53:58"
+  }
+}
