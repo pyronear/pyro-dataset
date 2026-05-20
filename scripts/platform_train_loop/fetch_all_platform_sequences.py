@@ -328,13 +328,26 @@ def _process_sequence(
             f"Skipping sequence {sequence['id']}: organization {camera['organization_id']} not found"
         )
         return records
+    # The current platform API renamed/split several fields that the legacy
+    # `platform_utils.to_record` still reads under their old names. Adapt
+    # here (local to this script) so the rest of the pipeline keeps working:
+    #   sequence.azimuth      <- sequence.camera_azimuth     (per convention)
+    #   detection.azimuth     <- sequence.camera_azimuth     (no per-detection field anymore)
+    #   detection.bboxes      <- detection.bbox              (renamed singular -> plural)
+    camera_azimuth = sequence.get("camera_azimuth", sequence.get("azimuth"))
+    sequence_for_record = {**sequence, "azimuth": camera_azimuth}
     for detection in detections:
+        detection_for_record = {
+            **detection,
+            "azimuth": detection.get("azimuth", camera_azimuth),
+            "bboxes": detection.get("bboxes", detection.get("bbox", "[]")),
+        }
         records.append(
             platform_utils.to_record(
-                detection=detection,
+                detection=detection_for_record,
                 camera=camera,
                 organization=organization,
-                sequence=sequence,
+                sequence=sequence_for_record,
             )
         )
     return records
@@ -387,7 +400,14 @@ def fetch_new_sequences_within(
         sequence_id = s.get("id")
         camera_id = s.get("camera_id")
         started_at = s.get("started_at")
-        azimuth = s.get("azimuth")
+        # The current platform API exposes `camera_azimuth` (preferred per
+        # convention) and `sequence_azimuth`; older payloads used a flat
+        # `azimuth`. Accept all three for robustness, preferring `camera_azimuth`.
+        azimuth = s.get("camera_azimuth")
+        if azimuth is None:
+            azimuth = s.get("azimuth")
+        if azimuth is None:
+            azimuth = s.get("sequence_azimuth")
         if (
             sequence_id is None
             or camera_id is None
