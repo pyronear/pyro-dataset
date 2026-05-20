@@ -1,0 +1,6 @@
+outs:
+- md5: ba7cdca755a1bd332d4f8771d98e5322.dir
+  size: 269835006
+  nfiles: 5233
+  hash: md5
+  path: yolo_test_corrected

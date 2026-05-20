@@ -10,3 +10,5 @@
 /sequential_test
 /yolo_toy
 /sequential_toy
+/yolo_train_val_corrected
+/yolo_test_corrected
