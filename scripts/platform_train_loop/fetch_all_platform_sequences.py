@@ -252,9 +252,16 @@ def _fetch_sequences_for_date(
 ) -> list:
     """
     Page through `/sequences/all/fromdate` for `mdate`. Returns the full
-    list — keeps requesting pages until a short page is returned.
+    list — keeps requesting pages until a short page is returned, the API
+    stops adding new IDs, or an error response is detected.
+
+    Raises `RuntimeError` on a non-list page response (e.g. a JSON error
+    body) to avoid silently truncating the day's sequences. Also breaks
+    out of the loop if a full page contributes no new sequence IDs, which
+    would otherwise loop forever against a broken API that ignores `offset`.
     """
     all_sequences: list = []
+    seen_ids: set = set()
     offset = 0
     while True:
         page = api.list_sequences_for_date(
@@ -265,13 +272,25 @@ def _fetch_sequences_for_date(
             access_token=access_token,
         )
         if not isinstance(page, list):
-            logging.warning(
+            raise RuntimeError(
                 f"Unexpected response paginating {mdate} at offset {offset}: "
-                f"{type(page).__name__}"
+                f"{type(page).__name__} {page!r}"
             )
-            break
-        all_sequences.extend(page)
+        new_in_page = 0
+        for s in page:
+            sid = s.get("id") if isinstance(s, dict) else None
+            if sid is None or sid not in seen_ids:
+                if sid is not None:
+                    seen_ids.add(sid)
+                all_sequences.append(s)
+                new_in_page += 1
         if len(page) < _SEQUENCES_PAGE_SIZE:
+            break
+        if new_in_page == 0:
+            logging.warning(
+                f"Pagination for {mdate} stalled at offset {offset}: full page "
+                f"({len(page)}) added no new sequence IDs — stopping"
+            )
             break
         offset += _SEQUENCES_PAGE_SIZE
     return all_sequences
@@ -365,17 +384,19 @@ def fetch_new_sequences_within(
     skipped_missing_camera = 0
     skipped_malformed = 0
     for s in sequences:
+        sequence_id = s.get("id")
         camera_id = s.get("camera_id")
         started_at = s.get("started_at")
         azimuth = s.get("azimuth")
         if (
-            camera_id is None
+            sequence_id is None
+            or camera_id is None
             or not isinstance(started_at, str)
             or not isinstance(azimuth, (int, float))
         ):
             skipped_malformed += 1
             logging.debug(
-                f"Skipping malformed sequence (id={s.get('id')!r}): "
+                f"Skipping malformed sequence (id={sequence_id!r}): "
                 f"camera_id={camera_id!r}, started_at={started_at!r}, azimuth={azimuth!r}"
             )
             continue
