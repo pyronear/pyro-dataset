@@ -1,0 +1,124 @@
+import json
+import random
+
+from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
+
+ROAD_BOX = {
+    "xyxyn": [0.60, 0.46, 0.62, 0.49],
+    "smoke_type": None,
+    "false_positive_types": ["road"],
+    "origin": "engine",
+}
+
+
+def alert_with_boxes(boxes):
+    return {
+        "objects": [
+            {
+                "record_kind": "false_positive",
+                "frames": [
+                    {"detection_id": i, "boxes": [box]} for i, box in enumerate(boxes)
+                ],
+            }
+        ]
+    }
+
+
+def test_main_bbox_returns_none_without_boxes():
+    assert main_bbox(alert_with_boxes([])) is None
+
+
+def test_main_bbox_returns_the_dominant_box():
+    assert main_bbox(alert_with_boxes([ROAD_BOX] * 3)) == (0.60, 0.46, 0.62, 0.49)
+
+
+def test_main_bbox_ignores_degenerate_boxes():
+    flat = {**ROAD_BOX, "xyxyn": [0.6, 0.4, 0.6, 0.5]}
+    assert main_bbox(alert_with_boxes([flat])) is None
+
+
+def test_mint_then_match_returns_the_same_id():
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    assert ro_id == "ro_00001"
+    assert ledger.match("cam-01", 285, (0.601, 0.461, 0.621, 0.491), 0.3) == ro_id
+
+
+def test_match_is_scoped_to_camera_and_azimuth():
+    ledger = Ledger()
+    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    assert ledger.match("cam-02", 285, (0.60, 0.46, 0.62, 0.49), 0.3) is None
+    assert ledger.match("cam-01", 0, (0.60, 0.46, 0.62, 0.49), 0.3) is None
+
+
+def test_match_returns_none_below_threshold():
+    ledger = Ledger()
+    ledger.mint("cam-01", 285, (0.10, 0.10, 0.20, 0.20), "train")
+    assert ledger.match("cam-01", 285, (0.80, 0.80, 0.90, 0.90), 0.3) is None
+
+
+def test_match_picks_the_best_overlap_when_several_qualify():
+    ledger = Ledger()
+    ledger.mint("cam-01", 285, (0.10, 0.10, 0.30, 0.30), "train")
+    near = ledger.mint("cam-01", 285, (0.20, 0.20, 0.40, 0.40), "train")
+    assert ledger.match("cam-01", 285, (0.21, 0.21, 0.41, 0.41), 0.1) == near
+
+
+def test_a_matched_object_keeps_its_original_split():
+    """The point of the ledger: an artefact cannot change split."""
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "val")
+    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50))
+    assert ledger.entries[ro_id]["split"] == "val"
+    assert ledger.entries[ro_id]["seen"] == 2
+
+
+def test_seen_and_ingested_are_independent_counters():
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ledger.record_sighting(ro_id, (0.60, 0.46, 0.62, 0.49))
+    ledger.record_ingested(ro_id)
+    assert ledger.entries[ro_id]["seen"] == 2
+    assert ledger.entries[ro_id]["ingested"] == 1
+
+
+def test_record_sighting_refreshes_the_matching_bbox():
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50))
+    assert ledger.entries[ro_id]["bbox_xyxyn"] == [0.61, 0.47, 0.63, 0.50]
+
+
+def test_round_trips_through_disk(tmp_path):
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    path = tmp_path / "recurring_objects.json"
+    ledger.save(path)
+    reloaded = Ledger.load(path)
+    assert reloaded.entries[ro_id]["camera"] == "cam-01"
+    assert reloaded.mint("cam-02", 0, (0.1, 0.1, 0.2, 0.2), "train") == "ro_00002"
+
+
+def test_load_of_a_missing_file_is_empty(tmp_path):
+    assert Ledger.load(tmp_path / "nope.json").entries == {}
+
+
+def test_assign_new_split_is_ninety_ten_train_val():
+    rng = random.Random(0)
+    counts = {"train": 0, "val": 0}
+    splits = []
+    for _ in range(10):
+        split = assign_new_split(rng, counts)
+        splits.append(split)
+        counts[split] += 1
+    assert splits.count("train") == 9
+    assert splits.count("val") == 1
+    assert "test" not in splits
+
+
+def test_saved_ledger_is_valid_json(tmp_path):
+    ledger = Ledger()
+    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    path = tmp_path / "recurring_objects.json"
+    ledger.save(path)
+    assert json.loads(path.read_text())["ro_00001"]["ingested"] == 0
