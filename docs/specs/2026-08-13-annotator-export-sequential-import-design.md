@@ -27,7 +27,7 @@ falling back to frequency-only ranking, so the two efforts do not block each oth
 - Cleaning the historical label dirt — tracked separately in
   [#22](https://github.com/pyronear/pyro-dataset/issues/22).
 - Lane-level (object-level) dataset semantics. See "Deferred" below.
-- Growing the test set. See "Deferred".
+- Growing the test set: v1 never assigns test, so the split is untouched. See "Deferred".
 
 ## Background: how the pipeline works today
 
@@ -218,17 +218,12 @@ could exist in both, in different splits. It shrinks as annotator data comes to 
 
 ### 4. Splits: train and val only
 
-Annotator sequences are assigned **train/val at 90/10 and never test**.
-
-This is what makes older models comparable across imports. The test split's inputs stay
-bit-identical: no new wildfire sequences enter test, so `quota = n_wf` for test is
-unchanged; no annotator FP enters the test pool, so its DINOv2 embeddings are unchanged;
-KMeans runs with `--random-seed 0`. Same pool, same `k`, same seed produces the same
-selected negatives. No lockfile, no pinning, no changes to pyro-dataset internals.
-
-Without this rule the test set is *not* stable: adding data changes `quota`, which changes
-`k`, which can change the chosen test negatives wholesale — including for sequences that
-were already there and were never touched.
+Annotator sequences are assigned **train/val at 90/10, never test**. The test split is out
+of scope for this implementation: since `quota` is computed per split and no annotator data
+enters the test pool, test is untouched by construction — its sequences, its FP candidates
+and its embeddings are all unchanged by an import. Assigning test at all means deciding how
+test should grow without silently re-rolling what is already in it, which is a separate
+piece of work (see Deferred).
 
 A recurring object is pinned to exactly one split, permanently. With one sequence per recurring object this is
 free today; it matters when a later import brings more sequences of the same artefact.
@@ -372,9 +367,9 @@ asserting a pinned FP entry appears in the built split regardless of clustering.
   entries.
 - **Leakage**: existing `tests/test_data_leakage.py` covers folder and image overlap across
   sequential splits; extend it with an assertion that no recurring object appears in two splits.
-- **Test-set stability**: build `sequential_test` before and after an import and diff the
-  folder listing — they must be identical. Worth checking empirically rather than trusting
-  the seed, given the float32 BLAS non-determinism already noted in the two-stage selection.
+- **Test untouched**: no registry entry gains `split: test`, and no folder appears under
+  `sequential_test` that was not there before. Asserted on the registry, not by rebuilding —
+  comparing built test sets belongs to the deferred test-growth work.
 - **Balance**: after the build, `n_fp == n_wf` per split, unchanged.
 - **Losslessness**: for every imported alert, the lanes and boxes in `meta.json` round-trip
   the export's objects exactly — count of lanes, frames per lane, boxes per frame — so
@@ -390,7 +385,7 @@ asserting a pinned FP entry appears in the built split regardless of clustering.
 
 | Item | Why deferred |
 |---|---|
-| Growing the test set from annotator data | Deliberately frozen for now (§4). Growing it requires test to become **append-only**: `build_sequential_dataset.py` must record the FP sequences chosen per split in a lockfile and reuse them, selecting only enough new ones to cover a raised quota — otherwise each import changes `quota`, hence `k`, and KMeans silently re-rolls the historical test negatives, so two models are scored on different data although nobody touched it. The recurring-object ledger (§5) is what makes the annotator side possible then; 70 of 100 recurring objects stay unused by this import, so the material is not consumed. |
+| Growing the test set from annotator data | Out of scope for v1 (§4), which never assigns test. Its own piece of work, because growing test means making it **append-only**: `build_sequential_dataset.py` must record the FP sequences chosen per split in a lockfile and reuse them, selecting only enough new ones to cover a raised quota. Without that, adding wildfire sequences to test raises `quota`, hence `k`, and KMeans re-rolls the historical test negatives — two models scored on different data although nobody touched it. That project also owns the empirical check that a build is reproducible at all (build twice, diff `sequential_test`), given the float32 BLAS non-determinism already noted in the two-stage selection. Nothing is consumed meanwhile: 70 of 100 recurring objects go unused by this import, and the ledger (§5) records which never fed train. |
 | Object-level dataset (layout v4) | The real mismatch: pyro-annotator annotates objects, temporal-model *learns* on objects (`build_tubes` emits one tube per sequence), but the dataset in between labels whole sequences via a directory name. Not the binding constraint today — 17 of 767 alerts are multi-object (2.2%), none mixed, and `select_longest_tube` would discard the extra tracks anyway — so a revamp only pays once temporal-model trains on multiple labelled tracks per sequence. That is a cross-repo contract change (`list_sequences`, `is_wf_sequence`, `build_tubes`, `build_sequential_dataset.py`, leakage tests, toy dataset) deserving its own brainstorm; `list_sequences` already documents a versioned "v3.0.0 layout", so a v4 is a legitimate successor. `meta.json` (§5) means the data is already there when it happens. |
 | Confidence column for FP boxes | Requires the annotator export to carry engine confidence, matched back to detections. Only affects the detector's hard-negative ranking. |
 | Historical label-id cleanup | [#22](https://github.com/pyronear/pyro-dataset/issues/22). |
