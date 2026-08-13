@@ -20,7 +20,7 @@ Usage:
 Arguments:
     --export-dir       Export directory holding manifest.jsonl and images/
                        (default: data/raw/pyro-annotator/export, DVC-tracked).
-    --output-dir       Where to write staging folders (default: data/interim/annotator-import).
+    --output-dir       Where to write staging folders (default: data/interim/pyro-annotator/sequences).
     --ledger           Recurring-object ledger (default: data/raw/pyro-annotator/recurring_objects.json).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
     --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
@@ -60,7 +60,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--export-dir", type=Path, default=Path("data/raw/pyro-annotator/export")
     )
     parser.add_argument(
-        "--output-dir", type=Path, default=Path("data/interim/annotator-import")
+        "--output-dir", type=Path, default=Path("data/interim/pyro-annotator/sequences")
     )
     parser.add_argument(
         "--ledger", type=Path, default=Path("data/raw/pyro-annotator/recurring_objects.json")

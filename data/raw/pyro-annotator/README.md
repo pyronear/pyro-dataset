@@ -66,6 +66,16 @@ uv run python scripts/import_annotator_export.py --dry-run   # inspect the plan
 uv run python scripts/import_annotator_export.py             # write staging folders
 ```
 
+Staging folders land in `data/interim/pyro-annotator/sequences/` — `wildfire/`,
+`fp/` and a `splits.json` — mirroring `data/interim/pyronear-platform/sequences/`
+from the platform loop. They are transient: `scripts/add_data.py` copies them into
+the pools and writes the registry, after which the staging directory can be
+deleted.
+
+Deleting it *without* also resetting the ledger and the registry leaves the three
+out of step: the ledger still records those objects as contributed, so the next
+run stages the smoke half and no false positives at all.
+
 Full workflow, and what makes this import different from the platform loop, is in
 `CLAUDE.md`; the design and its rationale are in
 `docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.

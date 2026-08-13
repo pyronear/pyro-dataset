@@ -90,10 +90,10 @@ Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 uv run python scripts/import_annotator_export.py   # reads data/raw/pyro-annotator/export
 
 # 2. Register both halves — splits come from the file, not per-camera assignment
-uv run python scripts/add_data.py --src data/interim/annotator-import/wildfire \
-  --type wildfire --splits-from data/interim/annotator-import/splits.json
-uv run python scripts/add_data.py --src data/interim/annotator-import/fp \
-  --type fp --splits-from data/interim/annotator-import/splits.json
+uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/wildfire \
+  --type wildfire --splits-from data/interim/pyro-annotator/sequences/splits.json
+uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/fp \
+  --type fp --splits-from data/interim/pyro-annotator/sequences/splits.json
 ```
 
 Run with `--dry-run` first: it reports the quota, how many recurring objects were
