@@ -10,15 +10,14 @@ Feed human-annotated alerts from pyro-annotator into the sequential dataset, add
 smoke sequences and an equal number of false-positive sequences per import, without
 data leakage and without the same recurring false positive appearing over and over.
 
-The reference export (2026-08-13, pulled from the test server) holds 767 alerts:
-**30 smoke alerts** (35 lanes) and **737 false-positive alerts** (750 lanes), covering
-17,502 frames.
+The reference export (2026-08-13, re-pulled from the test server after
+`temporal_model_score` shipped) holds 795 alerts: **58 smoke alerts** (70 lanes) and
+**737 false-positive alerts** (750 lanes), covering 18,145 frames. Cross-checked against an
+independent SQL re-derivation of the export gate, which returned 796 alerts a minute later —
+the box is annotated live, so counts drift upward between any two observations.
 
-## Dependency
-
-Ranking hard negatives (§3) reads `temporal_model_score` per object from the export. That
-field is being added to `/export/alerts` in parallel; the importer must run without it,
-falling back to frequency-only ranking, so the two efforts do not block each other.
+That drift is why the FP quota is defined as *"the number of smoke alerts in this export"*
+rather than a constant: it was 30 in the morning pull and 58 by the evening.
 
 ## Non-goals
 
@@ -143,13 +142,12 @@ consuming annotator data, and is listed under Deferred.
 
 ### 3. Selection: all smoke, an equal number of FPs, one per recurring object
 
-**Smoke**: every smoke alert is imported (30 in the reference export). Nothing about them
-repeats — 31 groups across 35 lanes.
+**Smoke**: every smoke alert is imported — 58 in the reference export, from 70 lanes.
 
-**False positives**: the smoke count sets the quota, so 30 FP sequences. They are chosen
-**one per recurring object, walking down a frequency ranking**, where a recurring object's
-frequency is how many alerts in this export belong to it. No two of the 30 are then the
-same artefact.
+**False positives**: the smoke count sets the quota, so 58 FP sequences here. They are
+chosen **one per recurring object, walking down the ranking below**, where a recurring
+object's frequency is how many alerts in this export belong to it. No two of the selected
+sequences are then the same artefact.
 
 The expected scale comes from the annotator's own grouping of the same data (a different
 implementation of the same idea — see below): it puts the 750 FP lanes into **100 groups
@@ -157,7 +155,7 @@ across 42 cameras**, with a heavily skewed frequency distribution — the larges
 times (a road on `sdis-tigery-02`), then a cliff on `brison-03` (32), a building on
 `cis-petersbach-01` (30), a light on `morcenx-01` (27). Recomputed recurring objects will not match
 one-for-one, since the thresholds differ, but this is the order of magnitude to expect:
-roughly 100 candidates for 30 slots. Taking frequent artefacts first targets the false
+roughly 100 candidates for 58 slots. Taking frequent artefacts first targets the false
 positives that actually cost operators attention. **Implementation should report the
 recomputed recurring object count and its agreement with these numbers**, and calibrate the IoU
 threshold if they diverge badly — the annotator merges at IoU > 0.3, pyro-dataset's
@@ -166,29 +164,44 @@ is the safer default.
 
 **Hard negatives rank first.** Frequency answers "how often does this cost an operator";
 it does not answer "does the model still fall for it". The second question is answered
-directly by `temporal_model_score` — the deployed temporal model's own verdict on that
-sequence, carried per object in the export. Measured on the exportable lanes: 665 of 750
-FP lanes have a score, distributed min 0.000 / mean 0.140 / max 0.994, and **82 lanes score
-≥ 0.5** — false positives the current model believes are smoke.
+directly by `temporal_model_score` — the deployed temporal model's own verdict, carried
+**per alert** in the export alongside `temporal_model_version` and `temporal_api_version`.
+Measured on the 2026-08-13 export: 665 of 737 FP alerts carry a score (90%), distributed
+min 0.000 / p50 0.000 / p90 0.560 / max 0.994, all from one model+api pair (`0.2.0`,
+`0.3.1`) so they are mutually comparable. **82 FP alerts score ≥ 0.5** — false positives
+the deployed model believes are smoke — spread across 29 cameras, led by `antenna` (20),
+`combine_harvester` (17), `other` (16) and `building` (12).
 
-Objects are therefore ranked in two buckets, then by frequency within each:
+Recurring objects are ranked in two buckets, then by frequency within each:
 
-1. **Fooling** — max `temporal_model_score` across the object's members ≥ `--hard-negative-threshold`
-   (default 0.5), ordered by `seen` descending.
+1. **Fooling** — max `temporal_model_score` across the object's alerts ≥
+   `--hard-negative-threshold` (default 0.5), ordered by `seen` descending.
 2. **The rest** — ordered by `seen` descending.
 
 Bucketing rather than blending keeps the ordering explainable and robust to score noise, and
-degrades gracefully: an object with no scored member (11% of lanes) simply lands in bucket 2.
+degrades gracefully: an object whose alerts are all unscored (10%) simply lands in bucket 2.
 **If the export carries no `temporal_model_score` at all, everything lands in bucket 2 and the
 ranking is frequency-only** — so the importer runs unchanged against older exports.
 
-Within a recurring object, the chosen alert is the highest-scoring member — the specific
-sighting that fools the model most — falling back to frame count when no member is scored,
+Bucket 1 need not fill the quota. Those 82 are *alerts*, not distinct recurring objects, so
+after clustering the bucket may hold fewer objects than there are slots; bucket 2 then fills
+the remainder. Implementation should log the split between the two, since it is the honest
+measure of how much hard-negative material an export actually carries.
+
+Within a recurring object, the chosen alert is the highest-scoring one — the specific
+sighting that fools the model most — falling back to frame count when none is scored,
 tie-broken by lowest `platform_alert_id`. Selection is deterministic either way.
+
+The score's grain is the alert, not the lane, so for a multi-object alert it cannot be
+attributed to a particular lane (23 of 795 alerts). Harmless here: an object's rank uses the
+max across its alerts, and FP alerts are overwhelmingly single-lane.
 
 For smoke this ordering is unused, since every smoke alert is imported. Should smoke ever
 exceed a quota, the analogous rule inverts: rank by *lowest* score first, those being the
-plumes the model currently misses.
+plumes the model currently misses. Worth knowing that today there are none to find — every
+one of the 58 exported smoke alerts scores **≥ 0.993**, so the deployed model already gets
+all of them right. The smoke half of this import buys coverage and raises the FP quota; the
+hard examples are all on the false-positive side.
 
 **`--max-per-object` (default 1, range 1–10)** allows a recurring object to contribute more than one
 sequence. It changes only this step; the ledger, split inheritance and build-time pinning
@@ -329,9 +342,9 @@ not be picked. `build_sequential_dataset.py` is therefore taught to treat entrie
 `source: pyro-annotator` as **pinned**: included first, with two-stage selection filling
 the remaining quota from the historical pool.
 
-This does not displace anything. The import adds 30 smoke sequences, which raises
-`quota = n_wf` by 30 — the pinned FPs consume exactly the slots their own positives
-created.
+This does not displace anything. The import adds as many smoke sequences as the export
+holds (58 here), which raises `quota = n_wf` by the same number — the pinned FPs consume
+exactly the slots their own positives created.
 
 ### 7. Changes to existing pyro-dataset code
 
@@ -385,7 +398,7 @@ asserting a pinned FP entry appears in the built split regardless of clustering.
 
 | Item | Why deferred |
 |---|---|
-| Growing the test set from annotator data | Out of scope for v1 (§4), which never assigns test. Its own piece of work, because growing test means making it **append-only**: `build_sequential_dataset.py` must record the FP sequences chosen per split in a lockfile and reuse them, selecting only enough new ones to cover a raised quota. Without that, adding wildfire sequences to test raises `quota`, hence `k`, and KMeans re-rolls the historical test negatives — two models scored on different data although nobody touched it. That project also owns the empirical check that a build is reproducible at all (build twice, diff `sequential_test`), given the float32 BLAS non-determinism already noted in the two-stage selection. Nothing is consumed meanwhile: 70 of 100 recurring objects go unused by this import, and the ledger (§5) records which never fed train. |
+| Growing the test set from annotator data | Out of scope for v1 (§4), which never assigns test. Its own piece of work, because growing test means making it **append-only**: `build_sequential_dataset.py` must record the FP sequences chosen per split in a lockfile and reuse them, selecting only enough new ones to cover a raised quota. Without that, adding wildfire sequences to test raises `quota`, hence `k`, and KMeans re-rolls the historical test negatives — two models scored on different data although nobody touched it. That project also owns the empirical check that a build is reproducible at all (build twice, diff `sequential_test`), given the float32 BLAS non-determinism already noted in the two-stage selection. Nothing is consumed meanwhile: most of the ~100 recurring objects go unused by this import, and the ledger (§5) records which never fed train. |
 | Object-level dataset (layout v4) | The real mismatch: pyro-annotator annotates objects, temporal-model *learns* on objects (`build_tubes` emits one tube per sequence), but the dataset in between labels whole sequences via a directory name. Not the binding constraint today — 17 of 767 alerts are multi-object (2.2%), none mixed, and `select_longest_tube` would discard the extra tracks anyway — so a revamp only pays once temporal-model trains on multiple labelled tracks per sequence. That is a cross-repo contract change (`list_sequences`, `is_wf_sequence`, `build_tubes`, `build_sequential_dataset.py`, leakage tests, toy dataset) deserving its own brainstorm; `list_sequences` already documents a versioned "v3.0.0 layout", so a v4 is a legitimate successor. `meta.json` (§5) means the data is already there when it happens. |
 | Confidence column for FP boxes | Requires the annotator export to carry engine confidence, matched back to detections. Only affects the detector's hard-negative ranking. |
 | Historical label-id cleanup | [#22](https://github.com/pyronear/pyro-dataset/issues/22). |
