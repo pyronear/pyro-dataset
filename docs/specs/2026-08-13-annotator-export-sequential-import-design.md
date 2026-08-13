@@ -62,23 +62,51 @@ and writes staging folders in the layout `add_data.py` already expects:
 {organisation}_{camera}_{azimuth}_{YYYY-MM-DDTHH-MM-SS}/
 ├── images/{camera}_{frame-ts}.jpg
 ├── labels/{camera}_{frame-ts}.txt      # YOLO xywhn, converted from the export's xyxyn
-└── meta.json                           # lane-level provenance (see §5)
+└── meta.json                           # provenance + every lane's full track (§5)
 ```
 
 Azimuth is `999` when the alert has none, matching the existing convention.
 
-**All lanes of an alert merge into that single folder**, with their boxes unioned per
-frame. This is forced — sibling lanes share camera and start time, so they would produce
-identical folder names — and correct: sibling lanes hold byte-identical images (verified:
-71 frames in the reference export literally reuse another detection's image, same
-sha256). Merging also makes alert-level split binding structural rather than a rule to
-enforce.
+**All lanes of an alert merge into that single folder.** This is forced — sibling lanes
+share camera and start time, so they would produce identical folder names — and correct:
+sibling lanes hold byte-identical images (verified: 71 frames in the reference export
+literally reuse another detection's image, same sha256). Merging also makes alert-level
+split binding structural rather than a rule to enforce.
 
 An alert is classified **wildfire if any lane is smoke**, else **fp**. In the reference
 export this is a distinction without a difference — 737 alerts are pure false-positive,
 30 are pure smoke, and **none mixes lane kinds**. The rule matters only when a mixed
 alert first appears, and it fails safe: putting the frames in `fp/` would train the
 temporal model on a sequence that demonstrably contains smoke.
+
+### 1b. Which boxes reach `labels/`
+
+**Only the boxes of the lane kind that decided the folder.** Not the union across kinds.
+
+| alert | folder | `labels/` contains |
+|---|---|---|
+| any lane is smoke | `wildfire/` | smoke-lane boxes only |
+| every lane is FP | `fp/` | FP-lane boxes |
+
+The reason is `select_longest_tube` (temporal-model `core/tubes.py:297`): `build_tubes`
+keeps exactly **one** tube per sequence, chosen by `(length, n_observed)` and blind to the
+class id. In a mixed alert the FP lane is a recurring artefact present from frame 0, while
+the plume usually appears partway in — so the FP tube is longer, wins selection, and the
+sequence, labelled positive by its directory, would train the model with the *building* as
+its evidence. Exactly inverted supervision, silently.
+
+The same rule applies within a smoke lane: boxes the annotator flagged with a
+`false_positive_type` (the export's `_smoke_lane_boxes` sets this) are excluded from
+`labels/`. None exist in the reference export — verified zero — but the rule should not
+wait for the first one.
+
+Nothing is discarded: every excluded box survives in `meta.json` as part of its lane's
+track (§5), so an object-level consumer loses nothing.
+
+Note the consequence for multi-object alerts of a *single* kind (52124's three plumes,
+52155, 53360, 57057): all their smoke boxes are written. The detector wants them all, and
+the temporal model keeps the longest tube and ignores the rest — its existing behaviour
+for any multi-plume sequence, not something this import introduces.
 
 ### 2. Label class ids
 
@@ -92,6 +120,10 @@ as a sentinel that collides with none of the ids present in the historical pools
 (`0,1,3,4,8,9,10,12,15,18,19`), so annotator-sourced boxes stay greppable and can never be
 confused with the dirt in #22. This is safe because no consumer reads the class id (see
 Background); it is a correctness-of-record decision, not a functional one.
+
+Given §1b, class `99` can only ever appear under `fp/`. Since `build_wf_yolo_dataset.py`
+copies class ids verbatim into the detector dataset while FP images enter it with empty
+labels, the sentinel can never reach detector training targets.
 
 Labels are written with five columns (`class cx cy w h`). The export carries no detection
 confidence — `BoxExport` has `xyxyn`, `smoke_type`, `false_positive_types`, `origin`, and
@@ -164,20 +196,52 @@ Registry entries for annotator sequences carry two extra fields:
 
 ```json
 {"id": "fp_00007155", "folder": "...", "camera": "...", "split": "train",
- "source": "pyro-annotator", "atom": "<camera>_<azimuth>_<short hash of the atom's representative bbox>"}
+ "source": "pyro-annotator", "atom": "atom_00042"}
 ```
 
 `source` marks the entries for build-time pinning (§6) and lets a future test refresh
-select from atoms that never fed train. `atom` is the ledger: once an atom is seen, its
-split is authoritative, so a later import of the same artefact follows it rather than
-being re-clustered.
+select from atoms that never fed train.
 
-`meta.json` inside each folder keeps what the merge flattens — source alert id, each
-lane's kind, smoke types and false-positive types, box origins, atom key. It exists so the
-lane-level redesign (Deferred) does not need a re-export, and so a promotion of these
-folders elsewhere is a move rather than a re-derivation. Ingest validation checks naming,
-`images/`, `labels/` and ≥2 non-empty labels; an extra file is ignored, and the build
-copies folders as-is.
+**The atom id is a surrogate key, never derived from content.** Atoms live in a ledger,
+`data/raw/annotator_atoms.json`:
+
+```json
+{"atom_00042": {"camera": "sdis-tigery-02", "azimuth": 285,
+                "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49],
+                "split": "train", "first_seen": "2026-08-13", "members": 1}}
+```
+
+On each import, a new sequence's main bbox is matched by IoU against the stored
+`bbox_xyxyn` of existing atoms on the same `(camera, azimuth)`, using the same threshold as
+the intra-export clustering. A match joins that atom and **inherits its split**; no match
+mints the next id. The stored bbox may be updated as members join.
+
+The key must not be a hash of the representative bbox, which was the first sketch and is
+wrong: an atom's representative drifts by design — it is the member closest to the centroid,
+and the centroid moves as sightings accumulate — so the hash would change and the same
+physical artefact would be minted as a new atom, free to land in a different split. That is
+exactly the leakage the ledger exists to prevent. Identity must live in the id; geometry is
+only the matching signal. This mirrors pyro-annotator's own sweep, which matches a new
+sequence's median bbox against existing groups keyed on `(camera_id, azimuth)`.
+
+**`meta.json`** inside each folder carries provenance *and* every lane's full track — the
+source alert id, the atom id, and for each lane its kind, smoke types, false-positive
+types, and its per-frame boxes with their origins, including lanes and boxes that §1b
+excluded from `labels/`:
+
+```json
+{"source_api": "pyronear_french", "platform_alert_id": 57057, "atom": "atom_00042",
+ "lanes": [{"sequence_id": 7236, "kind": "smoke", "smoke_types": ["industrial"],
+            "false_positive_types": [], "in_labels": true,
+            "track": [{"frame": "chateau-eau-milly-la-foret-02_2026-08-05T13-46-08",
+                       "xyxyn": [0.72, 0.30, 0.74, 0.32], "origin": "human"}]}]}
+```
+
+This is the lossless half of the design. The folder layout stays byte-compatible with what
+pyro-dataset and temporal-model expect today, so nothing downstream changes; but the
+object-level truth is on disk from this import onward, so the redesign in Deferred needs no
+re-export and no re-annotation. Ingest validation checks naming, `images/`, `labels/` and
+≥2 non-empty labels; an extra file is ignored, and the build copies folders as-is.
 
 ### 6. Making the selection stick at build time
 
@@ -197,8 +261,11 @@ created.
    nothing ever writes into `data/processed/`. This is what keeps the detector and
    temporal datasets on the same splits.
 2. Annotator sequences never receive `split: test`.
-3. All sequences of one atom share one split, forever.
-4. Smoke boxes are class `0`; false-positive proposal boxes are class `99`.
+3. All sequences of one atom share one split, forever. Atom identity is the ledger id,
+   never a value derived from geometry.
+4. Smoke boxes are class `0`; false-positive proposal boxes are class `99`. `labels/`
+   holds only the boxes of the lane kind that decided the folder (§1b); everything else
+   lives in `meta.json`.
 5. Re-running the import on the same export is a no-op — folder names are stable
    identities and the registry is append-only.
 
@@ -212,6 +279,12 @@ created.
   folder listing — they must be identical. Worth checking empirically rather than trusting
   the seed, given the float32 BLAS non-determinism already noted in the two-stage selection.
 - **Balance**: after the build, `n_fp == n_wf` per split, unchanged.
+- **Losslessness**: for every imported alert, the lanes and boxes in `meta.json` round-trip
+  the export's objects exactly — count of lanes, frames per lane, boxes per frame — so
+  what §1b excludes from `labels/` is provably still on disk.
+- **Atom stability**: re-run the import against an export extended with more alerts; every
+  previously seen atom keeps its id and its split, and only genuinely new artefacts mint
+  new ids.
 - **Spot check**: render overlays for a sample of imported folders (pyro-annotator's
   `make render-overlays` produces the equivalent view from the export side) and confirm
   boxes land on the annotated object.
@@ -221,7 +294,7 @@ created.
 | Item | Why deferred |
 |---|---|
 | Growing the test set from annotator data | Needs previously-selected FP test sequences pinned in a lockfile so test can append without re-shuffling. The atom ledger (§5) is what makes it possible later; 70 of 100 atoms stay unused by this import, so the material is not consumed. |
-| Lane-level (object-level) dataset semantics | Today a sequence is wildfire or fp as a whole. Lanes are the truer unit, but no alert in the export mixes kinds, so nothing is lost yet. `meta.json` preserves the data for when it is. |
+| Object-level dataset (layout v4) | The real mismatch: pyro-annotator annotates objects, temporal-model *learns* on objects (`build_tubes` emits one tube per sequence), but the dataset in between labels whole sequences via a directory name. Not the binding constraint today — 17 of 767 alerts are multi-object (2.2%), none mixed, and `select_longest_tube` would discard the extra tracks anyway — so a revamp only pays once temporal-model trains on multiple labelled tracks per sequence. That is a cross-repo contract change (`list_sequences`, `is_wf_sequence`, `build_tubes`, `build_sequential_dataset.py`, leakage tests, toy dataset) deserving its own brainstorm; `list_sequences` already documents a versioned "v3.0.0 layout", so a v4 is a legitimate successor. `meta.json` (§5) means the data is already there when it happens. |
 | Confidence column for FP boxes | Requires the annotator export to carry engine confidence, matched back to detections. Only affects the detector's hard-negative ranking. |
 | Historical label-id cleanup | [#22](https://github.com/pyronear/pyro-dataset/issues/22). |
 | Cross-pool atom matching | Would close the residual camera-overlap risk in §3 once annotator data is no longer marginal. |
