@@ -76,13 +76,13 @@ Azimuth is `999` when the alert has none, matching the existing convention.
 
 **All lanes of an alert merge into that single folder.** This is forced — sibling lanes
 share camera and start time, so they would produce identical folder names — and correct:
-sibling lanes hold byte-identical images (verified: 71 frames in the reference export
+sibling lanes hold byte-identical images (verified: 109 frames in the reference export
 literally reuse another detection's image, same sha256). Merging also makes alert-level
 split binding structural rather than a rule to enforce.
 
 An alert is classified **wildfire if any lane is smoke**, else **fp**. In the reference
 export this is a distinction without a difference — 737 alerts are pure false-positive,
-30 are pure smoke, and **none mixes lane kinds**. The rule matters only when a mixed
+58 are pure smoke, and **none mixes lane kinds** — re-verified on the re-pulled export. The rule matters only when a mixed
 alert first appears, and it fails safe: putting the frames in `fp/` would train the
 temporal model on a sequence that demonstrably contains smoke.
 
