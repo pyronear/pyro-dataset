@@ -58,7 +58,6 @@ from pathlib import Path
 
 from pyro_dataset.fp.selection import load_embeddings, two_stage_select
 
-
 SPLITS = ["train", "val", "test"]
 
 
@@ -66,9 +65,15 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Build a sequential dataset from wf and fp sequences."
     )
-    parser.add_argument("--wf-registry", type=Path, default=Path("data/raw/wildfire/registry.json"))
-    parser.add_argument("--wf-data-dir", type=Path, default=Path("data/raw/wildfire/data"))
-    parser.add_argument("--fp-registry", type=Path, default=Path("data/raw/fp/registry.json"))
+    parser.add_argument(
+        "--wf-registry", type=Path, default=Path("data/raw/wildfire/registry.json")
+    )
+    parser.add_argument(
+        "--wf-data-dir", type=Path, default=Path("data/raw/wildfire/data")
+    )
+    parser.add_argument(
+        "--fp-registry", type=Path, default=Path("data/raw/fp/registry.json")
+    )
     parser.add_argument("--fp-data-dir", type=Path, default=Path("data/raw/fp/data"))
     parser.add_argument(
         "--embeddings-dir",
@@ -76,8 +81,14 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("data/interim/fp_sequence_embeddings"),
         help="Per-split DINOv2 embeddings root (read for the two-stage FP selection).",
     )
-    parser.add_argument("--output-train-val", type=Path, default=Path("data/processed/sequential_train_val"))
-    parser.add_argument("--output-test", type=Path, default=Path("data/processed/sequential_test"))
+    parser.add_argument(
+        "--output-train-val",
+        type=Path,
+        default=Path("data/processed/sequential_train_val"),
+    )
+    parser.add_argument(
+        "--output-test", type=Path, default=Path("data/processed/sequential_test")
+    )
     parser.add_argument("--random-seed", type=int, default=0)
     parser.add_argument("--nms-iou", type=float, default=0.3)
     parser.add_argument("--match-iou", type=float, default=0.7)
@@ -101,6 +112,28 @@ def copy_sequence(src: Path, dst: Path, dry_run: bool) -> None:
         dst_sub = dst / subdir
         if src_sub.is_dir():
             shutil.copytree(src_sub, dst_sub, dirs_exist_ok=True)
+
+
+ANNOTATOR_SOURCE = "pyro-annotator"
+
+
+def partition_pinned(sequences: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Split registry entries into pinned (annotator-sourced) and the rest.
+
+    Adding a sequence to data/raw/fp does not put it in the built dataset:
+    two-stage selection picks `quota` representatives from the whole pool and
+    may not choose it. Annotator false positives were selected deliberately
+    upstream — one per recurring object, hard negatives first — so they are
+    included before clustering fills what remains.
+    """
+    pinned = [s for s in sequences if s.get("source") == ANNOTATOR_SOURCE]
+    rest = [s for s in sequences if s.get("source") != ANNOTATOR_SOURCE]
+    return pinned, rest
+
+
+def remaining_quota(quota: int, pinned: list[dict]) -> int:
+    """Slots left for clustering once the pinned sequences take theirs."""
+    return max(quota - len(pinned), 0)
 
 
 if __name__ == "__main__":
@@ -127,7 +160,9 @@ if __name__ == "__main__":
 
     wf_sequences = load_registry(wf_registry_path)
     fp_sequences = load_registry(fp_registry_path)
-    logging.info(f"Loaded {len(wf_sequences)} WF sequences, {len(fp_sequences)} FP sequences")
+    logging.info(
+        f"Loaded {len(wf_sequences)} WF sequences, {len(fp_sequences)} FP sequences"
+    )
 
     # Group WF sequences by split
     wf_by_split: dict[str, list[dict]] = {s: [] for s in SPLITS}
@@ -149,20 +184,42 @@ if __name__ == "__main__":
         quota = n_wf  # 50/50 balance at sequence level
         out = split_output[split]
 
+        # Annotator-sourced FP sequences were chosen deliberately upstream, so
+        # they are included first and the clustering fills only what is left.
+        pinned_seqs, _pool_seqs = partition_pinned(
+            [s for s in fp_sequences if s["split"] == split]
+        )
+        # Registered but absent from disk: warn like the WF path does rather
+        # than copying an empty folder into the dataset. Not counted as missing
+        # here — the embeddings loop below counts the same folder.
+        for seq in list(pinned_seqs):
+            if not (fp_data_dir / seq["folder"]).is_dir():
+                logging.warning(
+                    f"pinned FP sequence folder not found: {fp_data_dir / seq['folder']}"
+                )
+                pinned_seqs.remove(seq)
+        pinned_folders = {s["folder"] for s in pinned_seqs}
+        pinned_paths = [fp_data_dir / s["folder"] for s in pinned_seqs]
+        quota = remaining_quota(quota, pinned_seqs)
+
         # Load DINOv2 embeddings + per-sequence metadata for this split.
         emb, items = load_embeddings(embeddings_dir, split)
-        # Filter to items whose folder still exists on disk; preserve alignment.
+        # Filter to items whose folder still exists on disk, dropping pinned
+        # ones so they cannot be selected twice; preserve alignment.
         keep_mask = []
         items_kept: list[dict] = []
         for it in items:
-            ok = (fp_data_dir / it["sequence_folder"]).is_dir()
+            ok = (fp_data_dir / it["sequence_folder"]).is_dir() and it[
+                "sequence_folder"
+            ] not in pinned_folders
             keep_mask.append(ok)
-            if not ok:
+            if not (fp_data_dir / it["sequence_folder"]).is_dir():
                 fp_missing_total += 1
-            else:
+            if ok:
                 items_kept.append(it)
         if not all(keep_mask):
             import numpy as _np
+
             emb = emb[_np.asarray(keep_mask)]
 
         selected_idx = two_stage_select(
@@ -174,10 +231,15 @@ if __name__ == "__main__":
             match_iou=match_iou,
             seed=seed,
         )
-        selected_fp_paths = [fp_data_dir / items_kept[i]["sequence_folder"] for i in selected_idx]
+        selected_fp_paths = pinned_paths + [
+            fp_data_dir / items_kept[i]["sequence_folder"] for i in selected_idx
+        ]
         n_fp = len(selected_fp_paths)
 
-        logging.info(f"{split}: {n_wf} WF + {n_fp} FP sequences → {out}/{split}/  (two_stage)")
+        logging.info(
+            f"{split}: {n_wf} WF + {n_fp} FP sequences → {out}/{split}/  "
+            f"(two_stage; {len(pinned_seqs)} pinned from the annotator)"
+        )
 
         wf_missing = 0
         for seq in wf_seqs:
@@ -194,17 +256,19 @@ if __name__ == "__main__":
         counters[split] = {"wf": n_wf - wf_missing, "fp": n_fp}
     fp_missing = fp_missing_total
 
-    print(f"\n{'='*55}")
+    print(f"\n{'=' * 55}")
     print(f"{'DRY RUN — ' if dry_run else ''}Sequential dataset")
     for split in SPLITS:
         wf = counters[split]["wf"]
         fp = counters[split]["fp"]
         total = wf + fp
         ratio = fp / total * 100 if total else 0
-        print(f"  {split:<6}: {wf:>5} WF + {fp:>5} FP = {total:>5} sequences  ({ratio:.0f}% FP)")
+        print(
+            f"  {split:<6}: {wf:>5} WF + {fp:>5} FP = {total:>5} sequences  ({ratio:.0f}% FP)"
+        )
     if fp_missing:
         print(f"  missing FP folders: {fp_missing}")
-    print(f"{'='*55}\n")
+    print(f"{'=' * 55}\n")
 
     if dry_run:
         print("Dry run — nothing written.")

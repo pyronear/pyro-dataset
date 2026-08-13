@@ -11,3 +11,9 @@ runs/
 .venv
 
 **.DS_Store**
+
+# Implementation plans are working notes, not repo content
+docs/plans/
+
+# Annotator import staging — transient, rebuilt by import_annotator_export.py
+data/interim/pyro-annotator/
