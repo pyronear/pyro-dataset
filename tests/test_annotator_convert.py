@@ -197,6 +197,29 @@ def test_label_lines_union_sibling_lanes_at_one_capture():
     ]
 
 
+def test_label_lines_take_one_frame_per_lane_per_capture():
+    """Stems are second-resolution and a lane can hold two detections inside
+    one second. Only the first becomes an image, so the label must describe
+    that one alone — not both boxes on a picture that was never kept."""
+    lane = ALERT["objects"][0]
+    first = lane["frames"][0]
+    second = {
+        **first,
+        "detection_id": 116824,
+        "recorded_at": "2026-08-05T13:46:08.912000Z",  # same second
+        "boxes": [
+            {
+                "xyxyn": [0.7, 0.7, 0.8, 0.8],
+                "smoke_type": "industrial",
+                "false_positive_types": None,
+                "origin": "human",
+            }
+        ],
+    }
+    alert = {**ALERT, "objects": [{**lane, "frames": [first, second]}]}
+    assert label_lines(alert, first) == ["0 0.300000 0.500000 0.200000 0.200000"]
+
+
 def test_build_meta_keeps_every_lane_including_excluded_ones():
     mixed = {
         **ALERT,

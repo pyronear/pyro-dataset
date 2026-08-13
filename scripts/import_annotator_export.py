@@ -63,7 +63,9 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--output-dir", type=Path, default=Path("data/interim/pyro-annotator/sequences")
     )
     parser.add_argument(
-        "--ledger", type=Path, default=Path("data/raw/pyro-annotator/recurring_objects.json")
+        "--ledger",
+        type=Path,
+        default=Path("data/raw/pyro-annotator/recurring_objects.json"),
     )
     parser.add_argument("--max-per-object", type=int, default=1)
     parser.add_argument("--hard-negative-threshold", type=float, default=0.5)
@@ -167,11 +169,16 @@ def resolve_recurring_objects(
 
 def write_sequence(
     export_dir: Path, alert: dict[str, Any], dest: Path, ro_id: str | None
-) -> None:
+) -> bool:
     """Materialise one alert as a sequence folder: images, labels, meta.json.
 
     Captures are deduplicated by timestamp — sibling lanes hold their own copies
     of the same capture, and the folder holds one image per capture.
+
+    Returns whether any frame was written. An alert whose images are all
+    missing leaves no folder behind: an empty one would be rejected
+    structurally by `add_data.py` while still consuming the recurring object's
+    per-object slot.
     """
     (dest / "images").mkdir(parents=True, exist_ok=True)
     (dest / "labels").mkdir(parents=True, exist_ok=True)
@@ -199,9 +206,17 @@ def write_sequence(
                 "\n".join(lines) + ("\n" if lines else "")
             )
 
+    if not written:
+        logging.warning(
+            f"alert {alert['platform_alert_id']}: no usable image, folder dropped"
+        )
+        shutil.rmtree(dest, ignore_errors=True)
+        return False
+
     (dest / "meta.json").write_text(
         json.dumps(build_meta(alert, ro_id), indent=2) + "\n"
     )
+    return True
 
 
 def main() -> None:
@@ -233,12 +248,17 @@ def main() -> None:
 
     # Seed from the ledger *and* from smoke folders earlier runs staged: smoke
     # has no recurring object, so the ledger alone under-counts and the 90/10
-    # balance drifts as imports accumulate.
+    # balance drifts as imports accumulate. Only folders the ledger does not
+    # already account for are added, or every staged false positive would be
+    # counted twice — once as its object, once as its folder.
     split_counts: dict[str, int] = {"train": 0, "val": 0}
     for entry in ledger.entries.values():
         split_counts[entry["split"]] = split_counts.get(entry["split"], 0) + 1
-    for split in load_existing_splits(output_dir).values():
-        if split in split_counts:
+    ledger_folders = {
+        folder for e in ledger.entries.values() for folder in e["ingested_folders"]
+    }
+    for folder, split in load_existing_splits(output_dir).items():
+        if folder not in ledger_folders and split in split_counts:
             split_counts[split] += 1
 
     object_meta, candidates = resolve_recurring_objects(
@@ -287,9 +307,20 @@ def main() -> None:
             split = assign_new_split(rng, split_counts)
             split_counts[split] = split_counts.get(split, 0) + 1
             splits[name] = split
-        if dry_run or dest.exists():
+        if dry_run:
             continue
-        write_sequence(export_dir, alert, dest, ro_id)
+        if dest.exists():
+            # Already staged. Still record it: an interrupted run, or a ledger
+            # rebuilt beside surviving folders, would otherwise leave the
+            # object with nothing recorded and no way to ever record it — the
+            # quota would under-count and the --force-train guard would be
+            # bypassed for that object, permanently.
+            if ro_id is not None:
+                ledger.record_ingested(ro_id, name)
+            continue
+        if not write_sequence(export_dir, alert, dest, ro_id):
+            splits.pop(name, None)
+            continue
         written += 1
         if ro_id is not None:
             ledger.record_ingested(ro_id, name)

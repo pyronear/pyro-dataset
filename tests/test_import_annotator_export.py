@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -233,10 +234,14 @@ def test_force_train_moves_an_unused_object(tmp_path):
     assert json.loads(ledger_path.read_text())[ro_id]["split"] == "train"
 
 
-def test_force_train_reaches_a_folder_staged_by_an_earlier_run(tmp_path):
-    """The ledger is authoritative: moving an object must also move the split
-    recorded for the folder an earlier run already staged, or add_data would
-    register it under the stale one."""
+def test_force_train_writes_the_new_split_into_splits_json(tmp_path):
+    """The ledger is authoritative: once an object is moved, the folder it
+    stages must carry the new split, or add_data would register it under the
+    stale one.
+
+    The object must not already be staged — while it is, the guard refuses,
+    because moving it would leave the staged folder and the ledger disagreeing.
+    """
     export = small_export(tmp_path)
     out = tmp_path / "staging"
     ledger_path = tmp_path / "ledger.json"
@@ -245,14 +250,38 @@ def test_force_train_reaches_a_folder_staged_by_an_earlier_run(tmp_path):
     ledger = json.loads(ledger_path.read_text())
     ro_id = next(iter(ledger))
     fp_folder = next((out / "fp").iterdir()).name
+
+    # Unstage it, and put the object in val by hand — the documented escape
+    # hatch when the guard would otherwise refuse.
+    shutil.rmtree(out / "fp" / fp_folder)
     ledger[ro_id]["split"] = "val"
     ledger[ro_id]["ingested_folders"] = []
     ledger_path.write_text(json.dumps(ledger))
-    run_import(export, out, ledger_path)
-    assert json.loads((out / "splits.json").read_text())[fp_folder] == "val"
 
-    run_import(export, out, ledger_path, ["--force-train", ro_id])
+    result = run_import(export, out, ledger_path, ["--force-train", ro_id])
+    assert result.returncode == 0, result.stderr
+    assert json.loads(ledger_path.read_text())[ro_id]["split"] == "train"
     assert json.loads((out / "splits.json").read_text())[fp_folder] == "train"
+
+
+def test_force_train_is_refused_while_the_object_is_staged(tmp_path):
+    """Regression for the ingestion-recording fix: a folder already staged is
+    recorded even when it is not re-written, so the guard sees it."""
+    export = small_export(tmp_path)
+    out = tmp_path / "staging"
+    ledger_path = tmp_path / "ledger.json"
+    run_import(export, out, ledger_path)
+
+    ledger = json.loads(ledger_path.read_text())
+    ro_id = next(iter(ledger))
+    ledger[ro_id]["split"] = "val"
+    ledger[ro_id]["ingested_folders"] = []  # ledger forgets, staging remembers
+    ledger_path.write_text(json.dumps(ledger))
+    run_import(export, out, ledger_path)  # re-records from the staged folder
+
+    result = run_import(export, out, ledger_path, ["--force-train", ro_id])
+    assert result.returncode != 0
+    assert "refused" in result.stderr
 
 
 def test_force_train_refuses_an_object_already_ingested_elsewhere(tmp_path):

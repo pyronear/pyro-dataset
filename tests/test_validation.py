@@ -1,6 +1,6 @@
 import pytest
 
-from pyro_dataset.ingest import ValidationResult, validate_sequence_folder
+from pyro_dataset.ingest import validate_sequence_folder
 
 
 @pytest.fixture

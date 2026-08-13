@@ -219,7 +219,9 @@ def test_assignments_from_splits_continues_the_id_sequence():
 
 
 def test_assignments_from_splits_rejects_a_missing_entry():
-    with pytest.raises(KeyError):
+    """Named, like the other rejections — the operator needs to know which
+    folder is missing, not read a bare KeyError traceback."""
+    with pytest.raises(ValueError, match=ANNOTATOR_FOLDER):
         assignments_from_splits(
             [ANNOTATOR_FOLDER], existing=[], start_id=1, prefix="fp", splits={}
         )

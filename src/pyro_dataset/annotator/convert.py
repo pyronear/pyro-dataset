@@ -70,9 +70,16 @@ def label_lines(alert: dict[str, Any], frame: dict[str, Any]) -> list[str]:
         if kind == "wildfire" and not lane_is_smoke:
             continue
         class_id = CLASS_ID_SMOKE if lane_is_smoke else CLASS_ID_FALSE_POSITIVE_PROPOSAL
-        for lane_frame in obj["frames"]:
-            if _timestamp(lane_frame["recorded_at"]) != capture:
-                continue
+        # At most one frame per lane per capture. Stems are second-resolution
+        # and a lane can hold two detections inside one second; only the first
+        # is written as an image, so taking both here would describe a picture
+        # that was never kept.
+        matched = [
+            lane_frame
+            for lane_frame in obj["frames"]
+            if _timestamp(lane_frame["recorded_at"]) == capture
+        ][:1]
+        for lane_frame in matched:
             for box in lane_frame["boxes"]:
                 if lane_is_smoke and box.get("smoke_type") is None:
                     continue

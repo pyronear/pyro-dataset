@@ -319,6 +319,8 @@ def assignments_from_splits(
     assignments = []
     current_id = start_id
     for folder in sorted(new_folders):
+        if folder not in splits:
+            raise ValueError(f"{folder}: no split recorded in the splits file")
         split = splits[folder]
         if split == "test":
             raise ValueError(

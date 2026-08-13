@@ -26,7 +26,12 @@ SPLIT_TARGETS = {"train": 0.9, "val": 0.1}
 
 
 def main_bbox(alert: dict[str, Any]) -> Bbox | None:
-    """The alert's representative box: the per-coordinate median of its boxes.
+    """The alert's representative box: the per-coordinate median of the boxes
+    of its **dominant lane** — the lane contributing the most boxes.
+
+    Per lane, not across lanes: an alert may hold two spatially separate
+    artefacts, and a median spanning both lands between them, describing a box
+    that exists nowhere and anchoring the recurring object on a phantom.
 
     NMS is useless here — the export carries no confidence, so every box would
     enter with the same score and the winner would just be whichever appeared
@@ -34,20 +39,25 @@ def main_bbox(alert: dict[str, Any]) -> Bbox | None:
     to a drifting plume or a jittering detection, and mirrors how pyro-annotator
     derives its own group representative.
     """
-    xs1, ys1, xs2, ys2 = [], [], [], []
+    per_lane: list[list[tuple[float, float, float, float]]] = []
     for obj in alert["objects"]:
-        for frame in obj["frames"]:
-            for box in frame["boxes"]:
-                x1, y1, x2, y2 = box["xyxyn"]
-                if x2 <= x1 or y2 <= y1:
-                    continue
-                xs1.append(x1)
-                ys1.append(y1)
-                xs2.append(x2)
-                ys2.append(y2)
-    if not xs1:
+        boxes = [
+            tuple(box["xyxyn"])
+            for frame in obj["frames"]
+            for box in frame["boxes"]
+            if box["xyxyn"][2] > box["xyxyn"][0] and box["xyxyn"][3] > box["xyxyn"][1]
+        ]
+        if boxes:
+            per_lane.append(boxes)
+    if not per_lane:
         return None
-    return (median(xs1), median(ys1), median(xs2), median(ys2))
+    dominant = max(per_lane, key=len)
+    return (
+        median(b[0] for b in dominant),
+        median(b[1] for b in dominant),
+        median(b[2] for b in dominant),
+        median(b[3] for b in dominant),
+    )
 
 
 def assign_new_split(rng: random.Random, counts: dict[str, int]) -> str:
@@ -122,16 +132,24 @@ class Ledger:
         return ro_id
 
     def record_sighting(self, ro_id: str, bbox: Bbox, alert: str) -> None:
-        """Another alert matched this object: record it, refresh the bbox.
+        """Another alert matched this object: record it.
 
         Identified by alert rather than counted, because the export is a full
         re-pull: counting would inflate `seen` by one whole history per import
         and bias the frequency ranking against genuinely new artefacts.
+
+        **The anchor bbox is deliberately never moved.** Updating it to each
+        new sighting made matching depend on the order and history of the walk:
+        replaying the same export against its own ledger re-assigned alerts to
+        different objects and minted duplicates, each duplicate then drawing a
+        fresh split — the one-artefact-in-two-splits leakage this ledger exists
+        to prevent. A frozen anchor makes `match` a pure function of the
+        recorded geometry, so a re-pull is a no-op. `bbox` stays in the
+        signature because the caller has it and a future scheme may want it.
         """
         entry = self.entries[ro_id]
         if alert not in entry["seen_alerts"]:
             entry["seen_alerts"].append(alert)
-        entry["bbox_xyxyn"] = list(bbox)
 
     def record_ingested(self, ro_id: str, folder: str) -> None:
         """One of this object's sequences entered the dataset.

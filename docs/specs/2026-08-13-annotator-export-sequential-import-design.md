@@ -312,7 +312,10 @@ import exists to find. Counting ingested sequences fails more subtly: selection 
 re-pick the alert it already staged, that pick would be silently dropped as an existing
 folder, and the object could never reach a cap above 1 while burning a quota slot every run.
 
-`bbox_xyxyn` is the **per-coordinate median** of the alert's boxes. NMS cannot serve here —
+`bbox_xyxyn` is the **per-coordinate median of the alert's dominant lane** — the lane
+contributing the most boxes. Per lane, not across lanes: an alert may hold two spatially
+separate artefacts, and a median spanning both lands between them, anchoring the object on
+a box that exists in neither. NMS cannot serve here either —
 the export carries no confidence, so every box ties and the winner is whichever appeared
 first in the manifest, an arbitrary first-frame box. Annotator FP boxes are tiny, so an
 unrepresentative one makes the IoU match fragile and splits one artefact into several
@@ -331,7 +334,16 @@ time.
 On each import, a new sequence's main bbox is matched by IoU against the stored
 `bbox_xyxyn` of existing recurring objects on the same `(camera, azimuth)`, using the same threshold as
 the intra-export clustering. A match joins that recurring object and **inherits its split**; no match
-mints the next id. The stored bbox may be updated as members join.
+mints the next id.
+
+**The anchor bbox is frozen at mint and never moved.** Updating it to each new
+sighting made matching depend on the order and history of the walk: replaying one
+export against its own ledger re-assigned alerts to other objects and minted
+duplicates, and each duplicate drew a fresh split — the one-artefact-in-two-splits
+leakage this ledger exists to prevent. Frozen, `match` is a pure function of the
+recorded geometry, so a re-pull is a no-op. Verified on the reference export: 103
+recurring objects on the first pass and 103 on a replay against the resulting
+ledger.
 
 The key must not be a hash of the representative bbox, which was the first sketch and is
 wrong: a recurring object's representative drifts by design — it is the member closest to the centroid,
