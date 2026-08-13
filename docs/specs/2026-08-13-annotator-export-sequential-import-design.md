@@ -213,7 +213,7 @@ between diversity and frequency realism, and inside a fixed quota the trade is s
 each extra copy of the road costs one distinct object (a cap of 3 yields roughly 15–18
 distinct objects instead of 30). Default 1 — maximum diversity — until training results
 justify weighting the head of the distribution. The cap is enforced across imports via the
-ledger's `ingested` counter (§5), not per import.
+ledger's `ingested_folders` list (§5), not per import.
 
 **Recurring objects are recomputed locally, not imported.** pyro-annotator has its own grouping
 (`sequence_group_id`; 783 of 785 exported lanes carry one, over 131 groups), but it is
@@ -240,6 +240,16 @@ piece of work (see Deferred).
 
 A recurring object is pinned to exactly one split, permanently. With one sequence per recurring object this is
 free today; it matters when a later import brings more sequences of the same artefact.
+
+**Known limitation — smoke alerts are not grouped.** Recurring objects exist for false
+positives; a fire is not a recurring artefact, so smoke alerts get an independent split.
+Two alerts of the *same fire* on one camera can therefore straddle train and val. This is
+real in the reference export: `sdis-40_laluque-02_61` produced two smoke folders 147
+minutes apart on the same camera and azimuth, one in each. The existing leakage tests do
+not catch it — they compare folder names and image stems, which differ — and it matches
+what the platform loop already does, so it is accepted rather than solved here. Solving it
+means defining "the same fire" (camera + azimuth + a time window), which belongs with the
+object-level work in Deferred.
 
 **The split is decided per recurring object, not per camera — annotator imports opt out of
 the existing stratification.** `compute_new_assignments` enforces the 80/10/10 ratio
@@ -284,18 +294,34 @@ select from recurring objects that never fed train.
 
 ```json
 {"ro_00042": {"camera": "sdis-tigery-02", "azimuth": 285,
-              "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49],
-              "split": "train", "seen": 57, "ingested": 1}}
+              "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49], "split": "train",
+              "seen_alerts": ["pyronear_french:50397", "..."],
+              "ingested_folders": ["sdis-91_sdis-tigery-02_285_2026-07-06T04-28-05"]}}
 ```
 
 Every field is load-bearing. `camera`, `azimuth` and `bbox_xyxyn` are the matching signal;
-`split` is what a future sighting inherits. The two counters are deliberately distinct:
-`seen` is how many sightings have ever matched this recurring object, accumulating across
-imports so an artefact's importance is not recomputed from whichever export happens to be
-in hand, and it drives the frequency ranking; `ingested` is how many of its sequences are
-actually in the dataset, and it is what enforces `--max-per-object` across imports. A
-single count cannot do both — with a cap above 1, a later import would have no way to know
-the recurring object had already contributed and would add its quota again.
+`split` is what a future sighting inherits. The two lists are deliberately distinct:
+`seen_alerts` drives the frequency ranking, `ingested_folders` enforces
+`--max-per-object` across imports. One list cannot do both — with a cap above 1, a later
+import would have no way to know the object had already contributed.
+
+**Both are identities, not tallies, because the export is a full re-pull**: every import
+re-walks the entire history. Counting sightings would inflate an old artefact's frequency
+by one whole history per import, biasing the ranking against exactly the new artefacts the
+import exists to find. Counting ingested sequences fails more subtly: selection would
+re-pick the alert it already staged, that pick would be silently dropped as an existing
+folder, and the object could never reach a cap above 1 while burning a quota slot every run.
+
+`bbox_xyxyn` is the **per-coordinate median** of the alert's boxes. NMS cannot serve here —
+the export carries no confidence, so every box ties and the winner is whichever appeared
+first in the manifest, an arbitrary first-frame box. Annotator FP boxes are tiny, so an
+unrepresentative one makes the IoU match fragile and splits one artefact into several
+objects with different splits. The median is robust to a drifting plume and mirrors how
+pyro-annotator derives its own group representative.
+
+The **quota discounts what earlier imports ingested** for the same reason: `smoke` counted
+from a full re-pull is cumulative, while already-staged folders are skipped, so a second
+import would pay twice for the same smoke and over-supply false positives.
 
 There is deliberately no `first_seen`. Nothing reads it, and it is the weaker version of
 something already derivable: each of an object's sequences carries its alert timestamp in

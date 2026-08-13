@@ -162,7 +162,7 @@ if __name__ == "__main__":
                     print(f"    ✗ {issue}")
                 for issue in r.naming_issues:
                     print(f"    ~ {issue}")
-            print(f"\nFix the issues above and re-run to include them.")
+            print("\nFix the issues above and re-run to include them.")
 
         if naming_only:
             print(f"\n{'=' * 60}")
@@ -182,12 +182,10 @@ if __name__ == "__main__":
         print("Nothing to copy.")
         exit(0 if not summary.rejected else 1)
 
-    logging.info(f"Copying {len(to_copy)} folder(s) to {dir_data} ...")
-    if not dry_run:
-        for folder in to_copy:
-            shutil.copytree(src=src / folder, dst=dir_data / folder)
-            logging.debug(f"  copied {folder}")
-
+    # Resolve splits BEFORE copying. assignments_from_splits rejects a folder
+    # missing from the file, or one pre-assigned to test; raising after the
+    # copy would leave folders in the pool that the registry never learns
+    # about, and a re-run would skip them as "already on disk" forever.
     start_id = next_id(existing, prefix)
     if args["splits_from"]:
         splits = json.loads(Path(args["splits_from"]).read_text())
@@ -199,6 +197,12 @@ if __name__ == "__main__":
             to_copy, existing, start_id, prefix, random_seed=args["random_seed"]
         )
     all_sequences = existing + new_assignments
+
+    logging.info(f"Copying {len(to_copy)} folder(s) to {dir_data} ...")
+    if not dry_run:
+        for folder in to_copy:
+            shutil.copytree(src=src / folder, dst=dir_data / folder)
+            logging.debug(f"  copied {folder}")
 
     print_summary(new_assignments, all_sequences)
 

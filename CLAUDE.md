@@ -108,9 +108,11 @@ What differs from the platform loop:
 - **Splits come from `data/raw/recurring_objects.json`**, the recurring-object
   ledger, not from per-camera stratification: every sequence of one artefact must
   share a split, or the model meets the same object on both sides. The ledger is
-  authoritative and must be kept — losing it means later imports re-mint objects
-  and can place one artefact in a second split. `--force-train <ro_id>` moves an
-  artefact that is hurting in production into train, unless it already has
+  **committed to git** (52 KB, diffable) rather than tracked by DVC, because it is
+  authoritative metadata — losing it means later imports re-mint objects and can
+  place one artefact in a second split, which is the leakage it exists to prevent.
+  Commit it with the registry change from the same import. `--force-train <ro_id>`
+  moves an artefact that is hurting in production into train, unless it already has
   sequences elsewhere.
 - **Test is never assigned.** `assignments_from_splits` refuses it outright, so an
   import cannot disturb the test set. Growing test is separate work.

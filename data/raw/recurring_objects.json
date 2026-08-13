@@ -1,0 +1,2381 @@
+{
+  "ro_00001": {
+    "azimuth": 18,
+    "bbox_xyxyn": [
+      0.225,
+      0.475,
+      0.263,
+      0.524
+    ],
+    "camera": "sdis-91_sdis-tigery-02",
+    "ingested_folders": [
+      "sdis-91_sdis-tigery-02_18_2026-07-09T04-11-25"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50397",
+      "pyronear_french:50467",
+      "pyronear_french:50577",
+      "pyronear_french:50751",
+      "pyronear_french:50794",
+      "pyronear_french:50889",
+      "pyronear_french:51009",
+      "pyronear_french:51485",
+      "pyronear_french:51682",
+      "pyronear_french:51996",
+      "pyronear_french:52277",
+      "pyronear_french:52291",
+      "pyronear_french:52557",
+      "pyronear_french:52756",
+      "pyronear_french:53107",
+      "pyronear_french:53119",
+      "pyronear_french:53302",
+      "pyronear_french:53333",
+      "pyronear_french:53423",
+      "pyronear_french:53586",
+      "pyronear_french:53613",
+      "pyronear_french:53722",
+      "pyronear_french:53779",
+      "pyronear_french:53984",
+      "pyronear_french:54025",
+      "pyronear_french:54149",
+      "pyronear_french:54213",
+      "pyronear_french:54405",
+      "pyronear_french:54432",
+      "pyronear_french:54485",
+      "pyronear_french:54974",
+      "pyronear_french:55150",
+      "pyronear_french:55256",
+      "pyronear_french:56358",
+      "pyronear_french:56758"
+    ],
+    "split": "train"
+  },
+  "ro_00002": {
+    "azimuth": 313,
+    "bbox_xyxyn": [
+      0.792,
+      0.39,
+      0.822,
+      0.414
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_313_2026-07-22T16-58-35"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50401",
+      "pyronear_french:50815",
+      "pyronear_french:51614",
+      "pyronear_french:52473",
+      "pyronear_french:53382",
+      "pyronear_french:53477",
+      "pyronear_french:53560",
+      "pyronear_french:53581",
+      "pyronear_french:53618",
+      "pyronear_french:53738",
+      "pyronear_french:53951",
+      "pyronear_french:54029",
+      "pyronear_french:54086",
+      "pyronear_french:54236",
+      "pyronear_french:54423",
+      "pyronear_french:54657",
+      "pyronear_french:54856",
+      "pyronear_french:54877",
+      "pyronear_french:55047",
+      "pyronear_french:55225",
+      "pyronear_french:55535",
+      "pyronear_french:55762",
+      "pyronear_french:56175",
+      "pyronear_french:56305",
+      "pyronear_french:56387",
+      "pyronear_french:56510",
+      "pyronear_french:56704",
+      "pyronear_french:56755",
+      "pyronear_french:56883",
+      "pyronear_french:57074"
+    ],
+    "split": "train"
+  },
+  "ro_00003": {
+    "azimuth": 123,
+    "bbox_xyxyn": [
+      0.676,
+      0.49,
+      0.69,
+      0.516
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_123_2026-07-22T13-33-54"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50407",
+      "pyronear_french:50551",
+      "pyronear_french:51120",
+      "pyronear_french:51677",
+      "pyronear_french:53370",
+      "pyronear_french:53933",
+      "pyronear_french:53969",
+      "pyronear_french:54082",
+      "pyronear_french:54425",
+      "pyronear_french:55018",
+      "pyronear_french:55704",
+      "pyronear_french:56456"
+    ],
+    "split": "train"
+  },
+  "ro_00004": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.301,
+      0.443,
+      0.315,
+      0.463
+    ],
+    "camera": "sdis-91_sdis-tigery-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50410",
+      "pyronear_french:50685",
+      "pyronear_french:50894",
+      "pyronear_french:51472"
+    ],
+    "split": "train"
+  },
+  "ro_00005": {
+    "azimuth": 141,
+    "bbox_xyxyn": [
+      0.393,
+      0.459,
+      0.42,
+      0.492
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_141_2026-07-02T05-22-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50421",
+      "pyronear_french:50699",
+      "pyronear_french:50919",
+      "pyronear_french:51224",
+      "pyronear_french:52570",
+      "pyronear_french:52773",
+      "pyronear_french:54583",
+      "pyronear_french:54713",
+      "pyronear_french:55545",
+      "pyronear_french:55651",
+      "pyronear_french:55816"
+    ],
+    "split": "val"
+  },
+  "ro_00006": {
+    "azimuth": 104,
+    "bbox_xyxyn": [
+      0.266,
+      0.456,
+      0.275,
+      0.491
+    ],
+    "camera": "sdis-40_morcenx-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50464",
+      "pyronear_french:51267",
+      "pyronear_french:51509",
+      "pyronear_french:52386",
+      "pyronear_french:52609",
+      "pyronear_french:56667",
+      "pyronear_french:56807"
+    ],
+    "split": "train"
+  },
+  "ro_00007": {
+    "azimuth": 44,
+    "bbox_xyxyn": [
+      0.45,
+      0.448,
+      0.458,
+      0.461
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50472",
+      "pyronear_french:50754",
+      "pyronear_french:50871",
+      "pyronear_french:51025"
+    ],
+    "split": "train"
+  },
+  "ro_00008": {
+    "azimuth": 231,
+    "bbox_xyxyn": [
+      0.466,
+      0.35,
+      0.473,
+      0.365
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_231_2026-07-22T16-58-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50473",
+      "pyronear_french:50658",
+      "pyronear_french:50681",
+      "pyronear_french:50756",
+      "pyronear_french:50987",
+      "pyronear_french:51195",
+      "pyronear_french:51216",
+      "pyronear_french:51442",
+      "pyronear_french:51684",
+      "pyronear_french:55048"
+    ],
+    "split": "train"
+  },
+  "ro_00009": {
+    "azimuth": 37,
+    "bbox_xyxyn": [
+      0.41800000000000004,
+      0.448,
+      0.4285,
+      0.461
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [
+      "sdis-40_morcenx-01_37_2026-07-01T10-02-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50489"
+    ],
+    "split": "train"
+  },
+  "ro_00010": {
+    "azimuth": 196,
+    "bbox_xyxyn": [
+      0.6094999999999999,
+      0.572,
+      0.619,
+      0.588
+    ],
+    "camera": "sdis-77_croix-augas-02",
+    "ingested_folders": [
+      "sdis-77_croix-augas-02_196_2026-07-03T11-44-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50510",
+      "pyronear_french:51034",
+      "pyronear_french:51305",
+      "pyronear_french:51525",
+      "pyronear_french:51778",
+      "pyronear_french:52412",
+      "pyronear_french:52622",
+      "pyronear_french:52826",
+      "pyronear_french:52985"
+    ],
+    "split": "train"
+  },
+  "ro_00011": {
+    "azimuth": 352,
+    "bbox_xyxyn": [
+      0.337,
+      0.498,
+      0.378,
+      0.524
+    ],
+    "camera": "adf_font-rubi-01",
+    "ingested_folders": [
+      "adf_font-rubi-01_352_2026-07-10T08-39-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50526",
+      "pyronear_french:51754",
+      "pyronear_french:52364",
+      "pyronear_french:52638",
+      "pyronear_french:52792",
+      "pyronear_french:52973",
+      "pyronear_french:53386",
+      "pyronear_french:53559",
+      "pyronear_french:55333",
+      "pyronear_french:55495",
+      "pyronear_french:55576"
+    ],
+    "split": "train"
+  },
+  "ro_00012": {
+    "azimuth": 13,
+    "bbox_xyxyn": [
+      0.926,
+      0.454,
+      0.936,
+      0.469
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50537",
+      "pyronear_french:50586",
+      "pyronear_french:50675",
+      "pyronear_french:50873"
+    ],
+    "split": "train"
+  },
+  "ro_00013": {
+    "azimuth": 271,
+    "bbox_xyxyn": [
+      0.823,
+      0.418,
+      0.843,
+      0.437
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50540",
+      "pyronear_french:50816",
+      "pyronear_french:51183",
+      "pyronear_french:51598",
+      "pyronear_french:51897",
+      "pyronear_french:52266",
+      "pyronear_french:54506",
+      "pyronear_french:54857"
+    ],
+    "split": "train"
+  },
+  "ro_00014": {
+    "azimuth": 291,
+    "bbox_xyxyn": [
+      0.321,
+      0.227,
+      0.3495,
+      0.248
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50545",
+      "pyronear_french:53195",
+      "pyronear_french:53957",
+      "pyronear_french:54491",
+      "pyronear_french:54837",
+      "pyronear_french:55185",
+      "pyronear_french:56589"
+    ],
+    "split": "train"
+  },
+  "ro_00015": {
+    "azimuth": 275,
+    "bbox_xyxyn": [
+      0.218,
+      0.413,
+      0.2255,
+      0.424
+    ],
+    "camera": "sdis-40_laluque-01",
+    "ingested_folders": [
+      "sdis-40_laluque-01_275_2026-07-22T15-55-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50556",
+      "pyronear_french:51395",
+      "pyronear_french:51868",
+      "pyronear_french:52240",
+      "pyronear_french:55035",
+      "pyronear_french:55580",
+      "pyronear_french:56386",
+      "pyronear_french:56920"
+    ],
+    "split": "val"
+  },
+  "ro_00016": {
+    "azimuth": 278,
+    "bbox_xyxyn": [
+      0.511,
+      0.462,
+      0.543,
+      0.518
+    ],
+    "camera": "sdis-40_morcenx-02",
+    "ingested_folders": [
+      "sdis-40_morcenx-02_278_2026-07-01T17-00-06"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50605"
+    ],
+    "split": "train"
+  },
+  "ro_00017": {
+    "azimuth": 248,
+    "bbox_xyxyn": [
+      0.778,
+      0.435,
+      0.795,
+      0.466
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_248_2026-07-05T18-43-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50627",
+      "pyronear_french:51426",
+      "pyronear_french:51650",
+      "pyronear_french:52727",
+      "pyronear_french:53083",
+      "pyronear_french:55611"
+    ],
+    "split": "train"
+  },
+  "ro_00018": {
+    "azimuth": 337,
+    "bbox_xyxyn": [
+      0.358,
+      0.42,
+      0.418,
+      0.463
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_337_2026-07-10T18-58-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50633",
+      "pyronear_french:50858",
+      "pyronear_french:51189",
+      "pyronear_french:51432",
+      "pyronear_french:51652",
+      "pyronear_french:51971",
+      "pyronear_french:52272",
+      "pyronear_french:52527",
+      "pyronear_french:52925",
+      "pyronear_french:53100",
+      "pyronear_french:54569",
+      "pyronear_french:54904",
+      "pyronear_french:55254",
+      "pyronear_french:56023",
+      "pyronear_french:56205",
+      "pyronear_french:56626",
+      "pyronear_french:57325"
+    ],
+    "split": "train"
+  },
+  "ro_00019": {
+    "azimuth": 328,
+    "bbox_xyxyn": [
+      0.182,
+      0.4015,
+      0.2215,
+      0.447
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [
+      "sdis-40_morcenx-01_328_2026-07-10T18-55-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50634",
+      "pyronear_french:50850",
+      "pyronear_french:51185",
+      "pyronear_french:51430",
+      "pyronear_french:51655",
+      "pyronear_french:51954",
+      "pyronear_french:52530",
+      "pyronear_french:52924",
+      "pyronear_french:53093",
+      "pyronear_french:53425",
+      "pyronear_french:53788",
+      "pyronear_french:54295",
+      "pyronear_french:54463",
+      "pyronear_french:54560"
+    ],
+    "split": "train"
+  },
+  "ro_00020": {
+    "azimuth": 154,
+    "bbox_xyxyn": [
+      0.421,
+      0.568,
+      0.46,
+      0.619
+    ],
+    "camera": "sdis-77_videlles-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50643",
+      "pyronear_french:51960",
+      "pyronear_french:52929",
+      "pyronear_french:53099",
+      "pyronear_french:55422",
+      "pyronear_french:55787",
+      "pyronear_french:56019"
+    ],
+    "split": "train"
+  },
+  "ro_00021": {
+    "azimuth": 13,
+    "bbox_xyxyn": [
+      0.259,
+      0.417,
+      0.268,
+      0.44
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_13_2026-07-03T19-26-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50656",
+      "pyronear_french:50852",
+      "pyronear_french:51196",
+      "pyronear_french:51437",
+      "pyronear_french:51654",
+      "pyronear_french:51959",
+      "pyronear_french:52532",
+      "pyronear_french:52936",
+      "pyronear_french:53428",
+      "pyronear_french:53597",
+      "pyronear_french:53795",
+      "pyronear_french:54469",
+      "pyronear_french:54561",
+      "pyronear_french:54693",
+      "pyronear_french:55074",
+      "pyronear_french:55240",
+      "pyronear_french:55423",
+      "pyronear_french:55509",
+      "pyronear_french:56024",
+      "pyronear_french:56198",
+      "pyronear_french:56424",
+      "pyronear_french:56732",
+      "pyronear_french:56927",
+      "pyronear_french:57118",
+      "pyronear_french:57327"
+    ],
+    "split": "train"
+  },
+  "ro_00022": {
+    "azimuth": 9,
+    "bbox_xyxyn": [
+      0.097,
+      0.748,
+      0.112,
+      0.768
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [
+      "sdis-40_morcenx-01_9_2026-08-06T19-52-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50660",
+      "pyronear_french:50869",
+      "pyronear_french:51203",
+      "pyronear_french:51456",
+      "pyronear_french:51670",
+      "pyronear_french:51979",
+      "pyronear_french:52547",
+      "pyronear_french:52746",
+      "pyronear_french:53110",
+      "pyronear_french:53289",
+      "pyronear_french:53435",
+      "pyronear_french:53809",
+      "pyronear_french:54311",
+      "pyronear_french:54474",
+      "pyronear_french:54570",
+      "pyronear_french:54699",
+      "pyronear_french:54906",
+      "pyronear_french:55429",
+      "pyronear_french:55796",
+      "pyronear_french:56327",
+      "pyronear_french:56445",
+      "pyronear_french:56543",
+      "pyronear_french:56631",
+      "pyronear_french:56745",
+      "pyronear_french:56944",
+      "pyronear_french:57340"
+    ],
+    "split": "train"
+  },
+  "ro_00023": {
+    "azimuth": 349,
+    "bbox_xyxyn": [
+      0.467,
+      0.52,
+      0.503,
+      0.589
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [
+      "germersheim_germersheim-02_349_2026-07-17T16-02-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50669",
+      "pyronear_french:53626",
+      "pyronear_french:54103",
+      "pyronear_french:54194",
+      "pyronear_french:54237",
+      "pyronear_french:54324",
+      "pyronear_french:56308",
+      "pyronear_french:56394",
+      "pyronear_french:56531"
+    ],
+    "split": "train"
+  },
+  "ro_00024": {
+    "azimuth": 301,
+    "bbox_xyxyn": [
+      0.062,
+      0.453,
+      0.084,
+      0.476
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50678",
+      "pyronear_french:50881",
+      "pyronear_french:51215",
+      "pyronear_french:52555",
+      "pyronear_french:52755",
+      "pyronear_french:53113"
+    ],
+    "split": "train"
+  },
+  "ro_00025": {
+    "azimuth": 96,
+    "bbox_xyxyn": [
+      0.245,
+      0.455,
+      0.262,
+      0.47
+    ],
+    "camera": "sdis-77_videlles-01",
+    "ingested_folders": [
+      "sdis-77_videlles-01_96_2026-07-08T06-36-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50680",
+      "pyronear_french:51226",
+      "pyronear_french:52309",
+      "pyronear_french:56043",
+      "pyronear_french:56410"
+    ],
+    "split": "train"
+  },
+  "ro_00026": {
+    "azimuth": 246,
+    "bbox_xyxyn": [
+      0.724,
+      0.549,
+      0.744,
+      0.565
+    ],
+    "camera": "sdis-07_brison-03",
+    "ingested_folders": [
+      "sdis-07_brison-03_246_2026-07-12T04-49-02"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50691",
+      "pyronear_french:50765",
+      "pyronear_french:51218",
+      "pyronear_french:51301",
+      "pyronear_french:51473",
+      "pyronear_french:51516",
+      "pyronear_french:51689",
+      "pyronear_french:51772",
+      "pyronear_french:51991",
+      "pyronear_french:52056",
+      "pyronear_french:52294",
+      "pyronear_french:52561",
+      "pyronear_french:52610",
+      "pyronear_french:52760",
+      "pyronear_french:52940",
+      "pyronear_french:53118",
+      "pyronear_french:53130",
+      "pyronear_french:53470",
+      "pyronear_french:53624",
+      "pyronear_french:54928",
+      "pyronear_french:55149",
+      "pyronear_french:55277",
+      "pyronear_french:55807",
+      "pyronear_french:56049",
+      "pyronear_french:56212",
+      "pyronear_french:56457",
+      "pyronear_french:56546",
+      "pyronear_french:56655",
+      "pyronear_french:56959",
+      "pyronear_french:57079",
+      "pyronear_french:57150",
+      "pyronear_french:57216"
+    ],
+    "split": "val"
+  },
+  "ro_00027": {
+    "azimuth": 73,
+    "bbox_xyxyn": [
+      0.888,
+      0.413,
+      0.898,
+      0.427
+    ],
+    "camera": "sdis-07_brison-01",
+    "ingested_folders": [
+      "sdis-07_brison-01_73_2026-07-02T05-35-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50702",
+      "pyronear_french:50910",
+      "pyronear_french:51221",
+      "pyronear_french:51692",
+      "pyronear_french:52769",
+      "pyronear_french:53121",
+      "pyronear_french:53483",
+      "pyronear_french:55285",
+      "pyronear_french:56459",
+      "pyronear_french:56559",
+      "pyronear_french:56966",
+      "pyronear_french:57153"
+    ],
+    "split": "train"
+  },
+  "ro_00028": {
+    "azimuth": 128,
+    "bbox_xyxyn": [
+      0.765,
+      0.517,
+      0.786,
+      0.545
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50718",
+      "pyronear_french:50970",
+      "pyronear_french:51238",
+      "pyronear_french:51495",
+      "pyronear_french:51715",
+      "pyronear_french:52336",
+      "pyronear_french:56086",
+      "pyronear_french:57168"
+    ],
+    "split": "train"
+  },
+  "ro_00029": {
+    "azimuth": 86,
+    "bbox_xyxyn": [
+      0.073,
+      0.457,
+      0.086,
+      0.47
+    ],
+    "camera": "sdis-77_videlles-01",
+    "ingested_folders": [
+      "sdis-77_videlles-01_86_2026-07-25T07-28-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50721",
+      "pyronear_french:51252",
+      "pyronear_french:52347",
+      "pyronear_french:55451",
+      "pyronear_french:55847",
+      "pyronear_french:56685"
+    ],
+    "split": "train"
+  },
+  "ro_00030": {
+    "azimuth": 326,
+    "bbox_xyxyn": [
+      0.475,
+      0.482,
+      0.483,
+      0.505
+    ],
+    "camera": "sdis-77_croix-augas-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50747",
+      "pyronear_french:53778",
+      "pyronear_french:56123",
+      "pyronear_french:56356",
+      "pyronear_french:56847",
+      "pyronear_french:57009",
+      "pyronear_french:57094"
+    ],
+    "split": "train"
+  },
+  "ro_00031": {
+    "azimuth": 83,
+    "bbox_xyxyn": [
+      0.5680000000000001,
+      0.468,
+      0.585,
+      0.4945
+    ],
+    "camera": "sdis-77_videlles-02",
+    "ingested_folders": [
+      "sdis-77_videlles-02_83_2026-07-02T10-50-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50758"
+    ],
+    "split": "train"
+  },
+  "ro_00032": {
+    "azimuth": 268,
+    "bbox_xyxyn": [
+      0.594,
+      0.463,
+      0.5985,
+      0.475
+    ],
+    "camera": "sdis-91_sdis-tigery-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50810",
+      "pyronear_french:50838",
+      "pyronear_french:55425",
+      "pyronear_french:55588",
+      "pyronear_french:55794",
+      "pyronear_french:56029",
+      "pyronear_french:56529"
+    ],
+    "split": "train"
+  },
+  "ro_00033": {
+    "azimuth": 358,
+    "bbox_xyxyn": [
+      0.091,
+      0.507,
+      0.106,
+      0.527
+    ],
+    "camera": "vendoeuvres_vendoeuvres-01",
+    "ingested_folders": [
+      "vendoeuvres_vendoeuvres-01_358_2026-07-08T17-00-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50856",
+      "pyronear_french:51147",
+      "pyronear_french:51388",
+      "pyronear_french:51474",
+      "pyronear_french:51974",
+      "pyronear_french:52000",
+      "pyronear_french:52490",
+      "pyronear_french:52718",
+      "pyronear_french:54688",
+      "pyronear_french:56033",
+      "pyronear_french:57120",
+      "pyronear_french:57322"
+    ],
+    "split": "train"
+  },
+  "ro_00034": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.031,
+      0.729,
+      0.05,
+      0.747
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50870",
+      "pyronear_french:52549",
+      "pyronear_french:55086"
+    ],
+    "split": "train"
+  },
+  "ro_00035": {
+    "azimuth": 328,
+    "bbox_xyxyn": [
+      0.257,
+      0.579,
+      0.284,
+      0.618
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:50906",
+      "pyronear_french:55348",
+      "pyronear_french:55440",
+      "pyronear_french:55474",
+      "pyronear_french:57151"
+    ],
+    "split": "train"
+  },
+  "ro_00036": {
+    "azimuth": 356,
+    "bbox_xyxyn": [
+      0.8955,
+      0.494,
+      0.908,
+      0.514
+    ],
+    "camera": "vendoeuvres_vendoeuvres-01",
+    "ingested_folders": [
+      "vendoeuvres_vendoeuvres-01_356_2026-08-05T18-17-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50938",
+      "pyronear_french:51464",
+      "pyronear_french:51600",
+      "pyronear_french:51992",
+      "pyronear_french:52295",
+      "pyronear_french:57119"
+    ],
+    "split": "val"
+  },
+  "ro_00037": {
+    "azimuth": 213,
+    "bbox_xyxyn": [
+      0.73,
+      0.482,
+      0.75,
+      0.513
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [
+      "germersheim_germersheim-02_213_2026-07-03T13-47-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51075",
+      "pyronear_french:51403",
+      "pyronear_french:52679",
+      "pyronear_french:53090",
+      "pyronear_french:53773",
+      "pyronear_french:54515",
+      "pyronear_french:54648",
+      "pyronear_french:55202",
+      "pyronear_french:55485",
+      "pyronear_french:55581",
+      "pyronear_french:56605",
+      "pyronear_french:56868"
+    ],
+    "split": "train"
+  },
+  "ro_00038": {
+    "azimuth": 13,
+    "bbox_xyxyn": [
+      0.928,
+      0.461,
+      0.937,
+      0.48
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51086",
+      "pyronear_french:52142",
+      "pyronear_french:53344",
+      "pyronear_french:54990"
+    ],
+    "split": "train"
+  },
+  "ro_00039": {
+    "azimuth": 316,
+    "bbox_xyxyn": [
+      0.794,
+      0.191,
+      0.8154999999999999,
+      0.208
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51156",
+      "pyronear_french:51956",
+      "pyronear_french:53101",
+      "pyronear_french:53760"
+    ],
+    "split": "train"
+  },
+  "ro_00040": {
+    "azimuth": 320,
+    "bbox_xyxyn": [
+      0.041499999999999995,
+      0.237,
+      0.111,
+      0.334
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51181",
+      "pyronear_french:51952",
+      "pyronear_french:52726",
+      "pyronear_french:53089",
+      "pyronear_french:53281",
+      "pyronear_french:53420"
+    ],
+    "split": "train"
+  },
+  "ro_00041": {
+    "azimuth": 7,
+    "bbox_xyxyn": [
+      0.602,
+      0.562,
+      0.629,
+      0.582
+    ],
+    "camera": "adf_font-rubi-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51204",
+      "pyronear_french:51457",
+      "pyronear_french:51673",
+      "pyronear_french:52942",
+      "pyronear_french:55529"
+    ],
+    "split": "train"
+  },
+  "ro_00042": {
+    "azimuth": 39,
+    "bbox_xyxyn": [
+      0.781,
+      0.459,
+      0.8065,
+      0.489
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [
+      "sdis-77_nemours-02_39_2026-07-04T09-10-03"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51265"
+    ],
+    "split": "train"
+  },
+  "ro_00043": {
+    "azimuth": 145,
+    "bbox_xyxyn": [
+      0.198,
+      0.474,
+      0.208,
+      0.497
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51315",
+      "pyronear_french:52640",
+      "pyronear_french:52834",
+      "pyronear_french:52998",
+      "pyronear_french:55183",
+      "pyronear_french:55364",
+      "pyronear_french:56590"
+    ],
+    "split": "train"
+  },
+  "ro_00044": {
+    "azimuth": 170,
+    "bbox_xyxyn": [
+      0.403,
+      0.876,
+      0.422,
+      0.895
+    ],
+    "camera": "sdis-91_sdis-tigery-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51405",
+      "pyronear_french:52238",
+      "pyronear_french:53246",
+      "pyronear_french:53479",
+      "pyronear_french:53627",
+      "pyronear_french:53755",
+      "pyronear_french:53831",
+      "pyronear_french:54239",
+      "pyronear_french:56886",
+      "pyronear_french:57291"
+    ],
+    "split": "train"
+  },
+  "ro_00045": {
+    "azimuth": 319,
+    "bbox_xyxyn": [
+      0.127,
+      0.325,
+      0.197,
+      0.427
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51427",
+      "pyronear_french:52725",
+      "pyronear_french:52920",
+      "pyronear_french:53087",
+      "pyronear_french:54458",
+      "pyronear_french:55784"
+    ],
+    "split": "train"
+  },
+  "ro_00046": {
+    "azimuth": 236,
+    "bbox_xyxyn": [
+      0.231,
+      0.469,
+      0.244,
+      0.491
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [
+      "germersheim_germersheim-02_236_2026-08-03T19-36-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51454",
+      "pyronear_french:51668",
+      "pyronear_french:53290",
+      "pyronear_french:53431",
+      "pyronear_french:53808",
+      "pyronear_french:54472",
+      "pyronear_french:54568",
+      "pyronear_french:54698",
+      "pyronear_french:54903",
+      "pyronear_french:55084",
+      "pyronear_french:55252",
+      "pyronear_french:56034",
+      "pyronear_french:56325",
+      "pyronear_french:56743"
+    ],
+    "split": "val"
+  },
+  "ro_00047": {
+    "azimuth": 110,
+    "bbox_xyxyn": [
+      0.675,
+      0.47,
+      0.681,
+      0.481
+    ],
+    "camera": "germersheim_germersheim-01",
+    "ingested_folders": [
+      "germersheim_germersheim-01_110_2026-08-06T11-14-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51468",
+      "pyronear_french:52585",
+      "pyronear_french:54158",
+      "pyronear_french:57215",
+      "pyronear_french:57252"
+    ],
+    "split": "train"
+  },
+  "ro_00048": {
+    "azimuth": 126,
+    "bbox_xyxyn": [
+      0.053,
+      0.379,
+      0.099,
+      0.415
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_126_2026-07-05T11-36-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51528"
+    ],
+    "split": "train"
+  },
+  "ro_00049": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.304,
+      0.454,
+      0.316,
+      0.47
+    ],
+    "camera": "sdis-91_sdis-tigery-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51686",
+      "pyronear_french:51988",
+      "pyronear_french:52292"
+    ],
+    "split": "train"
+  },
+  "ro_00050": {
+    "azimuth": 246,
+    "bbox_xyxyn": [
+      0.731,
+      0.434,
+      0.755,
+      0.456
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_246_2026-07-27T06-38-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51749",
+      "pyronear_french:52023",
+      "pyronear_french:53875",
+      "pyronear_french:54136",
+      "pyronear_french:54722",
+      "pyronear_french:55659"
+    ],
+    "split": "train"
+  },
+  "ro_00051": {
+    "azimuth": 233,
+    "bbox_xyxyn": [
+      0.74,
+      0.395,
+      0.754,
+      0.424
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:51850",
+      "pyronear_french:52653",
+      "pyronear_french:52849",
+      "pyronear_french:53247",
+      "pyronear_french:55985"
+    ],
+    "split": "train"
+  },
+  "ro_00052": {
+    "azimuth": 344,
+    "bbox_xyxyn": [
+      0.223,
+      0.5785,
+      0.273,
+      0.702
+    ],
+    "camera": "sdis-07_sampzon-ldd-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:52256"
+    ],
+    "split": "train"
+  },
+  "ro_00053": {
+    "azimuth": 334,
+    "bbox_xyxyn": [
+      0.192,
+      0.507,
+      0.198,
+      0.52
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:52262",
+      "pyronear_french:53088",
+      "pyronear_french:53421"
+    ],
+    "split": "train"
+  },
+  "ro_00054": {
+    "azimuth": 252,
+    "bbox_xyxyn": [
+      0.737,
+      0.332,
+      0.7825,
+      0.393
+    ],
+    "camera": "sdis-40_morcenx-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:52503",
+      "pyronear_french:52716",
+      "pyronear_french:53266",
+      "pyronear_french:54542",
+      "pyronear_french:54673",
+      "pyronear_french:54879",
+      "pyronear_french:56005"
+    ],
+    "split": "train"
+  },
+  "ro_00055": {
+    "azimuth": 27,
+    "bbox_xyxyn": [
+      0.503,
+      0.447,
+      0.523,
+      0.47
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [
+      "sdis-77_nemours-02_27_2026-07-09T07-40-56"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52582"
+    ],
+    "split": "train"
+  },
+  "ro_00056": {
+    "azimuth": 66,
+    "bbox_xyxyn": [
+      0.8175,
+      0.374,
+      0.8434999999999999,
+      0.409
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-02",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-02_66_2026-07-09T17-25-06"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52712"
+    ],
+    "split": "val"
+  },
+  "ro_00057": {
+    "azimuth": 152,
+    "bbox_xyxyn": [
+      0.117,
+      0.432,
+      0.138,
+      0.455
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_152_2026-07-10T06-20-03"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52777",
+      "pyronear_french:53127",
+      "pyronear_french:53845",
+      "pyronear_french:55113",
+      "pyronear_french:55287",
+      "pyronear_french:55448",
+      "pyronear_french:55822",
+      "pyronear_french:56060",
+      "pyronear_french:56765",
+      "pyronear_french:56979",
+      "pyronear_french:57156"
+    ],
+    "split": "train"
+  },
+  "ro_00058": {
+    "azimuth": 121,
+    "bbox_xyxyn": [
+      0.409,
+      0.656,
+      0.435,
+      0.736
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:52922",
+      "pyronear_french:53091",
+      "pyronear_french:53280",
+      "pyronear_french:53786",
+      "pyronear_french:54462",
+      "pyronear_french:54556",
+      "pyronear_french:54690",
+      "pyronear_french:54886",
+      "pyronear_french:56015",
+      "pyronear_french:56196"
+    ],
+    "split": "train"
+  },
+  "ro_00059": {
+    "azimuth": 262,
+    "bbox_xyxyn": [
+      0.359,
+      0.378,
+      0.365,
+      0.391
+    ],
+    "camera": "yvelines-78_poteau-quenouilles-02",
+    "ingested_folders": [
+      "yvelines-78_poteau-quenouilles-02_262_2026-07-14T19-18-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52963",
+      "pyronear_french:53046",
+      "pyronear_french:53306",
+      "pyronear_french:53407",
+      "pyronear_french:53601",
+      "pyronear_french:53708",
+      "pyronear_french:54009"
+    ],
+    "split": "train"
+  },
+  "ro_00060": {
+    "azimuth": 157,
+    "bbox_xyxyn": [
+      0.499,
+      0.5845,
+      0.528,
+      0.661
+    ],
+    "camera": "vendoeuvres_vendoeuvres-02",
+    "ingested_folders": [
+      "vendoeuvres_vendoeuvres-02_157_2026-07-14T19-30-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53106",
+      "pyronear_french:53371",
+      "pyronear_french:53602",
+      "pyronear_french:53632",
+      "pyronear_french:53777",
+      "pyronear_french:53924",
+      "pyronear_french:53973",
+      "pyronear_french:54131",
+      "pyronear_french:54172",
+      "pyronear_french:55571",
+      "pyronear_french:55623",
+      "pyronear_french:56321",
+      "pyronear_french:56354",
+      "pyronear_french:56714",
+      "pyronear_french:56757",
+      "pyronear_french:56996"
+    ],
+    "split": "train"
+  },
+  "ro_00061": {
+    "azimuth": 345,
+    "bbox_xyxyn": [
+      0.244,
+      0.34,
+      0.2655,
+      0.362
+    ],
+    "camera": "adf_pontons-03",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53120",
+      "pyronear_french:54581",
+      "pyronear_french:54711",
+      "pyronear_french:55552",
+      "pyronear_french:55813",
+      "pyronear_french:56046",
+      "pyronear_french:56215",
+      "pyronear_french:56561"
+    ],
+    "split": "train"
+  },
+  "ro_00062": {
+    "azimuth": 334,
+    "bbox_xyxyn": [
+      0.056,
+      0.55,
+      0.078,
+      0.613
+    ],
+    "camera": "adf_montgros-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53262",
+      "pyronear_french:53307",
+      "pyronear_french:54750",
+      "pyronear_french:54926",
+      "pyronear_french:55102",
+      "pyronear_french:55514",
+      "pyronear_french:55546",
+      "pyronear_french:56329",
+      "pyronear_french:56415",
+      "pyronear_french:56452"
+    ],
+    "split": "train"
+  },
+  "ro_00063": {
+    "azimuth": 24,
+    "bbox_xyxyn": [
+      0.889,
+      0.633,
+      0.912,
+      0.692
+    ],
+    "camera": "adf_montgros-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53427",
+      "pyronear_french:53516",
+      "pyronear_french:53600",
+      "pyronear_french:53647",
+      "pyronear_french:53862",
+      "pyronear_french:53923",
+      "pyronear_french:53992",
+      "pyronear_french:54049",
+      "pyronear_french:54105",
+      "pyronear_french:54280",
+      "pyronear_french:54382"
+    ],
+    "split": "train"
+  },
+  "ro_00064": {
+    "azimuth": 18,
+    "bbox_xyxyn": [
+      0.226,
+      0.482,
+      0.24,
+      0.523
+    ],
+    "camera": "sdis-91_sdis-tigery-02",
+    "ingested_folders": [
+      "sdis-91_sdis-tigery-02_18_2026-08-05T05-08-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53462",
+      "pyronear_french:53820",
+      "pyronear_french:54072",
+      "pyronear_french:54079",
+      "pyronear_french:54321",
+      "pyronear_french:54579",
+      "pyronear_french:54709",
+      "pyronear_french:54925",
+      "pyronear_french:55092",
+      "pyronear_french:55273",
+      "pyronear_french:55436",
+      "pyronear_french:55539",
+      "pyronear_french:55644",
+      "pyronear_french:55806",
+      "pyronear_french:56035",
+      "pyronear_french:56213",
+      "pyronear_french:56453",
+      "pyronear_french:56553",
+      "pyronear_french:56649",
+      "pyronear_french:56956",
+      "pyronear_french:57145"
+    ],
+    "split": "train"
+  },
+  "ro_00065": {
+    "azimuth": 210,
+    "bbox_xyxyn": [
+      0.294,
+      0.515,
+      0.335,
+      0.552
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53474",
+      "pyronear_french:55801",
+      "pyronear_french:56039",
+      "pyronear_french:56317",
+      "pyronear_french:56421",
+      "pyronear_french:56525",
+      "pyronear_french:56538",
+      "pyronear_french:56551",
+      "pyronear_french:56639"
+    ],
+    "split": "val"
+  },
+  "ro_00066": {
+    "azimuth": 144,
+    "bbox_xyxyn": [
+      0.822,
+      0.446,
+      0.853,
+      0.479
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_144_2026-07-27T04-05-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53480",
+      "pyronear_french:54256",
+      "pyronear_french:54600",
+      "pyronear_french:55147",
+      "pyronear_french:55631"
+    ],
+    "split": "train"
+  },
+  "ro_00067": {
+    "azimuth": 351,
+    "bbox_xyxyn": [
+      0.346,
+      0.321,
+      0.369,
+      0.337
+    ],
+    "camera": "adf_pontons-03",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53539",
+      "pyronear_french:53830",
+      "pyronear_french:53952",
+      "pyronear_french:54275",
+      "pyronear_french:54724",
+      "pyronear_french:55290",
+      "pyronear_french:55482",
+      "pyronear_french:55566",
+      "pyronear_french:55646",
+      "pyronear_french:56560"
+    ],
+    "split": "train"
+  },
+  "ro_00068": {
+    "azimuth": 268,
+    "bbox_xyxyn": [
+      0.0,
+      0.6555,
+      0.017,
+      0.727
+    ],
+    "camera": "sdis-07_brison-04",
+    "ingested_folders": [
+      "sdis-07_brison-04_268_2026-07-29T18-39-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53596",
+      "pyronear_french:54683",
+      "pyronear_french:55532",
+      "pyronear_french:55613",
+      "pyronear_french:56025",
+      "pyronear_french:56197",
+      "pyronear_french:56312",
+      "pyronear_french:56429",
+      "pyronear_french:56540",
+      "pyronear_french:56624",
+      "pyronear_french:56734",
+      "pyronear_french:56929"
+    ],
+    "split": "train"
+  },
+  "ro_00069": {
+    "azimuth": 299,
+    "bbox_xyxyn": [
+      0.628,
+      0.734,
+      0.654,
+      0.78
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53804",
+      "pyronear_french:53847",
+      "pyronear_french:54407",
+      "pyronear_french:56238",
+      "pyronear_french:56257",
+      "pyronear_french:56357",
+      "pyronear_french:56760"
+    ],
+    "split": "train"
+  },
+  "ro_00070": {
+    "azimuth": 19,
+    "bbox_xyxyn": [
+      0.788,
+      0.493,
+      0.835,
+      0.538
+    ],
+    "camera": "adf_montgros-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:53813",
+      "pyronear_french:56547",
+      "pyronear_french:56636",
+      "pyronear_french:56749",
+      "pyronear_french:56945",
+      "pyronear_french:57140"
+    ],
+    "split": "train"
+  },
+  "ro_00071": {
+    "azimuth": 42,
+    "bbox_xyxyn": [
+      0.818,
+      0.454,
+      0.831,
+      0.479
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [
+      "sdis-77_nemours-02_42_2026-07-16T09-37-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53901"
+    ],
+    "split": "train"
+  },
+  "ro_00072": {
+    "azimuth": 204,
+    "bbox_xyxyn": [
+      0.663,
+      0.4165,
+      0.709,
+      0.4515
+    ],
+    "camera": "sdis-77_nemours-01",
+    "ingested_folders": [
+      "sdis-77_nemours-01_204_2026-07-16T13-07-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53950"
+    ],
+    "split": "train"
+  },
+  "ro_00073": {
+    "azimuth": 173,
+    "bbox_xyxyn": [
+      0.196,
+      0.538,
+      0.233,
+      0.584
+    ],
+    "camera": "sdis-77_moret-sur-loing-01",
+    "ingested_folders": [
+      "sdis-77_moret-sur-loing-01_173_2026-07-16T13-45-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53960"
+    ],
+    "split": "train"
+  },
+  "ro_00074": {
+    "azimuth": 132,
+    "bbox_xyxyn": [
+      0.605,
+      0.422,
+      0.637,
+      0.451
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54041"
+    ],
+    "split": "train"
+  },
+  "ro_00075": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.095,
+      0.747,
+      0.11,
+      0.766
+    ],
+    "camera": "sdis-40_morcenx-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54071"
+    ],
+    "split": "train"
+  },
+  "ro_00076": {
+    "azimuth": 223,
+    "bbox_xyxyn": [
+      0.813,
+      0.595,
+      0.846,
+      0.635
+    ],
+    "camera": "vendoeuvres_vendoeuvres-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54114",
+      "pyronear_french:54205",
+      "pyronear_french:54309",
+      "pyronear_french:55501",
+      "pyronear_french:56218",
+      "pyronear_french:56243",
+      "pyronear_french:56310",
+      "pyronear_french:56370"
+    ],
+    "split": "val"
+  },
+  "ro_00077": {
+    "azimuth": 81,
+    "bbox_xyxyn": [
+      0.001,
+      0.4785,
+      0.065,
+      0.574
+    ],
+    "camera": "sdis-40_morcenx-02",
+    "ingested_folders": [
+      "sdis-40_morcenx-02_81_2026-07-18T08-54-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54147",
+      "pyronear_french:54391",
+      "pyronear_french:54594",
+      "pyronear_french:55305"
+    ],
+    "split": "train"
+  },
+  "ro_00078": {
+    "azimuth": 21,
+    "bbox_xyxyn": [
+      0.835,
+      0.288,
+      0.849,
+      0.304
+    ],
+    "camera": "sdis-07_bidon-ldd-01",
+    "ingested_folders": [
+      "sdis-07_bidon-ldd-01_21_2026-07-18T06-08-07"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54204",
+      "pyronear_french:54354"
+    ],
+    "split": "train"
+  },
+  "ro_00079": {
+    "azimuth": 4,
+    "bbox_xyxyn": [
+      0.2955,
+      0.351,
+      0.308,
+      0.367
+    ],
+    "camera": "st-martin-de-toques_st-martin-de-toques-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54337",
+      "pyronear_french:54543",
+      "pyronear_french:54592",
+      "pyronear_french:55238",
+      "pyronear_french:55279",
+      "pyronear_french:55656"
+    ],
+    "split": "train"
+  },
+  "ro_00080": {
+    "azimuth": 52,
+    "bbox_xyxyn": [
+      0.366,
+      0.349,
+      0.374,
+      0.365
+    ],
+    "camera": "st-martin-de-toques_st-martin-de-toques-01",
+    "ingested_folders": [
+      "st-martin-de-toques_st-martin-de-toques-01_52_2026-07-20T18-47-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54352",
+      "pyronear_french:54451",
+      "pyronear_french:54590",
+      "pyronear_french:54689"
+    ],
+    "split": "train"
+  },
+  "ro_00081": {
+    "azimuth": 295,
+    "bbox_xyxyn": [
+      0.5845,
+      0.368,
+      0.596,
+      0.393
+    ],
+    "camera": "st-peray_st-peray-03",
+    "ingested_folders": [
+      "st-peray_st-peray-03_295_2026-07-25T18-40-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54481",
+      "pyronear_french:54596",
+      "pyronear_french:54746",
+      "pyronear_french:54961",
+      "pyronear_french:55121",
+      "pyronear_french:55313",
+      "pyronear_french:55516",
+      "pyronear_french:55635"
+    ],
+    "split": "train"
+  },
+  "ro_00082": {
+    "azimuth": 334,
+    "bbox_xyxyn": [
+      0.193,
+      0.5085,
+      0.201,
+      0.524
+    ],
+    "camera": "germersheim_germersheim-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54551",
+      "pyronear_french:55421"
+    ],
+    "split": "train"
+  },
+  "ro_00083": {
+    "azimuth": 356,
+    "bbox_xyxyn": [
+      0.93,
+      0.35,
+      0.941,
+      0.362
+    ],
+    "camera": "st-martin-de-toques_st-martin-de-toques-01",
+    "ingested_folders": [
+      "st-martin-de-toques_st-martin-de-toques-01_356_2026-07-27T11-05-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54566",
+      "pyronear_french:54859",
+      "pyronear_french:55377",
+      "pyronear_french:55702"
+    ],
+    "split": "train"
+  },
+  "ro_00084": {
+    "azimuth": 173,
+    "bbox_xyxyn": [
+      0.817,
+      0.637,
+      0.996,
+      0.745
+    ],
+    "camera": "sdis-77_videlles-01",
+    "ingested_folders": [
+      "sdis-77_videlles-01_173_2026-07-20T12-32-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54623"
+    ],
+    "split": "train"
+  },
+  "ro_00085": {
+    "azimuth": 110,
+    "bbox_xyxyn": [
+      0.675,
+      0.462,
+      0.682,
+      0.474
+    ],
+    "camera": "germersheim_germersheim-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54739"
+    ],
+    "split": "val"
+  },
+  "ro_00086": {
+    "azimuth": 349,
+    "bbox_xyxyn": [
+      0.311,
+      0.444,
+      0.3245,
+      0.472
+    ],
+    "camera": "adf_montgros-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:54759",
+      "pyronear_french:54963",
+      "pyronear_french:55031",
+      "pyronear_french:55555",
+      "pyronear_french:56339",
+      "pyronear_french:56483"
+    ],
+    "split": "train"
+  },
+  "ro_00087": {
+    "azimuth": 48,
+    "bbox_xyxyn": [
+      0.119,
+      0.376,
+      0.125,
+      0.392
+    ],
+    "camera": "yvelines-78_poteau-quenouilles-01",
+    "ingested_folders": [
+      "yvelines-78_poteau-quenouilles-01_48_2026-07-21T18-58-31"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54891",
+      "pyronear_french:54936",
+      "pyronear_french:55075"
+    ],
+    "split": "train"
+  },
+  "ro_00088": {
+    "azimuth": 299,
+    "bbox_xyxyn": [
+      0.649,
+      0.464,
+      0.655,
+      0.478
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [
+      "sdis-77_nemours-02_299_2026-07-22T20-12-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55087",
+      "pyronear_french:55761",
+      "pyronear_french:55797",
+      "pyronear_french:56326",
+      "pyronear_french:56444"
+    ],
+    "split": "train"
+  },
+  "ro_00089": {
+    "azimuth": 354,
+    "bbox_xyxyn": [
+      0.116,
+      0.373,
+      0.127,
+      0.386
+    ],
+    "camera": "st-martin-de-toques_st-martin-de-toques-01",
+    "ingested_folders": [
+      "st-martin-de-toques_st-martin-de-toques-01_354_2026-07-23T10-30-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55137",
+      "pyronear_french:55155",
+      "pyronear_french:55864",
+      "pyronear_french:56806",
+      "pyronear_french:56991",
+      "pyronear_french:57095",
+      "pyronear_french:57130",
+      "pyronear_french:57172"
+    ],
+    "split": "train"
+  },
+  "ro_00090": {
+    "azimuth": 320,
+    "bbox_xyxyn": [
+      0.265,
+      0.403,
+      0.275,
+      0.426
+    ],
+    "camera": "st-martin-de-toques_st-martin-de-toques-01",
+    "ingested_folders": [
+      "st-martin-de-toques_st-martin-de-toques-01_320_2026-08-03T05-21-12"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55188",
+      "pyronear_french:55583",
+      "pyronear_french:56602",
+      "pyronear_french:56645",
+      "pyronear_french:56701",
+      "pyronear_french:56787",
+      "pyronear_french:56933",
+      "pyronear_french:56960",
+      "pyronear_french:57124",
+      "pyronear_french:57299"
+    ],
+    "split": "train"
+  },
+  "ro_00091": {
+    "azimuth": 10,
+    "bbox_xyxyn": [
+      0.195,
+      0.325,
+      0.213,
+      0.339
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_10_2026-07-24T13-19-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55378"
+    ],
+    "split": "train"
+  },
+  "ro_00092": {
+    "azimuth": 299,
+    "bbox_xyxyn": [
+      0.652,
+      0.47,
+      0.658,
+      0.4835
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:55432"
+    ],
+    "split": "train"
+  },
+  "ro_00093": {
+    "azimuth": 50,
+    "bbox_xyxyn": [
+      0.601,
+      0.449,
+      0.608,
+      0.463
+    ],
+    "camera": "sdis-77_moret-sur-loing-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:55628",
+      "pyronear_french:56768",
+      "pyronear_french:56859",
+      "pyronear_french:56952",
+      "pyronear_french:57024",
+      "pyronear_french:57068"
+    ],
+    "split": "train"
+  },
+  "ro_00094": {
+    "azimuth": 29,
+    "bbox_xyxyn": [
+      0.974,
+      0.557,
+      0.9895,
+      0.61
+    ],
+    "camera": "adf_montgros-02",
+    "ingested_folders": [
+      "adf_montgros-02_29_2026-07-28T11-01-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55652",
+      "pyronear_french:55789",
+      "pyronear_french:55840",
+      "pyronear_french:55898",
+      "pyronear_french:56026",
+      "pyronear_french:56090",
+      "pyronear_french:56199",
+      "pyronear_french:56227"
+    ],
+    "split": "train"
+  },
+  "ro_00095": {
+    "azimuth": 185,
+    "bbox_xyxyn": [
+      0.39849999999999997,
+      0.367,
+      0.4565,
+      0.4035
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_185_2026-07-28T11-38-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55905"
+    ],
+    "split": "train"
+  },
+  "ro_00096": {
+    "azimuth": 36,
+    "bbox_xyxyn": [
+      0.2,
+      0.518,
+      0.217,
+      0.557
+    ],
+    "camera": "sdis-77_nemours-01",
+    "ingested_folders": [
+      "sdis-77_nemours-01_36_2026-08-01T13-15-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56508"
+    ],
+    "split": "val"
+  },
+  "ro_00097": {
+    "azimuth": 258,
+    "bbox_xyxyn": [
+      0.046,
+      0.15,
+      0.064,
+      0.205
+    ],
+    "camera": "sdis-77_croix-augas-01",
+    "ingested_folders": [
+      "sdis-77_croix-augas-01_258_2026-08-02T19-42-42"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56630"
+    ],
+    "split": "train"
+  },
+  "ro_00098": {
+    "azimuth": 328,
+    "bbox_xyxyn": [
+      0.269,
+      0.3875,
+      0.276,
+      0.402
+    ],
+    "camera": "yvelines-78_poteau-quenouilles-01",
+    "ingested_folders": [
+      "yvelines-78_poteau-quenouilles-01_328_2026-08-06T18-57-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56736",
+      "pyronear_french:56791",
+      "pyronear_french:56968",
+      "pyronear_french:56990",
+      "pyronear_french:57333"
+    ],
+    "split": "train"
+  },
+  "ro_00099": {
+    "azimuth": 232,
+    "bbox_xyxyn": [
+      0.471,
+      0.338,
+      0.476,
+      0.352
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-01",
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-01_232_2026-08-05T10-20-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56976",
+      "pyronear_french:57017",
+      "pyronear_french:57144",
+      "pyronear_french:57315"
+    ],
+    "split": "train"
+  },
+  "ro_00100": {
+    "azimuth": 48,
+    "bbox_xyxyn": [
+      0.115,
+      0.373,
+      0.127,
+      0.4
+    ],
+    "camera": "yvelines-78_poteau-quenouilles-01",
+    "ingested_folders": [
+      "yvelines-78_poteau-quenouilles-01_48_2026-08-05T10-21-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57018"
+    ],
+    "split": "train"
+  },
+  "ro_00101": {
+    "azimuth": 48,
+    "bbox_xyxyn": [
+      0.12,
+      0.383,
+      0.127,
+      0.399
+    ],
+    "camera": "yvelines-78_poteau-quenouilles-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57091",
+      "pyronear_french:57149"
+    ],
+    "split": "train"
+  },
+  "ro_00102": {
+    "azimuth": 316,
+    "bbox_xyxyn": [
+      0.794,
+      0.201,
+      0.815,
+      0.216
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57121"
+    ],
+    "split": "train"
+  },
+  "ro_00103": {
+    "azimuth": 328,
+    "bbox_xyxyn": [
+      0.5874999999999999,
+      0.349,
+      0.618,
+      0.39
+    ],
+    "camera": "sdis-91_chateau-eau-milly-la-foret-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57324"
+    ],
+    "split": "train"
+  },
+  "ro_00104": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.0,
+      0.5,
+      0.026,
+      0.556
+    ],
+    "camera": "sdis-12_pouncho-agast-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57328"
+    ],
+    "split": "train"
+  },
+  "ro_00105": {
+    "azimuth": 170,
+    "bbox_xyxyn": [
+      0.66,
+      0.272,
+      0.673,
+      0.295
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57329"
+    ],
+    "split": "val"
+  },
+  "ro_00106": {
+    "azimuth": 117,
+    "bbox_xyxyn": [
+      0.856,
+      0.405,
+      0.88,
+      0.428
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57331"
+    ],
+    "split": "train"
+  },
+  "ro_00107": {
+    "azimuth": 20,
+    "bbox_xyxyn": [
+      0.863,
+      0.431,
+      0.882,
+      0.448
+    ],
+    "camera": "adf_can-mitjans-01",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57332"
+    ],
+    "split": "train"
+  },
+  "ro_00108": {
+    "azimuth": 187,
+    "bbox_xyxyn": [
+      0.291,
+      0.507,
+      0.324,
+      0.54
+    ],
+    "camera": "sdis-91_videlles-03",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57334"
+    ],
+    "split": "train"
+  },
+  "ro_00109": {
+    "azimuth": 302,
+    "bbox_xyxyn": [
+      0.741,
+      0.538,
+      0.7595000000000001,
+      0.559
+    ],
+    "camera": "sdis-40_morcenx-02",
+    "ingested_folders": [],
+    "seen_alerts": [
+      "pyronear_french:57341"
+    ],
+    "split": "train"
+  }
+}

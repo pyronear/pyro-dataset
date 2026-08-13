@@ -177,6 +177,45 @@ def test_rerun_is_idempotent_and_the_ledger_keeps_splits(tmp_path):
     }
 
 
+def test_a_later_export_does_not_double_pay_the_quota(tmp_path):
+    """The export is a full re-pull, so smoke is cumulative while staged
+    folders are skipped. Without discounting what earlier runs ingested, the
+    second import would over-supply false positives and break the balance."""
+    out = tmp_path / "staging"
+    ledger_path = tmp_path / "ledger.json"
+    export = tmp_path / "export"
+
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-b")]
+        + [make_alert(10 + i, "fp", f"cam-f{i}") for i in range(6)],
+    )
+    run_import(export, out, ledger_path)
+    assert len(list((out / "wildfire").iterdir())) == 2
+    assert len(list((out / "fp").iterdir())) == 2
+
+    # A later pull: the same two smoke alerts are still there, plus two new.
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-b")]
+        + [make_alert(3, "smoke", "cam-c"), make_alert(4, "smoke", "cam-d")]
+        + [make_alert(10 + i, "fp", f"cam-f{i}") for i in range(6)],
+    )
+    run_import(export, out, ledger_path)
+    assert len(list((out / "wildfire").iterdir())) == 4
+    assert len(list((out / "fp").iterdir())) == 4, "cumulative balance, not 2 + 4"
+
+
+def test_seen_does_not_grow_on_a_repeated_import(tmp_path):
+    export = small_export(tmp_path)
+    out = tmp_path / "staging"
+    ledger_path = tmp_path / "ledger.json"
+    for _ in range(3):
+        run_import(export, out, ledger_path)
+    entry = next(iter(json.loads(ledger_path.read_text()).values()))
+    assert entry["seen_alerts"] == ["pyronear_french:10"]
+
+
 def test_force_train_moves_an_unused_object(tmp_path):
     export = small_export(tmp_path)
     out = tmp_path / "staging"
@@ -186,7 +225,7 @@ def test_force_train_moves_an_unused_object(tmp_path):
     ledger = json.loads(ledger_path.read_text())
     ro_id = next(iter(ledger))
     ledger[ro_id]["split"] = "val"
-    ledger[ro_id]["ingested"] = 0
+    ledger[ro_id]["ingested_folders"] = []
     ledger_path.write_text(json.dumps(ledger))
 
     result = run_import(export, out, ledger_path, ["--force-train", ro_id])
@@ -207,7 +246,7 @@ def test_force_train_reaches_a_folder_staged_by_an_earlier_run(tmp_path):
     ro_id = next(iter(ledger))
     fp_folder = next((out / "fp").iterdir()).name
     ledger[ro_id]["split"] = "val"
-    ledger[ro_id]["ingested"] = 0
+    ledger[ro_id]["ingested_folders"] = []
     ledger_path.write_text(json.dumps(ledger))
     run_import(export, out, ledger_path)
     assert json.loads((out / "splits.json").read_text())[fp_folder] == "val"
@@ -225,7 +264,7 @@ def test_force_train_refuses_an_object_already_ingested_elsewhere(tmp_path):
     ledger = json.loads(ledger_path.read_text())
     ro_id = next(iter(ledger))
     ledger[ro_id]["split"] = "val"
-    ledger[ro_id]["ingested"] = 1
+    ledger[ro_id]["ingested_folders"] = ["some-folder"]
     ledger_path.write_text(json.dumps(ledger))
 
     result = run_import(export, out, ledger_path, ["--force-train", ro_id])

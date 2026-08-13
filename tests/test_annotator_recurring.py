@@ -39,64 +39,101 @@ def test_main_bbox_ignores_degenerate_boxes():
 
 def test_mint_then_match_returns_the_same_id():
     ledger = Ledger()
-    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
     assert ro_id == "ro_00001"
     assert ledger.match("cam-01", 285, (0.601, 0.461, 0.621, 0.491), 0.3) == ro_id
 
 
 def test_match_is_scoped_to_camera_and_azimuth():
     ledger = Ledger()
-    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
     assert ledger.match("cam-02", 285, (0.60, 0.46, 0.62, 0.49), 0.3) is None
     assert ledger.match("cam-01", 0, (0.60, 0.46, 0.62, 0.49), 0.3) is None
 
 
 def test_match_returns_none_below_threshold():
     ledger = Ledger()
-    ledger.mint("cam-01", 285, (0.10, 0.10, 0.20, 0.20), "train")
+    ledger.mint("cam-01", 285, (0.10, 0.10, 0.20, 0.20), "train", "src:1")
     assert ledger.match("cam-01", 285, (0.80, 0.80, 0.90, 0.90), 0.3) is None
 
 
 def test_match_picks_the_best_overlap_when_several_qualify():
     ledger = Ledger()
-    ledger.mint("cam-01", 285, (0.10, 0.10, 0.30, 0.30), "train")
-    near = ledger.mint("cam-01", 285, (0.20, 0.20, 0.40, 0.40), "train")
+    ledger.mint("cam-01", 285, (0.10, 0.10, 0.30, 0.30), "train", "src:1")
+    near = ledger.mint("cam-01", 285, (0.20, 0.20, 0.40, 0.40), "train", "src:2")
     assert ledger.match("cam-01", 285, (0.21, 0.21, 0.41, 0.41), 0.1) == near
 
 
 def test_a_matched_object_keeps_its_original_split():
     """The point of the ledger: an artefact cannot change split."""
     ledger = Ledger()
-    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "val")
-    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50))
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "val", "src:1")
+    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50), "src:2")
     assert ledger.entries[ro_id]["split"] == "val"
-    assert ledger.entries[ro_id]["seen"] == 2
+    assert ledger.seen(ro_id) == 2
 
 
 def test_seen_and_ingested_are_independent_counters():
     ledger = Ledger()
-    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
-    ledger.record_sighting(ro_id, (0.60, 0.46, 0.62, 0.49))
-    ledger.record_ingested(ro_id)
-    assert ledger.entries[ro_id]["seen"] == 2
-    assert ledger.entries[ro_id]["ingested"] == 1
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
+    ledger.record_sighting(ro_id, (0.60, 0.46, 0.62, 0.49), "src:2")
+    ledger.record_ingested(ro_id, "folder-a")
+    assert ledger.seen(ro_id) == 2
+    assert ledger.ingested(ro_id) == ["folder-a"]
 
 
 def test_record_sighting_refreshes_the_matching_bbox():
     ledger = Ledger()
-    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
-    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50))
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
+    ledger.record_sighting(ro_id, (0.61, 0.47, 0.63, 0.50), "src:2")
     assert ledger.entries[ro_id]["bbox_xyxyn"] == [0.61, 0.47, 0.63, 0.50]
 
 
 def test_round_trips_through_disk(tmp_path):
     ledger = Ledger()
-    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
     path = tmp_path / "recurring_objects.json"
     ledger.save(path)
     reloaded = Ledger.load(path)
     assert reloaded.entries[ro_id]["camera"] == "cam-01"
-    assert reloaded.mint("cam-02", 0, (0.1, 0.1, 0.2, 0.2), "train") == "ro_00002"
+    assert (
+        reloaded.mint("cam-02", 0, (0.1, 0.1, 0.2, 0.2), "train", "src:9") == "ro_00002"
+    )
+
+
+def test_seen_counts_distinct_alerts_not_repeat_sightings():
+    """The export is a full re-pull, so the same alert is matched on every run.
+    Counting instead of identifying would inflate seen by one whole history per
+    import and bias the ranking against genuinely new artefacts."""
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
+    for _ in range(3):
+        ledger.record_sighting(ro_id, (0.60, 0.46, 0.62, 0.49), "src:1")
+    assert ledger.seen(ro_id) == 1
+    ledger.record_sighting(ro_id, (0.60, 0.46, 0.62, 0.49), "src:2")
+    assert ledger.seen(ro_id) == 2
+
+
+def test_record_ingested_is_idempotent_per_folder():
+    ledger = Ledger()
+    ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
+    ledger.record_ingested(ro_id, "folder-a")
+    ledger.record_ingested(ro_id, "folder-a")
+    ledger.record_ingested(ro_id, "folder-b")
+    assert ledger.ingested(ro_id) == ["folder-a", "folder-b"]
+
+
+def test_main_bbox_is_the_median_not_the_first_box():
+    """NMS cannot discriminate without confidences, so it returned whichever
+    box came first in the manifest — an arbitrary first-frame box."""
+    outlier = {**ROAD_BOX, "xyxyn": [0.10, 0.10, 0.12, 0.13]}
+    steady = {**ROAD_BOX, "xyxyn": [0.60, 0.46, 0.62, 0.49]}
+    assert main_bbox(alert_with_boxes([outlier, steady, steady])) == (
+        0.60,
+        0.46,
+        0.62,
+        0.49,
+    )
 
 
 def test_load_of_a_missing_file_is_empty(tmp_path):
@@ -118,7 +155,7 @@ def test_assign_new_split_is_ninety_ten_train_val():
 
 def test_saved_ledger_is_valid_json(tmp_path):
     ledger = Ledger()
-    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train")
+    ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")
     path = tmp_path / "recurring_objects.json"
     ledger.save(path)
-    assert json.loads(path.read_text())["ro_00001"]["ingested"] == 0
+    assert json.loads(path.read_text())["ro_00001"]["ingested_folders"] == []

@@ -15,33 +15,39 @@ signal.
 import json
 import random
 from pathlib import Path
+from statistics import median
 from typing import Any
 
-from pyro_dataset.fp.selection import iou_xyxyn, nms_top1
+from pyro_dataset.fp.selection import iou_xyxyn
 
 Bbox = tuple[float, float, float, float]
 
 SPLIT_TARGETS = {"train": 0.9, "val": 0.1}
 
 
-def main_bbox(alert: dict[str, Any], nms_iou: float = 0.3) -> Bbox | None:
-    """The alert's dominant box across all frames of all lanes.
+def main_bbox(alert: dict[str, Any]) -> Bbox | None:
+    """The alert's representative box: the per-coordinate median of its boxes.
 
-    Boxes carry no confidence in the export, so every box enters NMS with the
-    same score and ties resolve by appearance order — deterministic, because
-    the manifest's lane and frame order is stable.
+    NMS is useless here — the export carries no confidence, so every box would
+    enter with the same score and the winner would just be whichever appeared
+    first in the manifest, an arbitrary first-frame box. The median is robust
+    to a drifting plume or a jittering detection, and mirrors how pyro-annotator
+    derives its own group representative.
     """
-    boxes: list[tuple[float, float, float, float, float]] = []
+    xs1, ys1, xs2, ys2 = [], [], [], []
     for obj in alert["objects"]:
         for frame in obj["frames"]:
             for box in frame["boxes"]:
                 x1, y1, x2, y2 = box["xyxyn"]
                 if x2 <= x1 or y2 <= y1:
                     continue
-                boxes.append((x1, y1, x2, y2, 1.0))
-    if not boxes:
+                xs1.append(x1)
+                ys1.append(y1)
+                xs2.append(x2)
+                ys2.append(y2)
+    if not xs1:
         return None
-    return nms_top1(boxes, nms_iou)
+    return (median(xs1), median(ys1), median(xs2), median(ys2))
 
 
 def assign_new_split(rng: random.Random, counts: dict[str, int]) -> str:
@@ -99,7 +105,9 @@ class Ledger:
                 best_id, best_iou = ro_id, score
         return best_id
 
-    def mint(self, camera: str, azimuth: int, bbox: Bbox, split: str) -> str:
+    def mint(
+        self, camera: str, azimuth: int, bbox: Bbox, split: str, alert: str
+    ) -> str:
         """Register a newly seen artefact. This is the only moment a split is
         ever chosen for it."""
         ro_id = f"ro_{len(self.entries) + 1:05d}"
@@ -108,17 +116,37 @@ class Ledger:
             "azimuth": azimuth,
             "bbox_xyxyn": list(bbox),
             "split": split,
-            "seen": 1,
-            "ingested": 0,
+            "seen_alerts": [alert],
+            "ingested_folders": [],
         }
         return ro_id
 
-    def record_sighting(self, ro_id: str, bbox: Bbox) -> None:
-        """Another alert matched this object: count it, refresh the bbox."""
+    def record_sighting(self, ro_id: str, bbox: Bbox, alert: str) -> None:
+        """Another alert matched this object: record it, refresh the bbox.
+
+        Identified by alert rather than counted, because the export is a full
+        re-pull: counting would inflate `seen` by one whole history per import
+        and bias the frequency ranking against genuinely new artefacts.
+        """
         entry = self.entries[ro_id]
-        entry["seen"] += 1
+        if alert not in entry["seen_alerts"]:
+            entry["seen_alerts"].append(alert)
         entry["bbox_xyxyn"] = list(bbox)
 
-    def record_ingested(self, ro_id: str) -> None:
-        """One of this object's sequences entered the dataset."""
-        self.entries[ro_id]["ingested"] += 1
+    def record_ingested(self, ro_id: str, folder: str) -> None:
+        """One of this object's sequences entered the dataset.
+
+        Recording the folder, not a tally, is what lets a later import pick a
+        *different* alert of the same artefact when the cap allows another.
+        """
+        folders = self.entries[ro_id]["ingested_folders"]
+        if folder not in folders:
+            folders.append(folder)
+
+    def seen(self, ro_id: str) -> int:
+        """Distinct alerts ever matched to this object."""
+        return len(self.entries[ro_id]["seen_alerts"])
+
+    def ingested(self, ro_id: str) -> list[str]:
+        """Folders of this object already staged into the dataset."""
+        return list(self.entries[ro_id]["ingested_folders"])

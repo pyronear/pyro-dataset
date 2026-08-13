@@ -34,28 +34,37 @@ def select_fp(
     per_object_alerts: dict[str, list[dict[str, Any]]],
     quota: int,
     max_per_object: int,
-    ingested: dict[str, int],
+    ingested: dict[str, list[str]],
 ) -> list[dict[str, Any]]:
     """Walk the ranking, taking alerts until the quota is met.
 
     One alert per object per pass, so the quota spreads across distinct
-    artefacts before it deepens any of them. `ingested` carries how many
-    sequences each object contributed in earlier imports, making
-    `max_per_object` a lifetime cap rather than a per-run one.
+    artefacts before it deepens any of them. `ingested` maps each object to the
+    folders it already contributed, making `max_per_object` a lifetime cap.
+
+    Those folders are skipped rather than merely counted. Counting alone made
+    an object re-pick its already-staged alert on the next run, which was then
+    silently dropped as an existing folder — burning a quota slot and leaving
+    the object permanently short of its cap.
 
     Alerts within an object are taken in the order the caller supplied — the
     importer sorts them best-first — and are copied, not mutated.
     """
     picked: list[dict[str, Any]] = []
-    taken: dict[str, int] = dict(ingested)
+    fresh: dict[str, list[dict[str, Any]]] = {
+        ro_id: [a for a in alerts if a["folder"] not in set(ingested.get(ro_id, []))]
+        for ro_id, alerts in per_object_alerts.items()
+    }
+    taken = {ro_id: len(folders) for ro_id, folders in ingested.items()}
     used_this_run: dict[str, int] = {}
+
     for _pass in range(max_per_object):
         for ro_id in ranked:
             if len(picked) >= quota:
                 return picked
             if taken.get(ro_id, 0) >= max_per_object:
                 continue
-            alerts = per_object_alerts.get(ro_id, [])
+            alerts = fresh.get(ro_id, [])
             index = used_this_run.get(ro_id, 0)
             if index >= len(alerts):
                 continue

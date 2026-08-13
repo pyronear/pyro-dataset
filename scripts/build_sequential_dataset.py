@@ -189,18 +189,17 @@ if __name__ == "__main__":
         pinned_seqs, _pool_seqs = partition_pinned(
             [s for s in fp_sequences if s["split"] == split]
         )
-        pinned_folders = {s["folder"] for s in pinned_seqs}
-        pinned_paths = []
+        # Registered but absent from disk: warn like the WF path does rather
+        # than copying an empty folder into the dataset. Not counted as missing
+        # here — the embeddings loop below counts the same folder.
         for seq in list(pinned_seqs):
-            path = fp_data_dir / seq["folder"]
-            if path.is_dir():
-                pinned_paths.append(path)
-            else:
-                # Registered but absent from disk: warn like the WF path does
-                # rather than copying an empty folder into the dataset.
-                logging.warning(f"pinned FP sequence folder not found: {path}")
+            if not (fp_data_dir / seq["folder"]).is_dir():
+                logging.warning(
+                    f"pinned FP sequence folder not found: {fp_data_dir / seq['folder']}"
+                )
                 pinned_seqs.remove(seq)
-                fp_missing_total += 1
+        pinned_folders = {s["folder"] for s in pinned_seqs}
+        pinned_paths = [fp_data_dir / s["folder"] for s in pinned_seqs]
         quota = remaining_quota(quota, pinned_seqs)
 
         # Load DINOv2 embeddings + per-sequence metadata for this split.

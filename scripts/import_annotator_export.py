@@ -103,10 +103,11 @@ def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
         entry = ledger.entries.get(ro_id)
         if entry is None:
             raise SystemExit(f"--force-train {ro_id}: unknown recurring object")
-        if entry["split"] != "train" and entry["ingested"] > 0:
+        staged = entry["ingested_folders"]
+        if entry["split"] != "train" and staged:
             raise SystemExit(
                 f"--force-train {ro_id}: refused, it already has "
-                f"{entry['ingested']} sequence(s) in {entry['split']}"
+                f"{len(staged)} sequence(s) in {entry['split']}: {', '.join(staged)}"
             )
         entry["split"] = "train"
 
@@ -133,23 +134,25 @@ def resolve_recurring_objects(
                 f"alert {alert['platform_alert_id']}: no usable box, not a candidate"
             )
             continue
+        alert_key = f"{alert['source_api']}:{alert['platform_alert_id']}"
         camera, azimuth = camera_key(alert).rsplit("_", 1)
         ro_id = ledger.match(camera, int(azimuth), bbox, match_iou)
         if ro_id is None:
             split = assign_new_split(rng, split_counts)
-            ro_id = ledger.mint(camera, int(azimuth), bbox, split)
+            ro_id = ledger.mint(camera, int(azimuth), bbox, split, alert_key)
             split_counts[split] = split_counts.get(split, 0) + 1
         else:
-            ledger.record_sighting(ro_id, bbox)
+            ledger.record_sighting(ro_id, bbox, alert_key)
 
         score = alert.get("temporal_model_score")
         meta = object_meta.setdefault(ro_id, {"score": None, "seen": 0})
-        meta["seen"] = ledger.entries[ro_id]["seen"]
+        meta["seen"] = ledger.seen(ro_id)
         if score is not None and (meta["score"] is None or score > meta["score"]):
             meta["score"] = score
         candidates.setdefault(ro_id, []).append(
             {
                 "alert": alert,
+                "folder": folder_name(alert),
                 "score": score if score is not None else -1.0,
                 "frames": sum(len(obj["frames"]) for obj in alert["objects"]),
             }
@@ -214,18 +217,29 @@ def main() -> None:
     alerts = load_manifest(export_dir)
     smoke = [a for a in alerts if alert_kind(a) == "wildfire"]
     fp_alerts = [a for a in alerts if alert_kind(a) == "fp"]
-    quota = len(smoke)
-    logging.info(
-        f"{len(alerts)} alerts: {len(smoke)} smoke (sets the FP quota), "
-        f"{len(fp_alerts)} false positive"
-    )
 
     ledger = Ledger.load(ledger_path)
     apply_force_train(ledger, args["force_train"])
 
+    # The export is a full re-pull, so `smoke` is the cumulative total while
+    # already-staged folders are skipped. Discount the false positives previous
+    # runs contributed, or the quota pays twice for the same smoke.
+    already_ingested = sum(len(e["ingested_folders"]) for e in ledger.entries.values())
+    quota = max(len(smoke) - already_ingested, 0)
+    logging.info(
+        f"{len(alerts)} alerts: {len(smoke)} smoke, {len(fp_alerts)} false positive; "
+        f"FP quota {quota} ({already_ingested} already ingested)"
+    )
+
+    # Seed from the ledger *and* from smoke folders earlier runs staged: smoke
+    # has no recurring object, so the ledger alone under-counts and the 90/10
+    # balance drifts as imports accumulate.
     split_counts: dict[str, int] = {"train": 0, "val": 0}
     for entry in ledger.entries.values():
         split_counts[entry["split"]] = split_counts.get(entry["split"], 0) + 1
+    for split in load_existing_splits(output_dir).values():
+        if split in split_counts:
+            split_counts[split] += 1
 
     object_meta, candidates = resolve_recurring_objects(
         fp_alerts, ledger, rng, split_counts, args["match_iou"]
@@ -248,7 +262,7 @@ def main() -> None:
         per_object_alerts=candidates,
         quota=quota,
         max_per_object=args["max_per_object"],
-        ingested={ro_id: e["ingested"] for ro_id, e in ledger.entries.items()},
+        ingested={ro_id: ledger.ingested(ro_id) for ro_id in ledger.entries},
     )
     logging.info(f"selected {len(picked)}/{quota} false-positive sequences")
 
@@ -278,7 +292,7 @@ def main() -> None:
         write_sequence(export_dir, alert, dest, ro_id)
         written += 1
         if ro_id is not None:
-            ledger.record_ingested(ro_id)
+            ledger.record_ingested(ro_id, name)
 
     print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import")
     print(f"  wildfire : {len(smoke)}")
