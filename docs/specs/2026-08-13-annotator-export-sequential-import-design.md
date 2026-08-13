@@ -39,8 +39,10 @@ Established by reading the code, and load-bearing for this design:
   split. Cameras deliberately span splits: 88 wildfire and 124 FP cameras already do.
 - **The sequential build balances 50/50 at the sequence level.** `quota = n_wf` per split
   (`build_sequential_dataset.py:149`), with FP sequences chosen by two-stage selection:
-  union-find on main-bbox IoU per camera (recurring artefact "atoms"), then KMeans on
-  DINOv2 embeddings of the atom representatives.
+  union-find on main-bbox IoU per camera, producing clusters the code calls "atoms" and
+  its docstring describes as "a recurring artefact at the camera" — the same concept this
+  spec calls a **recurring object** — then KMeans on the DINOv2 embeddings of their
+  representatives.
 - **The FP class id is inert.** `fp/selection.py:load_seq_boxes` reads columns 1–5 (+6 as
   confidence) and ignores the class id; `build_fp_yolo_dataset.py:260` writes FP images
   into the detector dataset with `dst_label.touch()`, an empty label. In temporal-model,
@@ -139,7 +141,7 @@ consuming annotator data, and is listed under Deferred.
 repeats — 31 groups across 35 lanes.
 
 **False positives**: the smoke count sets the quota, so 30 FP sequences. They are chosen
-**one per recurring-object atom, walking down a frequency ranking**, where an atom's
+**one per recurring object, walking down a frequency ranking**, where a recurring object's
 frequency is how many alerts in this export belong to it. No two of the 30 are then the
 same artefact.
 
@@ -147,28 +149,40 @@ The expected scale comes from the annotator's own grouping of the same data (a d
 implementation of the same idea — see below): it puts the 750 FP lanes into **100 groups
 across 42 cameras**, with a heavily skewed frequency distribution — the largest fired 57
 times (a road on `sdis-tigery-02`), then a cliff on `brison-03` (32), a building on
-`cis-petersbach-01` (30), a light on `morcenx-01` (27). Recomputed atoms will not match
+`cis-petersbach-01` (30), a light on `morcenx-01` (27). Recomputed recurring objects will not match
 one-for-one, since the thresholds differ, but this is the order of magnitude to expect:
 roughly 100 candidates for 30 slots. Taking frequent artefacts first targets the false
 positives that actually cost operators attention. **Implementation should report the
-recomputed atom count and its agreement with these numbers**, and calibrate the IoU
+recomputed recurring object count and its agreement with these numbers**, and calibrate the IoU
 threshold if they diverge badly — the annotator merges at IoU > 0.3, pyro-dataset's
-existing atoms at > 0.7, and for "never the same object twice" the more aggressive merge
+pyro-dataset's build-time atoms at > 0.7, and for "never the same object twice" the more aggressive merge
 is the safer default.
 
-Within an atom the representative is the alert with the most frames, tie-broken by lowest
-`platform_alert_id`, so selection is deterministic.
+Within a recurring object, alerts are ordered by frame count descending, tie-broken by lowest
+`platform_alert_id`, and the first is taken — so selection is deterministic.
 
-**Atoms are recomputed locally, not imported.** pyro-annotator has its own grouping
+**`--max-per-object` (default 1, range 1–10)** allows a recurring object to contribute more than one
+sequence. It changes only this step; the ledger, split inheritance and build-time pinning
+are unaffected, and multiple sequences of one recurring object cannot leak because they inherit its
+single split. Note that with a uniform walk the cap never binds while recurring objects outnumber the
+quota (100 vs 30 here) — it takes effect under frequency-proportional allocation, where
+slots are handed out in proportion to `seen` and clamped to the cap. That is the dial
+between diversity and frequency realism, and inside a fixed quota the trade is strict:
+each extra copy of the road costs one distinct object (a cap of 3 yields roughly 15–18
+distinct objects instead of 30). Default 1 — maximum diversity — until training results
+justify weighting the head of the distribution. The cap is enforced across imports via the
+ledger's `ingested` counter (§5), not per import.
+
+**Recurring objects are recomputed locally, not imported.** pyro-annotator has its own grouping
 (`sequence_group_id`; 783 of 785 exported lanes carry one, over 131 groups), but it is
 machine-derived by the same kind of algorithm — median engine bbox, greedy IoU > 0.3, keyed
-on `(camera_id, azimuth)` — as pyro-dataset's atoms (NMS top-1 bbox, union-find IoU > 0.7,
+on `(camera_id, azimuth)` — as pyro-dataset's build-time atoms (NMS top-1 bbox, union-find IoU > 0.7,
 per camera, where `camera` already embeds azimuth). Importing the id would couple the
 dataset to mutable annotator internals without importing any human judgement. What the
 humans did produce — the false-positive **type** — is in the export and rides into
 `meta.json`.
 
-Atoms are computed over **annotator-sourced sequences only** (this export plus previously
+Recurring objects are computed over **annotator-sourced sequences only** (this export plus previously
 imported ones), not the historical pool. Residual risk, accepted: 127 exported alerts sit
 on 12 cameras the historical pool already uses across all three splits, so one artefact
 could exist in both, in different splits. It shrinks as annotator data comes to dominate.
@@ -187,7 +201,7 @@ Without this rule the test set is *not* stable: adding data changes `quota`, whi
 `k`, which can change the chosen test negatives wholesale — including for sequences that
 were already there and were never touched.
 
-An atom is pinned to exactly one split, permanently. With one sequence per atom this is
+A recurring object is pinned to exactly one split, permanently. With one sequence per recurring object this is
 free today; it matters when a later import brings more sequences of the same artefact.
 
 ### 5. Registry and provenance
@@ -196,41 +210,49 @@ Registry entries for annotator sequences carry two extra fields:
 
 ```json
 {"id": "fp_00007155", "folder": "...", "camera": "...", "split": "train",
- "source": "pyro-annotator", "atom": "atom_00042"}
+ "source": "pyro-annotator", "recurring_object": "ro_00042"}
 ```
 
 `source` marks the entries for build-time pinning (§6) and lets a future test refresh
-select from atoms that never fed train.
+select from recurring objects that never fed train.
 
-**The atom id is a surrogate key, never derived from content.** Atoms live in a ledger,
-`data/raw/annotator_atoms.json`:
+**The recurring object id is a surrogate key, never derived from content.** Recurring objects live in a ledger,
+`data/raw/recurring_objects.json`:
 
 ```json
-{"atom_00042": {"camera": "sdis-tigery-02", "azimuth": 285,
+{"ro_00042": {"camera": "sdis-tigery-02", "azimuth": 285,
                 "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49],
-                "split": "train", "first_seen": "2026-08-13", "members": 1}}
+                "split": "train", "first_seen": "2026-08-13",
+                "seen": 57, "ingested": 1}}
 ```
 
+The two counters are deliberately distinct. `seen` is how many sightings have ever matched
+this recurring object; it accumulates across imports and drives the frequency ranking, so an artefact's
+importance is not recomputed from whichever export happens to be in hand. `ingested` is how
+many of its sequences are actually in the dataset; it is what enforces `--max-per-object`
+across imports. A single count cannot do both — with a cap above 1, a later import would
+have no way to know the recurring object had already contributed and would add its quota again.
+
 On each import, a new sequence's main bbox is matched by IoU against the stored
-`bbox_xyxyn` of existing atoms on the same `(camera, azimuth)`, using the same threshold as
-the intra-export clustering. A match joins that atom and **inherits its split**; no match
+`bbox_xyxyn` of existing recurring objects on the same `(camera, azimuth)`, using the same threshold as
+the intra-export clustering. A match joins that recurring object and **inherits its split**; no match
 mints the next id. The stored bbox may be updated as members join.
 
 The key must not be a hash of the representative bbox, which was the first sketch and is
-wrong: an atom's representative drifts by design — it is the member closest to the centroid,
+wrong: a recurring object's representative drifts by design — it is the member closest to the centroid,
 and the centroid moves as sightings accumulate — so the hash would change and the same
-physical artefact would be minted as a new atom, free to land in a different split. That is
+physical artefact would be minted as a new recurring object, free to land in a different split. That is
 exactly the leakage the ledger exists to prevent. Identity must live in the id; geometry is
 only the matching signal. This mirrors pyro-annotator's own sweep, which matches a new
 sequence's median bbox against existing groups keyed on `(camera_id, azimuth)`.
 
 **`meta.json`** inside each folder carries provenance *and* every lane's full track — the
-source alert id, the atom id, and for each lane its kind, smoke types, false-positive
+source alert id, the recurring object id, and for each lane its kind, smoke types, false-positive
 types, and its per-frame boxes with their origins, including lanes and boxes that §1b
 excluded from `labels/`:
 
 ```json
-{"source_api": "pyronear_french", "platform_alert_id": 57057, "atom": "atom_00042",
+{"source_api": "pyronear_french", "platform_alert_id": 57057, "recurring_object": "ro_00042",
  "lanes": [{"sequence_id": 7236, "kind": "smoke", "smoke_types": ["industrial"],
             "false_positive_types": [], "in_labels": true,
             "track": [{"frame": "chateau-eau-milly-la-foret-02_2026-08-05T13-46-08",
@@ -261,7 +283,7 @@ created.
    nothing ever writes into `data/processed/`. This is what keeps the detector and
    temporal datasets on the same splits.
 2. Annotator sequences never receive `split: test`.
-3. All sequences of one atom share one split, forever. Atom identity is the ledger id,
+3. All sequences of one recurring object share one split, forever. Recurring object identity is the ledger id,
    never a value derived from geometry.
 4. Smoke boxes are class `0`; false-positive proposal boxes are class `99`. `labels/`
    holds only the boxes of the lane kind that decided the folder (§1b); everything else
@@ -274,7 +296,7 @@ created.
 - **Idempotency**: run the import twice; the second run adds no folders and no registry
   entries.
 - **Leakage**: existing `tests/test_data_leakage.py` covers folder and image overlap across
-  sequential splits; extend it with an assertion that no atom appears in two splits.
+  sequential splits; extend it with an assertion that no recurring object appears in two splits.
 - **Test-set stability**: build `sequential_test` before and after an import and diff the
   folder listing — they must be identical. Worth checking empirically rather than trusting
   the seed, given the float32 BLAS non-determinism already noted in the two-stage selection.
@@ -282,8 +304,8 @@ created.
 - **Losslessness**: for every imported alert, the lanes and boxes in `meta.json` round-trip
   the export's objects exactly — count of lanes, frames per lane, boxes per frame — so
   what §1b excludes from `labels/` is provably still on disk.
-- **Atom stability**: re-run the import against an export extended with more alerts; every
-  previously seen atom keeps its id and its split, and only genuinely new artefacts mint
+- **Recurring object stability**: re-run the import against an export extended with more alerts; every
+  previously seen recurring object keeps its id and its split, and only genuinely new artefacts mint
   new ids.
 - **Spot check**: render overlays for a sample of imported folders (pyro-annotator's
   `make render-overlays` produces the equivalent view from the export side) and confirm
@@ -293,8 +315,8 @@ created.
 
 | Item | Why deferred |
 |---|---|
-| Growing the test set from annotator data | Needs previously-selected FP test sequences pinned in a lockfile so test can append without re-shuffling. The atom ledger (§5) is what makes it possible later; 70 of 100 atoms stay unused by this import, so the material is not consumed. |
+| Growing the test set from annotator data | Needs previously-selected FP test sequences pinned in a lockfile so test can append without re-shuffling. The recurring object ledger (§5) is what makes it possible later; 70 of 100 recurring objects stay unused by this import, so the material is not consumed. |
 | Object-level dataset (layout v4) | The real mismatch: pyro-annotator annotates objects, temporal-model *learns* on objects (`build_tubes` emits one tube per sequence), but the dataset in between labels whole sequences via a directory name. Not the binding constraint today — 17 of 767 alerts are multi-object (2.2%), none mixed, and `select_longest_tube` would discard the extra tracks anyway — so a revamp only pays once temporal-model trains on multiple labelled tracks per sequence. That is a cross-repo contract change (`list_sequences`, `is_wf_sequence`, `build_tubes`, `build_sequential_dataset.py`, leakage tests, toy dataset) deserving its own brainstorm; `list_sequences` already documents a versioned "v3.0.0 layout", so a v4 is a legitimate successor. `meta.json` (§5) means the data is already there when it happens. |
 | Confidence column for FP boxes | Requires the annotator export to carry engine confidence, matched back to detections. Only affects the detector's hard-negative ranking. |
 | Historical label-id cleanup | [#22](https://github.com/pyronear/pyro-dataset/issues/22). |
-| Cross-pool atom matching | Would close the residual camera-overlap risk in §3 once annotator data is no longer marginal. |
+| Cross-pool recurring object matching | Would close the residual camera-overlap risk in §3 once annotator data is no longer marginal. |
