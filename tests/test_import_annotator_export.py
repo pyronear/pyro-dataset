@@ -194,6 +194,28 @@ def test_force_train_moves_an_unused_object(tmp_path):
     assert json.loads(ledger_path.read_text())[ro_id]["split"] == "train"
 
 
+def test_force_train_reaches_a_folder_staged_by_an_earlier_run(tmp_path):
+    """The ledger is authoritative: moving an object must also move the split
+    recorded for the folder an earlier run already staged, or add_data would
+    register it under the stale one."""
+    export = small_export(tmp_path)
+    out = tmp_path / "staging"
+    ledger_path = tmp_path / "ledger.json"
+    run_import(export, out, ledger_path)
+
+    ledger = json.loads(ledger_path.read_text())
+    ro_id = next(iter(ledger))
+    fp_folder = next((out / "fp").iterdir()).name
+    ledger[ro_id]["split"] = "val"
+    ledger[ro_id]["ingested"] = 0
+    ledger_path.write_text(json.dumps(ledger))
+    run_import(export, out, ledger_path)
+    assert json.loads((out / "splits.json").read_text())[fp_folder] == "val"
+
+    run_import(export, out, ledger_path, ["--force-train", ro_id])
+    assert json.loads((out / "splits.json").read_text())[fp_folder] == "train"
+
+
 def test_force_train_refuses_an_object_already_ingested_elsewhere(tmp_path):
     export = small_export(tmp_path)
     out = tmp_path / "staging"

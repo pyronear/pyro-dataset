@@ -262,13 +262,14 @@ def main() -> None:
     for alert, kind, ro_id in plan:
         name = folder_name(alert)
         dest = output_dir / kind / name
-        if name not in splits:
-            if ro_id is not None:
-                splits[name] = ledger.entries[ro_id]["split"]
-            else:
-                split = assign_new_split(rng, split_counts)
-                split_counts[split] = split_counts.get(split, 0) + 1
-                splits[name] = split
+        if ro_id is not None:
+            # The ledger is authoritative, so --force-train reaches a folder
+            # that an earlier run already staged.
+            splits[name] = ledger.entries[ro_id]["split"]
+        elif name not in splits:
+            split = assign_new_split(rng, split_counts)
+            split_counts[split] = split_counts.get(split, 0) + 1
+            splits[name] = split
         if dry_run or dest.exists():
             continue
         write_sequence(export_dir, alert, dest, ro_id)
