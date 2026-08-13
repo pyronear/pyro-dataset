@@ -14,6 +14,12 @@ The reference export (2026-08-13, pulled from the test server) holds 767 alerts:
 **30 smoke alerts** (35 lanes) and **737 false-positive alerts** (750 lanes), covering
 17,502 frames.
 
+## Dependency
+
+Ranking hard negatives (§3) reads `temporal_model_score` per object from the export. That
+field is being added to `/export/alerts` in parallel; the importer must run without it,
+falling back to frequency-only ranking, so the two efforts do not block each other.
+
 ## Non-goals
 
 - Changing the 50/50 balance, the two-stage FP selection, or anything about how the
@@ -158,8 +164,31 @@ threshold if they diverge badly — the annotator merges at IoU > 0.3, pyro-data
 pyro-dataset's build-time atoms at > 0.7, and for "never the same object twice" the more aggressive merge
 is the safer default.
 
-Within a recurring object, alerts are ordered by frame count descending, tie-broken by lowest
-`platform_alert_id`, and the first is taken — so selection is deterministic.
+**Hard negatives rank first.** Frequency answers "how often does this cost an operator";
+it does not answer "does the model still fall for it". The second question is answered
+directly by `temporal_model_score` — the deployed temporal model's own verdict on that
+sequence, carried per object in the export. Measured on the exportable lanes: 665 of 750
+FP lanes have a score, distributed min 0.000 / mean 0.140 / max 0.994, and **82 lanes score
+≥ 0.5** — false positives the current model believes are smoke.
+
+Objects are therefore ranked in two buckets, then by frequency within each:
+
+1. **Fooling** — max `temporal_model_score` across the object's members ≥ `--hard-negative-threshold`
+   (default 0.5), ordered by `seen` descending.
+2. **The rest** — ordered by `seen` descending.
+
+Bucketing rather than blending keeps the ordering explainable and robust to score noise, and
+degrades gracefully: an object with no scored member (11% of lanes) simply lands in bucket 2.
+**If the export carries no `temporal_model_score` at all, everything lands in bucket 2 and the
+ranking is frequency-only** — so the importer runs unchanged against older exports.
+
+Within a recurring object, the chosen alert is the highest-scoring member — the specific
+sighting that fools the model most — falling back to frame count when no member is scored,
+tie-broken by lowest `platform_alert_id`. Selection is deterministic either way.
+
+For smoke this ordering is unused, since every smoke alert is imported. Should smoke ever
+exceed a quota, the analogous rule inverts: rank by *lowest* score first, those being the
+plumes the model currently misses.
 
 **`--max-per-object` (default 1, range 1–10)** allows a recurring object to contribute more than one
 sequence. It changes only this step; the ledger, split inheritance and build-time pinning
@@ -203,6 +232,32 @@ were already there and were never touched.
 
 A recurring object is pinned to exactly one split, permanently. With one sequence per recurring object this is
 free today; it matters when a later import brings more sequences of the same artefact.
+
+**The split is decided per recurring object, not per camera — annotator imports opt out of
+the existing stratification.** `compute_new_assignments` enforces the 80/10/10 ratio
+*within each camera*: it groups incoming folders by camera, shuffles them with a seed, and
+sends each to whichever split is most under-represented for that camera. That policy is
+right for the platform flow — every camera then contributes to evaluation — and it stays
+untouched for all other data. But it is per *sequence* and decided by *camera*, so it
+directly conflicts with object pinning: two sequences of one artefact would be spread
+across splits for the sake of a camera's ratio. It is also the reason 88 wildfire and 124
+FP cameras currently span more than one split.
+
+For annotator sequences the split therefore comes from the ledger (§5): a matched object
+inherits its recorded split, and a newly minted one is assigned 90/10 train/val by seeded
+choice. This requires `add_data.py` to accept **pre-assigned splits** rather than computing
+them — see §7. Without that change the ledger is merely advisory and camera stratification
+silently wins, breaking the pinning invariant.
+
+**Overrides.** An operator often knows which false positive is hurting in production and
+wants it trained on. `--dry-run` prints the ranked recurring objects — id, camera, FP type,
+`seen`, proposed split — and `--force-train ro_00042` (repeatable) forces one to train;
+hand-editing `"split"` in the ledger before first ingest does the same thing. Forcing to
+train can only remove evaluation contamination, never create it, so the only guard needed
+is a refusal when that object already has sequences in another split, naming the sequences
+that block it. Since annotator objects never enter test, the only possible conflict is with
+the 10% val slice. This pairs with `--max-per-object`: the artefact you most want gone is
+usually a heavy hitter, so "force to train and give it three sequences" is the real gesture.
 
 ### 5. Registry and provenance
 
@@ -283,6 +338,20 @@ This does not displace anything. The import adds 30 smoke sequences, which raise
 `quota = n_wf` by 30 — the pinned FPs consume exactly the slots their own positives
 created.
 
+### 7. Changes to existing pyro-dataset code
+
+Everything else is new code. Exactly two existing files change, and both changes are
+additive — they alter behaviour only for entries carrying `source: pyro-annotator`, so the
+platform flow is bit-for-bit unaffected.
+
+| file | change | why |
+|---|---|---|
+| `scripts/add_data.py` / `src/pyro_dataset/ingest.py` | accept pre-assigned splits (`--splits-from <file>`, or honour a `split` field on incoming folders) instead of always calling `compute_new_assignments` | §4 — the ledger decides the split per recurring object; without this, per-camera stratification overrides it and pinning breaks |
+| `scripts/build_sequential_dataset.py` | include `source: pyro-annotator` FP entries before two-stage selection fills the remaining quota | §6 — otherwise KMeans may simply not pick the recurring objects we deliberately chose |
+
+Both deserve a test: one asserting a pre-assigned split survives ingest untouched, one
+asserting a pinned FP entry appears in the built split regardless of clustering.
+
 ## Invariants
 
 1. The import writes staging folders only. Registry writes go through `add_data.py`;
@@ -321,7 +390,7 @@ created.
 
 | Item | Why deferred |
 |---|---|
-| Growing the test set from annotator data | Needs previously-selected FP test sequences pinned in a lockfile so test can append without re-shuffling. The recurring object ledger (§5) is what makes it possible later; 70 of 100 recurring objects stay unused by this import, so the material is not consumed. |
+| Growing the test set from annotator data | Deliberately frozen for now (§4). Growing it requires test to become **append-only**: `build_sequential_dataset.py` must record the FP sequences chosen per split in a lockfile and reuse them, selecting only enough new ones to cover a raised quota — otherwise each import changes `quota`, hence `k`, and KMeans silently re-rolls the historical test negatives, so two models are scored on different data although nobody touched it. The recurring-object ledger (§5) is what makes the annotator side possible then; 70 of 100 recurring objects stay unused by this import, so the material is not consumed. |
 | Object-level dataset (layout v4) | The real mismatch: pyro-annotator annotates objects, temporal-model *learns* on objects (`build_tubes` emits one tube per sequence), but the dataset in between labels whole sequences via a directory name. Not the binding constraint today — 17 of 767 alerts are multi-object (2.2%), none mixed, and `select_longest_tube` would discard the extra tracks anyway — so a revamp only pays once temporal-model trains on multiple labelled tracks per sequence. That is a cross-repo contract change (`list_sequences`, `is_wf_sequence`, `build_tubes`, `build_sequential_dataset.py`, leakage tests, toy dataset) deserving its own brainstorm; `list_sequences` already documents a versioned "v3.0.0 layout", so a v4 is a legitimate successor. `meta.json` (§5) means the data is already there when it happens. |
 | Confidence column for FP boxes | Requires the annotator export to carry engine confidence, matched back to detections. Only affects the detector's hard-negative ranking. |
 | Historical label-id cleanup | [#22](https://github.com/pyronear/pyro-dataset/issues/22). |
