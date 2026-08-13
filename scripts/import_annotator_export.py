@@ -1,0 +1,311 @@
+"""
+CLI script to convert a pyro-annotator export into ingest-ready sequence folders.
+
+Reads an export directory (manifest.jsonl + images/) and writes staging folders in
+the layout add_data.py expects, plus a splits.json mapping each folder to its split
+and an updated recurring-object ledger. Registry writes are NOT done here: run
+add_data.py afterwards, which stays the only writer of registry.json.
+
+Every smoke alert is imported; that count sets the false-positive quota, filled one
+alert per recurring object walking a hard-negatives-first ranking. Splits come from
+the ledger, so an artefact always lands in the split it first went to — and never in
+test.
+
+See docs/specs/2026-08-13-annotator-export-sequential-import-design.md.
+
+Usage:
+    python scripts/import_annotator_export.py --export-dir <path>
+    python scripts/import_annotator_export.py --export-dir <path> --dry-run
+
+Arguments:
+    --export-dir       Export directory holding manifest.jsonl and images/ (required).
+    --output-dir       Where to write staging folders (default: data/interim/annotator-import).
+    --ledger           Recurring-object ledger (default: data/raw/recurring_objects.json).
+    --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
+    --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
+    --match-iou        IoU for matching an alert to an existing recurring object (default: 0.3).
+    --force-train      Recurring object id to force into train (repeatable).
+    --random-seed      Seed for split assignment (default: 0).
+    --dry-run          Print the plan without writing anything.
+    -log, --loglevel   Logging level (default: info).
+"""
+
+import argparse
+import json
+import logging
+import random
+import shutil
+import sys
+from pathlib import Path
+from typing import Any
+
+from pyro_dataset.annotator.convert import (
+    alert_kind,
+    build_meta,
+    camera_key,
+    folder_name,
+    frame_stem,
+    label_lines,
+)
+from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
+from pyro_dataset.annotator.select import rank_objects, select_fp
+
+
+def make_cli_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Convert a pyro-annotator export into ingest-ready sequence folders."
+    )
+    parser.add_argument("--export-dir", type=Path, required=True)
+    parser.add_argument(
+        "--output-dir", type=Path, default=Path("data/interim/annotator-import")
+    )
+    parser.add_argument(
+        "--ledger", type=Path, default=Path("data/raw/recurring_objects.json")
+    )
+    parser.add_argument("--max-per-object", type=int, default=1)
+    parser.add_argument("--hard-negative-threshold", type=float, default=0.5)
+    parser.add_argument("--match-iou", type=float, default=0.3)
+    parser.add_argument("--force-train", action="append", default=[])
+    parser.add_argument("--random-seed", type=int, default=0)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "-log",
+        "--loglevel",
+        default="info",
+        choices=["debug", "info", "warning", "error"],
+    )
+    return parser
+
+
+def load_manifest(export_dir: Path) -> list[dict[str, Any]]:
+    with (export_dir / "manifest.jsonl").open() as fh:
+        return [json.loads(line) for line in fh if line.strip()]
+
+
+def load_existing_splits(output_dir: Path) -> dict[str, str]:
+    """Splits recorded by earlier runs into the same staging directory."""
+    path = output_dir / "splits.json"
+    if not path.is_file():
+        return {}
+    return json.loads(path.read_text())
+
+
+def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
+    """Move named recurring objects to train, refusing any already used elsewhere.
+
+    Forcing to train can only remove evaluation contamination, never create it —
+    but only while the object has no sequences in another split.
+    """
+    for ro_id in ro_ids:
+        entry = ledger.entries.get(ro_id)
+        if entry is None:
+            raise SystemExit(f"--force-train {ro_id}: unknown recurring object")
+        if entry["split"] != "train" and entry["ingested"] > 0:
+            raise SystemExit(
+                f"--force-train {ro_id}: refused, it already has "
+                f"{entry['ingested']} sequence(s) in {entry['split']}"
+            )
+        entry["split"] = "train"
+
+
+def resolve_recurring_objects(
+    fp_alerts: list[dict[str, Any]],
+    ledger: Ledger,
+    rng: random.Random,
+    split_counts: dict[str, int],
+    match_iou: float,
+) -> tuple[dict[str, dict[str, Any]], dict[str, list[dict[str, Any]]]]:
+    """Attach every FP alert to a recurring object, minting on first sight.
+
+    Returns the per-object ranking inputs and, for each object, its candidate
+    alerts ordered best-first: highest score, then most frames.
+    """
+    object_meta: dict[str, dict[str, Any]] = {}
+    candidates: dict[str, list[dict[str, Any]]] = {}
+
+    for alert in fp_alerts:
+        bbox = main_bbox(alert)
+        if bbox is None:
+            logging.warning(
+                f"alert {alert['platform_alert_id']}: no usable box, not a candidate"
+            )
+            continue
+        camera, azimuth = camera_key(alert).rsplit("_", 1)
+        ro_id = ledger.match(camera, int(azimuth), bbox, match_iou)
+        if ro_id is None:
+            split = assign_new_split(rng, split_counts)
+            ro_id = ledger.mint(camera, int(azimuth), bbox, split)
+            split_counts[split] = split_counts.get(split, 0) + 1
+        else:
+            ledger.record_sighting(ro_id, bbox)
+
+        score = alert.get("temporal_model_score")
+        meta = object_meta.setdefault(ro_id, {"score": None, "seen": 0})
+        meta["seen"] = ledger.entries[ro_id]["seen"]
+        if score is not None and (meta["score"] is None or score > meta["score"]):
+            meta["score"] = score
+        candidates.setdefault(ro_id, []).append(
+            {
+                "alert": alert,
+                "score": score if score is not None else -1.0,
+                "frames": sum(len(obj["frames"]) for obj in alert["objects"]),
+            }
+        )
+
+    for alerts in candidates.values():
+        alerts.sort(
+            key=lambda c: (-c["score"], -c["frames"], c["alert"]["platform_alert_id"])
+        )
+    return object_meta, candidates
+
+
+def write_sequence(
+    export_dir: Path, alert: dict[str, Any], dest: Path, ro_id: str | None
+) -> None:
+    """Materialise one alert as a sequence folder: images, labels, meta.json.
+
+    Captures are deduplicated by timestamp — sibling lanes hold their own copies
+    of the same capture, and the folder holds one image per capture.
+    """
+    (dest / "images").mkdir(parents=True, exist_ok=True)
+    (dest / "labels").mkdir(parents=True, exist_ok=True)
+
+    written: set[str] = set()
+    for obj in alert["objects"]:
+        for frame in obj["frames"]:
+            stem = frame_stem(alert, frame)
+            if stem in written:
+                continue
+            if not frame.get("image_path"):
+                logging.warning(
+                    f"alert {alert['platform_alert_id']}: frame "
+                    f"{frame['detection_id']} has no image, skipped"
+                )
+                continue
+            source = export_dir / frame["image_path"]
+            if not source.is_file():
+                logging.warning(f"missing image on disk, skipped: {source}")
+                continue
+            written.add(stem)
+            shutil.copy2(source, dest / "images" / f"{stem}.jpg")
+            lines = label_lines(alert, frame)
+            (dest / "labels" / f"{stem}.txt").write_text(
+                "\n".join(lines) + ("\n" if lines else "")
+            )
+
+    (dest / "meta.json").write_text(
+        json.dumps(build_meta(alert, ro_id), indent=2) + "\n"
+    )
+
+
+def main() -> None:
+    args = vars(make_cli_parser().parse_args())
+    logging.basicConfig(level=args["loglevel"].upper())
+
+    export_dir: Path = args["export_dir"]
+    output_dir: Path = args["output_dir"]
+    ledger_path: Path = args["ledger"]
+    dry_run: bool = args["dry_run"]
+    rng = random.Random(args["random_seed"])
+
+    alerts = load_manifest(export_dir)
+    smoke = [a for a in alerts if alert_kind(a) == "wildfire"]
+    fp_alerts = [a for a in alerts if alert_kind(a) == "fp"]
+    quota = len(smoke)
+    logging.info(
+        f"{len(alerts)} alerts: {len(smoke)} smoke (sets the FP quota), "
+        f"{len(fp_alerts)} false positive"
+    )
+
+    ledger = Ledger.load(ledger_path)
+    apply_force_train(ledger, args["force_train"])
+
+    split_counts: dict[str, int] = {"train": 0, "val": 0}
+    for entry in ledger.entries.values():
+        split_counts[entry["split"]] = split_counts.get(entry["split"], 0) + 1
+
+    object_meta, candidates = resolve_recurring_objects(
+        fp_alerts, ledger, rng, split_counts, args["match_iou"]
+    )
+    threshold = args["hard_negative_threshold"]
+    ranked = rank_objects(object_meta, threshold=threshold)
+    fooling = sum(
+        1
+        for ro_id in ranked
+        if (object_meta[ro_id]["score"] is not None)
+        and object_meta[ro_id]["score"] >= threshold
+    )
+    logging.info(
+        f"{len(ranked)} recurring objects, {fooling} in the hard-negative bucket "
+        f"(score >= {threshold})"
+    )
+
+    picked = select_fp(
+        ranked=ranked,
+        per_object_alerts=candidates,
+        quota=quota,
+        max_per_object=args["max_per_object"],
+        ingested={ro_id: e["ingested"] for ro_id, e in ledger.entries.items()},
+    )
+    logging.info(f"selected {len(picked)}/{quota} false-positive sequences")
+
+    plan: list[tuple[dict[str, Any], str, str | None]] = [
+        (alert, "wildfire", None) for alert in smoke
+    ]
+    plan += [(entry["alert"], "fp", entry["recurring_object"]) for entry in picked]
+
+    # Carry forward earlier runs: a re-run selects nothing new (the per-object
+    # cap already counted those objects), so rewriting splits.json from this
+    # run's plan alone would drop folders still sitting in staging.
+    splits = load_existing_splits(output_dir)
+    written = 0
+    for alert, kind, ro_id in plan:
+        name = folder_name(alert)
+        dest = output_dir / kind / name
+        if name not in splits:
+            if ro_id is not None:
+                splits[name] = ledger.entries[ro_id]["split"]
+            else:
+                split = assign_new_split(rng, split_counts)
+                split_counts[split] = split_counts.get(split, 0) + 1
+                splits[name] = split
+        if dry_run or dest.exists():
+            continue
+        write_sequence(export_dir, alert, dest, ro_id)
+        written += 1
+        if ro_id is not None:
+            ledger.record_ingested(ro_id)
+
+    print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import")
+    print(f"  wildfire : {len(smoke)}")
+    print(f"  fp       : {len(picked)} of a {quota} quota, {fooling} objects fooling")
+    print(
+        f"  splits   : train {sum(1 for s in splits.values() if s == 'train')}, "
+        f"val {sum(1 for s in splits.values() if s == 'val')}"
+    )
+    if not dry_run:
+        print(
+            f"  written  : {written} new folder(s), {len(splits) - written} already staged"
+        )
+
+    if dry_run:
+        print("Dry run — nothing written.")
+        return
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "splits.json").write_text(
+        json.dumps(splits, indent=2, sort_keys=True) + "\n"
+    )
+    ledger.save(ledger_path)
+    print(f"\n  staging  : {output_dir}")
+    print(f"  ledger   : {ledger_path}")
+    print("\nNext:")
+    for kind, dataset in (("wildfire", "wildfire"), ("fp", "fp")):
+        print(
+            f"  uv run python scripts/add_data.py --src {output_dir}/{kind} "
+            f"--type {dataset} --splits-from {output_dir}/splits.json"
+        )
+
+
+if __name__ == "__main__":
+    sys.exit(main())
