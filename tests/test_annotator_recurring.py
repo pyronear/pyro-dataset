@@ -163,6 +163,21 @@ def test_seen_counts_distinct_alerts_not_repeat_sightings():
     assert ledger.seen(ro_id) == 2
 
 
+def test_an_alert_belongs_to_exactly_one_object():
+    """A re-pull can move an alert to a better-matching object minted later.
+    The stale record must go, or `seen` counts it twice — and if the two
+    objects held different splits, one artefact would be tied to both."""
+    ledger = Ledger()
+    first = ledger.mint("cam-01", 285, (0.10, 0.10, 0.20, 0.20), "train", "src:1")
+    second = ledger.mint("cam-01", 285, (0.50, 0.50, 0.60, 0.60), "val", "src:2")
+    ledger.record_sighting(first, (0.10, 0.10, 0.20, 0.20), "src:9")
+    assert ledger.seen(first) == 2
+
+    ledger.record_sighting(second, (0.50, 0.50, 0.60, 0.60), "src:9")
+    assert ledger.entries[first]["seen_alerts"] == ["src:1"]
+    assert ledger.entries[second]["seen_alerts"] == ["src:2", "src:9"]
+
+
 def test_record_ingested_is_idempotent_per_folder():
     ledger = Ledger()
     ro_id = ledger.mint("cam-01", 285, (0.60, 0.46, 0.62, 0.49), "train", "src:1")

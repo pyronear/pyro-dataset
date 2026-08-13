@@ -755,9 +755,7 @@
       "pyronear_french:52769",
       "pyronear_french:53121",
       "pyronear_french:53483",
-      "pyronear_french:55285",
-      "pyronear_french:56459",
-      "pyronear_french:56559"
+      "pyronear_french:55285"
     ],
     "split": "train"
   },
@@ -2165,7 +2163,9 @@
     "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:56966",
-      "pyronear_french:57153"
+      "pyronear_french:57153",
+      "pyronear_french:56459",
+      "pyronear_french:56559"
     ],
     "split": "train"
   },

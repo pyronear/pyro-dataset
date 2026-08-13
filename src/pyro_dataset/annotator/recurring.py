@@ -150,6 +150,14 @@ class Ledger:
         entry = self.entries[ro_id]
         if alert not in entry["seen_alerts"]:
             entry["seen_alerts"].append(alert)
+        # An alert belongs to exactly one object. On a first pass an alert can
+        # attach to one object before the better-matching one has been minted;
+        # on the next pass best-IoU moves it. Without dropping the stale record
+        # the alert counts twice, inflating the frequency ranking — and if the
+        # two objects held different splits it would tie one artefact to both.
+        for other_id, other in self.entries.items():
+            if other_id != ro_id and alert in other["seen_alerts"]:
+                other["seen_alerts"].remove(alert)
 
     def record_ingested(self, ro_id: str, folder: str) -> None:
         """One of this object's sequences entered the dataset.
