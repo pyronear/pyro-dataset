@@ -2,6 +2,7 @@ import pytest
 
 from pyro_dataset.ingest import (
     assign_split,
+    assignments_from_splits,
     compute_new_assignments,
     extract_camera,
     next_id,
@@ -100,7 +101,12 @@ def test_compute_new_assignments_stable_on_second_run():
 def test_rebalance_swaps_val_to_test():
     # Simulate 10 sequences all on same camera → 8 train, 2 val, 0 test (common edge case)
     new = [
-        {"id": f"wf_{i:08d}", "folder": f"cam1_2024-01-{i:02d}T00-00", "camera": "cam1", "split": split}
+        {
+            "id": f"wf_{i:08d}",
+            "folder": f"cam1_2024-01-{i:02d}T00-00",
+            "camera": "cam1",
+            "split": split,
+        }
         for i, split in enumerate(["train"] * 8 + ["val", "val"], 1)
     ]
     result = rebalance_minority_splits(new, [])
@@ -112,12 +118,37 @@ def test_rebalance_swaps_val_to_test():
 def test_rebalance_respects_camera_minimum():
     # Camera with only 1 val should not have it swapped away
     new = [
-        {"id": "wf_00000001", "folder": "cam1_2024-01-01T00-00", "camera": "cam1", "split": "train"},
-        {"id": "wf_00000002", "folder": "cam1_2024-01-02T00-00", "camera": "cam1", "split": "val"},
+        {
+            "id": "wf_00000001",
+            "folder": "cam1_2024-01-01T00-00",
+            "camera": "cam1",
+            "split": "train",
+        },
+        {
+            "id": "wf_00000002",
+            "folder": "cam1_2024-01-02T00-00",
+            "camera": "cam1",
+            "split": "val",
+        },
         # cam2 has surplus val
-        {"id": "wf_00000003", "folder": "cam2_2024-01-01T00-00", "camera": "cam2", "split": "train"},
-        {"id": "wf_00000004", "folder": "cam2_2024-01-02T00-00", "camera": "cam2", "split": "val"},
-        {"id": "wf_00000005", "folder": "cam2_2024-01-03T00-00", "camera": "cam2", "split": "val"},
+        {
+            "id": "wf_00000003",
+            "folder": "cam2_2024-01-01T00-00",
+            "camera": "cam2",
+            "split": "train",
+        },
+        {
+            "id": "wf_00000004",
+            "folder": "cam2_2024-01-02T00-00",
+            "camera": "cam2",
+            "split": "val",
+        },
+        {
+            "id": "wf_00000005",
+            "folder": "cam2_2024-01-03T00-00",
+            "camera": "cam2",
+            "split": "val",
+        },
     ]
     result = rebalance_minority_splits(new, [])
     cam1_splits = [r["split"] for r in result if r["camera"] == "cam1"]
@@ -139,3 +170,80 @@ def test_compute_new_assignments_multiple_cameras():
     # Each camera should start with train
     assert by_camera["cam1"][0] == "train"
     assert by_camera["cam2"][0] == "train"
+
+
+ANNOTATOR_FOLDER = "sdis-91_cam-a_285_2026-08-05T13-46-08"
+
+
+def test_assignments_from_splits_honours_the_given_split():
+    assert assignments_from_splits(
+        [ANNOTATOR_FOLDER],
+        existing=[],
+        start_id=1,
+        prefix="fp",
+        splits={ANNOTATOR_FOLDER: "val"},
+    ) == [
+        {
+            "id": "fp_00000001",
+            "folder": ANNOTATOR_FOLDER,
+            "camera": "sdis-91_cam-a_285",
+            "split": "val",
+            "source": "pyro-annotator",
+        }
+    ]
+
+
+def test_assignments_from_splits_ignores_per_camera_balance():
+    """Two sequences of one camera may share a split — that is the point: the
+    recurring-object ledger decides, not the camera's ratio."""
+    folders = [ANNOTATOR_FOLDER, "sdis-91_cam-a_285_2026-08-06T09-00-00"]
+    result = assignments_from_splits(
+        folders,
+        existing=[],
+        start_id=1,
+        prefix="fp",
+        splits=dict.fromkeys(folders, "train"),
+    )
+    assert [r["split"] for r in result] == ["train", "train"]
+
+
+def test_assignments_from_splits_continues_the_id_sequence():
+    result = assignments_from_splits(
+        [ANNOTATOR_FOLDER],
+        existing=[],
+        start_id=42,
+        prefix="wf",
+        splits={ANNOTATOR_FOLDER: "train"},
+    )
+    assert result[0]["id"] == "wf_00000042"
+
+
+def test_assignments_from_splits_rejects_a_missing_entry():
+    with pytest.raises(KeyError):
+        assignments_from_splits(
+            [ANNOTATOR_FOLDER], existing=[], start_id=1, prefix="fp", splits={}
+        )
+
+
+def test_assignments_from_splits_rejects_test():
+    """Annotator imports never assign test; enforcing it at the registry writer
+    keeps the rule where it cannot be bypassed."""
+    with pytest.raises(ValueError, match="test"):
+        assignments_from_splits(
+            [ANNOTATOR_FOLDER],
+            existing=[],
+            start_id=1,
+            prefix="fp",
+            splits={ANNOTATOR_FOLDER: "test"},
+        )
+
+
+def test_assignments_from_splits_rejects_an_unknown_split():
+    with pytest.raises(ValueError, match="nonsense"):
+        assignments_from_splits(
+            [ANNOTATOR_FOLDER],
+            existing=[],
+            start_id=1,
+            prefix="fp",
+            splits={ANNOTATOR_FOLDER: "nonsense"},
+        )

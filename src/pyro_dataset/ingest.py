@@ -22,7 +22,7 @@ _IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 @dataclasses.dataclass
 class ValidationResult:
     folder: str
-    naming_issues: list[str]   # warnings: folder/image name format
+    naming_issues: list[str]  # warnings: folder/image name format
     structural_issues: list[str]  # errors: missing dirs, too few labels
 
     @property
@@ -73,7 +73,9 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
         structural.append("missing 'labels/' subdirectory")
 
     if not dir_images.is_dir() or not dir_labels.is_dir():
-        return ValidationResult(folder=name, naming_issues=naming, structural_issues=structural)
+        return ValidationResult(
+            folder=name, naming_issues=naming, structural_issues=structural
+        )
 
     # Image filename format (naming warning)
     bad_images = [
@@ -88,7 +90,9 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
             f"{len(bad_images)} image(s) with invalid filename: {sample}{extra}"
         )
 
-    total_images = sum(1 for f in dir_images.iterdir() if f.suffix.lower() in _IMAGE_EXTENSIONS)
+    total_images = sum(
+        1 for f in dir_images.iterdir() if f.suffix.lower() in _IMAGE_EXTENSIONS
+    )
     non_empty_labels = [f for f in dir_labels.glob("*.txt") if f.stat().st_size > 0]
     if len(non_empty_labels) == 0 or (len(non_empty_labels) == 1 and total_images > 2):
         structural.append(
@@ -96,7 +100,9 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
             f"(need at least 1, or 2+ if images > 2)"
         )
 
-    return ValidationResult(folder=name, naming_issues=naming, structural_issues=structural)
+    return ValidationResult(
+        folder=name, naming_issues=naming, structural_issues=structural
+    )
 
 
 @dataclasses.dataclass
@@ -177,9 +183,7 @@ def assign_split(counts: dict[str, int]) -> str:
             (for this camera, including any already assigned in this batch).
     """
     total = sum(counts.values()) + 1  # +1 for the sequence being assigned
-    deficits = {
-        split: SPLIT_TARGETS[split] - counts[split] / total for split in SPLITS
-    }
+    deficits = {split: SPLIT_TARGETS[split] - counts[split] / total for split in SPLITS}
     return max(deficits, key=lambda s: deficits[s])
 
 
@@ -291,13 +295,57 @@ def compute_new_assignments(
     return rebalance_minority_splits(assignments, existing)
 
 
+ANNOTATOR_SOURCE = "pyro-annotator"
+
+
+def assignments_from_splits(
+    new_folders: list[str],
+    existing: list[dict],
+    start_id: int,
+    prefix: str,
+    splits: dict[str, str],
+) -> list[dict]:
+    """Assign ids to new_folders using splits the caller already decided.
+
+    Used by the annotator import, whose splits come from the recurring-object
+    ledger: every sequence of one artefact must share a split, which per-camera
+    stratification would break by spreading them for the sake of a camera's
+    ratio. Entries are stamped with their source so the sequential build can
+    pin them through its selection.
+
+    Test is refused: annotator sequences never enter it, and enforcing that at
+    the registry writer puts the rule where it cannot be bypassed.
+    """
+    assignments = []
+    current_id = start_id
+    for folder in sorted(new_folders):
+        split = splits[folder]
+        if split == "test":
+            raise ValueError(
+                f"{folder}: pre-assigned split 'test' is not allowed for imports"
+            )
+        if split not in SPLITS:
+            raise ValueError(f"{folder}: unknown split {split!r}")
+        assignments.append(
+            {
+                "id": f"{prefix}_{current_id:08d}",
+                "folder": folder,
+                "camera": extract_camera(folder),
+                "split": split,
+                "source": ANNOTATOR_SOURCE,
+            }
+        )
+        current_id += 1
+    return assignments
+
+
 def print_summary(new_assignments: list[dict], all_sequences: list[dict]) -> None:
     """Print a summary of new assignments and overall split distribution."""
     if not new_assignments:
         print("No new sequences found.")
         return
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"New sequences: {len(new_assignments)}")
 
     cameras: dict[str, dict] = {}
@@ -316,11 +364,11 @@ def print_summary(new_assignments: list[dict], all_sequences: list[dict]) -> Non
         total_counts[seq["split"]] += 1
     total = sum(total_counts.values())
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"Overall split distribution ({total} total sequences):")
     for split in SPLITS:
         n = total_counts[split]
         pct = n / total * 100 if total else 0
         target_pct = SPLIT_TARGETS[split] * 100
         print(f"  {split:<6}: {n:>4}  ({pct:.1f}%  target {target_pct:.0f}%)")
-    print(f"{'='*50}\n")
+    print(f"{'=' * 50}\n")

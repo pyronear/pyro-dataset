@@ -20,11 +20,13 @@ Arguments:
 """
 
 import argparse
+import json
 import logging
 import shutil
 from pathlib import Path
 
 from pyro_dataset.ingest import (
+    assignments_from_splits,
     compute_new_assignments,
     load_registry,
     next_id,
@@ -54,6 +56,14 @@ def make_cli_parser() -> argparse.ArgumentParser:
         help='Dataset type: "wildfire" or "fp".',
         choices=list(DATASET_TYPES.keys()),
         required=True,
+    )
+    parser.add_argument(
+        "--splits-from",
+        help="JSON file mapping folder name to split. Bypasses per-camera "
+        "assignment — used by the annotator import, whose splits come from the "
+        "recurring-object ledger so an artefact stays in one split.",
+        type=Path,
+        default=None,
     )
     parser.add_argument(
         "--random-seed",
@@ -121,7 +131,9 @@ if __name__ == "__main__":
     already_registered = [f for f in incoming if f in registered_folders]
 
     if already_registered:
-        logging.info(f"Skipping {len(already_registered)} already registered folder(s).")
+        logging.info(
+            f"Skipping {len(already_registered)} already registered folder(s)."
+        )
     if skipped_unregistered:
         logging.warning(
             f"{len(skipped_unregistered)} folder(s) exist on disk but are not in "
@@ -139,9 +151,11 @@ if __name__ == "__main__":
         naming_only = [r for r in summary.rejected if not r.has_structural_issues]
 
         if structural:
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"STRUCTURAL ISSUES — {len(structural)} folder(s) skipped")
-            print("These folders are missing required structure and cannot be ingested.\n")
+            print(
+                "These folders are missing required structure and cannot be ingested.\n"
+            )
             for r in structural:
                 print(f"  {r.folder}")
                 for issue in r.structural_issues:
@@ -151,7 +165,7 @@ if __name__ == "__main__":
             print(f"\nFix the issues above and re-run to include them.")
 
         if naming_only:
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"NAMING ISSUES — {len(naming_only)} folder(s) skipped")
             print(
                 "Expected format: <source>_<camera>_<azimuth 0-360|999>_<YYYY-MM-DDTHH-MM-SS>\n"
@@ -175,9 +189,15 @@ if __name__ == "__main__":
             logging.debug(f"  copied {folder}")
 
     start_id = next_id(existing, prefix)
-    new_assignments = compute_new_assignments(
-        to_copy, existing, start_id, prefix, random_seed=args["random_seed"]
-    )
+    if args["splits_from"]:
+        splits = json.loads(Path(args["splits_from"]).read_text())
+        new_assignments = assignments_from_splits(
+            to_copy, existing, start_id, prefix, splits
+        )
+    else:
+        new_assignments = compute_new_assignments(
+            to_copy, existing, start_id, prefix, random_seed=args["random_seed"]
+        )
     all_sequences = existing + new_assignments
 
     print_summary(new_assignments, all_sequences)
