@@ -221,17 +221,23 @@ select from recurring objects that never fed train.
 
 ```json
 {"ro_00042": {"camera": "sdis-tigery-02", "azimuth": 285,
-                "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49],
-                "split": "train", "first_seen": "2026-08-13",
-                "seen": 57, "ingested": 1}}
+              "bbox_xyxyn": [0.61, 0.47, 0.62, 0.49],
+              "split": "train", "seen": 57, "ingested": 1}}
 ```
 
-The two counters are deliberately distinct. `seen` is how many sightings have ever matched
-this recurring object; it accumulates across imports and drives the frequency ranking, so an artefact's
-importance is not recomputed from whichever export happens to be in hand. `ingested` is how
-many of its sequences are actually in the dataset; it is what enforces `--max-per-object`
-across imports. A single count cannot do both — with a cap above 1, a later import would
-have no way to know the recurring object had already contributed and would add its quota again.
+Every field is load-bearing. `camera`, `azimuth` and `bbox_xyxyn` are the matching signal;
+`split` is what a future sighting inherits. The two counters are deliberately distinct:
+`seen` is how many sightings have ever matched this recurring object, accumulating across
+imports so an artefact's importance is not recomputed from whichever export happens to be
+in hand, and it drives the frequency ranking; `ingested` is how many of its sequences are
+actually in the dataset, and it is what enforces `--max-per-object` across imports. A
+single count cannot do both — with a cap above 1, a later import would have no way to know
+the recurring object had already contributed and would add its quota again.
+
+There is deliberately no `first_seen`. Nothing reads it, and it is the weaker version of
+something already derivable: each of an object's sequences carries its alert timestamp in
+the folder name, so the earliest gives first sighting in alert time rather than import
+time.
 
 On each import, a new sequence's main bbox is matched by IoU against the stored
 `bbox_xyxyn` of existing recurring objects on the same `(camera, azimuth)`, using the same threshold as
