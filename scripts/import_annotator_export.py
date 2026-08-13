@@ -18,7 +18,8 @@ Usage:
     python scripts/import_annotator_export.py --export-dir <path> --dry-run
 
 Arguments:
-    --export-dir       Export directory holding manifest.jsonl and images/ (required).
+    --export-dir       Export directory holding manifest.jsonl and images/
+                       (default: data/raw/annotator-export, DVC-tracked).
     --output-dir       Where to write staging folders (default: data/interim/annotator-import).
     --ledger           Recurring-object ledger (default: data/raw/recurring_objects.json).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
@@ -55,7 +56,9 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Convert a pyro-annotator export into ingest-ready sequence folders."
     )
-    parser.add_argument("--export-dir", type=Path, required=True)
+    parser.add_argument(
+        "--export-dir", type=Path, default=Path("data/raw/annotator-export")
+    )
     parser.add_argument(
         "--output-dir", type=Path, default=Path("data/interim/annotator-import")
     )

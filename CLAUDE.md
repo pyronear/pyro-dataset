@@ -87,7 +87,7 @@ Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 
 ```bash
 # 1. Convert an export into staging folders (writes splits.json + the ledger)
-uv run python scripts/import_annotator_export.py --export-dir <path to alerts export>
+uv run python scripts/import_annotator_export.py   # reads data/raw/annotator-export
 
 # 2. Register both halves — splits come from the file, not per-camera assignment
 uv run python scripts/add_data.py --src data/interim/annotator-import/wildfire \
