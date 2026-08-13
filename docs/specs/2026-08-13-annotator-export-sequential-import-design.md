@@ -290,7 +290,7 @@ Registry entries for annotator sequences carry two extra fields:
 select from recurring objects that never fed train.
 
 **The recurring object id is a surrogate key, never derived from content.** Recurring objects live in a ledger,
-`data/raw/recurring_objects.json`:
+`data/raw/pyro-annotator/recurring_objects.json`:
 
 ```json
 {"ro_00042": {"camera": "sdis-tigery-02", "azimuth": 285,

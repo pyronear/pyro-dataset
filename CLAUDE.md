@@ -87,7 +87,7 @@ Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 
 ```bash
 # 1. Convert an export into staging folders (writes splits.json + the ledger)
-uv run python scripts/import_annotator_export.py   # reads data/raw/annotator-export
+uv run python scripts/import_annotator_export.py   # reads data/raw/pyro-annotator/export
 
 # 2. Register both halves — splits come from the file, not per-camera assignment
 uv run python scripts/add_data.py --src data/interim/annotator-import/wildfire \
@@ -105,7 +105,7 @@ What differs from the platform loop:
   so the pools stay balanced. One sequence per recurring object
   (`--max-per-object` raises the lifetime cap), ranked hard-negatives-first by
   `temporal_model_score`, then by how often the artefact fires.
-- **Splits come from `data/raw/recurring_objects.json`**, the recurring-object
+- **Splits come from `data/raw/pyro-annotator/recurring_objects.json`**, the recurring-object
   ledger, not from per-camera stratification: every sequence of one artefact must
   share a split, or the model meets the same object on both sides. The ledger is
   **committed to git** (52 KB, diffable) rather than tracked by DVC, because it is

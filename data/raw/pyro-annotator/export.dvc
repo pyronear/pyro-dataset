@@ -3,4 +3,4 @@ outs:
   size: 2226912411
   nfiles: 18146
   hash: md5
-  path: annotator-export
+  path: export

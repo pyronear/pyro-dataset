@@ -19,9 +19,9 @@ Usage:
 
 Arguments:
     --export-dir       Export directory holding manifest.jsonl and images/
-                       (default: data/raw/annotator-export, DVC-tracked).
+                       (default: data/raw/pyro-annotator/export, DVC-tracked).
     --output-dir       Where to write staging folders (default: data/interim/annotator-import).
-    --ledger           Recurring-object ledger (default: data/raw/recurring_objects.json).
+    --ledger           Recurring-object ledger (default: data/raw/pyro-annotator/recurring_objects.json).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
     --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
     --match-iou        IoU for matching an alert to an existing recurring object (default: 0.3).
@@ -57,13 +57,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
         description="Convert a pyro-annotator export into ingest-ready sequence folders."
     )
     parser.add_argument(
-        "--export-dir", type=Path, default=Path("data/raw/annotator-export")
+        "--export-dir", type=Path, default=Path("data/raw/pyro-annotator/export")
     )
     parser.add_argument(
         "--output-dir", type=Path, default=Path("data/interim/annotator-import")
     )
     parser.add_argument(
-        "--ledger", type=Path, default=Path("data/raw/recurring_objects.json")
+        "--ledger", type=Path, default=Path("data/raw/pyro-annotator/recurring_objects.json")
     )
     parser.add_argument("--max-per-object", type=int, default=1)
     parser.add_argument("--hard-negative-threshold", type=float, default=0.5)
