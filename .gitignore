@@ -11,3 +11,6 @@ runs/
 .venv
 
 **.DS_Store**
+
+# Implementation plans are working notes, not repo content
+docs/plans/
