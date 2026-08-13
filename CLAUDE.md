@@ -80,6 +80,48 @@ The `scripts/platform_train_loop/` subdirectory implements an iterative annotati
 5. `dvc repro` to regenerate datasets
 6. Review reports, push data, retrain model, create GitHub release
 
+### Annotator Export Import
+
+Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
+`docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.
+
+```bash
+# 1. Convert an export into staging folders (writes splits.json + the ledger)
+uv run python scripts/import_annotator_export.py --export-dir <path to alerts export>
+
+# 2. Register both halves — splits come from the file, not per-camera assignment
+uv run python scripts/add_data.py --src data/interim/annotator-import/wildfire \
+  --type wildfire --splits-from data/interim/annotator-import/splits.json
+uv run python scripts/add_data.py --src data/interim/annotator-import/fp \
+  --type fp --splits-from data/interim/annotator-import/splits.json
+```
+
+Run with `--dry-run` first: it reports the quota, how many recurring objects were
+found and how many still fool the temporal model, without writing anything.
+
+What differs from the platform loop:
+
+- **Every smoke alert is imported**, and that count sets the false-positive quota,
+  so the pools stay balanced. One sequence per recurring object
+  (`--max-per-object` raises the lifetime cap), ranked hard-negatives-first by
+  `temporal_model_score`, then by how often the artefact fires.
+- **Splits come from `data/raw/recurring_objects.json`**, the recurring-object
+  ledger, not from per-camera stratification: every sequence of one artefact must
+  share a split, or the model meets the same object on both sides. The ledger is
+  authoritative and must be kept — losing it means later imports re-mint objects
+  and can place one artefact in a second split. `--force-train <ro_id>` moves an
+  artefact that is hurting in production into train, unless it already has
+  sequences elsewhere.
+- **Test is never assigned.** `assignments_from_splits` refuses it outright, so an
+  import cannot disturb the test set. Growing test is separate work.
+- **False-positive boxes are class 99**, not `0`: they mark where the detector
+  fired, not smoke. `build_sequential_dataset.py` pins annotator-sourced FP
+  sequences ahead of its clustering, so the ones chosen upstream actually reach
+  the built dataset.
+- Each folder carries a `meta.json` with every lane's full track, including boxes
+  left out of `labels/`, so an object-level dataset can be derived later without
+  re-exporting.
+
 ### Bounding Box Formats
 
 YOLO uses `xywhn` (center_x, center_y, width, height, normalized). Internally we also use `xyxyn` (x1, y1, x2, y2, normalized). Conversion utilities are in `src/pyro_dataset/yolo/utils.py`.
