@@ -181,22 +181,19 @@ if __name__ == "__main__":
                     f"pinned FP sequence folder not found: {fp_data_dir / seq['folder']}"
                 )
                 pinned_seqs.remove(seq)
-        pinned_folders = {s["folder"] for s in pinned_seqs}
         pinned_paths = [fp_data_dir / s["folder"] for s in pinned_seqs]
         quota = remaining_quota(quota, pinned_seqs)
 
-        # Load DINOv2 embeddings + per-sequence metadata for this split.
+        # Load DINOv2 embeddings + per-sequence metadata for this split. The
+        # annotator cohort is absent by construction — embed_fp_for_selection
+        # skips it — so only folders missing from disk are dropped here.
         emb, items = load_embeddings(embeddings_dir, split)
-        # Filter to items whose folder still exists on disk, dropping pinned
-        # ones so they cannot be selected twice; preserve alignment.
         keep_mask = []
         items_kept: list[dict] = []
         for it in items:
-            ok = (fp_data_dir / it["sequence_folder"]).is_dir() and it[
-                "sequence_folder"
-            ] not in pinned_folders
+            ok = (fp_data_dir / it["sequence_folder"]).is_dir()
             keep_mask.append(ok)
-            if not (fp_data_dir / it["sequence_folder"]).is_dir():
+            if not ok:
                 fp_missing_total += 1
             if ok:
                 items_kept.append(it)

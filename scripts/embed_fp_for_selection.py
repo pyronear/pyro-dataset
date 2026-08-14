@@ -1,5 +1,9 @@
 """Compute one DINOv2-base embedding per FP sequence using the highest-scoring
 labeled frame. Used by the FP YOLO dataset build pipeline (val + train).
+Annotator-sourced sequences (source: pyro-annotator) are skipped: their
+identity is recorded exactly in the recurring-object ledger, so the builders
+pin them without embeddings (see
+docs/specs/2026-08-14-recurring-object-fp-identity-design.md).
 
 For each sequence in the chosen split(s):
   1. Pick the labeled frame with the highest detection score (6th column of
@@ -27,6 +31,8 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel
+
+from pyro_dataset.fp.selection import partition_pinned
 
 HF_REPO = "facebook/dinov2-base"
 PADDING = 0.2
@@ -209,6 +215,9 @@ def main() -> None:
 
     for split in args.splits:
         seqs = by_split.get(split, [])
+        # Annotator-sourced sequences are never embedded: their identity comes
+        # from the recurring-object ledger, and the builders pin them outright.
+        _, seqs = partition_pinned(seqs)
         if not seqs:
             print(f"[{split}] no sequences; skipping")
             continue
