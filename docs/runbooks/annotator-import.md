@@ -51,7 +51,7 @@ go wrong.
 
   ```bash
   uv sync
-  dvc pull   # or targeted: data/raw/pyro-annotator/export (2.2 GB),
+  dvc pull   # or targeted: data/raw/pyro-annotator/export (2.4 GB),
              # data/raw/wildfire, data/raw/fp, data/interim/fp_sequence_embeddings,
              # data/processed/sequential_test
   ```
@@ -67,18 +67,17 @@ the API — no need to run it on the VM hosting the annotator.
 From a checkout of pyro-annotator, in `annotation_api/`:
 
 ```bash
-MAIN_ANNOTATION_LOGIN=admin MAIN_ANNOTATION_PASSWORD=... \
+MAIN_ANNOTATION_LOGIN=<admin-login> MAIN_ANNOTATION_PASSWORD=<admin-password> \
 make export-alerts \
-  REMOTE_API=http://162.19.113.48:5050 \
+  REMOTE_API=<production-annotation-api-url> \
   OUTPUT_DIR=<path-to-pyro-dataset>/data/raw/pyro-annotator/export
 ```
 
 - `REMOTE_API` defaults to `https://annotationapi.pyronear.org`; point it at
-  whichever deployment is currently production (`162.19.113.48` is the OVH
-  annotator VM this runbook's numbers came from). The admin credentials are
-  `AUTH_USERNAME` / `AUTH_PASSWORD` in `~/pyro-annotator/.env` on that VM
-  (`ssh ubuntu@162.19.113.48`). Pass them as environment variables (or the
-  pyro-annotator `.env`) — never commit them.
+  whichever deployment is currently production. The admin credentials live in
+  the deployment's `.env` — ask the platform maintainers if you do not have
+  them. Pass them as environment variables (or the pyro-annotator `.env`) —
+  never commit them.
 - Point `OUTPUT_DIR` straight at this repo's
   `data/raw/pyro-annotator/export/`: the pull is idempotent (the manifest is
   rewritten in full, only missing images are downloaded), so writing into the
