@@ -24,14 +24,17 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 CAM_RE = re.compile(r"^(.+)_(\d+)$")
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser()
-    p.add_argument("--matches-dir", type=Path, default=Path("data/interim/camera_kp_matches"))
-    p.add_argument("--split", default="all", help="Which split's decisions.json to consume.")
+    p.add_argument(
+        "--matches-dir", type=Path, default=Path("data/interim/camera_kp_matches")
+    )
+    p.add_argument(
+        "--split", default="all", help="Which split's decisions.json to consume."
+    )
     p.add_argument("--registry", type=Path, default=Path("data/raw/fp/registry.json"))
     p.add_argument(
         "--out",
@@ -136,7 +139,8 @@ def main() -> None:
                         "cluster_size": len(members),
                         "cluster_members": ",".join(str(x) for x in sorted(members)),
                         "evidence_pairs": " | ".join(
-                            f"{a}↔{b}(keep={k},inl={n})" for a, b, k, n in sorted(evidence, key=lambda e: -e[3])
+                            f"{a}↔{b}(keep={k},inl={n})"
+                            for a, b, k, n in sorted(evidence, key=lambda e: -e[3])
                         ),
                     }
                 )
@@ -164,9 +168,7 @@ def main() -> None:
 
     print(f"wrote {out_path} — {len(rows)} azimuths to remap")
     n_seq_total = sum(r["n_sequences"] for r in rows)
-    splits_total = {
-        s: sum(r[f"n_{s}"] for r in rows) for s in ("train", "val", "test")
-    }
+    splits_total = {s: sum(r[f"n_{s}"] for r in rows) for s in ("train", "val", "test")}
     n_clusters = len({r["cluster_id"] for r in rows})
     print(f"  clusters: {n_clusters}")
     print(f"  sequences impacted: {n_seq_total}  ({splits_total})")

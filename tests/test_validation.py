@@ -32,29 +32,31 @@ def test_valid_folder(valid_folder):
 @pytest.mark.parametrize(
     "name",
     [
-        "sdis83_brison_200_2024-01-15T10-30-00",       # hyphen separators
+        "sdis83_brison_200_2024-01-15T10-30-00",  # hyphen separators
         "pyronear-biobio_florida_0_2025-05-30T18-42-38",  # azimuth 0
     ],
 )
 def test_valid_folder_names(valid_folder, tmp_path, name):
     """Rename the valid_folder fixture to check name patterns."""
     from pyro_dataset.ingest import _FOLDER_RE
+
     assert _FOLDER_RE.match(name), f"Expected '{name}' to match"
 
 
 @pytest.mark.parametrize(
     "name",
     [
-        "sdis83_brison_200",                        # missing timestamp
-        "sdis83_brison_200_2024-01-15",             # incomplete timestamp (no time)
-        "sdis83 brison_200_2024-01-15T10-30-00",    # space in name
-        "sdis83_brison_200_2024-1-15T10-30-00",     # month not zero-padded
-        "adf_avinyonet_999_2023_05_23T17_18_31",    # underscore date → invalid
+        "sdis83_brison_200",  # missing timestamp
+        "sdis83_brison_200_2024-01-15",  # incomplete timestamp (no time)
+        "sdis83 brison_200_2024-01-15T10-30-00",  # space in name
+        "sdis83_brison_200_2024-1-15T10-30-00",  # month not zero-padded
+        "adf_avinyonet_999_2023_05_23T17_18_31",  # underscore date → invalid
         "awf-axis_armstronglookout1_2023_06_01T10_35_04",  # missing azimuth → invalid
     ],
 )
 def test_invalid_folder_names(name):
     from pyro_dataset.ingest import _FOLDER_RE
+
     assert not _FOLDER_RE.match(name), f"Expected '{name}' to not match"
 
 
@@ -73,6 +75,7 @@ def test_invalid_azimuth_range(tmp_path):
     )
     (folder / "labels" / "sdis83_brison_500_2024-01-15T10-32-00.txt").touch()
     from pyro_dataset.ingest import validate_sequence_folder
+
     result = validate_sequence_folder(folder)
     assert result.has_naming_issues
     assert any("azimuth" in issue for issue in result.naming_issues)
@@ -80,6 +83,7 @@ def test_invalid_azimuth_range(tmp_path):
 
 def test_missing_images_dir(valid_folder):
     import shutil
+
     shutil.rmtree(valid_folder / "images")
     result = validate_sequence_folder(valid_folder)
     assert result.has_structural_issues
@@ -88,6 +92,7 @@ def test_missing_images_dir(valid_folder):
 
 def test_missing_labels_dir(valid_folder):
     import shutil
+
     shutil.rmtree(valid_folder / "labels")
     result = validate_sequence_folder(valid_folder)
     assert result.has_structural_issues

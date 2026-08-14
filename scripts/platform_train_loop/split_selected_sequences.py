@@ -186,9 +186,9 @@ def train_val_test_split(
     test_size = len(dirs_sequences) - train_size - val_size
 
     # Assert check to ensure all directories are used in train_dirs, val_dirs, and test_dirs
-    assert train_size + val_size + test_size == len(
-        dirs_sequences
-    ), "Not all directories are accounted for in the splits."
+    assert train_size + val_size + test_size == len(dirs_sequences), (
+        "Not all directories are accounted for in the splits."
+    )
 
     # Split the directories into train, validation, and test sets
     train_dirs = dirs_sequences_shuffled[:train_size]
@@ -196,24 +196,24 @@ def train_val_test_split(
     test_dirs = dirs_sequences_shuffled[train_size + val_size :]
 
     # Assert check to ensure all directories are used in train_dirs, val_dirs, and test_dirs
-    assert len(train_dirs) + len(val_dirs) + len(test_dirs) == len(
-        dirs_sequences
-    ), "Not all directories are accounted for in the splits."
+    assert len(train_dirs) + len(val_dirs) + len(test_dirs) == len(dirs_sequences), (
+        "Not all directories are accounted for in the splits."
+    )
 
     # Assert check to ensure there is no overlap between train_dirs and val_dirs
-    assert not set(train_dirs) & set(
-        val_dirs
-    ), "There is an overlap between training and validation directories."
+    assert not set(train_dirs) & set(val_dirs), (
+        "There is an overlap between training and validation directories."
+    )
 
     # Assert check to ensure there is no overlap between train_dirs and test_dirs
-    assert not set(train_dirs) & set(
-        test_dirs
-    ), "There is an overlap between training and test directories."
+    assert not set(train_dirs) & set(test_dirs), (
+        "There is an overlap between training and test directories."
+    )
 
     # Assert check to ensure there is no overlap between val_dirs and test_dirs
-    assert not set(val_dirs) & set(
-        test_dirs
-    ), "There is an overlap between validation and test directories."
+    assert not set(val_dirs) & set(test_dirs), (
+        "There is an overlap between validation and test directories."
+    )
 
     return {
         "train": train_dirs,

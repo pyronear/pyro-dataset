@@ -28,7 +28,6 @@ import re
 from collections import defaultdict
 from pathlib import Path
 
-
 CAM_RE = re.compile(r"^(.+)_(\d+)$")
 
 
@@ -40,7 +39,11 @@ def make_cli_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("data/interim/camera_kp_matches/all/azimuth_remap.csv"),
     )
-    p.add_argument("--apply", action="store_true", help="Actually perform the rename + registry update.")
+    p.add_argument(
+        "--apply",
+        action="store_true",
+        help="Actually perform the rename + registry update.",
+    )
     p.add_argument("-log", "--loglevel", default="info")
     return p
 
@@ -88,7 +91,7 @@ def main() -> None:
         if not old_folder.startswith(prefix):
             logging.warning(f"unexpected folder prefix, skipping: {old_folder}")
             continue
-        new_folder = f"{site}_{keep_az}_" + old_folder[len(prefix):]
+        new_folder = f"{site}_{keep_az}_" + old_folder[len(prefix) :]
         old_path = data_dir / old_folder
         new_path = data_dir / new_folder
 
@@ -161,7 +164,7 @@ def main() -> None:
                         continue
                     if not f.name.startswith(old_prefix):
                         continue
-                    target = d / (new_prefix + f.name[len(old_prefix):])
+                    target = d / (new_prefix + f.name[len(old_prefix) :])
                     f.rename(target)
                     n_files_renamed += 1
             # Step 2: rename the folder itself

@@ -37,6 +37,7 @@ def load_pairs(split: str):
     pairs = []
     with (base / "pairs.csv").open() as f:
         for r in csv.DictReader(f):
+
             def _f(v):
                 if v is None or v == "":
                     return None
@@ -44,6 +45,7 @@ def load_pairs(split: str):
                     return float(v)
                 except ValueError:
                     return None
+
             pairs.append(
                 {
                     "site": r["site"],
@@ -85,9 +87,7 @@ def save_decisions(split: str, decisions: dict) -> None:
 
 
 @st.cache_data
-def compute_overlay(
-    img_a_path: str, img_b_path: str, n_features: int, max_lines: int
-):
+def compute_overlay(img_a_path: str, img_b_path: str, n_features: int, max_lines: int):
     img_a = cv2.imread(img_a_path)
     img_b = cv2.imread(img_b_path)
     if img_a is None or img_b is None:
@@ -140,7 +140,11 @@ st.set_page_config(page_title="Azimuth validator", layout="wide")
 st.title("Azimuth correction validator")
 
 available = (
-    [p.name for p in MATCHES_ROOT.iterdir() if p.is_dir() and (p / "pairs.csv").exists()]
+    [
+        p.name
+        for p in MATCHES_ROOT.iterdir()
+        if p.is_dir() and (p / "pairs.csv").exists()
+    ]
     if MATCHES_ROOT.is_dir()
     else []
 )
@@ -149,7 +153,9 @@ if not available:
     st.stop()
 
 split = st.sidebar.selectbox(
-    "split", sorted(available), index=sorted(available).index("all") if "all" in available else 0
+    "split",
+    sorted(available),
+    index=sorted(available).index("all") if "all" in available else 0,
 )
 pairs, reprs = load_pairs(split)
 decisions = load_decisions(split)
@@ -186,8 +192,12 @@ filtered = [p for p in pairs if passes(p)]
 
 # Counts for global progress
 n_total_eligible = sum(1 for p in pairs if p["n_inliers"] >= min_inliers)
-n_acc = sum(1 for p in pairs if p["n_inliers"] >= min_inliers and status_of(p) == "accepted")
-n_rej = sum(1 for p in pairs if p["n_inliers"] >= min_inliers and status_of(p) == "rejected")
+n_acc = sum(
+    1 for p in pairs if p["n_inliers"] >= min_inliers and status_of(p) == "accepted"
+)
+n_rej = sum(
+    1 for p in pairs if p["n_inliers"] >= min_inliers and status_of(p) == "rejected"
+)
 n_pen = n_total_eligible - n_acc - n_rej
 
 st.sidebar.markdown(
@@ -211,9 +221,11 @@ decision = decisions.get(pid, {})
 a_meta = reprs[(p["site"], p["azimuth_a"])]
 b_meta = reprs[(p["site"], p["azimuth_b"])]
 
+
 # Default "keep" choice: most recent timestamp wins; on ties, more sequences wins.
 def _score(meta: dict):
     return (meta.get("latest_timestamp", ""), meta.get("n_sequences", 0))
+
 
 if decision.get("status") == "accepted" and decision.get("kept_azimuth") is not None:
     default_keep = int(decision["kept_azimuth"])
@@ -229,6 +241,7 @@ with left:
         f"#{idx + 1}/{len(filtered)}  ·  {p['site']}  ·  azimuth "
         f"**{p['azimuth_a']}** ↔ **{p['azimuth_b']}**"
     )
+
     def _fmt(v, prec=2, default="—"):
         return default if v is None else f"{v:.{prec}f}"
 
@@ -250,11 +263,17 @@ with right:
         )
 
 # Overlay
-overlay = compute_overlay(a_meta["image_path"], b_meta["image_path"], n_features, max_lines)
+overlay = compute_overlay(
+    a_meta["image_path"], b_meta["image_path"], n_features, max_lines
+)
 if overlay is None:
     st.warning("could not compute overlay")
 else:
-    st.image(overlay, caption=f"left: az {p['azimuth_a']}  ·  right: az {p['azimuth_b']}", width="stretch")
+    st.image(
+        overlay,
+        caption=f"left: az {p['azimuth_a']}  ·  right: az {p['azimuth_b']}",
+        width="stretch",
+    )
 
 # Metadata per side
 m1, m2 = st.columns(2)
@@ -315,4 +334,9 @@ c1.button("✅ Accept", on_click=_record, args=("accepted", keep), width="stretc
 c2.button("❌ Reject", on_click=_record, args=("rejected", None), width="stretch")
 c3.button("⏭ Skip", on_click=_skip, width="stretch")
 c4.button("⏮ Previous", on_click=_back, width="stretch")
-c5.button("↺ Clear", on_click=_clear, width="stretch", help="Remove existing decision for this pair.")
+c5.button(
+    "↺ Clear",
+    on_click=_clear,
+    width="stretch",
+    help="Remove existing decision for this pair.",
+)

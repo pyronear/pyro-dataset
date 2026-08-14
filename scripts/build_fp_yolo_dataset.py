@@ -62,7 +62,6 @@ from pathlib import Path
 
 from pyro_dataset.fp.selection import load_embeddings, two_stage_select
 
-
 SPLITS = ["train", "val", "test"]
 FP_RATIO = {"train": 0.1, "val": 0.1, "test": 0.5}
 TWO_STAGE_SPLITS = {"train", "val"}  # test stays on round-robin
@@ -72,9 +71,13 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Build a FP YOLO dataset from fp sequences."
     )
-    parser.add_argument("--registry", type=Path, default=Path("data/raw/fp/registry.json"))
+    parser.add_argument(
+        "--registry", type=Path, default=Path("data/raw/fp/registry.json")
+    )
     parser.add_argument("--data-dir", type=Path, default=Path("data/raw/fp/data"))
-    parser.add_argument("--wf-dataset", type=Path, default=Path("data/processed/wildfire_yolo"))
+    parser.add_argument(
+        "--wf-dataset", type=Path, default=Path("data/processed/wildfire_yolo")
+    )
     parser.add_argument(
         "--embeddings-dir",
         type=Path,
@@ -83,10 +86,18 @@ def make_cli_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--output", type=Path, default=Path("data/processed/fp_yolo"))
     parser.add_argument("--random-seed", type=int, default=0)
-    parser.add_argument("--nms-iou", type=float, default=0.3,
-                        help="NMS IoU threshold for intra-sequence main bbox.")
-    parser.add_argument("--match-iou", type=float, default=0.7,
-                        help="IoU threshold for intra-camera bbox-overlap grouping.")
+    parser.add_argument(
+        "--nms-iou",
+        type=float,
+        default=0.3,
+        help="NMS IoU threshold for intra-sequence main bbox.",
+    )
+    parser.add_argument(
+        "--match-iou",
+        type=float,
+        default=0.7,
+        help="IoU threshold for intra-camera bbox-overlap grouping.",
+    )
     parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument("-log", "--loglevel", default="info")
     return parser
@@ -103,7 +114,8 @@ def count_wf_images(wf_dataset: Path) -> dict[str, int]:
         images_dir = wf_dataset / "images" / split
         if images_dir.is_dir():
             counts[split] = sum(
-                1 for f in images_dir.iterdir()
+                1
+                for f in images_dir.iterdir()
                 if f.suffix.lower() in {".jpg", ".jpeg", ".png"}
             )
         else:
@@ -204,7 +216,9 @@ if __name__ == "__main__":
 
     # Group sequences by split for round-robin (test) and metadata lookups
     by_split_seqs: dict[str, list[dict]] = {s: [] for s in SPLITS}
-    by_split_candidates: dict[str, list[list[tuple[float, Path]]]] = {s: [] for s in SPLITS}
+    by_split_candidates: dict[str, list[list[tuple[float, Path]]]] = {
+        s: [] for s in SPLITS
+    }
     missing = 0
     for seq in sequences:
         folder = seq["folder"]
@@ -243,7 +257,10 @@ if __name__ == "__main__":
                 seed=seed,
             )
             selected = [
-                data_dir / items[i]["sequence_folder"] / "images" / items[i]["image_name"]
+                data_dir
+                / items[i]["sequence_folder"]
+                / "images"
+                / items[i]["image_name"]
                 for i in selected_idx
             ]
             strategies[split] = "two_stage"
@@ -260,7 +277,7 @@ if __name__ == "__main__":
                 dst_label.touch()  # empty label = background
 
     total = sum(counters.values())
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"{'DRY RUN — ' if dry_run else ''}FP images: {total}")
     for split in SPLITS:
         ratio = FP_RATIO[split] * 100
@@ -270,7 +287,7 @@ if __name__ == "__main__":
         )
     if missing:
         print(f"  missing sequence folders: {missing}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     if dry_run:
         print("Dry run — nothing written.")
