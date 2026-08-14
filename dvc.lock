@@ -581,8 +581,8 @@ stages:
       size: 348611
     - path: scripts/build_wf_yolo_dataset.py
       hash: md5
-      md5: 75f947663308b63e200f0ab3829a67de
-      size: 5353
+      md5: 975a917e3e98a137c0fbdb4d6a7b6c25
+      size: 5358
     outs:
     - path: data/processed/wildfire_yolo
       hash: md5
@@ -621,12 +621,12 @@ stages:
       size: 1318880
     - path: scripts/build_fp_yolo_dataset.py
       hash: md5
-      md5: beef769c774ad3764e1275badb3685f2
-      size: 10434
+      md5: ca087d24c82e3a93ff766c015e852a37
+      size: 10573
     - path: src/pyro_dataset/fp/selection.py
       hash: md5
-      md5: 388f68725b27e8457100f04b7dbf8f35
-      size: 7990
+      md5: e9d2065653a9aafdc035c700fa2d678f
+      size: 7999
     outs:
     - path: data/processed/fp_yolo
       hash: md5
@@ -650,8 +650,8 @@ stages:
       nfiles: 32914
     - path: scripts/merge_yolo_dataset.py
       hash: md5
-      md5: d663221ed657bad88c40690092277942
-      size: 4104
+      md5: 2e2ddc978bb90346c30567fe4c35fa8e
+      size: 4164
     outs:
     - path: data/processed/yolo_test
       hash: md5
@@ -747,8 +747,8 @@ stages:
       size: 10179
     - path: src/pyro_dataset/fp/selection.py
       hash: md5
-      md5: 388f68725b27e8457100f04b7dbf8f35
-      size: 7990
+      md5: e9d2065653a9aafdc035c700fa2d678f
+      size: 7999
     outs:
     - path: data/processed/sequential_test
       hash: md5
@@ -777,8 +777,8 @@ stages:
       nfiles: 33635
     - path: scripts/build_toy_dataset.py
       hash: md5
-      md5: 089011bf97589a800dfce6a8b7750217
-      size: 5961
+      md5: f0955aea5d5e2364549d4bcd6cc116ce
+      size: 6060
     outs:
     - path: data/processed/sequential_toy
       hash: md5
@@ -820,8 +820,8 @@ stages:
       nfiles: 33635
     - path: tests/test_data_leakage.py
       hash: md5
-      md5: e3a98eb02997d75b5094f96b7ae6a22e
-      size: 5737
+      md5: beb959069e4a7a1e12ed04c2e7da6ca0
+      size: 5738
   compute_fp_embeddings:
     cmd: uv run python scripts/embed_fp_for_selection.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --output data/interim/fp_sequence_embeddings --splits
@@ -838,12 +838,12 @@ stages:
       size: 1318880
     - path: scripts/embed_fp_for_selection.py
       hash: md5
-      md5: 8512e0a4046c2a76d31f3870aea5bb30
-      size: 7925
+      md5: 27c76f4126615f2be3fb4b798e8c55ef
+      size: 8024
     - path: src/pyro_dataset/fp/selection.py
       hash: md5
-      md5: 388f68725b27e8457100f04b7dbf8f35
-      size: 7990
+      md5: e9d2065653a9aafdc035c700fa2d678f
+      size: 7999
     outs:
     - path: data/interim/fp_sequence_embeddings/test
       hash: md5
