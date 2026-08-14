@@ -19,6 +19,7 @@ Datasets covered:
 - sequential_train_val + sequential_test – sequential datasets for wildfire and fp
 """
 
+import json
 from pathlib import Path
 
 import pytest
@@ -152,3 +153,51 @@ def test_sequential_no_image_leakage(
         f"Sequential [{category}] image leakage ({name_a} ∩ {name_b}): "
         f"{len(overlap)} image(s) shared, e.g. {sorted(overlap)[:3]}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Registry-level consistency: recurring-object pinning and the test lockfile
+# ---------------------------------------------------------------------------
+
+RAW = Path(__file__).parent.parent / "data" / "raw"
+LEDGER_PATH = RAW / "pyro-annotator" / "recurring_objects.json"
+FP_REGISTRY_PATH = RAW / "fp" / "registry.json"
+WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
+TEST_LOCKFILE_PATH = RAW / "fp" / "sequential_test_lock.json"
+
+
+def test_no_recurring_object_spans_splits() -> None:
+    """Every ingested sequence of one artefact sits in the ledger's split."""
+    _skip_if_missing(LEDGER_PATH, FP_REGISTRY_PATH)
+    ledger = json.loads(LEDGER_PATH.read_text())
+    registry = {
+        s["folder"]: s["split"]
+        for s in json.loads(FP_REGISTRY_PATH.read_text())["sequences"]
+    }
+    for ro_id, entry in ledger.items():
+        splits = {
+            registry[folder]
+            for folder in entry["ingested_folders"]
+            if folder in registry
+        }
+        assert splits <= {entry["split"]}, (
+            f"{ro_id} is pinned to {entry['split']} but has sequences in {splits}"
+        )
+
+
+def test_lockfile_matches_the_test_quota() -> None:
+    """The frozen negatives are exactly quota-many registered test FPs."""
+    _skip_if_missing(TEST_LOCKFILE_PATH, WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+    folders = json.loads(TEST_LOCKFILE_PATH.read_text())["folders"]
+    n_wf_test = sum(
+        1
+        for s in json.loads(WF_REGISTRY_PATH.read_text())["sequences"]
+        if s["split"] == "test"
+    )
+    fp_test = {
+        s["folder"]
+        for s in json.loads(FP_REGISTRY_PATH.read_text())["sequences"]
+        if s["split"] == "test"
+    }
+    assert len(folders) == len(set(folders)) == n_wf_test
+    assert set(folders) <= fp_test
