@@ -30,6 +30,7 @@ PROCESSED = Path(__file__).parent.parent / "data" / "processed"
 # Helpers
 # ---------------------------------------------------------------------------
 
+
 def _yolo_images(split_dir: Path) -> set[str]:
     """Return the set of image stems in a flat YOLO split directory."""
     return {p.stem for p in split_dir.glob("*.jpg")}

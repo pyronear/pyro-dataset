@@ -196,7 +196,11 @@ def make_ultralytics_format(
 
     dict_labels = {}
     for filepath_image in filepaths_images:
-        filepath_label_ground_truth = Path(str(filepath_image).replace("images", "labels_ground_truth").replace("jpg", "txt"))
+        filepath_label_ground_truth = Path(
+            str(filepath_image)
+            .replace("images", "labels_ground_truth")
+            .replace("jpg", "txt")
+        )
         if is_background:
             dict_labels[filepath_label_ground_truth] = ""
         else:

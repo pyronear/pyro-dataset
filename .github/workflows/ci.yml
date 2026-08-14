@@ -7,6 +7,57 @@ on:
     branches: [main]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --no-dev --group test
+
+      # `tests/test_data_leakage.py` skips itself when `data/processed/` is
+      # absent, which it always is here — the datasets are DVC-tracked and CI
+      # has no access to them. Everything else runs on fixtures and `tmp_path`.
+      #
+      # `--no-sync`: without it `uv run` re-syncs to the default groups and
+      # reinstalls the dev group the step above just excluded.
+      - name: Run tests
+        run: uv run --no-sync pytest tests/ -q
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      # `--only-group`, not `--group`: the latter installs the project and its
+      # runtime dependencies too — torch, the nvidia CUDA wheels, ultralytics —
+      # 189 packages to put `pre-commit` on PATH. pre-commit needs none of it,
+      # and the hooks bring their own pinned tools. This installs 9.
+      - name: Install dependencies
+        run: uv sync --only-group lint
+
+      # `no-commit-to-branch` guards local commits. On a push to `main`,
+      # actions/checkout puts HEAD on a local `main`, so the hook would fail the
+      # job for doing exactly what the event is — skip it here.
+      #
+      # `--show-diff-on-failure`: the fixing hooks report only "files were
+      # modified by this hook", which is useless from a log. The diff is the fix.
+      #
+      # `--no-sync`: without it `uv run` re-syncs to the default groups and
+      # reinstalls the dev group the step above just excluded.
+      - name: Run pre-commit
+        env:
+          SKIP: no-commit-to-branch
+        run: uv run --no-sync pre-commit run --all-files --show-diff-on-failure
+
   check-leakage-results:
     runs-on: ubuntu-latest
     steps:

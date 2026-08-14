@@ -52,10 +52,18 @@ def truncate_sequences(input_dir: Path, output_dir: Path, max_images: int) -> No
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Truncate sequences to first N images.")
-    parser.add_argument("--input", type=Path, required=True, help="Input dataset directory")
-    parser.add_argument("--output", type=Path, required=True, help="Output dataset directory")
-    parser.add_argument("--max-images", type=int, default=20, help="Max images per sequence")
+    parser = argparse.ArgumentParser(
+        description="Truncate sequences to first N images."
+    )
+    parser.add_argument(
+        "--input", type=Path, required=True, help="Input dataset directory"
+    )
+    parser.add_argument(
+        "--output", type=Path, required=True, help="Output dataset directory"
+    )
+    parser.add_argument(
+        "--max-images", type=int, default=20, help="Max images per sequence"
+    )
     args = parser.parse_args()
 
     if not args.input.exists():
