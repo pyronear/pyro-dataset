@@ -260,9 +260,32 @@ def main() -> None:
     ]
     chosen += [(entry["alert"], "fp", entry["recurring_object"]) for entry in picked]
 
+    # Re-annotation can flip an alert between fp and wildfire after its folder
+    # was planned. The plan keeps the kind the folder was registered under — the
+    # registry is append-only, so moving it would leave two entries for one
+    # sequence — but a sequence quietly meaning the opposite of what it did is
+    # not something to swallow. Built from every alert, not just the usable
+    # ones: a flip is worth reporting even when the images have since gone.
+    export_kinds = {folder_name(alert): alert_kind(alert) for alert in alerts}
+    flipped = {
+        name
+        for name, entry in plan.items()
+        if export_kinds.get(name) not in (None, entry["kind"])
+    }
+    for name in sorted(flipped):
+        logging.warning(
+            f"{name}: changed kind in the export, {plan[name]['kind']} -> "
+            f"{export_kinds[name]}; kept as {plan[name]['kind']}"
+        )
+
     added = 0
     for alert, kind, ro_id in chosen:
         name = folder_name(alert)
+        if name in flipped:
+            # This pick is void. Recording it would claim a wildfire folder as
+            # a recurring object's false positive, burning the object's
+            # lifetime slot and shorting the quota, permanently and silently.
+            continue
         if name not in plan:
             added += 1
             split = (
@@ -289,19 +312,6 @@ def main() -> None:
         ro_id = entry["recurring_object"]
         if ro_id in ledger.entries:
             entry["split"] = ledger.entries[ro_id]["split"]
-
-    # Re-annotation can flip an alert between fp and wildfire. The plan keeps
-    # the kind the folder was registered under — the registry is append-only,
-    # so moving it would leave two entries for one sequence — but a sequence
-    # quietly meaning the opposite of what it did is not something to swallow.
-    export_kinds = {folder_name(alert): alert_kind(alert) for alert in usable}
-    for name, entry in plan.items():
-        kind = export_kinds.get(name)
-        if kind is not None and kind != entry["kind"]:
-            logging.warning(
-                f"{name}: changed kind in the export, {entry['kind']} -> {kind}; "
-                f"kept as {entry['kind']}"
-            )
 
     print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import plan")
     print(f"  wildfire : {len(smoke)}")

@@ -34,6 +34,11 @@ def kinds(plan: dict, kind: str) -> list[str]:
     return [name for name, entry in plan.items() if entry["kind"] == kind]
 
 
+def folder_of(plan: dict, alert_id: int) -> str:
+    """The planned folder of `make_alert(alert_id, ...)`, found by its minute."""
+    return next(name for name in plan if name.endswith(f"T13-{alert_id:02d}-00"))
+
+
 def test_the_fp_quota_equals_the_smoke_count(tmp_path):
     export = tmp_path / "export"
     write_export(
@@ -289,6 +294,39 @@ def test_an_alert_that_changed_kind_keeps_its_planned_kind_and_warns(tmp_path):
 
     assert read_plan(plan_path)[flipped]["kind"] == "fp"
     assert "changed kind" in result.stderr
+
+
+def test_a_wildfire_folder_is_never_recorded_against_a_recurring_object(tmp_path):
+    """The other flip direction. A folder planned as wildfire keeps that kind,
+    so recording it as a recurring object's contributed sequence would claim a
+    positive as the object's false positive — burning its lifetime slot and
+    shorting the quota forever, both silently and both permanently."""
+    plan_path = tmp_path / "plan.json"
+    ledger_path = tmp_path / "ledger.json"
+    export = tmp_path / "export"
+
+    write_export(
+        export,
+        [make_alert(i, "smoke", f"cam-s{i}") for i in range(1, 4)]
+        + [make_alert(20, "fp", "cam-f0")],
+    )
+    run_plan(export, plan_path, ledger_path)
+    flipped = folder_of(read_plan(plan_path), alert_id=3)
+
+    # Alert 3 is re-annotated as a false positive, and the quota has room.
+    write_export(
+        export,
+        [make_alert(i, "smoke", f"cam-s{i}") for i in range(1, 3)]
+        + [make_alert(3, "fp", "cam-s3")]
+        + [make_alert(20 + i, "fp", f"cam-f{i}") for i in range(3)],
+    )
+    result = run_plan(export, plan_path, ledger_path)
+    assert result.returncode == 0, result.stderr
+
+    assert read_plan(plan_path)[flipped]["kind"] == "wildfire"
+    ledger = json.loads(ledger_path.read_text())
+    recorded = {f for entry in ledger.values() for f in entry["ingested_folders"]}
+    assert flipped not in recorded
 
 
 def test_an_alert_with_no_image_on_disk_is_never_planned(tmp_path):

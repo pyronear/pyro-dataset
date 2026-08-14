@@ -108,6 +108,11 @@ its outputs from its deps, which would let `dvc repro` rebuild the ledger and de
 the split pinning it exists to provide. Materialisation is a pure function of
 `export/` + `import_plan.json`, so it caches and reproduces correctly.
 
+Because it is a stage, a full `dvc repro` now needs the annotator export on disk:
+run `dvc pull data/raw/pyro-annotator/export` (2.2 GB) first, or expect that one
+stage to fail. It sits last in `dvc.yaml` so the rest of the pipeline still runs —
+nothing downstream consumes its output, `add_data.py` does, by hand.
+
 What differs from the platform loop:
 
 - **Every smoke alert is imported**, and that count sets the false-positive quota,
