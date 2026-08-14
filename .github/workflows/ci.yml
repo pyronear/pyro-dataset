@@ -37,8 +37,12 @@ jobs:
         with:
           enable-cache: true
 
+      # `--only-group`, not `--group`: the latter installs the project and its
+      # runtime dependencies too — torch, the nvidia CUDA wheels, ultralytics —
+      # 189 packages to put `pre-commit` on PATH. pre-commit needs none of it,
+      # and the hooks bring their own pinned tools. This installs 9.
       - name: Install dependencies
-        run: uv sync --no-dev --group lint
+        run: uv sync --only-group lint
 
       # `no-commit-to-branch` guards local commits. On a push to `main`,
       # actions/checkout puts HEAD on a local `main`, so the hook would fail the
