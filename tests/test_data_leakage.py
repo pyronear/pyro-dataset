@@ -163,7 +163,7 @@ RAW = Path(__file__).parent.parent / "data" / "raw"
 LEDGER_PATH = RAW / "pyro-annotator" / "recurring_objects.json"
 FP_REGISTRY_PATH = RAW / "fp" / "registry.json"
 WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
-TEST_LOCKFILE_PATH = RAW / "fp" / "sequential_test_lock.json"
+TEST_LOCKFILE_PATH = RAW / "sequential_test_lock.json"
 
 
 def test_no_recurring_object_spans_splits() -> None:

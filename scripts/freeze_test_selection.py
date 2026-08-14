@@ -25,7 +25,7 @@ Arguments:
     --fp-registry      FP registry (default: data/raw/fp/registry.json).
     --fp-data-dir      FP sequence folders (default: data/raw/fp/data).
     --embeddings-dir   Per-split DINOv2 embeddings root (default: data/interim/fp_sequence_embeddings).
-    --lockfile         The lockfile (default: data/raw/fp/sequential_test_lock.json).
+    --lockfile         The lockfile (default: data/raw/sequential_test_lock.json).
     --bootstrap-from   Built sequential test dir to seed a missing lockfile from
                        (default: data/processed/sequential_test).
     --nms-iou          NMS IoU for the fill selection (default: 0.3).
@@ -70,7 +70,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("data/interim/fp_sequence_embeddings"),
     )
     parser.add_argument(
-        "--lockfile", type=Path, default=Path("data/raw/fp/sequential_test_lock.json")
+        "--lockfile", type=Path, default=Path("data/raw/sequential_test_lock.json")
     )
     parser.add_argument(
         "--bootstrap-from",

@@ -78,7 +78,7 @@ stages:
       --embeddings-dir data/interim/fp_sequence_embeddings
       --output-train-val data/processed/sequential_train_val
       --output-test data/processed/sequential_test
-      --test-lockfile data/raw/fp/sequential_test_lock.json
+      --test-lockfile data/raw/sequential_test_lock.json
       --random-seed 0
     deps:
       - scripts/build_sequential_dataset.py
@@ -90,7 +90,7 @@ stages:
       - data/raw/fp/data
       - data/interim/fp_sequence_embeddings/val
       - data/interim/fp_sequence_embeddings/train
-      - data/raw/fp/sequential_test_lock.json
+      - data/raw/sequential_test_lock.json
     outs:
       - data/processed/sequential_train_val
       - data/processed/sequential_test:

@@ -48,7 +48,7 @@ Arguments:
     --output-train-val  Output directory for train+val (default: data/processed/sequential_train_val).
     --output-test       Output directory for test (default: data/processed/sequential_test).
     --test-lockfile     Append-only lockfile holding the test FP folders
-                        (default: data/raw/fp/sequential_test_lock.json).
+                        (default: data/raw/sequential_test_lock.json).
     --random-seed       Random seed for KMeans init (default: 0).
     --nms-iou           NMS IoU for intra-sequence main bbox (default: 0.3).
     --match-iou         IoU threshold for intra-camera atoms (default: 0.7).
@@ -99,7 +99,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--test-lockfile",
         type=Path,
-        default=Path("data/raw/fp/sequential_test_lock.json"),
+        default=Path("data/raw/sequential_test_lock.json"),
         help="Append-only lockfile that IS the FP half of the test split.",
     )
     parser.add_argument("--random-seed", type=int, default=0)

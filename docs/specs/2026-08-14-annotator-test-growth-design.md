@@ -79,16 +79,20 @@ Two alternatives were rejected:
   comparability at the transition it exists to protect), and correctness would rest on
   an algorithmic invariant instead of recorded state.
 
-So: **`data/raw/fp/sequential_test_lock.json`** — an ordered, append-only list of FP
+So: **`data/raw/sequential_test_lock.json`** — an ordered, append-only list of FP
 folder names, exactly the FP half of the built `sequential_test`:
 
 ```json
 {"folders": ["pyronear_marguerite-282_212_2024-01-26T11-58-07", "..."]}
 ```
 
-Small, diffable, **git-committed** beside `registry.json`, in the same commit as the
-registries it must stay consistent with. A test-set change is a reviewable diff of pure
-additions. Order is append order and is never changed — the file is history.
+Small, diffable, **git-committed** at the `data/raw/` root — it cannot live inside
+`data/raw/fp/`, which is a single DVC-tracked object (`fp.dvc`) whose gitignore would
+swallow it and whose directory hash every freeze would churn. The git-tracked homes for
+accumulated state are the `data/raw/` root and `data/raw/pyro-annotator/` (the ledger
+and plan); the lockfile joins them, committed together with the DVC pointer of the
+registries it froze against. A test-set change is a reviewable diff of pure additions.
+Order is append order and is never changed — the file is history.
 
 ### 1. Opening the splits: 80/10/10, automatic
 
@@ -128,7 +132,7 @@ uv run python scripts/freeze_test_selection.py [--dry-run]
 | `--fp-registry` | `data/raw/fp/registry.json` | pool + pins |
 | `--fp-data-dir` | `data/raw/fp/data` | existence checks |
 | `--embeddings-dir` | `data/interim/fp_sequence_embeddings` | test embeddings for new slots |
-| `--lockfile` | `data/raw/fp/sequential_test_lock.json` | |
+| `--lockfile` | `data/raw/sequential_test_lock.json` | |
 | `--bootstrap-from` | `data/processed/sequential_test` | seed source when no lockfile exists (§4) |
 | `--nms-iou` / `--match-iou` / `--random-seed` | `0.3` / `0.7` / `0` | passed to `two_stage_select`, matching the build's defaults |
 
@@ -161,7 +165,7 @@ quota wait in the pool, §5).
 ### 3. Build changes
 
 `build_sequential_dataset.py` gains `--test-lockfile` (default
-`data/raw/fp/sequential_test_lock.json`). For the test split it performs **no
+`data/raw/sequential_test_lock.json`). For the test split it performs **no
 selection**: the FP folders are the lockfile's, verbatim. It errors — not warns — when:
 
 - the lockfile is missing, or its length ≠ quota
