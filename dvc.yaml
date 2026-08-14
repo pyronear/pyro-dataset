@@ -107,6 +107,10 @@ stages:
       - data/processed/yolo_test
       - data/processed/sequential_train_val
       - data/processed/sequential_test
+      - data/raw/pyro-annotator/recurring_objects.json
+      - data/raw/wildfire/registry.json
+      - data/raw/fp/registry.json
+      - data/raw/sequential_test_lock.json
 
   build_toy_dataset:
     cmd: >-

@@ -98,7 +98,8 @@ uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/wi
 uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/fp \
   --type fp --splits-from data/interim/pyro-annotator/sequences/splits.json
 
-# 4. Grow the frozen test negatives to match the new test quota
+# 4. Refresh embeddings, then grow the frozen test negatives to the new quota
+dvc repro compute_fp_embeddings
 uv run python scripts/freeze_test_selection.py
 ```
 
@@ -138,7 +139,9 @@ What differs from the platform loop:
   copied verbatim by the build, which errors on any mismatch instead of
   re-selecting. Every release's test set is a superset of the previous one,
   so models stay comparable across releases. Commit the lockfile with the
-  ledger and plan from the same import.
+  ledger and plan from the same import. Any ingest that adds test WF
+  sequences — annotator or not — grows the quota and needs a freeze before
+  the next `dvc repro`, or the build errors on the stale lockfile.
   Design: `docs/specs/2026-08-14-annotator-test-growth-design.md`.
 - **False-positive boxes are class 99**, not `0`: they mark where the detector
   fired, not smoke. `build_sequential_dataset.py` pins annotator-sourced FP

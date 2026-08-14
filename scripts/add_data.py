@@ -183,9 +183,9 @@ if __name__ == "__main__":
         exit(0 if not summary.rejected else 1)
 
     # Resolve splits BEFORE copying. assignments_from_splits rejects a folder
-    # missing from the file, or one pre-assigned to test; raising after the
-    # copy would leave folders in the pool that the registry never learns
-    # about, and a re-run would skip them as "already on disk" forever.
+    # missing from the file; raising after the copy would leave folders in
+    # the pool that the registry never learns about, and a re-run would skip
+    # them as "already on disk" forever.
     start_id = next_id(existing, prefix)
     if args["splits_from"]:
         splits = json.loads(Path(args["splits_from"]).read_text())

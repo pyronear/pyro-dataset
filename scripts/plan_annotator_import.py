@@ -366,6 +366,7 @@ def main() -> None:
             f"--src data/interim/pyro-annotator/sequences/{kind} --type {kind} "
             f"--splits-from data/interim/pyro-annotator/sequences/splits.json"
         )
+    print("  dvc repro compute_fp_embeddings")
     print("  uv run python scripts/freeze_test_selection.py")
     print("  dvc repro")
 

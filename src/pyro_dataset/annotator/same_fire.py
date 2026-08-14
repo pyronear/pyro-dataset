@@ -12,6 +12,7 @@ split, a false split leaks. Matching against the historical pool stays out of
 scope, consistent with the import design's accepted residual risks.
 """
 
+import logging
 from datetime import datetime, timedelta
 
 _TIME_FORMAT = "%Y-%m-%dT%H-%M-%S"
@@ -65,5 +66,14 @@ def _close(chain: list[_Event], groups: list[tuple[list[str], str | None]]) -> N
     new = [folder for _, folder, split in chain if split is None]
     if not new:
         return
-    inherited = next((split for _, _, split in chain if split is not None), None)
+    planned_splits = [split for _, _, split in chain if split is not None]
+    if len(set(planned_splits)) > 1:
+        # Pre-guard history: this fire already straddles splits — the exact
+        # leak the guard exists to stop. The earliest split wins, but the
+        # contamination it signals deserves eyes.
+        logging.warning(
+            f"same-fire chain around {new[0]} touches planned folders in "
+            f"{sorted(set(planned_splits))}; inheriting {planned_splits[0]}"
+        )
+    inherited = planned_splits[0] if planned_splits else None
     groups.append((new, inherited))
