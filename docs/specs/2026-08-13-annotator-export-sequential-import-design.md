@@ -60,10 +60,48 @@ FP sequences selected from a 7,154-sequence pool.
 
 ## Design
 
+### 0. Two halves, split at the state boundary
+
+The import is two commands, because only one half can be a DVC stage
+([#26](https://github.com/pyronear/pyro-dataset/issues/26)):
+
+| half | command | reads | writes |
+|---|---|---|---|
+| **plan** — every decision | `scripts/plan_annotator_import.py` | `export/`, the ledger, the plan | `import_plan.json`, the ledger |
+| **materialise** — pure copying | `scripts/materialise_annotator_sequences.py` | `export/`, `import_plan.json` | `sequences/`, `splits.json` |
+
+Plan holds the accumulated state: it clusters recurring objects, ranks them, sets the
+quota and assigns splits, and its result depends on every import that came before. A
+stage's outputs are regenerated from its declared deps, so declaring the ledger an `out`
+would let `dvc repro` rebuild it and destroy the split pinning it exists to provide,
+while leaving it undeclared would make the stage lie. Plan therefore stays a manual
+command — that is also where the judgement lives (`--dry-run`, `--force-train`,
+`--max-per-object`).
+
+Materialise is a total function of `export/` + `import_plan.json` — no ledger, no
+randomness, no decisions — so it is correctly cached and reproducible, and runs as the
+`materialise_annotator_sequences` stage in `dvc.yaml`.
+
+`import_plan.json` maps each decided folder to its kind, split and recurring object:
+
+```json
+{"sdis-91_sdis-tigery-02_285_2026-07-06T04-28-05":
+  {"kind": "fp", "split": "train", "recurring_object": "ro_00042"}}
+```
+
+Like the ledger it is accumulated, small and diffable, so it is **git-tracked** rather
+than DVC-tracked, and committed with the ledger by the same import commit. Because both
+outlive any single run, plan re-reads the ledger's split onto every plan entry: the
+ledger is authoritative, and a stale entry would be one artefact in two splits.
+
+Alerts with no image on disk are dropped at plan time, not while copying. That keeps
+materialisation total, and stops an unusable alert from consuming its recurring object's
+one slot.
+
 ### 1. One alert becomes one sequence folder
 
-`scripts/import_annotator_export.py` reads an export's `manifest.jsonl` and `images/`
-and writes staging folders in the layout `add_data.py` already expects:
+`scripts/materialise_annotator_sequences.py` reads an export's `manifest.jsonl` and
+`images/` and writes staging folders in the layout `add_data.py` already expects:
 
 ```
 {organisation}_{camera}_{azimuth}_{YYYY-MM-DDTHH-MM-SS}/
@@ -109,6 +147,14 @@ wait for the first one.
 
 Nothing is discarded: every excluded box survives in `meta.json` as part of its lane's
 track (§5), so an object-level consumer loses nothing.
+
+**The kind that decides all this is the one the plan pinned (§0), not the export's
+current answer.** They agree for every alert whose annotation has not changed. When
+re-annotation flips one after its folder was registered, the append-only registry
+keeps the folder where it is, so the labels and `meta.json` must stay there too —
+a folder filed as a false positive holding class-0 boxes is inverted supervision, and
+`build_sequential_dataset.py` copies `labels/` as-is. Planning warns on the flip;
+moving the sequence for real is `scripts/move_fp_to_wildfire.py`.
 
 Note the consequence for multi-object alerts of a *single* kind (52124's three plumes,
 52155, 53360, 57057): all their smoke boxes are written. The detector wants them all, and

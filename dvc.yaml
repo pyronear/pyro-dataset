@@ -1,5 +1,23 @@
 ---
 stages:
+  # Copies the alerts scripts/plan_annotator_import.py decided on into staging
+  # folders. The planning half stays a manual command: it carries the
+  # recurring-object ledger, which is accumulated state a stage would rebuild.
+  materialise_annotator_sequences:
+    cmd: >-
+      uv run python scripts/materialise_annotator_sequences.py
+      --export-dir data/raw/pyro-annotator/export
+      --plan data/raw/pyro-annotator/import_plan.json
+      --output-dir data/interim/pyro-annotator/sequences
+    deps:
+      - scripts/materialise_annotator_sequences.py
+      - src/pyro_dataset/annotator/convert.py
+      - src/pyro_dataset/constants.py
+      - data/raw/pyro-annotator/export
+      - data/raw/pyro-annotator/import_plan.json
+    outs:
+      - data/interim/pyro-annotator/sequences
+
   build_wf_yolo_dataset:
     cmd: >-
       uv run python scripts/build_wf_yolo_dataset.py

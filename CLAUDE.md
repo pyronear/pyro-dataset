@@ -86,18 +86,27 @@ Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 `docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.
 
 ```bash
-# 1. Convert an export into staging folders (writes splits.json + the ledger)
-uv run python scripts/import_annotator_export.py   # reads data/raw/pyro-annotator/export
+# 1. Decide what to import (writes import_plan.json + the ledger, copies nothing)
+uv run python scripts/plan_annotator_import.py   # reads data/raw/pyro-annotator/export
 
-# 2. Register both halves — splits come from the file, not per-camera assignment
+# 2. Copy the planned alerts into staging folders (a DVC stage)
+dvc repro materialise_annotator_sequences
+
+# 3. Register both halves — splits come from the file, not per-camera assignment
 uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/wildfire \
   --type wildfire --splits-from data/interim/pyro-annotator/sequences/splits.json
 uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/fp \
   --type fp --splits-from data/interim/pyro-annotator/sequences/splits.json
 ```
 
-Run with `--dry-run` first: it reports the quota, how many recurring objects were
-found and how many still fool the temporal model, without writing anything.
+Run step 1 with `--dry-run` first: it reports the quota, how many recurring objects
+were found and how many still fool the temporal model, without writing anything.
+
+**The two halves split at the state boundary.** Planning carries accumulated state —
+the ledger, and the plan itself — so it stays a manual command: a stage regenerates
+its outputs from its deps, which would let `dvc repro` rebuild the ledger and destroy
+the split pinning it exists to provide. Materialisation is a pure function of
+`export/` + `import_plan.json`, so it caches and reproduces correctly.
 
 What differs from the platform loop:
 
@@ -111,7 +120,8 @@ What differs from the platform loop:
   **committed to git** (52 KB, diffable) rather than tracked by DVC, because it is
   authoritative metadata — losing it means later imports re-mint objects and can
   place one artefact in a second split, which is the leakage it exists to prevent.
-  Commit it with the registry change from the same import. `--force-train <ro_id>`
+  `import_plan.json` sits beside it and is committed for the same reason. Commit
+  both with the registry change from the same import. `--force-train <ro_id>`
   moves an artefact that is hurting in production into train, unless it already has
   sequences elsewhere.
 - **Test is never assigned.** `assignments_from_splits` refuses it outright, so an
