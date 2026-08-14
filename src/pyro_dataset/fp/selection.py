@@ -20,10 +20,60 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
 from sklearn.cluster import KMeans
+
+ANNOTATOR_SOURCE = "pyro-annotator"
+
+
+def partition_pinned(sequences: list[dict]) -> tuple[list[dict], list[dict]]:
+    """Split registry entries into pinned (annotator-sourced) and the rest.
+
+    Adding a sequence to data/raw/fp does not put it in a built dataset:
+    two-stage selection picks `quota` representatives from the whole pool and
+    may not choose it. Annotator false positives were selected deliberately
+    upstream — one per recurring object, hard negatives first — so they are
+    included before clustering fills what remains, and they are never
+    embedded: their identity comes from the recurring-object ledger.
+    """
+    pinned = [s for s in sequences if s.get("source") == ANNOTATOR_SOURCE]
+    rest = [s for s in sequences if s.get("source") != ANNOTATOR_SOURCE]
+    return pinned, rest
+
+
+def remaining_quota(quota: int, pinned: Sequence) -> int:
+    """Slots left for clustering once the pinned sequences take theirs."""
+    return max(quota - len(pinned), 0)
+
+
+def folder_to_recurring_object(ledger: dict, folders: set[str]) -> dict[str, str]:
+    """Invert the ledger's ingested_folders, restricted to `folders`.
+
+    The ledger may list folders that were planned but never registered
+    (record_ingested stamps at planning time), so only requested folders are
+    mapped. A requested folder missing from the ledger, or claimed by two
+    objects, is a hard error: falling back silently would re-introduce the
+    estimated identity this mapping replaces.
+    """
+    mapping: dict[str, str] = {}
+    for ro_id, entry in ledger.items():
+        for folder in entry.get("ingested_folders", []):
+            if folder not in folders:
+                continue
+            if folder in mapping:
+                raise ValueError(
+                    f"{folder}: listed under both {mapping[folder]} and {ro_id}"
+                )
+            mapping[folder] = ro_id
+    missing = folders - mapping.keys()
+    if missing:
+        raise ValueError(
+            f"no recurring object recorded for: {', '.join(sorted(missing))}"
+        )
+    return mapping
 
 
 def iou_xyxyn(a, b) -> float:
