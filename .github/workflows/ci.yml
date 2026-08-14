@@ -44,12 +44,15 @@ jobs:
       # actions/checkout puts HEAD on a local `main`, so the hook would fail the
       # job for doing exactly what the event is — skip it here.
       #
+      # `--show-diff-on-failure`: the fixing hooks report only "files were
+      # modified by this hook", which is useless from a log. The diff is the fix.
+      #
       # `--no-sync`: without it `uv run` re-syncs to the default groups and
       # reinstalls the dev group the step above just excluded.
       - name: Run pre-commit
         env:
           SKIP: no-commit-to-branch
-        run: uv run --no-sync pre-commit run --all-files
+        run: uv run --no-sync pre-commit run --all-files --show-diff-on-failure
 
   check-leakage-results:
     runs-on: ubuntu-latest
