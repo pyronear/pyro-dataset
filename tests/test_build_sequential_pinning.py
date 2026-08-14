@@ -6,7 +6,10 @@ simply not choose it. Sequences the importer selected deliberately are pinned.
 """
 
 import importlib.util
+import json
 from pathlib import Path
+
+import pytest
 
 SCRIPT = Path("scripts/build_sequential_dataset.py")
 
@@ -47,3 +50,40 @@ def test_remaining_quota_never_goes_negative():
 
 def test_remaining_quota_is_untouched_without_pinned_sequences():
     assert module.remaining_quota(quota=10, pinned=[]) == 10
+
+
+def make_lock(tmp_path, folders):
+    path = tmp_path / "lock.json"
+    path.write_text(json.dumps({"folders": folders}))
+    return path
+
+
+def test_frozen_test_selection_returns_lockfile_paths_in_order(tmp_path):
+    for name in ("f1", "f2"):
+        (tmp_path / "data" / name / "images").mkdir(parents=True)
+    lock = make_lock(tmp_path, ["f2", "f1"])
+    paths = module.frozen_test_selection(
+        lock, quota=2, registered={"f1", "f2"}, data_dir=tmp_path / "data"
+    )
+    assert [p.name for p in paths] == ["f2", "f1"], "lockfile order, verbatim"
+
+
+def test_a_missing_lockfile_is_an_error(tmp_path):
+    with pytest.raises(SystemExit, match="freeze_test_selection"):
+        module.frozen_test_selection(
+            tmp_path / "lock.json", quota=1, registered=set(), data_dir=tmp_path
+        )
+
+
+def test_a_quota_mismatch_is_an_error(tmp_path):
+    lock = make_lock(tmp_path, ["f1"])
+    with pytest.raises(SystemExit, match="quota"):
+        module.frozen_test_selection(
+            lock, quota=2, registered={"f1"}, data_dir=tmp_path
+        )
+
+
+def test_an_unregistered_or_missing_folder_is_an_error(tmp_path):
+    lock = make_lock(tmp_path, ["f1"])
+    with pytest.raises(SystemExit, match="f1"):
+        module.frozen_test_selection(lock, quota=1, registered=set(), data_dir=tmp_path)
