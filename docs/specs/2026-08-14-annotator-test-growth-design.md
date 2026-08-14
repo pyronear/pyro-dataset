@@ -1,6 +1,6 @@
 # Growing the sequential test set from annotator imports
 
-**Status**: design approved, not implemented
+**Status**: implemented (2026-08-14)
 **Date**: 2026-08-14
 **Scope**: the sequential dataset (`sequential_test`); split assignment for annotator imports
 
