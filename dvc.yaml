@@ -39,6 +39,7 @@ stages:
       --data-dir data/raw/fp/data
       --wf-dataset data/processed/wildfire_yolo
       --embeddings-dir data/interim/fp_sequence_embeddings
+      --recurring-objects data/raw/pyro-annotator/recurring_objects.json
       --output data/processed/fp_yolo
       --random-seed 0
     deps:
@@ -46,6 +47,7 @@ stages:
       - src/pyro_dataset/fp/selection.py
       - data/raw/fp/registry.json
       - data/raw/fp/data
+      - data/raw/pyro-annotator/recurring_objects.json
       - data/processed/wildfire_yolo
       - data/interim/fp_sequence_embeddings/val
       - data/interim/fp_sequence_embeddings/train
