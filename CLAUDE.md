@@ -146,9 +146,11 @@ What differs from the platform loop:
   Design: `docs/specs/2026-08-14-annotator-test-growth-design.md`.
 - **False-positive boxes are class 99**, not `0`: they mark where the detector
   fired, not smoke. Annotator-sourced FP sequences are never embedded — their
-  identity comes from `recurring_objects.json` — and both builders pin them
-  ahead of clustering: the sequential build takes every sequence, the YOLO
-  build one image per recurring object. See
+  identity comes from `recurring_objects.json` — and in train and val both
+  builders pin them ahead of clustering: the sequential build takes every
+  sequence, the YOLO build one image per recurring object. In test they reach
+  `sequential_test` only through `freeze_test_selection.py`, up to the quota —
+  surplus pins are deferred until new test smoke opens slots. See
   `docs/specs/2026-08-14-recurring-object-fp-identity-design.md`.
 - Each folder carries a `meta.json` with every lane's full track, including boxes
   left out of `labels/`, so an object-level dataset can be derived later without

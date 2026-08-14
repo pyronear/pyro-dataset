@@ -136,8 +136,11 @@ score, ties broken by filename. Annotator labels are score-less, so in practice 
 the first labeled frame by name — but the rule stays correct if a scored sequence ever
 carries a `source`.
 
-Test split: untouched. Annotator sequences never enter test
-(`assignments_from_splits` refuses it), so round-robin is unaffected.
+Test split: untouched by this design. When it was written, annotator sequences
+could not enter test (`assignments_from_splits` refused it); the test-growth
+design has since repealed that refusal, so annotator test FPs will eventually
+appear in the round-robin pool — accepted, as the test-growth design declares
+detector-test behaviour out of its scope.
 
 ### `scripts/build_sequential_dataset.py`
 
@@ -196,8 +199,12 @@ Integration verification, in order:
   beyond fewer sequences passing through KMeans.
 - Interaction with
   [2026-08-14-annotator-test-growth-design.md](2026-08-14-annotator-test-growth-design.md)
-  (designed separately): it opens `split: test` to annotator imports, repealing the
-  "test is never assigned" premise this document leans on, and its §5 makes surplus
-  annotator test FPs "eligible for two-stage selection" — which presumes embeddings
-  this design stops producing. That reconciliation belongs to the test-growth
-  implementation, not to this one.
+  (designed separately, merged since): it opens `split: test` to annotator imports,
+  repealing the "test is never assigned" premise this document originally leaned on.
+  Its §5 makes surplus annotator test FPs "eligible for two-stage selection", which
+  presumes embeddings this design stops producing. How that lands in practice:
+  `freeze_test_selection.py` pins annotator test FPs from the registry — no
+  embeddings needed — and its clustering fill simply cannot see the surplus, so a
+  deferred sequence waits for future slots instead of competing by embedding
+  distance. Weaker than §5's letter, consistent with both designs' spirit: exact
+  identity is never traded back for estimated identity.
