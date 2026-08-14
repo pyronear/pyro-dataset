@@ -63,7 +63,12 @@ import shutil
 from pathlib import Path
 
 from pyro_dataset.fp.lockfile import load_lockfile, validate_lockfile
-from pyro_dataset.fp.selection import load_embeddings, two_stage_select
+from pyro_dataset.fp.selection import (
+    load_embeddings,
+    partition_pinned,
+    remaining_quota,
+    two_stage_select,
+)
 
 SPLITS = ["train", "val", "test"]
 
@@ -125,28 +130,6 @@ def copy_sequence(src: Path, dst: Path, dry_run: bool) -> None:
         dst_sub = dst / subdir
         if src_sub.is_dir():
             shutil.copytree(src_sub, dst_sub, dirs_exist_ok=True)
-
-
-ANNOTATOR_SOURCE = "pyro-annotator"
-
-
-def partition_pinned(sequences: list[dict]) -> tuple[list[dict], list[dict]]:
-    """Split registry entries into pinned (annotator-sourced) and the rest.
-
-    Adding a sequence to data/raw/fp does not put it in the built dataset:
-    two-stage selection picks `quota` representatives from the whole pool and
-    may not choose it. Annotator false positives were selected deliberately
-    upstream — one per recurring object, hard negatives first — so they are
-    included before clustering fills what remains.
-    """
-    pinned = [s for s in sequences if s.get("source") == ANNOTATOR_SOURCE]
-    rest = [s for s in sequences if s.get("source") != ANNOTATOR_SOURCE]
-    return pinned, rest
-
-
-def remaining_quota(quota: int, pinned: list[dict]) -> int:
-    """Slots left for clustering once the pinned sequences take theirs."""
-    return max(quota - len(pinned), 0)
 
 
 def frozen_test_selection(
@@ -252,22 +235,19 @@ if __name__ == "__main__":
                         f"pinned FP sequence folder not found: {fp_data_dir / seq['folder']}"
                     )
                     pinned_seqs.remove(seq)
-            pinned_folders = {s["folder"] for s in pinned_seqs}
             pinned_paths = [fp_data_dir / s["folder"] for s in pinned_seqs]
             quota = remaining_quota(quota, pinned_seqs)
 
-            # Load DINOv2 embeddings + per-sequence metadata for this split.
+            # Load DINOv2 embeddings + per-sequence metadata for this split. The
+            # annotator cohort is absent by construction — embed_fp_for_selection
+            # skips it — so only folders missing from disk are dropped here.
             emb, items = load_embeddings(embeddings_dir, split)
-            # Filter to items whose folder still exists on disk, dropping pinned
-            # ones so they cannot be selected twice; preserve alignment.
             keep_mask = []
             items_kept: list[dict] = []
             for it in items:
-                ok = (fp_data_dir / it["sequence_folder"]).is_dir() and it[
-                    "sequence_folder"
-                ] not in pinned_folders
+                ok = (fp_data_dir / it["sequence_folder"]).is_dir()
                 keep_mask.append(ok)
-                if not (fp_data_dir / it["sequence_folder"]).is_dir():
+                if not ok:
                     fp_missing_total += 1
                 if ok:
                     items_kept.append(it)

@@ -434,6 +434,10 @@ This does not displace anything. The import adds as many smoke sequences as the 
 holds (58 here), which raises `quota = n_wf` by the same number — the pinned FPs consume
 exactly the slots their own positives created.
 
+Since [2026-08-14-recurring-object-fp-identity-design.md](2026-08-14-recurring-object-fp-identity-design.md),
+pinning extends to the YOLO build (one image per recurring object) and the
+cohort is no longer embedded at all.
+
 ### 7. Changes to existing pyro-dataset code
 
 Everything else is new code. Exactly two existing files change, and both changes are

@@ -10,7 +10,10 @@ Quota per split (in IMAGES, computed from wildfire image counts):
   test        : FP = 50% of total  →  n_fp = n_wf
 
 Sampling strategy:
-  • train, val — TWO-STAGE clustering (selects diverse sequences):
+  • train, val — annotator-sourced sequences first: one image per recurring
+      object (identity from data/raw/pyro-annotator/recurring_objects.json,
+      deterministic frame pick), then TWO-STAGE clustering fills the rest
+      (selects diverse sequences):
       1. Bbox-overlap grouping per camera (NMS top-1 main bbox; intra-camera
          union-find with IoU > 0.7) → "atoms" (each ≡ same recurring artefact
          on the same camera).
@@ -58,9 +61,16 @@ import json
 import logging
 import random
 import shutil
+from collections import defaultdict
 from pathlib import Path
 
-from pyro_dataset.fp.selection import load_embeddings, two_stage_select
+from pyro_dataset.fp.selection import (
+    folder_to_recurring_object,
+    load_embeddings,
+    partition_pinned,
+    remaining_quota,
+    two_stage_select,
+)
 
 SPLITS = ["train", "val", "test"]
 FP_RATIO = {"train": 0.1, "val": 0.1, "test": 0.5}
@@ -83,6 +93,12 @@ def make_cli_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("data/interim/fp_sequence_embeddings"),
         help="Per-split DINOv2 embeddings root (read for train/val two-stage selection).",
+    )
+    parser.add_argument(
+        "--recurring-objects",
+        type=Path,
+        default=Path("data/raw/pyro-annotator/recurring_objects.json"),
+        help="Recurring-object ledger; identity for annotator-sourced (pinned) sequences.",
     )
     parser.add_argument("--output", type=Path, default=Path("data/processed/fp_yolo"))
     parser.add_argument("--random-seed", type=int, default=0)
@@ -184,6 +200,49 @@ def round_robin_sample(
     return selected
 
 
+def best_pinned_image(seq_path: Path) -> Path | None:
+    """Deterministic representative frame for a pinned sequence.
+
+    Annotator labels carry no score, so every frame ties at 0.0 and the sort
+    falls through to the filename. The rule stays correct for scored labels.
+    """
+    candidates = scored_images(seq_path)
+    if not candidates:
+        return None
+    candidates.sort(key=lambda c: (-c[0], c[1].name))
+    return candidates[0][1]
+
+
+def select_pinned_images(
+    pinned_seqs: list[dict], ledger: dict, data_dir: Path
+) -> list[Path]:
+    """One background image per recurring object, ledger-identified.
+
+    Several sequences of one artefact are distinct temporal negatives for the
+    sequential build but near-duplicate backgrounds here, so the object — not
+    the sequence — is the unit. Representative: lexicographically first
+    folder that yields a labeled frame.
+    """
+    ro_by_folder = folder_to_recurring_object(
+        ledger, {s["folder"] for s in pinned_seqs}
+    )
+    folders_by_ro: dict[str, list[str]] = defaultdict(list)
+    for s in pinned_seqs:
+        folders_by_ro[ro_by_folder[s["folder"]]].append(s["folder"])
+    images: list[Path] = []
+    for ro_id in sorted(folders_by_ro):
+        image = None
+        for folder in sorted(folders_by_ro[ro_id]):
+            image = best_pinned_image(data_dir / folder)
+            if image is not None:
+                break
+        if image is None:
+            logging.warning(f"{ro_id}: no labeled frame in any pinned folder")
+            continue
+        images.append(image)
+    return images
+
+
 # Two-stage helpers live in src/pyro_dataset/fp/selection.py and are imported above.
 
 
@@ -205,6 +264,8 @@ if __name__ == "__main__":
 
     sequences = load_registry(registry_path)
     logging.info(f"Loaded {len(sequences)} FP sequences from registry")
+
+    ledger = json.loads(args["recurring_objects"].read_text())
 
     wf_counts = count_wf_images(wf_dataset)
     quotas = {
@@ -246,24 +307,28 @@ if __name__ == "__main__":
     for split in SPLITS:
         quota = quotas[split]
         if split in TWO_STAGE_SPLITS:
+            # Annotator-sourced sequences are pinned: one image per recurring
+            # object, chosen deterministically, ahead of the clustering.
+            pinned_seqs, _ = partition_pinned(by_split_seqs[split])
+            pinned = select_pinned_images(pinned_seqs, ledger, data_dir)
             emb, items = load_embeddings(embeddings_dir, split)
             selected_idx = two_stage_select(
                 items=items,
                 embeddings=emb,
                 data_dir=data_dir,
-                quota=quota,
+                quota=remaining_quota(quota, pinned),
                 nms_iou=nms_iou,
                 match_iou=match_iou,
                 seed=seed,
             )
-            selected = [
+            selected = pinned + [
                 data_dir
                 / items[i]["sequence_folder"]
                 / "images"
                 / items[i]["image_name"]
                 for i in selected_idx
             ]
-            strategies[split] = "two_stage"
+            strategies[split] = f"two_stage+{len(pinned)}_pinned"
         else:
             selected = round_robin_sample(by_split_candidates[split], quota, rng)
             strategies[split] = "round_robin"
