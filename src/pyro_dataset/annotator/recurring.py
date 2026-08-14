@@ -22,7 +22,7 @@ from pyro_dataset.fp.selection import iou_xyxyn
 
 Bbox = tuple[float, float, float, float]
 
-SPLIT_TARGETS = {"train": 0.9, "val": 0.1}
+SPLIT_TARGETS = {"train": 0.8, "val": 0.1, "test": 0.1}
 
 
 def main_bbox(alert: dict[str, Any]) -> Bbox | None:
@@ -61,10 +61,11 @@ def main_bbox(alert: dict[str, Any]) -> Bbox | None:
 
 
 def assign_new_split(rng: random.Random, counts: dict[str, int]) -> str:
-    """Greedy 90/10 train/val — whichever split is furthest below its target.
+    """Greedy 80/10/10 — whichever split is furthest below its target.
 
-    Test is never a candidate: annotator sequences do not enter it, which is
-    what keeps the test set untouched by an import.
+    Test became a candidate with the test-growth design
+    (docs/specs/2026-08-14-annotator-test-growth-design.md): the built test
+    set is protected by the freeze lockfile, not by locking test shut.
     """
     total = sum(counts.get(split, 0) for split in SPLIT_TARGETS) + 1
     deficits = {
