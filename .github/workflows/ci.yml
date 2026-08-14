@@ -7,6 +7,27 @@ on:
     branches: [main]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --no-dev --group test
+
+      # `tests/test_data_leakage.py` skips itself when `data/processed/` is
+      # absent, which it always is here — the datasets are DVC-tracked and CI
+      # has no access to them. Everything else runs on fixtures and `tmp_path`.
+      #
+      # `--no-sync`: without it `uv run` re-syncs to the default groups and
+      # reinstalls the dev group the step above just excluded.
+      - name: Run tests
+        run: uv run --no-sync pytest tests/ -q
+
   check-leakage-results:
     runs-on: ubuntu-latest
     steps:
