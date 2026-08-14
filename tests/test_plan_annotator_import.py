@@ -61,25 +61,60 @@ def test_each_entry_carries_kind_split_and_recurring_object(tmp_path):
     plan = read_plan(plan_path)
 
     smoke = plan[kinds(plan, "wildfire")[0]]
-    assert smoke["split"] in {"train", "val"}
+    assert smoke["split"] in {"train", "val", "test"}
     assert smoke["recurring_object"] is None, "smoke has no recurring object"
 
     fp = plan[kinds(plan, "fp")[0]]
     assert fp["recurring_object"].startswith("ro_")
 
 
-def test_splits_never_assign_test(tmp_path):
+def test_splits_can_assign_test(tmp_path):
     export = tmp_path / "export"
     write_export(
         export,
-        [make_alert(i, "smoke", f"cam-s{i}") for i in range(1, 6)]
-        + [make_alert(20 + i, "fp", f"cam-f{i}") for i in range(6)],
+        [make_alert(i, "smoke", f"cam-s{i}") for i in range(1, 31)]
+        + [make_alert(30 + i, "fp", f"cam-f{i}") for i in range(1, 30)],
     )
     plan_path = tmp_path / "plan.json"
-    run_plan(export, plan_path, tmp_path / "ledger.json")
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
     plan = read_plan(plan_path)
-    assert plan
-    assert {entry["split"] for entry in plan.values()} <= {"train", "val"}
+    splits = {entry["split"] for entry in plan.values()}
+    assert splits <= {"train", "val", "test"}
+    assert "test" in splits, "80/10/10 targets must reach test"
+
+
+def test_same_fire_smoke_alerts_share_a_split(tmp_path):
+    export = tmp_path / "export"
+    # Same camera => same view; recorded_at differs by one minute.
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-a")]
+        + [make_alert(10 + i, "fp", f"cam-f{i}") for i in range(3)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    plan = read_plan(plan_path)
+    assert plan[folder_of(plan, 1)]["split"] == plan[folder_of(plan, 2)]["split"]
+
+
+def test_same_fire_split_is_inherited_across_runs(tmp_path):
+    export = tmp_path / "export"
+    plan_path = tmp_path / "plan.json"
+    ledger_path = tmp_path / "ledger.json"
+
+    write_export(export, [make_alert(1, "smoke", "cam-a")])
+    run_plan(export, plan_path, ledger_path)
+    first_plan = read_plan(plan_path)
+    first_split = first_plan[folder_of(first_plan, 1)]["split"]
+
+    write_export(
+        export, [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-a")]
+    )
+    run_plan(export, plan_path, ledger_path)
+    plan = read_plan(plan_path)
+    assert plan[folder_of(plan, 2)]["split"] == first_split
 
 
 def test_rerun_is_idempotent_and_the_ledger_keeps_splits(tmp_path):

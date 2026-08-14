@@ -4,6 +4,10 @@
 **Date**: 2026-08-13
 **Scope**: the sequential dataset (`sequential_train_val`, `sequential_test`) feeding the temporal model
 
+> **Superseded in part** (2026-08-14): §4's train/val-only restriction and the deferred
+> test-growth item are now designed in
+> [2026-08-14-annotator-test-growth-design.md](2026-08-14-annotator-test-growth-design.md).
+
 ## Goal
 
 Feed human-annotated alerts from pyro-annotator into the sequential dataset, adding

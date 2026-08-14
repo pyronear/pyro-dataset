@@ -137,7 +137,8 @@ if __name__ == "__main__":
     if skipped_unregistered:
         logging.warning(
             f"{len(skipped_unregistered)} folder(s) exist on disk but are not in "
-            "registry — run add_data.py to register them."
+            "registry — delete them from the pool and re-run add_data.py to "
+            "register them (already-on-disk folders are skipped, not registered)."
         )
     if not to_copy:
         print("Nothing new to add.")
@@ -183,9 +184,9 @@ if __name__ == "__main__":
         exit(0 if not summary.rejected else 1)
 
     # Resolve splits BEFORE copying. assignments_from_splits rejects a folder
-    # missing from the file, or one pre-assigned to test; raising after the
-    # copy would leave folders in the pool that the registry never learns
-    # about, and a re-run would skip them as "already on disk" forever.
+    # missing from the file; raising after the copy would leave folders in
+    # the pool that the registry never learns about, and a re-run would skip
+    # them as "already on disk" forever.
     start_id = next_id(existing, prefix)
     if args["splits_from"]:
         splits = json.loads(Path(args["splits_from"]).read_text())
