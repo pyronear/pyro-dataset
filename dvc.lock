@@ -572,13 +572,13 @@ stages:
     deps:
     - path: data/raw/wildfire/data
       hash: md5
-      md5: 2dcbdee5736e1d53e8e7d976a82d415e.dir
-      size: 6062098501
-      nfiles: 107889
+      md5: 94e50bb99a338d9ded78480e8c0f119b.dir
+      size: 6382366222
+      nfiles: 112095
     - path: data/raw/wildfire/registry.json
       hash: md5
-      md5: 3e31561ecbebfb84a4e2a5ade09650ca
-      size: 348611
+      md5: 364dc3a5c119528bda932aaba70eab4a
+      size: 368515
     - path: scripts/build_wf_yolo_dataset.py
       hash: md5
       md5: 975a917e3e98a137c0fbdb4d6a7b6c25
@@ -586,9 +586,9 @@ stages:
     outs:
     - path: data/processed/wildfire_yolo
       hash: md5
-      md5: 7e25bea7a3afa9a9bf704b8e42c56a97.dir
-      size: 1967711895
-      nfiles: 32914
+      md5: 22a936413362ce95f37891c14004d7b5.dir
+      size: 2109301391
+      nfiles: 34726
   build_fp_yolo_dataset:
     cmd: uv run python scripts/build_fp_yolo_dataset.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --wf-dataset data/processed/wildfire_yolo --embeddings-dir
@@ -607,22 +607,22 @@ stages:
       nfiles: 2
     - path: data/processed/wildfire_yolo
       hash: md5
-      md5: 7e25bea7a3afa9a9bf704b8e42c56a97.dir
-      size: 1967711895
-      nfiles: 32914
+      md5: 22a936413362ce95f37891c14004d7b5.dir
+      size: 2109301391
+      nfiles: 34726
     - path: data/raw/fp/data
       hash: md5
-      md5: 2fdf845cf344d8d1f88fca010509d589.dir
-      size: 11489927934
-      nfiles: 210580
+      md5: 56a0262944b8cfa4c46b21f98d5d6a06.dir
+      size: 11610073091
+      nfiles: 212648
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 7983fceca0836f734bdf7e6bf032063e
-      size: 1318880
+      md5: 85e9b8f31902f9ba1abb6d29035391bf
+      size: 1328360
     - path: data/raw/pyro-annotator/recurring_objects.json
       hash: md5
-      md5: ecc9988f92c56db6f9516052b8aae959
-      size: 50832
+      md5: ed723b7dee557aaa50c91e43cd4885bb
+      size: 53788
     - path: scripts/build_fp_yolo_dataset.py
       hash: md5
       md5: 7017e8e7f6d9d2d9e1ca981b63f25e7c
@@ -634,9 +634,9 @@ stages:
     outs:
     - path: data/processed/fp_yolo
       hash: md5
-      md5: 218aa610b9887a65ec9b27009d6a6f6f.dir
-      size: 332994040
-      nfiles: 6002
+      md5: 83c0b453a5aa172f682ff8fc2975aff3.dir
+      size: 366927490
+      nfiles: 6632
   merge_yolo_dataset:
     cmd: uv run python scripts/merge_yolo_dataset.py --wf-dataset data/processed/wildfire_yolo
       --fp-dataset data/processed/fp_yolo --output-train-val data/processed/yolo_train_val
@@ -644,14 +644,14 @@ stages:
     deps:
     - path: data/processed/fp_yolo
       hash: md5
-      md5: 218aa610b9887a65ec9b27009d6a6f6f.dir
-      size: 332994040
-      nfiles: 6002
+      md5: 83c0b453a5aa172f682ff8fc2975aff3.dir
+      size: 366927490
+      nfiles: 6632
     - path: data/processed/wildfire_yolo
       hash: md5
-      md5: 7e25bea7a3afa9a9bf704b8e42c56a97.dir
-      size: 1967711895
-      nfiles: 32914
+      md5: 22a936413362ce95f37891c14004d7b5.dir
+      size: 2109301391
+      nfiles: 34726
     - path: scripts/merge_yolo_dataset.py
       hash: md5
       md5: 2e2ddc978bb90346c30567fe4c35fa8e
@@ -659,23 +659,23 @@ stages:
     outs:
     - path: data/processed/yolo_test
       hash: md5
-      md5: 5dea78ce11082a26e264fb64ced8b6c8.dir
-      size: 272528163
-      nfiles: 5281
+      md5: da0575cab78acde3857810790f4af9a2.dir
+      size: 337330427
+      nfiles: 6249
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: a43f8eae91dd781aa91984d92bbe65d2.dir
-      size: 2028094915
-      nfiles: 33635
+      md5: 3f60ddc0047e4af076c56228335d7005.dir
+      size: 2138898572
+      nfiles: 35111
   visualize_yolo_train_val:
     cmd: uv run python scripts/visualize_dataset.py --dir-dataset data/processed/yolo_train_val
       --dir-save data/reporting/viz/yolo_train_val
     deps:
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: a43f8eae91dd781aa91984d92bbe65d2.dir
-      size: 2028094915
-      nfiles: 33635
+      md5: 3f60ddc0047e4af076c56228335d7005.dir
+      size: 2138898572
+      nfiles: 35111
     - path: scripts/visualize_dataset.py
       hash: md5
       md5: 63de03fbd853783380afb2588ad2e5da
@@ -683,18 +683,18 @@ stages:
     outs:
     - path: data/reporting/viz/yolo_train_val
       hash: md5
-      md5: 922d0a257ec915d91bb299f11df8ae27.dir
-      size: 3658189215
-      nfiles: 16817
+      md5: 5a749cee57a6b23b442619f94a514868.dir
+      size: 3858195536
+      nfiles: 17555
   visualize_yolo_test:
     cmd: uv run python scripts/visualize_dataset.py --dir-dataset data/processed/yolo_test
       --dir-save data/reporting/viz/yolo_test
     deps:
     - path: data/processed/yolo_test
       hash: md5
-      md5: 5dea78ce11082a26e264fb64ced8b6c8.dir
-      size: 272528163
-      nfiles: 5281
+      md5: da0575cab78acde3857810790f4af9a2.dir
+      size: 337330427
+      nfiles: 6249
     - path: scripts/visualize_dataset.py
       hash: md5
       md5: 63de03fbd853783380afb2588ad2e5da
@@ -702,9 +702,9 @@ stages:
     outs:
     - path: data/reporting/viz/yolo_test
       hash: md5
-      md5: bd34ccce3fc8349d9b790f17932d04cf.dir
-      size: 492913917
-      nfiles: 2640
+      md5: 3a1d448bc34f2c70bb7ad578a6f85baa.dir
+      size: 608864330
+      nfiles: 3124
   build_sequential_dataset:
     cmd: uv run python scripts/build_sequential_dataset.py --wf-registry data/raw/wildfire/registry.json
       --wf-data-dir data/raw/wildfire/data --fp-registry data/raw/fp/registry.json
@@ -724,26 +724,26 @@ stages:
       nfiles: 2
     - path: data/raw/fp/data
       hash: md5
-      md5: 2fdf845cf344d8d1f88fca010509d589.dir
-      size: 11489927934
-      nfiles: 210580
+      md5: 56a0262944b8cfa4c46b21f98d5d6a06.dir
+      size: 11610073091
+      nfiles: 212648
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 7983fceca0836f734bdf7e6bf032063e
-      size: 1318880
+      md5: 85e9b8f31902f9ba1abb6d29035391bf
+      size: 1328360
     - path: data/raw/sequential_test_lock.json
       hash: md5
-      md5: 11ac1db3f4b20059c71fcc296d891c6c
-      size: 8781
+      md5: ad7bcc52f82e439eeb527711c2fcea05
+      size: 10286
     - path: data/raw/wildfire/data
       hash: md5
-      md5: 2dcbdee5736e1d53e8e7d976a82d415e.dir
-      size: 6062098501
-      nfiles: 107889
+      md5: 94e50bb99a338d9ded78480e8c0f119b.dir
+      size: 6382366222
+      nfiles: 112095
     - path: data/raw/wildfire/registry.json
       hash: md5
-      md5: 3e31561ecbebfb84a4e2a5ade09650ca
-      size: 348611
+      md5: 364dc3a5c119528bda932aaba70eab4a
+      size: 368515
     - path: scripts/build_sequential_dataset.py
       hash: md5
       md5: a279800d6a6e0a1c507b77256174d805
@@ -759,14 +759,14 @@ stages:
     outs:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 713ab0c96ee240f0ba387f53f8648020.dir
-      size: 819983568
-      nfiles: 15320
+      md5: e0f54c26144583a161bd073b51a8016b.dir
+      size: 942998367
+      nfiles: 17140
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: ef44e3f9519456b587f424e27b5ad8a2.dir
-      size: 8556786817
-      nfiles: 144472
+      md5: 7a6cf403965044cca4101d423b6f34e1.dir
+      size: 9037464341
+      nfiles: 150786
   build_toy_dataset:
     cmd: uv run python scripts/build_toy_dataset.py --yolo-src data/processed/yolo_train_val
       --seq-src data/processed/sequential_train_val --yolo-output data/processed/yolo_toy
@@ -774,14 +774,14 @@ stages:
     deps:
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: ef44e3f9519456b587f424e27b5ad8a2.dir
-      size: 8556786817
-      nfiles: 144472
+      md5: 7a6cf403965044cca4101d423b6f34e1.dir
+      size: 9037464341
+      nfiles: 150786
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: a43f8eae91dd781aa91984d92bbe65d2.dir
-      size: 2028094915
-      nfiles: 33635
+      md5: 3f60ddc0047e4af076c56228335d7005.dir
+      size: 2138898572
+      nfiles: 35111
     - path: scripts/build_toy_dataset.py
       hash: md5
       md5: f0955aea5d5e2364549d4bcd6cc116ce
@@ -789,58 +789,58 @@ stages:
     outs:
     - path: data/processed/sequential_toy
       hash: md5
-      md5: 8b8508fb373310ebd49029ee7c54f8cf.dir
-      size: 443750294
-      nfiles: 7728
+      md5: 44f6051c12cb2b4b557079e65bb81e9d.dir
+      size: 436081066
+      nfiles: 7712
     - path: data/processed/yolo_toy
       hash: md5
-      md5: 257cdce256f23272ee72010f90fca5cd.dir
-      size: 101552974
-      nfiles: 1683
+      md5: a36e988f5979a8cd76d0c65c2246b365.dir
+      size: 107817877
+      nfiles: 1757
   test_data_leakage:
     cmd: uv run pytest tests/test_data_leakage.py -v --junit-xml=data/reporting/leakage_results.xml
     deps:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 713ab0c96ee240f0ba387f53f8648020.dir
-      size: 819983568
-      nfiles: 15320
+      md5: e0f54c26144583a161bd073b51a8016b.dir
+      size: 942998367
+      nfiles: 17140
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: ef44e3f9519456b587f424e27b5ad8a2.dir
-      size: 8556786817
-      nfiles: 144472
+      md5: 7a6cf403965044cca4101d423b6f34e1.dir
+      size: 9037464341
+      nfiles: 150786
     - path: data/processed/wildfire_yolo
       hash: md5
-      md5: 7e25bea7a3afa9a9bf704b8e42c56a97.dir
-      size: 1967711895
-      nfiles: 32914
+      md5: 22a936413362ce95f37891c14004d7b5.dir
+      size: 2109301391
+      nfiles: 34726
     - path: data/processed/yolo_test
       hash: md5
-      md5: 5dea78ce11082a26e264fb64ced8b6c8.dir
-      size: 272528163
-      nfiles: 5281
+      md5: da0575cab78acde3857810790f4af9a2.dir
+      size: 337330427
+      nfiles: 6249
     - path: data/processed/yolo_train_val
       hash: md5
-      md5: a43f8eae91dd781aa91984d92bbe65d2.dir
-      size: 2028094915
-      nfiles: 33635
+      md5: 3f60ddc0047e4af076c56228335d7005.dir
+      size: 2138898572
+      nfiles: 35111
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 7983fceca0836f734bdf7e6bf032063e
-      size: 1318880
+      md5: 85e9b8f31902f9ba1abb6d29035391bf
+      size: 1328360
     - path: data/raw/pyro-annotator/recurring_objects.json
       hash: md5
-      md5: ecc9988f92c56db6f9516052b8aae959
-      size: 50832
+      md5: ed723b7dee557aaa50c91e43cd4885bb
+      size: 53788
     - path: data/raw/sequential_test_lock.json
       hash: md5
-      md5: 11ac1db3f4b20059c71fcc296d891c6c
-      size: 8781
+      md5: ad7bcc52f82e439eeb527711c2fcea05
+      size: 10286
     - path: data/raw/wildfire/registry.json
       hash: md5
-      md5: 3e31561ecbebfb84a4e2a5ade09650ca
-      size: 348611
+      md5: 364dc3a5c119528bda932aaba70eab4a
+      size: 368515
     - path: tests/test_data_leakage.py
       hash: md5
       md5: 6a139392d901fc3f14ac20ec8162d515
@@ -852,13 +852,13 @@ stages:
     deps:
     - path: data/raw/fp/data
       hash: md5
-      md5: 2fdf845cf344d8d1f88fca010509d589.dir
-      size: 11489927934
-      nfiles: 210580
+      md5: 56a0262944b8cfa4c46b21f98d5d6a06.dir
+      size: 11610073091
+      nfiles: 212648
     - path: data/raw/fp/registry.json
       hash: md5
-      md5: 7983fceca0836f734bdf7e6bf032063e
-      size: 1318880
+      md5: 85e9b8f31902f9ba1abb6d29035391bf
+      size: 1328360
     - path: scripts/embed_fp_for_selection.py
       hash: md5
       md5: ba8c3fb00f8f15b129aa481889d816b8
@@ -889,13 +889,13 @@ stages:
     deps:
     - path: data/raw/pyro-annotator/export
       hash: md5
-      md5: 5de5c6368ca1188dd83d85258a776a53.dir
-      size: 2226912411
-      nfiles: 18146
+      md5: 5bfa1addbffccbadb526b4cf21bc2983.dir
+      size: 2578377307
+      nfiles: 20381
     - path: data/raw/pyro-annotator/import_plan.json
       hash: md5
-      md5: 7f3b46417b8000b049afcd5856662e78
-      size: 15720
+      md5: c07cd94dc43289a8197232e9564468ad
+      size: 34576
     - path: scripts/materialise_annotator_sequences.py
       hash: md5
       md5: 1006a14b5361eb77f8b22c8c17719344
@@ -911,6 +911,6 @@ stages:
     outs:
     - path: data/interim/pyro-annotator/sequences
       hash: md5
-      md5: d6476b791ec90bdfa8af7214c57317a1.dir
-      size: 382561114
-      nfiles: 5329
+      md5: ae8c7b74f86682941698ecd1870abdd6.dir
+      size: 822982482
+      nfiles: 11603

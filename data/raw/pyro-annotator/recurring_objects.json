@@ -154,7 +154,9 @@
       0.464
     ],
     "camera": "sdis-91_sdis-tigery-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-91_sdis-tigery-02_22_2026-07-07T04-34-14"
+    ],
     "seen_alerts": [
       "pyronear_french:50410",
       "pyronear_french:50685",
@@ -202,7 +204,9 @@
       0.494
     ],
     "camera": "sdis-40_morcenx-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-02_104_2026-08-04T08-53-08"
+    ],
     "seen_alerts": [
       "pyronear_french:50464",
       "pyronear_french:51267",
@@ -223,7 +227,9 @@
       0.462
     ],
     "camera": "sdis-40_morcenx-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-01_44_2026-07-01T08-53-19"
+    ],
     "seen_alerts": [
       "pyronear_french:50472",
       "pyronear_french:50754",
@@ -336,7 +342,9 @@
       0.474
     ],
     "camera": "germersheim_germersheim-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "germersheim_germersheim-02_13_2026-07-03T03-03-25"
+    ],
     "seen_alerts": [
       "pyronear_french:50537",
       "pyronear_french:50586",
@@ -358,7 +366,9 @@
       0.436
     ],
     "camera": "sis-67_cis-petersbach-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_271_2026-07-05T15-47-49"
+    ],
     "seen_alerts": [
       "pyronear_french:50540",
       "pyronear_french:50816",
@@ -380,7 +390,9 @@
       0.247
     ],
     "camera": "sis-67_donon-sarrebourg-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_291_2026-07-23T12-40-04"
+    ],
     "seen_alerts": [
       "pyronear_french:50545",
       "pyronear_french:53195",
@@ -527,7 +539,9 @@
       0.618
     ],
     "camera": "sdis-77_videlles-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_videlles-01_154_2026-07-24T18-51-18"
+    ],
     "seen_alerts": [
       "pyronear_french:50643",
       "pyronear_french:51960",
@@ -656,7 +670,9 @@
       0.474
     ],
     "camera": "sis-67_bischwiller-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_bischwiller-01_301_2026-07-04T03-58-46"
+    ],
     "seen_alerts": [
       "pyronear_french:50678",
       "pyronear_french:50881",
@@ -768,7 +784,9 @@
       0.556
     ],
     "camera": "sis-67_col-saverne-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_col-saverne-02_128_2026-07-02T07-40-48"
+    ],
     "seen_alerts": [
       "pyronear_french:50718",
       "pyronear_french:50970",
@@ -812,7 +830,9 @@
       0.512
     ],
     "camera": "sdis-77_croix-augas-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_croix-augas-01_326_2026-08-05T09-46-18"
+    ],
     "seen_alerts": [
       "pyronear_french:50747",
       "pyronear_french:53778",
@@ -850,7 +870,9 @@
       0.475
     ],
     "camera": "sdis-91_sdis-tigery-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-91_sdis-tigery-01_268_2026-07-02T17-44-32"
+    ],
     "seen_alerts": [
       "pyronear_french:50810",
       "pyronear_french:50838",
@@ -899,7 +921,9 @@
       0.752
     ],
     "camera": "sdis-40_morcenx-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-01_3_2026-07-22T20-09-10"
+    ],
     "seen_alerts": [
       "pyronear_french:50870",
       "pyronear_french:52549",
@@ -916,7 +940,9 @@
       0.619
     ],
     "camera": "sdis-77_nemours-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_nemours-02_328_2026-07-24T10-41-24"
+    ],
     "seen_alerts": [
       "pyronear_french:50906",
       "pyronear_french:55348",
@@ -985,7 +1011,9 @@
       0.212
     ],
     "camera": "sis-67_donon-sarrebourg-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_316_2026-07-06T18-55-15"
+    ],
     "seen_alerts": [
       "pyronear_french:51156",
       "pyronear_french:51956",
@@ -1004,7 +1032,9 @@
       0.314
     ],
     "camera": "sis-67_donon-sarrebourg-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_320_2026-07-03T18-40-28"
+    ],
     "seen_alerts": [
       "pyronear_french:51181",
       "pyronear_french:51952",
@@ -1024,7 +1054,9 @@
       0.581
     ],
     "camera": "adf_font-rubi-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_font-rubi-01_7_2026-07-03T20-32-18"
+    ],
     "seen_alerts": [
       "pyronear_french:51204",
       "pyronear_french:51457",
@@ -1060,7 +1092,9 @@
       0.497
     ],
     "camera": "sis-67_cis-petersbach-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_145_2026-07-04T11-56-11"
+    ],
     "seen_alerts": [
       "pyronear_french:51315",
       "pyronear_french:52640",
@@ -1107,7 +1141,9 @@
       0.40249999999999997
     ],
     "camera": "sis-67_cis-petersbach-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_319_2026-07-04T18-34-54"
+    ],
     "seen_alerts": [
       "pyronear_french:51427",
       "pyronear_french:52725",
@@ -1218,7 +1254,9 @@
       0.421
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_haguenau-02_233_2026-07-06T14-57-25"
+    ],
     "seen_alerts": [
       "pyronear_french:51850",
       "pyronear_french:52653",
@@ -1237,7 +1275,9 @@
       0.702
     ],
     "camera": "sdis-07_sampzon-ldd-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-07_sampzon-ldd-01_344_2026-07-07T18-16-44"
+    ],
     "seen_alerts": [
       "pyronear_french:52256"
     ],
@@ -1252,7 +1292,9 @@
       0.52
     ],
     "camera": "germersheim_germersheim-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "germersheim_germersheim-02_334_2026-07-13T18-39-14"
+    ],
     "seen_alerts": [
       "pyronear_french:52262",
       "pyronear_french:53088",
@@ -1271,7 +1313,9 @@
       0.363
     ],
     "camera": "sdis-40_morcenx-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-02_252_2026-07-09T17-55-11"
+    ],
     "seen_alerts": [
       "pyronear_french:52503",
       "pyronear_french:52716",
@@ -1353,7 +1397,9 @@
       0.734
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_haguenau-02_121_2026-07-28T18-34-32"
+    ],
     "seen_alerts": [
       "pyronear_french:52922",
       "pyronear_french:53091",
@@ -1432,7 +1478,9 @@
       0.37
     ],
     "camera": "adf_pontons-03",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_pontons-03_345_2026-07-29T05-11-31"
+    ],
     "seen_alerts": [
       "pyronear_french:53120",
       "pyronear_french:54581",
@@ -1454,7 +1502,9 @@
       0.614
     ],
     "camera": "adf_montgros-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_montgros-02_334_2026-07-26T06-11-42"
+    ],
     "seen_alerts": [
       "pyronear_french:53262",
       "pyronear_french:53307",
@@ -1505,7 +1555,9 @@
       0.5874999999999999
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_haguenau-02_210_2026-07-30T18-44-40"
+    ],
     "seen_alerts": [
       "pyronear_french:53474",
       "pyronear_french:55801",
@@ -1549,7 +1601,9 @@
       0.345
     ],
     "camera": "adf_pontons-03",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_pontons-03_351_2026-07-25T11-22-40"
+    ],
     "seen_alerts": [
       "pyronear_french:53539",
       "pyronear_french:53830",
@@ -1601,7 +1655,9 @@
       0.78
     ],
     "camera": "sdis-77_nemours-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_nemours-02_299_2026-07-30T09-53-35"
+    ],
     "seen_alerts": [
       "pyronear_french:53804",
       "pyronear_french:53847",
@@ -1622,7 +1678,9 @@
       0.536
     ],
     "camera": "adf_montgros-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_montgros-01_19_2026-08-05T01-04-49"
+    ],
     "seen_alerts": [
       "pyronear_french:53813",
       "pyronear_french:56547",
@@ -1693,7 +1751,9 @@
       0.45
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_haguenau-02_132_2026-07-16T18-43-58"
+    ],
     "seen_alerts": [
       "pyronear_french:54041"
     ],
@@ -1708,7 +1768,9 @@
       0.766
     ],
     "camera": "sdis-40_morcenx-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-01_3_2026-07-16T20-08-29"
+    ],
     "seen_alerts": [
       "pyronear_french:54071"
     ],
@@ -1723,7 +1785,9 @@
       0.634
     ],
     "camera": "vendoeuvres_vendoeuvres-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "vendoeuvres_vendoeuvres-02_223_2026-07-30T05-52-14"
+    ],
     "seen_alerts": [
       "pyronear_french:54114",
       "pyronear_french:54205",
@@ -1783,7 +1847,9 @@
       0.365
     ],
     "camera": "st-martin-de-toques_st-martin-de-toques-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "st-martin-de-toques_st-martin-de-toques-01_4_2026-07-27T06-34-01"
+    ],
     "seen_alerts": [
       "pyronear_french:54337",
       "pyronear_french:54543",
@@ -1884,7 +1950,9 @@
       0.465
     ],
     "camera": "adf_montgros-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_montgros-02_349_2026-07-22T14-52-20"
+    ],
     "seen_alerts": [
       "pyronear_french:54759",
       "pyronear_french:54963",
@@ -2014,7 +2082,9 @@
       0.4835
     ],
     "camera": "sdis-77_nemours-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_nemours-02_299_2026-07-24T20-14-33"
+    ],
     "seen_alerts": [
       "pyronear_french:55432"
     ],
@@ -2029,7 +2099,9 @@
       0.466
     ],
     "camera": "sdis-77_moret-sur-loing-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_moret-sur-loing-02_50_2026-08-05T04-45-26"
+    ],
     "seen_alerts": [
       "pyronear_french:55628",
       "pyronear_french:56768",
@@ -2090,7 +2162,9 @@
       0.464
     ],
     "camera": "sdis-77_videlles-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-77_videlles-01_96_2026-07-29T04-46-44"
+    ],
     "seen_alerts": [
       "pyronear_french:56043"
     ],
@@ -2160,7 +2234,9 @@
       0.428
     ],
     "camera": "sdis-07_brison-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-07_brison-01_73_2026-08-05T05-28-08"
+    ],
     "seen_alerts": [
       "pyronear_french:56966",
       "pyronear_french:57153",
@@ -2198,7 +2274,9 @@
       0.39
     ],
     "camera": "sdis-91_chateau-eau-milly-la-foret-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-91_chateau-eau-milly-la-foret-02_328_2026-08-06T18-35-55"
+    ],
     "seen_alerts": [
       "pyronear_french:57324"
     ],
@@ -2213,7 +2291,9 @@
       0.556
     ],
     "camera": "sdis-12_pouncho-agast-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-12_pouncho-agast-02_22_2026-08-06T18-48-06"
+    ],
     "seen_alerts": [
       "pyronear_french:57328"
     ],
@@ -2228,7 +2308,9 @@
       0.295
     ],
     "camera": "sis-67_cis-petersbach-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_170_2026-08-06T18-50-06"
+    ],
     "seen_alerts": [
       "pyronear_french:57329"
     ],
@@ -2243,7 +2325,9 @@
       0.428
     ],
     "camera": "sis-67_betschdorf-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sis-67_betschdorf-01_117_2026-08-06T18-50-57"
+    ],
     "seen_alerts": [
       "pyronear_french:57331"
     ],
@@ -2258,7 +2342,9 @@
       0.448
     ],
     "camera": "adf_can-mitjans-01",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "adf_can-mitjans-01_20_2026-08-06T18-51-31"
+    ],
     "seen_alerts": [
       "pyronear_french:57332"
     ],
@@ -2273,7 +2359,9 @@
       0.54
     ],
     "camera": "sdis-91_videlles-03",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-91_videlles-03_187_2026-08-06T19-09-57"
+    ],
     "seen_alerts": [
       "pyronear_french:57334"
     ],
@@ -2288,9 +2376,28 @@
       0.559
     ],
     "camera": "sdis-40_morcenx-02",
-    "ingested_folders": [],
+    "ingested_folders": [
+      "sdis-40_morcenx-02_302_2026-08-06T20-11-05"
+    ],
     "seen_alerts": [
       "pyronear_french:57341"
+    ],
+    "split": "train"
+  },
+  "ro_00104": {
+    "azimuth": 357,
+    "bbox_xyxyn": [
+      0.78,
+      0.423,
+      0.806,
+      0.447
+    ],
+    "camera": "sdis-77_nemours-02",
+    "ingested_folders": [
+      "sdis-77_nemours-02_357_2026-07-15T08-31-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53665"
     ],
     "split": "train"
   }
