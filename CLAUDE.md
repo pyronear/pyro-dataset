@@ -84,6 +84,7 @@ The `scripts/platform_train_loop/` subdirectory implements an iterative annotati
 
 Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 `docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.
+Step-by-step operator runbook: `docs/runbooks/annotator-import.md`.
 
 ```bash
 # 1. Decide what to import (writes import_plan.json + the ledger, copies nothing)

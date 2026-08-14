@@ -137,7 +137,8 @@ if __name__ == "__main__":
     if skipped_unregistered:
         logging.warning(
             f"{len(skipped_unregistered)} folder(s) exist on disk but are not in "
-            "registry — run add_data.py to register them."
+            "registry — delete them from the pool and re-run add_data.py to "
+            "register them (already-on-disk folders are skipped, not registered)."
         )
     if not to_copy:
         print("Nothing new to add.")

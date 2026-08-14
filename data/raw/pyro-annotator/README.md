@@ -80,10 +80,19 @@ rebuilds `data/interim/pyro-annotator/sequences/` from the export at any time.
 
 ## Using it
 
+The step-by-step operator guide — every command, what it prints, what to check,
+and how to recover when something goes wrong — is
+[`docs/runbooks/annotator-import.md`](../../../docs/runbooks/annotator-import.md).
+The condensed shape of an import:
+
 ```bash
 uv run python scripts/plan_annotator_import.py --dry-run   # inspect the plan
 uv run python scripts/plan_annotator_import.py             # write the plan + ledger
 dvc repro materialise_annotator_sequences                  # write staging folders
+uv run python scripts/add_data.py ... --splits-from ...    # register both halves
+dvc repro compute_fp_embeddings                            # freeze needs fresh ones
+uv run python scripts/freeze_test_selection.py             # grow the frozen test set
+dvc repro                                                  # rebuild + leakage checks
 ```
 
 Staging folders land in `data/interim/pyro-annotator/sequences/` — `wildfire/`,
@@ -92,6 +101,7 @@ from the platform loop. They are transient: `scripts/add_data.py` copies them in
 the pools and writes the registry, after which the staging directory can be
 deleted.
 
-Full workflow, and what makes this import different from the platform loop, is in
+What makes this import different from the platform loop is summarised in
 `CLAUDE.md`; the design and its rationale are in
-`docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.
+`docs/specs/2026-08-13-annotator-export-sequential-import-design.md` and
+`docs/specs/2026-08-14-annotator-test-growth-design.md`.
