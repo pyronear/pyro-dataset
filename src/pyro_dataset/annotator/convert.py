@@ -46,7 +46,9 @@ def alert_kind(alert: dict[str, Any]) -> str:
     return "fp"
 
 
-def label_lines(alert: dict[str, Any], frame: dict[str, Any]) -> list[str]:
+def label_lines(
+    alert: dict[str, Any], frame: dict[str, Any], kind: str | None = None
+) -> list[str]:
     """YOLO `class cx cy w h` lines for one capture, in lane order.
 
     `frame` identifies the capture; only its timestamp is read. Lanes are
@@ -61,15 +63,27 @@ def label_lines(alert: dict[str, Any], frame: dict[str, Any]) -> list[str]:
     flagged as false positives are excluded too — build_tubes keeps a single
     class-blind tube per sequence, so a persistent distractor would outlast a
     late-appearing plume and become the positive's evidence.
+
+    `kind` defaults to the alert's own. The importer passes the kind its plan
+    pinned instead: re-annotation can flip an alert after its folder was already
+    registered, and the registry is append-only, so the folder must stay whole
+    rather than acquire labels of the kind it is not filed under.
     """
-    kind = alert_kind(alert)
+    kind = alert_kind(alert) if kind is None else kind
+    # The folder's kind decides the class, not the lane's. For an unflipped
+    # alert the two agree by construction — a wildfire folder keeps only its
+    # smoke lanes, and an fp folder has none. They part only when the pinned
+    # kind is stale, and then the folder's own meaning has to win: class 0
+    # boxes inside the negative pool are inverted supervision.
+    class_id = (
+        CLASS_ID_SMOKE if kind == "wildfire" else CLASS_ID_FALSE_POSITIVE_PROPOSAL
+    )
     capture = _timestamp(frame["recorded_at"])
     lines: list[str] = []
     for obj in alert["objects"]:
         lane_is_smoke = obj["record_kind"] == "smoke"
         if kind == "wildfire" and not lane_is_smoke:
             continue
-        class_id = CLASS_ID_SMOKE if lane_is_smoke else CLASS_ID_FALSE_POSITIVE_PROPOSAL
         # At most one frame per lane per capture. Stems are second-resolution
         # and a lane can hold two detections inside one second; only the first
         # is written as an image, so taking both here would describe a picture
@@ -91,13 +105,17 @@ def label_lines(alert: dict[str, Any], frame: dict[str, Any]) -> list[str]:
 
 
 def build_meta(
-    alert: dict[str, Any], recurring_object_id: str | None
+    alert: dict[str, Any], recurring_object_id: str | None, kind: str | None = None
 ) -> dict[str, Any]:
     """Provenance plus every lane's full track.
 
     Includes the lanes and boxes `label_lines` excluded, which is what makes
     the import lossless: an object-level dataset can be derived later without
     re-exporting or re-annotating.
+
+    `kind` follows `label_lines`: the pinned kind when the importer supplies
+    one, so the sidecar describes the folder it sits in rather than a later
+    re-annotation of the alert.
     """
     return {
         "source_api": alert["source_api"],
@@ -105,7 +123,7 @@ def build_meta(
         "recurring_object": recurring_object_id,
         "temporal_model_score": alert.get("temporal_model_score"),
         "temporal_model_version": alert.get("temporal_model_version"),
-        "kind": alert_kind(alert),
+        "kind": alert_kind(alert) if kind is None else kind,
         "lanes": [
             {
                 "sequence_id": obj["sequence_id"],

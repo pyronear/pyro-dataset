@@ -860,3 +860,34 @@ stages:
       md5: f67a67aa959c223f8c054f3dc88b9853.dir
       size: 2466869
       nfiles: 2
+  materialise_annotator_sequences:
+    cmd: uv run python scripts/materialise_annotator_sequences.py --export-dir data/raw/pyro-annotator/export
+      --plan data/raw/pyro-annotator/import_plan.json --output-dir data/interim/pyro-annotator/sequences
+    deps:
+    - path: data/raw/pyro-annotator/export
+      hash: md5
+      md5: 5de5c6368ca1188dd83d85258a776a53.dir
+      size: 2226912411
+      nfiles: 18146
+    - path: data/raw/pyro-annotator/import_plan.json
+      hash: md5
+      md5: 7f3b46417b8000b049afcd5856662e78
+      size: 15720
+    - path: scripts/materialise_annotator_sequences.py
+      hash: md5
+      md5: 1006a14b5361eb77f8b22c8c17719344
+      size: 7019
+    - path: src/pyro_dataset/annotator/convert.py
+      hash: md5
+      md5: af23a27b5fbf4118ff276f416a30371f
+      size: 6133
+    - path: src/pyro_dataset/constants.py
+      hash: md5
+      md5: 80c49b6e8bdd8485c3595f28fbb65244
+      size: 430
+    outs:
+    - path: data/interim/pyro-annotator/sequences
+      hash: md5
+      md5: d6476b791ec90bdfa8af7214c57317a1.dir
+      size: 382561114
+      nfiles: 5329

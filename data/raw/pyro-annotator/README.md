@@ -9,6 +9,7 @@ data/raw/pyro-annotator/
 │   ├── manifest.jsonl         #   one JSON line per finished alert
 │   └── images/{source_api}/{platform_alert_id}/{detection_id}.jpg
 ├── recurring_objects.json     # git-tracked — the recurring-object ledger
+├── import_plan.json           # git-tracked — which alerts to import, and where
 └── README.md
 ```
 
@@ -34,7 +35,7 @@ Snapshot in this repo: 795 alerts (58 smoke, 737 false positive), 18,145 frames,
 ## `recurring_objects.json` — the ledger
 
 A **recurring object** is one artefact on one camera view: the road that fires
-every evening, the antenna on the horizon. `scripts/import_annotator_export.py`
+every evening, the antenna on the horizon. `scripts/plan_annotator_import.py`
 recomputes them geometrically and records each one here:
 
 ```json
@@ -59,11 +60,30 @@ history on every import.
 Commit it together with the `registry.json` change from the same import, so the
 two never disagree about which split an artefact went to.
 
+## `import_plan.json` — what to import, and where
+
+The decisions the ledger implies, one entry per folder:
+
+```json
+{"sdis-91_sdis-tigery-02_285_2026-07-06T04-28-05":
+  {"kind": "fp", "split": "train", "recurring_object": "ro_00042"}}
+```
+
+Like the ledger it accumulates across imports and lives in git, and for the same
+reason: it is the record of what was decided, not something derivable from the
+export alone — smoke folders carry a split that exists nowhere else. Planning
+re-reads the ledger's split onto every entry, so the ledger stays authoritative
+and a stale entry cannot put one artefact in two splits.
+
+It is also what makes staging disposable: with the plan in git, materialisation
+rebuilds `data/interim/pyro-annotator/sequences/` from the export at any time.
+
 ## Using it
 
 ```bash
-uv run python scripts/import_annotator_export.py --dry-run   # inspect the plan
-uv run python scripts/import_annotator_export.py             # write staging folders
+uv run python scripts/plan_annotator_import.py --dry-run   # inspect the plan
+uv run python scripts/plan_annotator_import.py             # write the plan + ledger
+dvc repro materialise_annotator_sequences                  # write staging folders
 ```
 
 Staging folders land in `data/interim/pyro-annotator/sequences/` — `wildfire/`,
@@ -71,10 +91,6 @@ Staging folders land in `data/interim/pyro-annotator/sequences/` — `wildfire/`
 from the platform loop. They are transient: `scripts/add_data.py` copies them into
 the pools and writes the registry, after which the staging directory can be
 deleted.
-
-Deleting it *without* also resetting the ledger and the registry leaves the three
-out of step: the ledger still records those objects as contributed, so the next
-run stages the smoke half and no false positives at all.
 
 Full workflow, and what makes this import different from the platform loop, is in
 `CLAUDE.md`; the design and its rationale are in

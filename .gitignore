@@ -15,5 +15,5 @@ runs/
 # Implementation plans are working notes, not repo content
 docs/plans/
 
-# Annotator import staging — transient, rebuilt by import_annotator_export.py
+# Annotator import staging — a DVC stage output (materialise_annotator_sequences)
 data/interim/pyro-annotator/

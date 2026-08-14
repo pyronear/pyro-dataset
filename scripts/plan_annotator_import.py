@@ -1,26 +1,32 @@
 """
-CLI script to convert a pyro-annotator export into ingest-ready sequence folders.
+CLI script deciding which alerts of a pyro-annotator export to import, and into
+which split.
 
-Reads an export directory (manifest.jsonl + images/) and writes staging folders in
-the layout add_data.py expects, plus a splits.json mapping each folder to its split
-and an updated recurring-object ledger. Registry writes are NOT done here: run
-add_data.py afterwards, which stays the only writer of registry.json.
+This is the half of the import that carries accumulated state, which is why it
+stays a manual command rather than a DVC stage: it reads the recurring-object
+ledger and writes it back, and its output depends on every import that came
+before. It copies no images — `materialise_annotator_sequences.py` turns the
+plan it writes into sequence folders, and that half *is* a stage.
 
-Every smoke alert is imported; that count sets the false-positive quota, filled one
-alert per recurring object walking a hard-negatives-first ranking. Splits come from
-the ledger, so an artefact always lands in the split it first went to — and never in
-test.
+Every smoke alert is imported; that count sets the false-positive quota, filled
+one alert per recurring object walking a hard-negatives-first ranking. Splits
+come from the ledger, so an artefact always lands in the split it first went to
+— and never in test.
+
+The plan is accumulated, not regenerated: it carries forward the folders earlier
+runs decided on, so it is committed to git alongside the ledger.
 
 See docs/specs/2026-08-13-annotator-export-sequential-import-design.md.
 
 Usage:
-    python scripts/import_annotator_export.py --export-dir <path>
-    python scripts/import_annotator_export.py --export-dir <path> --dry-run
+    python scripts/plan_annotator_import.py
+    python scripts/plan_annotator_import.py --dry-run
 
 Arguments:
     --export-dir       Export directory holding manifest.jsonl and images/
                        (default: data/raw/pyro-annotator/export, DVC-tracked).
-    --output-dir       Where to write staging folders (default: data/interim/pyro-annotator/sequences).
+    --plan             Import plan to read and update
+                       (default: data/raw/pyro-annotator/import_plan.json).
     --ledger           Recurring-object ledger (default: data/raw/pyro-annotator/recurring_objects.json).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
     --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
@@ -35,32 +41,24 @@ import argparse
 import json
 import logging
 import random
-import shutil
 import sys
 from pathlib import Path
 from typing import Any
 
-from pyro_dataset.annotator.convert import (
-    alert_kind,
-    build_meta,
-    camera_key,
-    folder_name,
-    frame_stem,
-    label_lines,
-)
+from pyro_dataset.annotator.convert import alert_kind, camera_key, folder_name
 from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
 from pyro_dataset.annotator.select import rank_objects, select_fp
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Convert a pyro-annotator export into ingest-ready sequence folders."
+        description="Decide which pyro-annotator alerts to import, and into which split."
     )
     parser.add_argument(
         "--export-dir", type=Path, default=Path("data/raw/pyro-annotator/export")
     )
     parser.add_argument(
-        "--output-dir", type=Path, default=Path("data/interim/pyro-annotator/sequences")
+        "--plan", type=Path, default=Path("data/raw/pyro-annotator/import_plan.json")
     )
     parser.add_argument(
         "--ledger",
@@ -87,12 +85,26 @@ def load_manifest(export_dir: Path) -> list[dict[str, Any]]:
         return [json.loads(line) for line in fh if line.strip()]
 
 
-def load_existing_splits(output_dir: Path) -> dict[str, str]:
-    """Splits recorded by earlier runs into the same staging directory."""
-    path = output_dir / "splits.json"
+def load_plan(path: Path) -> dict[str, dict[str, Any]]:
+    """Folders decided by earlier runs: name -> kind, split, recurring object."""
     if not path.is_file():
         return {}
     return json.loads(path.read_text())
+
+
+def has_usable_image(export_dir: Path, alert: dict[str, Any]) -> bool:
+    """Whether at least one of the alert's frames has an image on disk.
+
+    Checked here rather than while copying so that materialisation is a total
+    function of the plan. It also stops an unusable alert from consuming its
+    recurring object's one slot: a folder with no image is rejected
+    structurally by `add_data.py`, so planning it wastes the slot forever.
+    """
+    return any(
+        frame.get("image_path") and (export_dir / frame["image_path"]).is_file()
+        for obj in alert["objects"]
+        for frame in obj["frames"]
+    )
 
 
 def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
@@ -167,77 +179,33 @@ def resolve_recurring_objects(
     return object_meta, candidates
 
 
-def write_sequence(
-    export_dir: Path, alert: dict[str, Any], dest: Path, ro_id: str | None
-) -> bool:
-    """Materialise one alert as a sequence folder: images, labels, meta.json.
-
-    Captures are deduplicated by timestamp — sibling lanes hold their own copies
-    of the same capture, and the folder holds one image per capture.
-
-    Returns whether any frame was written. An alert whose images are all
-    missing leaves no folder behind: an empty one would be rejected
-    structurally by `add_data.py` while still consuming the recurring object's
-    per-object slot.
-    """
-    (dest / "images").mkdir(parents=True, exist_ok=True)
-    (dest / "labels").mkdir(parents=True, exist_ok=True)
-
-    written: set[str] = set()
-    for obj in alert["objects"]:
-        for frame in obj["frames"]:
-            stem = frame_stem(alert, frame)
-            if stem in written:
-                continue
-            if not frame.get("image_path"):
-                logging.warning(
-                    f"alert {alert['platform_alert_id']}: frame "
-                    f"{frame['detection_id']} has no image, skipped"
-                )
-                continue
-            source = export_dir / frame["image_path"]
-            if not source.is_file():
-                logging.warning(f"missing image on disk, skipped: {source}")
-                continue
-            written.add(stem)
-            shutil.copy2(source, dest / "images" / f"{stem}.jpg")
-            lines = label_lines(alert, frame)
-            (dest / "labels" / f"{stem}.txt").write_text(
-                "\n".join(lines) + ("\n" if lines else "")
-            )
-
-    if not written:
-        logging.warning(
-            f"alert {alert['platform_alert_id']}: no usable image, folder dropped"
-        )
-        shutil.rmtree(dest, ignore_errors=True)
-        return False
-
-    (dest / "meta.json").write_text(
-        json.dumps(build_meta(alert, ro_id), indent=2) + "\n"
-    )
-    return True
-
-
 def main() -> None:
     args = vars(make_cli_parser().parse_args())
     logging.basicConfig(level=args["loglevel"].upper())
 
     export_dir: Path = args["export_dir"]
-    output_dir: Path = args["output_dir"]
+    plan_path: Path = args["plan"]
     ledger_path: Path = args["ledger"]
     dry_run: bool = args["dry_run"]
     rng = random.Random(args["random_seed"])
 
     alerts = load_manifest(export_dir)
-    smoke = [a for a in alerts if alert_kind(a) == "wildfire"]
-    fp_alerts = [a for a in alerts if alert_kind(a) == "fp"]
+    usable = []
+    for alert in alerts:
+        if has_usable_image(export_dir, alert):
+            usable.append(alert)
+        else:
+            logging.warning(
+                f"alert {alert['platform_alert_id']}: no image on disk, not planned"
+            )
+    smoke = [a for a in usable if alert_kind(a) == "wildfire"]
+    fp_alerts = [a for a in usable if alert_kind(a) == "fp"]
 
     ledger = Ledger.load(ledger_path)
     apply_force_train(ledger, args["force_train"])
 
     # The export is a full re-pull, so `smoke` is the cumulative total while
-    # already-staged folders are skipped. Discount the false positives previous
+    # already-planned folders are kept. Discount the false positives previous
     # runs contributed, or the quota pays twice for the same smoke.
     already_ingested = sum(len(e["ingested_folders"]) for e in ledger.entries.values())
     quota = max(len(smoke) - already_ingested, 0)
@@ -246,10 +214,10 @@ def main() -> None:
         f"FP quota {quota} ({already_ingested} already ingested)"
     )
 
-    # Seed from the ledger *and* from smoke folders earlier runs staged: smoke
+    # Seed from the ledger *and* from smoke folders earlier runs planned: smoke
     # has no recurring object, so the ledger alone under-counts and the 90/10
     # balance drifts as imports accumulate. Only folders the ledger does not
-    # already account for are added, or every staged false positive would be
+    # already account for are added, or every planned false positive would be
     # counted twice — once as its object, once as its folder.
     split_counts: dict[str, int] = {"train": 0, "val": 0}
     for entry in ledger.entries.values():
@@ -257,9 +225,10 @@ def main() -> None:
     ledger_folders = {
         folder for e in ledger.entries.values() for folder in e["ingested_folders"]
     }
-    for folder, split in load_existing_splits(output_dir).items():
-        if folder not in ledger_folders and split in split_counts:
-            split_counts[split] += 1
+    plan = load_plan(plan_path)
+    for name, entry in plan.items():
+        if name not in ledger_folders and entry["split"] in split_counts:
+            split_counts[entry["split"]] += 1
 
     object_meta, candidates = resolve_recurring_objects(
         fp_alerts, ledger, rng, split_counts, args["match_iou"]
@@ -286,73 +255,89 @@ def main() -> None:
     )
     logging.info(f"selected {len(picked)}/{quota} false-positive sequences")
 
-    plan: list[tuple[dict[str, Any], str, str | None]] = [
+    chosen: list[tuple[dict[str, Any], str, str | None]] = [
         (alert, "wildfire", None) for alert in smoke
     ]
-    plan += [(entry["alert"], "fp", entry["recurring_object"]) for entry in picked]
+    chosen += [(entry["alert"], "fp", entry["recurring_object"]) for entry in picked]
 
-    # Carry forward earlier runs: a re-run selects nothing new (the per-object
-    # cap already counted those objects), so rewriting splits.json from this
-    # run's plan alone would drop folders still sitting in staging.
-    splits = load_existing_splits(output_dir)
-    written = 0
-    for alert, kind, ro_id in plan:
+    # Re-annotation can flip an alert between fp and wildfire after its folder
+    # was planned. The plan keeps the kind the folder was registered under — the
+    # registry is append-only, so moving it would leave two entries for one
+    # sequence — but a sequence quietly meaning the opposite of what it did is
+    # not something to swallow. Built from every alert, not just the usable
+    # ones: a flip is worth reporting even when the images have since gone.
+    export_kinds = {folder_name(alert): alert_kind(alert) for alert in alerts}
+    flipped = {
+        name
+        for name, entry in plan.items()
+        if export_kinds.get(name) not in (None, entry["kind"])
+    }
+    for name in sorted(flipped):
+        logging.warning(
+            f"{name}: changed kind in the export, {plan[name]['kind']} -> "
+            f"{export_kinds[name]}; kept as {plan[name]['kind']}"
+        )
+
+    added = 0
+    for alert, kind, ro_id in chosen:
         name = folder_name(alert)
-        dest = output_dir / kind / name
+        if name in flipped:
+            # This pick is void. Recording it would claim a wildfire folder as
+            # a recurring object's false positive, burning the object's
+            # lifetime slot and shorting the quota, permanently and silently.
+            continue
+        if name not in plan:
+            added += 1
+            split = (
+                ledger.entries[ro_id]["split"]
+                if ro_id is not None
+                else assign_new_split(rng, split_counts)
+            )
+            if ro_id is None:
+                split_counts[split] = split_counts.get(split, 0) + 1
+            plan[name] = {"kind": kind, "split": split, "recurring_object": ro_id}
         if ro_id is not None:
-            # The ledger is authoritative, so --force-train reaches a folder
-            # that an earlier run already staged.
-            splits[name] = ledger.entries[ro_id]["split"]
-        elif name not in splits:
-            split = assign_new_split(rng, split_counts)
-            split_counts[split] = split_counts.get(split, 0) + 1
-            splits[name] = split
-        if dry_run:
-            continue
-        if dest.exists():
-            # Already staged. Still record it: an interrupted run, or a ledger
-            # rebuilt beside surviving folders, would otherwise leave the
-            # object with nothing recorded and no way to ever record it — the
-            # quota would under-count and the --force-train guard would be
-            # bypassed for that object, permanently.
-            if ro_id is not None:
-                ledger.record_ingested(ro_id, name)
-            continue
-        if not write_sequence(export_dir, alert, dest, ro_id):
-            splits.pop(name, None)
-            continue
-        written += 1
-        if ro_id is not None:
+            # Record even when the folder was already planned: an interrupted
+            # run, or a ledger rebuilt beside a surviving plan, would otherwise
+            # leave the object with nothing recorded and no way to ever record
+            # it — the quota would under-count and the --force-train guard
+            # would be bypassed for that object, permanently.
             ledger.record_ingested(ro_id, name)
 
-    print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import")
+    # The ledger is authoritative over splits, and the plan now outlives the run
+    # that wrote it. Re-reading the ledger onto every entry is what makes
+    # --force-train reach a folder an earlier run already planned, and what
+    # stops a stale entry from putting one artefact in two splits.
+    for entry in plan.values():
+        ro_id = entry["recurring_object"]
+        if ro_id in ledger.entries:
+            entry["split"] = ledger.entries[ro_id]["split"]
+
+    print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import plan")
     print(f"  wildfire : {len(smoke)}")
     print(f"  fp       : {len(picked)} of a {quota} quota, {fooling} objects fooling")
     print(
-        f"  splits   : train {sum(1 for s in splits.values() if s == 'train')}, "
-        f"val {sum(1 for s in splits.values() if s == 'val')}"
+        f"  splits   : train {sum(1 for e in plan.values() if e['split'] == 'train')}, "
+        f"val {sum(1 for e in plan.values() if e['split'] == 'val')}"
     )
-    if not dry_run:
-        print(
-            f"  written  : {written} new folder(s), {len(splits) - written} already staged"
-        )
+    print(f"  planned  : {added} new folder(s), {len(plan) - added} already planned")
 
     if dry_run:
         print("Dry run — nothing written.")
         return
 
-    output_dir.mkdir(parents=True, exist_ok=True)
-    (output_dir / "splits.json").write_text(
-        json.dumps(splits, indent=2, sort_keys=True) + "\n"
-    )
+    plan_path.parent.mkdir(parents=True, exist_ok=True)
+    plan_path.write_text(json.dumps(plan, indent=2, sort_keys=True) + "\n")
     ledger.save(ledger_path)
-    print(f"\n  staging  : {output_dir}")
+    print(f"\n  plan     : {plan_path}")
     print(f"  ledger   : {ledger_path}")
     print("\nNext:")
-    for kind, dataset in (("wildfire", "wildfire"), ("fp", "fp")):
+    print("  dvc repro materialise_annotator_sequences")
+    for kind in ("wildfire", "fp"):
         print(
-            f"  uv run python scripts/add_data.py --src {output_dir}/{kind} "
-            f"--type {dataset} --splits-from {output_dir}/splits.json"
+            f"  uv run python scripts/add_data.py "
+            f"--src data/interim/pyro-annotator/sequences/{kind} --type {kind} "
+            f"--splits-from data/interim/pyro-annotator/sequences/splits.json"
         )
 
 
