@@ -85,15 +85,14 @@ def ultralytics_dataset_info(dir_dataset: Path) -> dict:
     }
 
     for split in splits:
-
         dir_images = dir_dataset / data_yaml[split]
         dir_labels = Path(str(dir_images).replace("images", "labels"))
         filepaths_images = list(dir_images.glob("*.jpg"))
         filepaths_labels = list(dir_labels.glob("*.txt"))
 
-        assert len(filepaths_images) == len(
-            filepaths_labels
-        ), "Should be the same length"
+        assert len(filepaths_images) == len(filepaths_labels), (
+            "Should be the same length"
+        )
         info["splits"][split] = {"images": filepaths_images, "labels": filepaths_labels}
 
     return info
@@ -113,9 +112,9 @@ def copy_ultralytics_dataset(
         dir_save (Path): The path to the destination directory where the dataset will be copied.
         splits (list[str], optional): A list of splits to copy (default is ["train", "val", "test"]).
     """
-    assert (
-        len(splits) >= 1
-    ), "`splits` should at least contain one split from {train, val, test}"
+    assert len(splits) >= 1, (
+        "`splits` should at least contain one split from {train, val, test}"
+    )
 
     info = ultralytics_dataset_info(dir_dataset=dir_dataset)
     dir_save.mkdir(parents=True, exist_ok=True)

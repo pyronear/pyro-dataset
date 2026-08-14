@@ -28,10 +28,18 @@ from pathlib import Path
 
 def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Merge WF and FP YOLO datasets.")
-    parser.add_argument("--wf-dataset", type=Path, default=Path("data/processed/wildfire_yolo"))
-    parser.add_argument("--fp-dataset", type=Path, default=Path("data/processed/fp_yolo"))
-    parser.add_argument("--output-train-val", type=Path, default=Path("data/processed/yolo_train_val"))
-    parser.add_argument("--output-test", type=Path, default=Path("data/processed/yolo_test"))
+    parser.add_argument(
+        "--wf-dataset", type=Path, default=Path("data/processed/wildfire_yolo")
+    )
+    parser.add_argument(
+        "--fp-dataset", type=Path, default=Path("data/processed/fp_yolo")
+    )
+    parser.add_argument(
+        "--output-train-val", type=Path, default=Path("data/processed/yolo_train_val")
+    )
+    parser.add_argument(
+        "--output-test", type=Path, default=Path("data/processed/yolo_test")
+    )
     parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument("-log", "--loglevel", default="info")
     return parser
@@ -109,7 +117,7 @@ if __name__ == "__main__":
         (out_tv / "data.yaml").write_text(DATA_YAML_TRAIN_VAL)
         (out_test / "data.yaml").write_text(DATA_YAML_TEST)
 
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"{'DRY RUN — ' if dry_run else ''}Final YOLO dataset")
     print(f"\n  yolo_train_val/")
     for split in splits_tv:
@@ -121,7 +129,7 @@ if __name__ == "__main__":
         n_img = counters[f"{split}/images"]
         n_lbl = counters[f"{split}/labels"]
         print(f"    {split:<6}: {n_img} images, {n_lbl} labels")
-    print(f"{'='*50}\n")
+    print(f"{'=' * 50}\n")
 
     if dry_run:
         print("Dry run — nothing written.")

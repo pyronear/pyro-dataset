@@ -44,17 +44,24 @@ import random
 import shutil
 from pathlib import Path
 
-
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 SPLITS = ["train", "val"]
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Build toy subsampled datasets.")
-    parser.add_argument("--yolo-src", type=Path, default=Path("data/processed/yolo_train_val"))
-    parser.add_argument("--seq-src", type=Path, default=Path("data/processed/sequential_train_val"))
-    parser.add_argument("--yolo-output", type=Path, default=Path("data/processed/yolo_toy"))
-    parser.add_argument("--seq-output", type=Path, default=Path("data/processed/sequential_toy"))
+    parser.add_argument(
+        "--yolo-src", type=Path, default=Path("data/processed/yolo_train_val")
+    )
+    parser.add_argument(
+        "--seq-src", type=Path, default=Path("data/processed/sequential_train_val")
+    )
+    parser.add_argument(
+        "--yolo-output", type=Path, default=Path("data/processed/yolo_toy")
+    )
+    parser.add_argument(
+        "--seq-output", type=Path, default=Path("data/processed/sequential_toy")
+    )
     parser.add_argument("--ratio", type=float, default=0.05)
     parser.add_argument("--random-seed", type=int, default=0)
     parser.add_argument("--dry-run", action="store_true", default=False)
@@ -67,13 +74,17 @@ def sample(items: list, ratio: float, rng: random.Random) -> list:
     return rng.sample(items, min(k, len(items)))
 
 
-def build_yolo_toy(src: Path, output: Path, ratio: float, rng: random.Random, dry_run: bool) -> dict:
+def build_yolo_toy(
+    src: Path, output: Path, ratio: float, rng: random.Random, dry_run: bool
+) -> dict:
     counters = {}
     for split in SPLITS:
         images_dir = src / "images" / split
         if not images_dir.is_dir():
             continue
-        images = sorted(f for f in images_dir.iterdir() if f.suffix.lower() in IMAGE_EXTENSIONS)
+        images = sorted(
+            f for f in images_dir.iterdir() if f.suffix.lower() in IMAGE_EXTENSIONS
+        )
         selected = sample(images, ratio, rng)
         counters[split] = len(selected)
         if dry_run:
@@ -97,7 +108,9 @@ def build_yolo_toy(src: Path, output: Path, ratio: float, rng: random.Random, dr
     return counters
 
 
-def build_seq_toy(src: Path, output: Path, ratio: float, rng: random.Random, dry_run: bool) -> dict:
+def build_seq_toy(
+    src: Path, output: Path, ratio: float, rng: random.Random, dry_run: bool
+) -> dict:
     counters = {}
     for split in SPLITS:
         split_dir = src / split
@@ -140,21 +153,21 @@ if __name__ == "__main__":
             if out.exists():
                 shutil.rmtree(out)
 
-    logging.info(f"Sampling {ratio*100:.0f}% from {yolo_src} → {yolo_output}")
+    logging.info(f"Sampling {ratio * 100:.0f}% from {yolo_src} → {yolo_output}")
     yolo_counts = build_yolo_toy(yolo_src, yolo_output, ratio, rng, dry_run)
 
-    logging.info(f"Sampling {ratio*100:.0f}% from {seq_src} → {seq_output}")
+    logging.info(f"Sampling {ratio * 100:.0f}% from {seq_src} → {seq_output}")
     seq_counts = build_seq_toy(seq_src, seq_output, ratio, rng, dry_run)
 
-    print(f"\n{'='*50}")
-    print(f"{'DRY RUN — ' if dry_run else ''}Toy dataset ({ratio*100:.0f}%)")
+    print(f"\n{'=' * 50}")
+    print(f"{'DRY RUN — ' if dry_run else ''}Toy dataset ({ratio * 100:.0f}%)")
     print("  YOLO images:")
     for split in SPLITS:
         print(f"    {split:<6}: {yolo_counts.get(split, 0):>5}")
     print("  Sequential sequences:")
     for split in SPLITS:
         print(f"    {split:<6}: {seq_counts.get(split, 0):>5}")
-    print(f"{'='*50}\n")
+    print(f"{'=' * 50}\n")
 
     if dry_run:
         print("Dry run — nothing written.")

@@ -83,9 +83,9 @@ def test_xywhn2xyxyn_data_type_preservation():
     bbox_xyxyn = xywhn2xyxyn(bbox_xywhn)
 
     # Assert: verify the output type is float (as specified in the function)
-    assert (
-        bbox_xyxyn.dtype == np.float16
-    ), "Output type should be float as specified in the function"
+    assert bbox_xyxyn.dtype == np.float16, (
+        "Output type should be float as specified in the function"
+    )
 
 
 def test_xywhn2xyxyn_inverse_operation():
@@ -124,6 +124,6 @@ def test_xywhn2xyxyn_batch_dimension():
         dtype=np.float16,
     )
     np.testing.assert_almost_equal(batch_xyxyn, expected, decimal=4)
-    assert (
-        batch_xyxyn.shape == batch_bboxes.shape
-    ), "Output shape should match input shape"
+    assert batch_xyxyn.shape == batch_bboxes.shape, (
+        "Output shape should match input shape"
+    )

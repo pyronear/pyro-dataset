@@ -29,7 +29,6 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-
 CAM_RE = re.compile(r"^(.+)_(\d+)$")
 TS_RE = re.compile(r"_(\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2})$")
 
@@ -48,10 +47,19 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default="all",
         help="all (default) | train | val | test",
     )
-    p.add_argument("--output", type=Path, default=Path("data/interim/camera_kp_matches"))
+    p.add_argument(
+        "--output", type=Path, default=Path("data/interim/camera_kp_matches")
+    )
     p.add_argument("--n-features", type=int, default=2000)
-    p.add_argument("--ratio", type=float, default=0.75, help="Lowe's ratio test threshold.")
-    p.add_argument("--ransac-thresh", type=float, default=5.0, help="RANSAC reprojection threshold (pixels).")
+    p.add_argument(
+        "--ratio", type=float, default=0.75, help="Lowe's ratio test threshold."
+    )
+    p.add_argument(
+        "--ransac-thresh",
+        type=float,
+        default=5.0,
+        help="RANSAC reprojection threshold (pixels).",
+    )
     p.add_argument(
         "--max-dcx",
         type=float,
@@ -159,7 +167,9 @@ def main():
     if args.split != "all":
         all_sequences = [s for s in all_sequences if s["split"] == args.split]
     sources_summary = ", ".join(str(s) for s in args.sources)
-    print(f"loaded {len(all_sequences)} sequences from {{ {sources_summary} }}  split={args.split}")
+    print(
+        f"loaded {len(all_sequences)} sequences from {{ {sources_summary} }}  split={args.split}"
+    )
 
     # Group sequences by (site, azimuth) and pick the most-recent one as representative
     by_key: dict[tuple[str, int], list[dict]] = defaultdict(list)
@@ -258,7 +268,9 @@ def main():
                 if len(good) >= 4:
                     src = np.float32([kp_a[m.queryIdx].pt for m in good])
                     dst = np.float32([kp_b[m.trainIdx].pt for m in good])
-                    H, mask = cv2.findHomography(src, dst, cv2.RANSAC, args.ransac_thresh)
+                    H, mask = cv2.findHomography(
+                        src, dst, cv2.RANSAC, args.ransac_thresh
+                    )
                     if mask is not None:
                         m1 = mask.ravel().astype(bool)
                         n_inliers = int(m1.sum())
@@ -267,16 +279,30 @@ def main():
                             in_dst = dst[m1]
                             wa, ha = image_size.get((site, a), (1, 1))
                             wb, hb = image_size.get((site, b), (1, 1))
-                            sx0, sy0 = float(in_src[:, 0].min()) / wa, float(in_src[:, 1].min()) / ha
-                            sx1, sy1 = float(in_src[:, 0].max()) / wa, float(in_src[:, 1].max()) / ha
-                            dx0, dy0 = float(in_dst[:, 0].min()) / wb, float(in_dst[:, 1].min()) / hb
-                            dx1, dy1 = float(in_dst[:, 0].max()) / wb, float(in_dst[:, 1].max()) / hb
+                            sx0, sy0 = (
+                                float(in_src[:, 0].min()) / wa,
+                                float(in_src[:, 1].min()) / ha,
+                            )
+                            sx1, sy1 = (
+                                float(in_src[:, 0].max()) / wa,
+                                float(in_src[:, 1].max()) / ha,
+                            )
+                            dx0, dy0 = (
+                                float(in_dst[:, 0].min()) / wb,
+                                float(in_dst[:, 1].min()) / hb,
+                            )
+                            dx1, dy1 = (
+                                float(in_dst[:, 0].max()) / wb,
+                                float(in_dst[:, 1].max()) / hb,
+                            )
                             s_area = (sx1 - sx0) * (sy1 - sy0)
                             d_area = (dx1 - dx0) * (dy1 - dy0)
                             dcx = ((dx0 + dx1) - (sx0 + sx1)) / 2.0
                             if H is not None:
                                 det = float(H[0, 0] * H[1, 1] - H[0, 1] * H[1, 0])
-                                h_scale = float(np.sqrt(det)) if det > 0 else float("nan")
+                                h_scale = (
+                                    float(np.sqrt(det)) if det > 0 else float("nan")
+                                )
 
                 # Hard-reject filters: only drop when we are confident
                 if not np.isnan(h_scale):
@@ -318,7 +344,16 @@ def main():
     repr_csv = out_dir / "representatives.csv"
     with repr_csv.open("w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["site", "azimuth", "image_path", "latest_timestamp", "n_sequences", "source"])
+        w.writerow(
+            [
+                "site",
+                "azimuth",
+                "image_path",
+                "latest_timestamp",
+                "n_sequences",
+                "source",
+            ]
+        )
         w.writerows(repr_csv_rows)
 
     pairs_csv = out_dir / "pairs.csv"

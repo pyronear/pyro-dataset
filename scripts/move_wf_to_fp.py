@@ -71,14 +71,23 @@ def move_sequences(folders: list[str], dry_run: bool = False) -> None:
 
     print(f"\n{'DRY RUN — ' if dry_run else ''}Moving {len(to_move)} sequence(s):\n")
 
-    new_wf_sequences = [s for s in wf_reg["sequences"] if s["folder"] not in {s["folder"] for s in to_move}]
+    new_wf_sequences = [
+        s
+        for s in wf_reg["sequences"]
+        if s["folder"] not in {s["folder"] for s in to_move}
+    ]
 
     for entry in to_move:
         folder = entry["folder"]
         src = WF_DIR / "data" / folder
         dst = FP_DIR / "data" / folder
         new_id = next_fp_id(fp_reg["sequences"])
-        new_entry = {"id": new_id, "folder": folder, "camera": entry["camera"], "split": entry["split"]}
+        new_entry = {
+            "id": new_id,
+            "folder": folder,
+            "camera": entry["camera"],
+            "split": entry["split"],
+        }
 
         print(f"  {entry['id']} → {new_id}  {folder}  (split={entry['split']})")
         if not dry_run:
@@ -89,7 +98,9 @@ def move_sequences(folders: list[str], dry_run: bool = False) -> None:
         wf_reg["sequences"] = new_wf_sequences
         save_registry(WF_REGISTRY, wf_reg)
         save_registry(FP_REGISTRY, fp_reg)
-        print(f"\nRegistries updated. wildfire: {len(wf_reg['sequences'])} seqs, fp: {len(fp_reg['sequences'])} seqs.")
+        print(
+            f"\nRegistries updated. wildfire: {len(wf_reg['sequences'])} seqs, fp: {len(fp_reg['sequences'])} seqs."
+        )
     else:
         print("\n(Dry run — no changes applied)")
 
@@ -97,14 +108,23 @@ def move_sequences(folders: list[str], dry_run: bool = False) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Move sequences from wildfire to fp.")
     parser.add_argument("folders", nargs="*", help="Sequence folder name(s) to move")
-    parser.add_argument("--pattern", help="Move all wildfire sequences whose folder name contains this substring")
-    parser.add_argument("--dry-run", action="store_true", help="Preview changes without applying them")
+    parser.add_argument(
+        "--pattern",
+        help="Move all wildfire sequences whose folder name contains this substring",
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Preview changes without applying them"
+    )
     args = parser.parse_args()
 
     if args.pattern:
         wf_reg = load_registry(WF_REGISTRY)
-        folders = [s["folder"] for s in wf_reg["sequences"] if args.pattern in s["folder"]]
-        print(f"Pattern '{args.pattern}' matched {len(folders)} sequences in wildfire registry.")
+        folders = [
+            s["folder"] for s in wf_reg["sequences"] if args.pattern in s["folder"]
+        ]
+        print(
+            f"Pattern '{args.pattern}' matched {len(folders)} sequences in wildfire registry."
+        )
     else:
         folders = args.folders
 

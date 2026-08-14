@@ -64,6 +64,7 @@ def make_cli_parser() -> argparse.ArgumentParser:
 
 def load_registry(registry_path: Path) -> list[dict]:
     import json
+
     with registry_path.open() as f:
         return json.load(f)["sequences"]
 
@@ -153,12 +154,12 @@ if __name__ == "__main__":
             counters[split] += 1
 
     total = sum(counters.values())
-    print(f"\n{'='*50}")
+    print(f"\n{'=' * 50}")
     print(f"{'DRY RUN — ' if dry_run else ''}Images copied: {total}")
     for split in splits:
         print(f"  {split:<6}: {counters[split]}")
     print(f"  skipped sequences: {skipped}")
-    print(f"{'='*50}\n")
+    print(f"{'=' * 50}\n")
 
     if dry_run:
         print("Dry run — nothing written.")

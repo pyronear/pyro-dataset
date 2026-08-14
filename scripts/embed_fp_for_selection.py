@@ -28,7 +28,6 @@ from PIL import Image
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
-
 HF_REPO = "facebook/dinov2-base"
 PADDING = 0.2
 OUT_SIZE = 224
@@ -114,12 +113,15 @@ def square_crop_224(img_path: Path, bbox, padding: float, out_size: int = 224):
     ys = int(round(cy - half))
     si = int(round(side))
     canvas = np.zeros((si, si, 3), dtype=np.uint8)
-    sx0 = max(0, xs); sy0 = max(0, ys)
-    sx1 = min(W, xs + si); sy1 = min(H, ys + si)
+    sx0 = max(0, xs)
+    sy0 = max(0, ys)
+    sx1 = min(W, xs + si)
+    sy1 = min(H, ys + si)
     if sx1 <= sx0 or sy1 <= sy0:
         return None
-    dx0 = sx0 - xs; dy0 = sy0 - ys
-    canvas[dy0:dy0 + (sy1 - sy0), dx0:dx0 + (sx1 - sx0)] = img[sy0:sy1, sx0:sx1]
+    dx0 = sx0 - xs
+    dy0 = sy0 - ys
+    canvas[dy0 : dy0 + (sy1 - sy0), dx0 : dx0 + (sx1 - sx0)] = img[sy0:sy1, sx0:sx1]
     interp = cv2.INTER_AREA if si > out_size else cv2.INTER_CUBIC
     return cv2.resize(canvas, (out_size, out_size), interpolation=interp)
 
@@ -134,7 +136,15 @@ def detect_device(arg: str | None) -> str:
     return "cpu"
 
 
-def embed_split(split: str, sequences: list[dict], data_dir: Path, model, proc, device: str, batch_size: int):
+def embed_split(
+    split: str,
+    sequences: list[dict],
+    data_dir: Path,
+    model,
+    proc,
+    device: str,
+    batch_size: int,
+):
     metadata: list[dict] = []
     crops: list[Image.Image] = []
     skipped = 0
@@ -169,11 +179,15 @@ def embed_split(split: str, sequences: list[dict], data_dir: Path, model, proc, 
     chunks: list[np.ndarray] = []
     with torch.inference_mode():
         for i in tqdm(range(0, len(crops), batch_size), desc=f"embed [{split}]"):
-            batch = crops[i:i + batch_size]
+            batch = crops[i : i + batch_size]
             inp = proc(images=batch, return_tensors="pt").to(device)
             out = model(**inp)
             chunks.append(out.last_hidden_state[:, 0, :].float().cpu().numpy())
-    feats = np.concatenate(chunks, axis=0).astype(np.float32) if chunks else np.empty((0, 768), dtype=np.float32)
+    feats = (
+        np.concatenate(chunks, axis=0).astype(np.float32)
+        if chunks
+        else np.empty((0, 768), dtype=np.float32)
+    )
     norms = np.linalg.norm(feats, axis=1, keepdims=True).clip(min=1e-12)
     feats = feats / norms
     return feats, metadata
@@ -198,7 +212,9 @@ def main() -> None:
         if not seqs:
             print(f"[{split}] no sequences; skipping")
             continue
-        feats, meta = embed_split(split, seqs, args.data_dir, model, proc, device, args.batch_size)
+        feats, meta = embed_split(
+            split, seqs, args.data_dir, model, proc, device, args.batch_size
+        )
 
         out_dir = args.output / split
         out_dir.mkdir(parents=True, exist_ok=True)

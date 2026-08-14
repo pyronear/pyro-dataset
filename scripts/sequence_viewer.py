@@ -15,10 +15,15 @@ st.title("Sequence Viewer")
 
 # --- NMS (from pyro-engine/pyroengine/utils.py) ---
 
+
 def box_iou(box1: np.ndarray, box2: np.ndarray, eps: float = 1e-7) -> np.ndarray:
     """Pairwise IoU for boxes in xyxy format. Returns (N, M) array."""
     (a1, a2), (b1, b2) = np.split(box1, 2, 1), np.split(box2, 2, 1)
-    inter = (np.minimum(a2, b2[:, None, :]) - np.maximum(a1, b1[:, None, :])).clip(0).prod(2)
+    inter = (
+        (np.minimum(a2, b2[:, None, :]) - np.maximum(a1, b1[:, None, :]))
+        .clip(0)
+        .prod(2)
+    )
     return inter / ((a2 - a1).prod(1) + (b2 - b1).prod(1)[:, None] - inter + eps)
 
 
@@ -36,11 +41,14 @@ def nms(boxes: np.ndarray, overlap_thresh: float = 0.0) -> np.ndarray:
     return boxes[indices]
 
 
-def xywhn2xyxy(cx: float, cy: float, w: float, h: float) -> tuple[float, float, float, float]:
+def xywhn2xyxy(
+    cx: float, cy: float, w: float, h: float
+) -> tuple[float, float, float, float]:
     return cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2
 
 
 # --- Data helpers ---
+
 
 def find_sequence(seq_name: str) -> Path | None:
     matches = list(DATA_RAW.glob(f"*/data/{seq_name}"))
@@ -73,13 +81,29 @@ def draw_boxes(
         x1, y1 = int((cx - bw / 2) * w), int((cy - bh / 2) * h)
         x2, y2 = int((cx + bw / 2) * w), int((cy + bh / 2) * h)
         cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
-        cv2.putText(img, "smoke", (x1, max(y1 - 6, 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.55, color, 2)
+        cv2.putText(
+            img,
+            "smoke",
+            (x1, max(y1 - 6, 10)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            color,
+            2,
+        )
     if highlight is not None:
         hx1, hy1, hx2, hy2 = highlight
         x1, y1 = int(hx1 * w), int(hy1 * h)
         x2, y2 = int(hx2 * w), int(hy2 * h)
         cv2.rectangle(img, (x1, y1), (x2, y2), highlight_color, 3)
-        cv2.putText(img, "main", (x1, max(y1 - 6, 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, highlight_color, 2)
+        cv2.putText(
+            img,
+            "main",
+            (x1, max(y1 - 6, 10)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.6,
+            highlight_color,
+            2,
+        )
     return img
 
 
@@ -208,7 +232,9 @@ if len(main_boxes) == 0:
             st.image(img, caption=img_path.name, width="stretch")
     st.stop()
 
-st.markdown(f"**{len(main_boxes)} main bbox{'es' if len(main_boxes) != 1 else ''}** found via NMS (iou=0)")
+st.markdown(
+    f"**{len(main_boxes)} main bbox{'es' if len(main_boxes) != 1 else ''}** found via NMS (iou=0)"
+)
 
 # One tab per main bbox
 tab_labels = [f"Zone {i + 1}" for i in range(len(main_boxes))]
@@ -223,7 +249,9 @@ for i, (tab, main_box) in enumerate(zip(tabs, main_boxes)):
         )
 
         matching_frames = frames_for_main_box(main_box, frame_data)
-        st.markdown(f"**{len(matching_frames)} frame{'s' if len(matching_frames) != 1 else ''}** with this zone")
+        st.markdown(
+            f"**{len(matching_frames)} frame{'s' if len(matching_frames) != 1 else ''}** with this zone"
+        )
 
         if not matching_frames:
             st.info("No frames found for this zone.")
@@ -231,7 +259,10 @@ for i, (tab, main_box) in enumerate(zip(tabs, main_boxes)):
 
         debug_mode = st.checkbox("Debug mode (dry run)", value=True, key=f"debug_{i}")
 
-        if st.button(f"🗑 Remove zone from all {len(matching_frames)} label files", key=f"remove_{i}"):
+        if st.button(
+            f"🗑 Remove zone from all {len(matching_frames)} label files",
+            key=f"remove_{i}",
+        ):
             if debug_mode:
                 mb = main_box[:4].reshape(1, 4)
                 lines_out = []
@@ -244,11 +275,18 @@ for i, (tab, main_box) in enumerate(zip(tabs, main_boxes)):
                     if removed:
                         label_path = labels_dir / img_path.with_suffix(".txt").name
                         for box in removed:
-                            lines_out.append(f"{label_path.name}: remove {' '.join(str(v) for v in box)}")
-                st.code("\n".join(lines_out) if lines_out else "(nothing to remove)", language=None)
+                            lines_out.append(
+                                f"{label_path.name}: remove {' '.join(str(v) for v in box)}"
+                            )
+                st.code(
+                    "\n".join(lines_out) if lines_out else "(nothing to remove)",
+                    language=None,
+                )
             else:
                 n_modified = remove_zone_from_labels(main_box, frame_data, labels_dir)
-                st.success(f"Removed from {n_modified} label file{'s' if n_modified != 1 else ''}.")
+                st.success(
+                    f"Removed from {n_modified} label file{'s' if n_modified != 1 else ''}."
+                )
                 st.rerun()
 
         cols = st.columns(3)
@@ -257,4 +295,8 @@ for i, (tab, main_box) in enumerate(zip(tabs, main_boxes)):
             img = draw_boxes(img, boxes, highlight=mb_xyxy)
             n = len(boxes)
             with cols[j % 3]:
-                st.image(img, caption=f"{img_path.name} — {n} box{'es' if n != 1 else ''}", width="stretch")
+                st.image(
+                    img,
+                    caption=f"{img_path.name} — {n} box{'es' if n != 1 else ''}",
+                    width="stretch",
+                )

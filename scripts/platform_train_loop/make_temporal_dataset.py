@@ -198,7 +198,6 @@ def handle_dir_sequence(dir_sequence: Path, split: str, is_smoke: bool = True) -
                 f"Missing ground truth labels for smoke sequence {sequence_reference} - Skipping"
             )
         else:
-
             # Creating the directories
             dir_sequence_images.mkdir(exist_ok=True, parents=True)
             dir_sequence_labels.mkdir(exist_ok=True, parents=True)
