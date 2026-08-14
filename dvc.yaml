@@ -78,17 +78,19 @@ stages:
       --embeddings-dir data/interim/fp_sequence_embeddings
       --output-train-val data/processed/sequential_train_val
       --output-test data/processed/sequential_test
+      --test-lockfile data/raw/sequential_test_lock.json
       --random-seed 0
     deps:
       - scripts/build_sequential_dataset.py
       - src/pyro_dataset/fp/selection.py
+      - src/pyro_dataset/fp/lockfile.py
       - data/raw/wildfire/registry.json
       - data/raw/wildfire/data
       - data/raw/fp/registry.json
       - data/raw/fp/data
       - data/interim/fp_sequence_embeddings/val
       - data/interim/fp_sequence_embeddings/train
-      - data/interim/fp_sequence_embeddings/test
+      - data/raw/sequential_test_lock.json
     outs:
       - data/processed/sequential_train_val
       - data/processed/sequential_test:
@@ -105,6 +107,10 @@ stages:
       - data/processed/yolo_test
       - data/processed/sequential_train_val
       - data/processed/sequential_test
+      - data/raw/pyro-annotator/recurring_objects.json
+      - data/raw/wildfire/registry.json
+      - data/raw/fp/registry.json
+      - data/raw/sequential_test_lock.json
 
   build_toy_dataset:
     cmd: >-

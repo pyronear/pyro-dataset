@@ -11,7 +11,7 @@ plan it writes into sequence folders, and that half *is* a stage.
 Every smoke alert is imported; that count sets the false-positive quota, filled
 one alert per recurring object walking a hard-negatives-first ranking. Splits
 come from the ledger, so an artefact always lands in the split it first went to
-— and never in test.
+— test included, at 80/10/10.
 
 The plan is accumulated, not regenerated: it carries forward the folders earlier
 runs decided on, so it is committed to git alongside the ledger.
@@ -31,6 +31,7 @@ Arguments:
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
     --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
     --match-iou        IoU for matching an alert to an existing recurring object (default: 0.3).
+    --same-fire-window Hours within which same-view smoke alerts count as one fire (default: 12).
     --force-train      Recurring object id to force into train (repeatable).
     --random-seed      Seed for split assignment (default: 0).
     --dry-run          Print the plan without writing anything.
@@ -47,6 +48,7 @@ from typing import Any
 
 from pyro_dataset.annotator.convert import alert_kind, camera_key, folder_name
 from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
+from pyro_dataset.annotator.same_fire import group_new_smoke
 from pyro_dataset.annotator.select import rank_objects, select_fp
 
 
@@ -68,6 +70,12 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-per-object", type=int, default=1)
     parser.add_argument("--hard-negative-threshold", type=float, default=0.5)
     parser.add_argument("--match-iou", type=float, default=0.3)
+    parser.add_argument(
+        "--same-fire-window",
+        type=float,
+        default=12.0,
+        help="Hours within which same-view smoke alerts count as one fire.",
+    )
     parser.add_argument("--force-train", action="append", default=[])
     parser.add_argument("--random-seed", type=int, default=0)
     parser.add_argument("--dry-run", action="store_true")
@@ -219,7 +227,7 @@ def main() -> None:
     # balance drifts as imports accumulate. Only folders the ledger does not
     # already account for are added, or every planned false positive would be
     # counted twice — once as its object, once as its folder.
-    split_counts: dict[str, int] = {"train": 0, "val": 0}
+    split_counts: dict[str, int] = {"train": 0, "val": 0, "test": 0}
     for entry in ledger.entries.values():
         split_counts[entry["split"]] = split_counts.get(entry["split"], 0) + 1
     ledger_folders = {
@@ -229,6 +237,26 @@ def main() -> None:
     for name, entry in plan.items():
         if name not in ledger_folders and entry["split"] in split_counts:
             split_counts[entry["split"]] += 1
+
+    # One fire, one split: same-view smoke alerts chaining within the window
+    # share a draw, inheriting from already planned smoke when the chain
+    # touches any (docs/specs/2026-08-14-annotator-test-growth-design.md §6).
+    planned_smoke = {
+        name: entry["split"]
+        for name, entry in plan.items()
+        if entry["kind"] == "wildfire"
+    }
+    new_smoke = [
+        folder_name(alert) for alert in smoke if folder_name(alert) not in plan
+    ]
+    smoke_splits: dict[str, str] = {}
+    for group, inherited in group_new_smoke(
+        new_smoke, planned_smoke, args["same_fire_window"]
+    ):
+        split = inherited or assign_new_split(rng, split_counts)
+        for name in group:
+            smoke_splits[name] = split
+            split_counts[split] = split_counts.get(split, 0) + 1
 
     object_meta, candidates = resolve_recurring_objects(
         fp_alerts, ledger, rng, split_counts, args["match_iou"]
@@ -291,10 +319,8 @@ def main() -> None:
             split = (
                 ledger.entries[ro_id]["split"]
                 if ro_id is not None
-                else assign_new_split(rng, split_counts)
+                else smoke_splits[name]
             )
-            if ro_id is None:
-                split_counts[split] = split_counts.get(split, 0) + 1
             plan[name] = {"kind": kind, "split": split, "recurring_object": ro_id}
         if ro_id is not None:
             # Record even when the folder was already planned: an interrupted
@@ -318,7 +344,8 @@ def main() -> None:
     print(f"  fp       : {len(picked)} of a {quota} quota, {fooling} objects fooling")
     print(
         f"  splits   : train {sum(1 for e in plan.values() if e['split'] == 'train')}, "
-        f"val {sum(1 for e in plan.values() if e['split'] == 'val')}"
+        f"val {sum(1 for e in plan.values() if e['split'] == 'val')}, "
+        f"test {sum(1 for e in plan.values() if e['split'] == 'test')}"
     )
     print(f"  planned  : {added} new folder(s), {len(plan) - added} already planned")
 
@@ -339,6 +366,9 @@ def main() -> None:
             f"--src data/interim/pyro-annotator/sequences/{kind} --type {kind} "
             f"--splits-from data/interim/pyro-annotator/sequences/splits.json"
         )
+    print("  dvc repro compute_fp_embeddings")
+    print("  uv run python scripts/freeze_test_selection.py")
+    print("  dvc repro")
 
 
 if __name__ == "__main__":

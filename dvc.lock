@@ -706,13 +706,8 @@ stages:
       --wf-data-dir data/raw/wildfire/data --fp-registry data/raw/fp/registry.json
       --fp-data-dir data/raw/fp/data --embeddings-dir data/interim/fp_sequence_embeddings
       --output-train-val data/processed/sequential_train_val --output-test data/processed/sequential_test
-      --random-seed 0
+      --test-lockfile data/raw/sequential_test_lock.json --random-seed 0
     deps:
-    - path: data/interim/fp_sequence_embeddings/test
-      hash: md5
-      md5: cc0dc162cbda7216b4cff38962eae849.dir
-      size: 2460628
-      nfiles: 2
     - path: data/interim/fp_sequence_embeddings/train
       hash: md5
       md5: 51edec8cc1a3f1c8b93e7af595f80717.dir
@@ -732,6 +727,10 @@ stages:
       hash: md5
       md5: 7983fceca0836f734bdf7e6bf032063e
       size: 1318880
+    - path: data/raw/sequential_test_lock.json
+      hash: md5
+      md5: 11ac1db3f4b20059c71fcc296d891c6c
+      size: 8781
     - path: data/raw/wildfire/data
       hash: md5
       md5: 2dcbdee5736e1d53e8e7d976a82d415e.dir
@@ -743,8 +742,12 @@ stages:
       size: 348611
     - path: scripts/build_sequential_dataset.py
       hash: md5
-      md5: bbaf4e6469763c273019adbda493e972
-      size: 10179
+      md5: 7cb5dd1ef282a34d5cd0436a020f664f
+      size: 12785
+    - path: src/pyro_dataset/fp/lockfile.py
+      hash: md5
+      md5: cfd051c856b57783e3201555d1b4b8c6
+      size: 2623
     - path: src/pyro_dataset/fp/selection.py
       hash: md5
       md5: e9d2065653a9aafdc035c700fa2d678f
@@ -818,10 +821,26 @@ stages:
       md5: 038270d9336432fa9001cf92069731b2.dir
       size: 2027739474
       nfiles: 33635
+    - path: data/raw/fp/registry.json
+      hash: md5
+      md5: 7983fceca0836f734bdf7e6bf032063e
+      size: 1318880
+    - path: data/raw/pyro-annotator/recurring_objects.json
+      hash: md5
+      md5: ecc9988f92c56db6f9516052b8aae959
+      size: 50832
+    - path: data/raw/sequential_test_lock.json
+      hash: md5
+      md5: 11ac1db3f4b20059c71fcc296d891c6c
+      size: 8781
+    - path: data/raw/wildfire/registry.json
+      hash: md5
+      md5: 3e31561ecbebfb84a4e2a5ade09650ca
+      size: 348611
     - path: tests/test_data_leakage.py
       hash: md5
-      md5: beb959069e4a7a1e12ed04c2e7da6ca0
-      size: 5738
+      md5: 6a139392d901fc3f14ac20ec8162d515
+      size: 7593
   compute_fp_embeddings:
     cmd: uv run python scripts/embed_fp_for_selection.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --output data/interim/fp_sequence_embeddings --splits

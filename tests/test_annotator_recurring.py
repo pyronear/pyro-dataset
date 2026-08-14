@@ -204,17 +204,15 @@ def test_load_of_a_missing_file_is_empty(tmp_path):
     assert Ledger.load(tmp_path / "nope.json").entries == {}
 
 
-def test_assign_new_split_is_ninety_ten_train_val():
+def test_assign_new_split_is_eighty_ten_ten():
     rng = random.Random(0)
-    counts = {"train": 0, "val": 0}
-    splits = []
-    for _ in range(10):
-        split = assign_new_split(rng, counts)
-        splits.append(split)
-        counts[split] += 1
-    assert splits.count("train") == 9
-    assert splits.count("val") == 1
-    assert "test" not in splits
+    counts = {"train": 0, "val": 0, "test": 0}
+    for _ in range(200):
+        counts[assign_new_split(rng, counts)] += 1
+    assert abs(counts["train"] - 160) <= 2
+    assert abs(counts["val"] - 20) <= 2
+    assert abs(counts["test"] - 20) <= 2
+    assert counts["test"] > 0, "test is a real candidate now"
 
 
 def test_saved_ledger_is_valid_json(tmp_path):

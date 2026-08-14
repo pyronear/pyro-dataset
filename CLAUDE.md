@@ -84,6 +84,7 @@ The `scripts/platform_train_loop/` subdirectory implements an iterative annotati
 
 Brings human-annotated alerts from pyro-annotator into the raw pools. Design:
 `docs/specs/2026-08-13-annotator-export-sequential-import-design.md`.
+Step-by-step operator runbook: `docs/runbooks/annotator-import.md`.
 
 ```bash
 # 1. Decide what to import (writes import_plan.json + the ledger, copies nothing)
@@ -97,6 +98,10 @@ uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/wi
   --type wildfire --splits-from data/interim/pyro-annotator/sequences/splits.json
 uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/fp \
   --type fp --splits-from data/interim/pyro-annotator/sequences/splits.json
+
+# 4. Refresh embeddings, then grow the frozen test negatives to the new quota
+dvc repro compute_fp_embeddings
+uv run python scripts/freeze_test_selection.py
 ```
 
 Run step 1 with `--dry-run` first: it reports the quota, how many recurring objects
@@ -129,8 +134,16 @@ What differs from the platform loop:
   both with the registry change from the same import. `--force-train <ro_id>`
   moves an artefact that is hurting in production into train, unless it already has
   sequences elsewhere.
-- **Test is never assigned.** `assignments_from_splits` refuses it outright, so an
-  import cannot disturb the test set. Growing test is separate work.
+- **Test grows append-only.** Imports assign 80/10/10, and the FP half of
+  `sequential_test` is frozen in `data/raw/sequential_test_lock.json` —
+  git-committed, appended to only by `scripts/freeze_test_selection.py`, and
+  copied verbatim by the build, which errors on any mismatch instead of
+  re-selecting. Every release's test set is a superset of the previous one,
+  so models stay comparable across releases. Commit the lockfile with the
+  ledger and plan from the same import. Any ingest that adds test WF
+  sequences — annotator or not — grows the quota and needs a freeze before
+  the next `dvc repro`, or the build errors on the stale lockfile.
+  Design: `docs/specs/2026-08-14-annotator-test-growth-design.md`.
 - **False-positive boxes are class 99**, not `0`: they mark where the detector
   fired, not smoke. `build_sequential_dataset.py` pins annotator-sourced FP
   sequences ahead of its clustering, so the ones chosen upstream actually reach

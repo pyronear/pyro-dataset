@@ -313,8 +313,8 @@ def assignments_from_splits(
     ratio. Entries are stamped with their source so the sequential build can
     pin them through its selection.
 
-    Test is refused: annotator sequences never enter it, and enforcing that at
-    the registry writer puts the rule where it cannot be bypassed.
+    Test is accepted since the test-growth design: the built test set is kept
+    append-only by the freeze lockfile, not by refusing the split here.
     """
     assignments = []
     current_id = start_id
@@ -322,10 +322,6 @@ def assignments_from_splits(
         if folder not in splits:
             raise ValueError(f"{folder}: no split recorded in the splits file")
         split = splits[folder]
-        if split == "test":
-            raise ValueError(
-                f"{folder}: pre-assigned split 'test' is not allowed for imports"
-            )
         if split not in SPLITS:
             raise ValueError(f"{folder}: unknown split {split!r}")
         assignments.append(
