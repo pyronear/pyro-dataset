@@ -227,17 +227,16 @@ def test_assignments_from_splits_rejects_a_missing_entry():
         )
 
 
-def test_assignments_from_splits_rejects_test():
-    """Annotator imports never assign test; enforcing it at the registry writer
-    keeps the rule where it cannot be bypassed."""
-    with pytest.raises(ValueError, match="test"):
-        assignments_from_splits(
-            [ANNOTATOR_FOLDER],
-            existing=[],
-            start_id=1,
-            prefix="fp",
-            splits={ANNOTATOR_FOLDER: "test"},
-        )
+def test_assignments_from_splits_accepts_test():
+    assignments = assignments_from_splits(
+        [ANNOTATOR_FOLDER],
+        existing=[],
+        start_id=1,
+        prefix="fp",
+        splits={ANNOTATOR_FOLDER: "test"},
+    )
+    assert assignments[0]["split"] == "test"
+    assert assignments[0]["source"] == "pyro-annotator"
 
 
 def test_assignments_from_splits_rejects_an_unknown_split():
