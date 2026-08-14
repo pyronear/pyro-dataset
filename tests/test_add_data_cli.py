@@ -56,11 +56,15 @@ def prepare(tmp_path: Path, split: str | None) -> tuple[Path, Path, Path]:
     return src, splits, pool
 
 
-def test_a_test_split_is_refused_without_copying(tmp_path):
+def test_a_test_split_is_copied_and_registered(tmp_path):
     src, splits, pool = prepare(tmp_path, "test")
     result = run_add_data(tmp_path, src, splits)
-    assert result.returncode != 0
-    assert list(pool.iterdir()) == []
+    assert result.returncode == 0, result.stderr
+    assert [p.name for p in pool.iterdir()] == ["sdis-91_cam-a_285_2026-08-05T13-46-08"]
+    registry = json.loads(
+        (tmp_path / "data" / "raw" / "wildfire" / "registry.json").read_text()
+    )["sequences"]
+    assert registry[0]["split"] == "test"
 
 
 def test_a_missing_split_entry_is_refused_without_copying(tmp_path):
