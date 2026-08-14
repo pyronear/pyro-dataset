@@ -15,7 +15,9 @@ data/raw/pyro-annotator/
 
 ## `export/` — the input
 
-Produced by `make export-alerts` in the pyro-annotator repo, which walks
+Produced by `scripts/data_transfer/export/export_alerts.py` in the
+pyro-annotator repo (exact command in `docs/runbooks/annotator-import.md`,
+step 1), which walks
 `GET /api/v1/export/alerts` and downloads the images. It holds only **finished**
 alerts: every lane annotated, unsure lanes omitted, skipped alerts excluded.
 
@@ -29,8 +31,8 @@ Every pull is a **full re-pull**, not a delta: the manifest is rewritten from
 scratch and only missing images are downloaded. Re-running `dvc add` after a pull
 records the new version; the `.dvc` file in git says which one a commit used.
 
-Snapshot in this repo: 795 alerts (58 smoke, 737 false positive), 18,145 frames,
-2.2 GB, pulled 2026-08-13.
+Snapshot in this repo: 892 alerts (154 smoke, 738 false positive), 20,380
+frames, 2.4 GB, pulled 2026-08-14.
 
 ## `recurring_objects.json` — the ledger
 

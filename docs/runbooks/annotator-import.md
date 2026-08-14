@@ -21,7 +21,7 @@ For operators who have done this before:
 ```bash
 # on a feature branch, from an up-to-date main
 dvc pull                                                    # pools, export, embeddings
-# refresh data/raw/pyro-annotator/export from pyro-annotator (make export-alerts), then:
+# refresh data/raw/pyro-annotator/export from pyro-annotator (export_alerts.py, step 1), then:
 dvc add data/raw/pyro-annotator/export
 
 uv run python scripts/plan_annotator_import.py --dry-run    # read it. really.
@@ -58,10 +58,32 @@ go wrong.
 
 ## 1. Refresh the export
 
-In the pyro-annotator repo, `make export-alerts` walks
+The export is pulled by `scripts/data_transfer/export/export_alerts.py` in the
+pyro-annotator repo (there is no make target). It walks
 `GET /api/v1/export/alerts` and downloads images for every **finished** alert.
-Place the result at `data/raw/pyro-annotator/export/` (a `manifest.jsonl` plus
-`images/`), then record the new version:
+Images come from presigned S3 URLs, so the script runs from any machine that can
+reach the API — no need to run it on the VM hosting the annotator.
+
+From a checkout of pyro-annotator, in `annotation_api/`:
+
+```bash
+MAIN_ANNOTATION_LOGIN=admin MAIN_ANNOTATION_PASSWORD=... \
+uv run python -m scripts.data_transfer.export.export_alerts \
+  --annotation-api-url http://162.19.113.48:5050 \
+  --output-dir <path-to-pyro-dataset>/data/raw/pyro-annotator/export \
+  --loglevel info
+```
+
+- `162.19.113.48` is the production annotator VM. The admin credentials are
+  `AUTH_USERNAME` / `AUTH_PASSWORD` in `~/pyro-annotator/.env` on that VM
+  (`ssh ubuntu@162.19.113.48`). Pass them as environment variables only —
+  never write them into a file.
+- Point `--output-dir` straight at this repo's
+  `data/raw/pyro-annotator/export/`: the pull is idempotent (the manifest is
+  rewritten in full, only missing images are downloaded), so writing into the
+  DVC-tracked directory is safe.
+
+Then record the new version:
 
 ```bash
 dvc add data/raw/pyro-annotator/export
@@ -266,6 +288,21 @@ dvc push
 
 Open a PR. The reviewer's fast path: the plan/ledger diffs are additions-only,
 the lockfile diff is additions-only, CI's leakage stage is green.
+
+## 10. Release the dataset
+
+A dataset release is a git tag on the merged import commit — the tag pins
+`dvc.lock`, which records the exact content hash of every output (see
+"Dataset Versioning" in the README). After the PR merges:
+
+```bash
+git checkout main && git pull
+git tag vX.Y.Z        # `git tag` lists the last one; new data = minor bump
+git push origin vX.Y.Z
+```
+
+Downstream repos then consume the release with
+`dvc import https://github.com/pyronear/pyro-dataset <path> --rev vX.Y.Z`.
 
 ## When something goes wrong
 
