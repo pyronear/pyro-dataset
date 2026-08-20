@@ -19,6 +19,11 @@
     "recurring_object": null,
     "split": "val"
   },
+  "adf_font-rubi-01_23_2026-07-02T11-31-33": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "adf_font-rubi-01_352_2026-07-10T08-39-52": {
     "kind": "fp",
     "recurring_object": "ro_00011",
@@ -194,6 +199,11 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-40_laluque-01_147_2026-07-13T18-55-34": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-40_laluque-01_233_2026-08-06T10-51-13": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -208,6 +218,11 @@
     "kind": "fp",
     "recurring_object": "ro_00015",
     "split": "val"
+  },
+  "sdis-40_laluque-02_11_2026-07-22T16-13-27": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
   },
   "sdis-40_laluque-02_20_2026-07-09T11-00-06": {
     "kind": "wildfire",
@@ -239,6 +254,16 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-40_laluque-02_26_2026-07-21T13-07-37": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-40_laluque-02_26_2026-07-23T12-36-29": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
+  },
   "sdis-40_laluque-02_26_2026-07-23T15-00-33": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -258,6 +283,11 @@
     "kind": "wildfire",
     "recurring_object": null,
     "split": "test"
+  },
+  "sdis-40_laluque-02_27_2026-07-08T09-07-39": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
   },
   "sdis-40_laluque-02_27_2026-08-05T13-29-56": {
     "kind": "wildfire",
@@ -279,6 +309,11 @@
     "recurring_object": null,
     "split": "val"
   },
+  "sdis-40_laluque-02_306_2026-07-23T12-19-27": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-40_laluque-02_314_2026-07-28T12-25-12": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -295,6 +330,11 @@
     "split": "train"
   },
   "sdis-40_laluque-02_5_2026-07-23T08-32-08": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-40_laluque-02_61_2026-07-05T12-36-16": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -374,7 +414,22 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-40_morcenx-01_338_2026-07-04T13-10-38": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
+  },
+  "sdis-40_morcenx-01_340_2026-07-05T14-58-38": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-40_morcenx-01_346_2026-07-23T08-00-45": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-40_morcenx-01_358_2026-07-05T16-29-29": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -414,7 +469,22 @@
     "recurring_object": "ro_00006",
     "split": "train"
   },
+  "sdis-40_morcenx-02_183_2026-07-03T09-20-57": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-40_morcenx-02_183_2026-07-10T08-08-45": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-40_morcenx-02_183_2026-07-26T09-46-37": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-40_morcenx-02_190_2026-07-22T13-43-36": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -484,6 +554,21 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-77_croix-augas-01_293_2026-07-04T12-15-09": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-01_296_2026-07-16T14-56-47": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
+  },
+  "sdis-77_croix-augas-01_308_2026-07-11T14-34-23": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_croix-augas-01_309_2026-07-12T12-40-55": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -492,6 +577,11 @@
   "sdis-77_croix-augas-01_326_2026-08-05T09-46-18": {
     "kind": "fp",
     "recurring_object": "ro_00030",
+    "split": "train"
+  },
+  "sdis-77_croix-augas-01_329_2026-07-10T16-48-51": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   },
   "sdis-77_croix-augas-01_344_2026-07-08T10-49-34": {
@@ -504,7 +594,17 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-77_croix-augas-01_347_2026-07-09T08-44-48": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
+  },
   "sdis-77_croix-augas-01_47_2026-07-12T11-47-09": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-01_48_2026-07-12T13-56-00": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -539,6 +639,21 @@
     "recurring_object": null,
     "split": "val"
   },
+  "sdis-77_croix-augas-02_143_2026-07-09T11-53-28": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-02_148_2026-07-06T13-39-25": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-02_159_2026-07-15T13-45-56": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_croix-augas-02_177_2026-07-07T15-53-32": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -553,6 +668,21 @@
     "kind": "fp",
     "recurring_object": "ro_00010",
     "split": "train"
+  },
+  "sdis-77_croix-augas-02_220_2026-07-18T11-17-16": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-02_230_2026-07-16T14-22-45": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_croix-augas-02_237_2026-07-14T03-59-31": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
   },
   "sdis-77_croix-augas-02_246_2026-07-28T13-24-16": {
     "kind": "wildfire",
@@ -634,6 +764,16 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-77_nemours-01_100_2026-07-06T13-14-08": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-01_102_2026-07-06T13-38-12": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_nemours-01_132_2026-07-04T11-48-23": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -649,12 +789,37 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-77_nemours-01_137_2026-07-19T11-35-50": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
+  },
   "sdis-77_nemours-01_153_2026-07-27T12-54-37": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
   },
   "sdis-77_nemours-01_156_2026-07-12T15-23-36": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-01_164_2026-07-04T17-20-13": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-01_165_2026-07-07T16-18-19": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-01_166_2026-07-07T14-20-36": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-01_166_2026-07-07T14-47-37": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -744,7 +909,22 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sdis-77_nemours-02_265_2026-07-07T15-10-09": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_nemours-02_266_2026-07-29T13-35-36": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
+  },
+  "sdis-77_nemours-02_268_2026-07-23T14-12-02": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-02_274_2026-07-04T11-54-26": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "test"
@@ -769,9 +949,29 @@
     "recurring_object": "ro_00066",
     "split": "train"
   },
+  "sdis-77_nemours-02_321_2026-07-05T12-58-08": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_nemours-02_328_2026-07-24T10-41-24": {
     "kind": "fp",
     "recurring_object": "ro_00035",
+    "split": "train"
+  },
+  "sdis-77_nemours-02_337_2026-07-02T13-02-11": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_nemours-02_344_2026-07-10T10-37-11": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
+  },
+  "sdis-77_nemours-02_344_2026-07-15T12-33-08": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   },
   "sdis-77_nemours-02_345_2026-08-01T12-54-07": {
@@ -787,6 +987,11 @@
   "sdis-77_nemours-02_357_2026-07-15T08-31-05": {
     "kind": "fp",
     "recurring_object": "ro_00104",
+    "split": "train"
+  },
+  "sdis-77_nemours-02_38_2026-07-07T16-06-21": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   },
   "sdis-77_nemours-02_39_2026-07-04T09-10-03": {
@@ -844,9 +1049,29 @@
     "recurring_object": "ro_00091",
     "split": "train"
   },
+  "sdis-77_videlles-01_98_2026-07-08T15-40-50": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_videlles-01_98_2026-07-08T15-43-47": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-77_videlles-02_83_2026-07-02T10-50-24": {
     "kind": "fp",
     "recurring_object": "ro_00031",
+    "split": "train"
+  },
+  "sdis-77_videlles-02_85_2026-07-11T14-35-13": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-77_videlles-02_98_2026-07-16T14-57-50": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   },
   "sdis-91_chateau-eau-milly-la-foret-01_126_2026-07-05T11-36-46": {
@@ -859,10 +1084,30 @@
     "recurring_object": null,
     "split": "val"
   },
+  "sdis-91_chateau-eau-milly-la-foret-01_131_2026-07-07T13-15-19": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
+  },
   "sdis-91_chateau-eau-milly-la-foret-01_141_2026-07-02T05-22-24": {
     "kind": "fp",
     "recurring_object": "ro_00005",
     "split": "val"
+  },
+  "sdis-91_chateau-eau-milly-la-foret-01_141_2026-07-08T12-01-14": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-91_chateau-eau-milly-la-foret-01_155_2026-07-07T15-38-40": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-91_chateau-eau-milly-la-foret-01_177_2026-07-07T16-28-38": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
   },
   "sdis-91_chateau-eau-milly-la-foret-01_185_2026-07-28T11-38-19": {
     "kind": "fp",
@@ -899,6 +1144,11 @@
     "recurring_object": "ro_00017",
     "split": "train"
   },
+  "sdis-91_chateau-eau-milly-la-foret-02_310_2026-07-10T12-38-44": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-91_chateau-eau-milly-la-foret-02_328_2026-08-06T18-35-55": {
     "kind": "fp",
     "recurring_object": "ro_00097",
@@ -915,6 +1165,11 @@
     "split": "train"
   },
   "sdis-91_chateau-eau-milly-la-foret-02_358_2026-07-04T12-11-15": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sdis-91_chateau-eau-milly-la-foret-02_42_2026-07-16T14-56-46": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -994,6 +1249,11 @@
     "recurring_object": "ro_00004",
     "split": "train"
   },
+  "sdis-91_sdis-tigery-02_39_2026-07-13T16-24-32": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sdis-91_videlles-03_187_2026-08-06T19-09-57": {
     "kind": "fp",
     "recurring_object": "ro_00102",
@@ -1009,7 +1269,22 @@
     "recurring_object": "ro_00024",
     "split": "train"
   },
+  "sis-67_bischwiller-01_303_2026-07-24T11-51-08": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sis-67_bischwiller-01_336_2026-07-25T11-21-19": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sis-67_bischwiller-02_152_2026-07-16T15-18-58": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sis-67_bischwiller-02_197_2026-07-22T12-37-50": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -1055,6 +1330,16 @@
     "split": "train"
   },
   "sis-67_cis-petersbach-02_19_2026-07-29T11-36-57": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "sis-67_col-saverne-01_217_2026-07-18T07-31-12": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "val"
+  },
+  "sis-67_col-saverne-01_243_2026-07-12T10-03-11": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -1149,6 +1434,11 @@
     "recurring_object": null,
     "split": "train"
   },
+  "sis-67_haguenau-02_151_2026-07-24T11-51-25": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "sis-67_haguenau-02_152_2026-07-10T06-20-03": {
     "kind": "fp",
     "recurring_object": "ro_00055",
@@ -1204,6 +1494,11 @@
     "recurring_object": "ro_00078",
     "split": "train"
   },
+  "vendoeuvres_vendoeuvres-01_102_2026-07-03T12-33-19": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "test"
+  },
   "vendoeuvres_vendoeuvres-01_334_2026-07-08T15-01-52": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -1219,7 +1514,17 @@
     "recurring_object": "ro_00033",
     "split": "train"
   },
+  "vendoeuvres_vendoeuvres-01_3_2026-07-23T14-39-11": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "vendoeuvres_vendoeuvres-01_93_2026-07-20T11-17-09": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
+  "vendoeuvres_vendoeuvres-02_152_2026-07-06T15-03-04": {
     "kind": "wildfire",
     "recurring_object": null,
     "split": "train"
@@ -1249,9 +1554,19 @@
     "recurring_object": null,
     "split": "train"
   },
+  "vendoeuvres_vendoeuvres-02_187_2026-07-05T13-44-21": {
+    "kind": "wildfire",
+    "recurring_object": null,
+    "split": "train"
+  },
   "vendoeuvres_vendoeuvres-02_223_2026-07-30T05-52-14": {
     "kind": "fp",
     "recurring_object": "ro_00073",
+    "split": "train"
+  },
+  "vendoeuvres_vendoeuvres-02_245_2026-07-09T13-17-56": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   },
   "vendoeuvres_vendoeuvres-02_247_2026-07-14T13-03-21": {
@@ -1287,6 +1602,11 @@
   "yvelines-78_poteau-quenouilles-02_262_2026-07-14T19-18-38": {
     "kind": "fp",
     "recurring_object": "ro_00057",
+    "split": "train"
+  },
+  "yvelines-78_poteau-quenouilles-02_318_2026-07-15T12-29-42": {
+    "kind": "wildfire",
+    "recurring_object": null,
     "split": "train"
   }
 }
