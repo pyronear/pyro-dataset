@@ -333,7 +333,15 @@ git add data/raw/pyro-annotator/export.dvc \
         dvc.lock
 git commit
 dvc push
+dvc push -r awspyronear-private \
+        data/processed/sequential_test data/processed/yolo_test
 ```
+
+The second push is the verification, not a repetition: the test datasets are
+pinned to `awspyronear-private`, and `dvc status --cloud` skips outputs owned
+by a non-default remote rather than comparing them — it reports "in sync"
+without having looked. A targeted push traverses them and is idempotent, so
+"Everything is up to date" is the answer you want.
 
 Open a PR. The reviewer's fast path: the plan/ledger diffs are additions-only,
 the lockfile diff is additions-only, CI's leakage stage is green.
@@ -345,10 +353,16 @@ A dataset release is a git tag on the merged import commit — the tag pins
 "Dataset Versioning" in the README). After the PR merges:
 
 ```bash
-git checkout main && git pull
-git tag vX.Y.Z        # `git tag` lists the last one; new data = minor bump
+git fetch origin main
+RELEASE=$(gh pr view <pr-number> --json mergeCommit --jq .mergeCommit.oid)
+git tag vX.Y.Z "$RELEASE"   # `git tag` lists the last one; new data = minor bump
 git push origin vX.Y.Z
 ```
+
+Tag that SHA rather than whatever `main` points at by then. Another dataset
+update landing between this import's merge and its release would otherwise
+take the version number with it, and the tag would pin a `dvc.lock` describing
+someone else's data.
 
 Downstream repos then consume the release with
 `dvc import https://github.com/pyronear/pyro-dataset <path> --rev vX.Y.Z`.
