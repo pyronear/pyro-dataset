@@ -172,6 +172,55 @@ existing entry's split changed, stop — that is the one-artefact-in-two-splits
 leak the ledger exists to prevent, and something is wrong (most likely a stale
 checkout; see step 0).
 
+**Check that on the parsed objects, not on the textual diff.** Both files are
+written sorted by key, so inserting a new entry shifts commas and closing
+braces, and `git diff` reports the neighbouring lines as removed and re-added.
+Those deletions are formatting, not lost state — reading them as the stop
+signal above would abort a healthy import:
+
+```bash
+uv run python - <<'EOF'
+import json, subprocess
+
+IDENTITY = ("camera", "azimuth", "bbox_xyxyn")   # what Ledger.match keys on
+
+def committed(path):
+    return json.loads(subprocess.run(
+        ["git", "show", f"HEAD:{path}"], capture_output=True, text=True).stdout)
+
+plan_before = committed("data/raw/pyro-annotator/import_plan.json")
+plan_after = json.load(open("data/raw/pyro-annotator/import_plan.json"))
+ledger_before = committed("data/raw/pyro-annotator/recurring_objects.json")
+ledger_after = json.load(open("data/raw/pyro-annotator/recurring_objects.json"))
+
+print("plan removed :", set(plan_before) - set(plan_after))
+print("plan changed :", {k for k in plan_before if k in plan_after
+                         and plan_before[k] != plan_after[k]})
+print("objects gone :", set(ledger_before) - set(ledger_after))
+print("splits moved :", {k for k in ledger_before if k in ledger_after
+                         and ledger_before[k]["split"] != ledger_after[k]["split"]})
+print("identity moved:", {k for k in ledger_before if k in ledger_after
+                          and [ledger_before[k][f] for f in IDENTITY]
+                          != [ledger_after[k][f] for f in IDENTITY]})
+print("ingested lost:", {k for k in ledger_before if k in ledger_after
+                         and not set(ledger_before[k]["ingested_folders"])
+                         <= set(ledger_after[k]["ingested_folders"])})
+EOF
+```
+
+All six must be empty, with one exception: `--force-train ro_XXXXX` moves an
+object that has no ingested sequence yet, so that object is expected under
+`splits moved` and nowhere else. Any other name there is the leak.
+
+`identity moved` covers camera, azimuth and the anchor bbox together, because
+those three are what `Ledger.match` keys on. Changing any of them silently
+breaks matching: the next import stops recognising the artefact and mints a
+duplicate, free to draw a different split — the leak this check exists to
+catch, arriving one import later.
+
+`seen_alerts` and `ingested_folders` growing on a known object is expected. The
+ledger accumulates; only these six invariants hold.
+
 ## 4. Materialise the staging folders
 
 ```bash
@@ -284,7 +333,15 @@ git add data/raw/pyro-annotator/export.dvc \
         dvc.lock
 git commit
 dvc push
+dvc push -r awspyronear-private \
+        data/processed/sequential_test data/processed/yolo_test
 ```
+
+The second push is the verification, not a repetition: the test datasets are
+pinned to `awspyronear-private`, and `dvc status --cloud` skips outputs owned
+by a non-default remote rather than comparing them — it reports "in sync"
+without having looked. A targeted push traverses them and is idempotent, so
+"Everything is up to date" is the answer you want.
 
 Open a PR. The reviewer's fast path: the plan/ledger diffs are additions-only,
 the lockfile diff is additions-only, CI's leakage stage is green.
@@ -296,10 +353,16 @@ A dataset release is a git tag on the merged import commit — the tag pins
 "Dataset Versioning" in the README). After the PR merges:
 
 ```bash
-git checkout main && git pull
-git tag vX.Y.Z        # `git tag` lists the last one; new data = minor bump
+git fetch origin main
+RELEASE=$(gh pr view <pr-number> --json mergeCommit --jq .mergeCommit.oid)
+git tag vX.Y.Z "$RELEASE"   # `git tag` lists the last one; new data = minor bump
 git push origin vX.Y.Z
 ```
+
+Tag that SHA rather than whatever `main` points at by then. Another dataset
+update landing between this import's merge and its release would otherwise
+take the version number with it, and the tag would pin a `dvc.lock` describing
+someone else's data.
 
 Downstream repos then consume the release with
 `dvc import https://github.com/pyronear/pyro-dataset <path> --rev vX.Y.Z`.
