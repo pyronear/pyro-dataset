@@ -160,9 +160,14 @@ git commit
 git push -u origin <branch>
 
 # 4. Push the data, and check it actually landed — a tag whose outputs are
-#    missing from the remote is a release nobody can consume
+#    missing from the remote is a release nobody can consume. `dvc push`
+#    routes each output to its own remote; verification has to ask both,
+#    because the test datasets live on `awspyronear-private` and a bare
+#    `dvc status --cloud` only answers for the default remote.
 uv run dvc push
 uv run dvc status --cloud
+uv run dvc status --cloud -r awspyronear-private \
+        data/processed/sequential_test data/processed/yolo_test
 
 # 5. Tag the merged commit, once the pull request is merged
 git checkout main && git pull
