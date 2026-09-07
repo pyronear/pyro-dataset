@@ -94,15 +94,39 @@ dvc push data/raw/fp
 dvc repro
 ```
 
+### Importing a pyro-annotator export
+
+Human-annotated alerts from
+[pyro-annotator](https://github.com/pyronear/pyro-annotator) follow a different
+path: their splits come from the recurring-object ledger rather than per-camera
+stratification, so `add_data.py` is called with `--splits-from`. Every sequence
+of one artefact has to land in the same split, or the model meets the same
+object on both sides of the evaluation.
+
+The export itself is produced by `make export-alerts` in the pyro-annotator
+repository, not here.
+
+Follow [docs/runbooks/annotator-import.md](docs/runbooks/annotator-import.md) —
+it is the source of truth for the whole flow, from the export to the release
+tag.
+
 ---
 
 ## Data Pipeline
 
 ### Stages
 
+`dvc.yaml` is authoritative; this list is a map of what each stage is for.
+
 - **build_wf_yolo_dataset**: Samples up to 10 labeled images per wildfire sequence and copies them into a YOLO-format dataset (`data/processed/wildfire_yolo/`), split into train/val/test according to `registry.json`.
+- **compute_fp_embeddings**: DINOv2 embeddings of the false-positive sequences, used to cluster them when selecting negatives. Refresh it after any ingest that adds FP sequences, or the new ones stay invisible to the selection.
 - **build_fp_yolo_dataset**: Samples false positive images using round-robin by max detection score. Quotas: 10% FP for train/val, 50% FP for test. Outputs to `data/processed/fp_yolo/`.
 - **merge_yolo_dataset**: Merges wildfire and FP images into two final datasets — `data/processed/yolo_train_val/` and `data/processed/yolo_test/`.
+- **build_sequential_dataset**: Builds the temporal datasets — `data/processed/sequential_train_val/` and `data/processed/sequential_test/` — at 50% FP in every split. The test half is copied verbatim from `data/raw/sequential_test_lock.json` and the stage errors rather than re-selecting when that lockfile is stale.
+- **test_data_leakage**: Runs `tests/test_data_leakage.py` against the real data: split leakage, recurring-object pinning, and lockfile-vs-quota consistency.
+- **build_toy_dataset**: A 5% sample of both datasets, for smoke-testing a training loop without moving 9 GB.
+- **visualize_yolo_train_val** / **visualize_yolo_test**: Render annotated samples into `data/reporting/viz/`.
+- **materialise_annotator_sequences**: Copies the alerts selected by `import_plan.json` out of the annotator export into staging folders. A full `dvc repro` therefore needs the export on disk — `dvc pull data/raw/pyro-annotator/export`, or expect this one stage to fail.
 
 ---
 
@@ -112,19 +136,44 @@ All dataset versions are tracked via Git tags. Each tag points to a specific `dv
 
 ### Release a new version
 
+Work on a feature branch: direct commits to `main` are blocked, and a release
+is a tag on the merged commit.
+
 ```sh
-# 1. Produce datasets
+# 1. Refresh the embeddings, then grow the frozen test negatives to the new
+#    quota. Any ingest that added test wildfire sequences opens slots, and
+#    build_sequential_dataset refuses to run against a stale lockfile.
+uv run dvc repro compute_fp_embeddings
+uv run python scripts/freeze_test_selection.py --dry-run   # then without it
+
+# 2. Produce datasets
 uv run dvc repro
 
-# 2. Push data to remote
-uv run dvc push
+# 3. Commit every piece of state the build depends on, together
+git add dvc.lock \
+        data/raw/wildfire.dvc data/raw/fp.dvc \
+        data/raw/sequential_test_lock.json \
+        data/raw/pyro-annotator/export.dvc \
+        data/raw/pyro-annotator/import_plan.json \
+        data/raw/pyro-annotator/recurring_objects.json
+git commit
+git push -u origin <branch>
 
-# 3. Commit and tag
-git add dvc.lock data/raw/wildfire.dvc data/raw/fp.dvc
-git commit -m "dataset: release v1.0.0"
-git tag v1.0.0
-git push && git push --tags
+# 4. Push the data, and check it actually landed — a tag whose outputs are
+#    missing from the remote is a release nobody can consume
+uv run dvc push
+uv run dvc status --cloud
+
+# 5. Tag the merged commit, once the pull request is merged
+git checkout main && git pull
+git tag vX.Y.Z        # `git tag` lists the last one; new data = minor bump
+git push origin vX.Y.Z
 ```
+
+The ledger, the plan and the test lockfile are accumulated state: they are
+committed to git rather than tracked by DVC, and they only make sense together
+with the registries they were computed against. Commit them in the same commit
+— that is what makes a tag reproducible.
 
 ### Use a specific version in another repo
 
