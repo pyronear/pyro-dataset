@@ -172,6 +172,42 @@ existing entry's split changed, stop — that is the one-artefact-in-two-splits
 leak the ledger exists to prevent, and something is wrong (most likely a stale
 checkout; see step 0).
 
+**Check that on the parsed objects, not on the textual diff.** Both files are
+written sorted by key, so inserting a new entry shifts commas and closing
+braces, and `git diff` reports the neighbouring lines as removed and re-added.
+Those deletions are formatting, not lost state — reading them as the stop
+signal above would abort a healthy import:
+
+```bash
+uv run python - <<'EOF'
+import json, subprocess
+
+def committed(path):
+    return json.loads(subprocess.run(
+        ["git", "show", f"HEAD:{path}"], capture_output=True, text=True).stdout)
+
+plan_before = committed("data/raw/pyro-annotator/import_plan.json")
+plan_after = json.load(open("data/raw/pyro-annotator/import_plan.json"))
+ledger_before = committed("data/raw/pyro-annotator/recurring_objects.json")
+ledger_after = json.load(open("data/raw/pyro-annotator/recurring_objects.json"))
+
+print("plan removed :", set(plan_before) - set(plan_after))
+print("plan changed :", {k for k in plan_before if k in plan_after
+                         and plan_before[k] != plan_after[k]})
+print("objects gone :", set(ledger_before) - set(ledger_after))
+print("splits moved :", {k for k in ledger_before if k in ledger_after
+                         and ledger_before[k]["split"] != ledger_after[k]["split"]})
+print("anchors moved:", {k for k in ledger_before if k in ledger_after
+                         and ledger_before[k]["bbox_xyxyn"] != ledger_after[k]["bbox_xyxyn"]})
+print("ingested lost:", {k for k in ledger_before if k in ledger_after
+                         and not set(ledger_before[k]["ingested_folders"])
+                         <= set(ledger_after[k]["ingested_folders"])})
+EOF
+```
+
+All six must be empty. `seen_alerts` and `ingested_folders` growing on a known
+object is expected — the ledger accumulates, only these six invariants hold.
+
 ## 4. Materialise the staging folders
 
 ```bash
