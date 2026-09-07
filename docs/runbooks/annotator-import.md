@@ -182,6 +182,8 @@ signal above would abort a healthy import:
 uv run python - <<'EOF'
 import json, subprocess
 
+IDENTITY = ("camera", "azimuth", "bbox_xyxyn")   # what Ledger.match keys on
+
 def committed(path):
     return json.loads(subprocess.run(
         ["git", "show", f"HEAD:{path}"], capture_output=True, text=True).stdout)
@@ -197,16 +199,27 @@ print("plan changed :", {k for k in plan_before if k in plan_after
 print("objects gone :", set(ledger_before) - set(ledger_after))
 print("splits moved :", {k for k in ledger_before if k in ledger_after
                          and ledger_before[k]["split"] != ledger_after[k]["split"]})
-print("anchors moved:", {k for k in ledger_before if k in ledger_after
-                         and ledger_before[k]["bbox_xyxyn"] != ledger_after[k]["bbox_xyxyn"]})
+print("identity moved:", {k for k in ledger_before if k in ledger_after
+                          and [ledger_before[k][f] for f in IDENTITY]
+                          != [ledger_after[k][f] for f in IDENTITY]})
 print("ingested lost:", {k for k in ledger_before if k in ledger_after
                          and not set(ledger_before[k]["ingested_folders"])
                          <= set(ledger_after[k]["ingested_folders"])})
 EOF
 ```
 
-All six must be empty. `seen_alerts` and `ingested_folders` growing on a known
-object is expected — the ledger accumulates, only these six invariants hold.
+All six must be empty, with one exception: `--force-train ro_XXXXX` moves an
+object that has no ingested sequence yet, so that object is expected under
+`splits moved` and nowhere else. Any other name there is the leak.
+
+`identity moved` covers camera, azimuth and the anchor bbox together, because
+those three are what `Ledger.match` keys on. Changing any of them silently
+breaks matching: the next import stops recognising the artefact and mints a
+duplicate, free to draw a different split — the leak this check exists to
+catch, arriving one import later.
+
+`seen_alerts` and `ingested_folders` growing on a known object is expected. The
+ledger accumulates; only these six invariants hold.
 
 ## 4. Materialise the staging folders
 
