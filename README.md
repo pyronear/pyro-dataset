@@ -161,17 +161,23 @@ git push -u origin <branch>
 
 # 4. Push the data, and check it actually landed — a tag whose outputs are
 #    missing from the remote is a release nobody can consume. `dvc push`
-#    routes each output to its own remote; verification has to ask both,
-#    because the test datasets live on `awspyronear-private` and a bare
-#    `dvc status --cloud` only answers for the default remote.
+#    routes each output to its own remote, but verification has to ask both:
+#    the test datasets are pinned to `awspyronear-private`, and
+#    `dvc status --cloud` skips outputs owned by a non-default remote instead
+#    of comparing them — it answers "in sync" without having looked.
+#    A targeted re-push is idempotent and does traverse them: expect
+#    "Everything is up to date."
 uv run dvc push
 uv run dvc status --cloud
-uv run dvc status --cloud -r awspyronear-private \
+uv run dvc push -r awspyronear-private \
         data/processed/sequential_test data/processed/yolo_test
 
-# 5. Tag the merged commit, once the pull request is merged
-git checkout main && git pull
-git tag vX.Y.Z        # `git tag` lists the last one; new data = minor bump
+# 5. Tag this release's merge commit, once the pull request is merged — not
+#    whatever main points at now: another dataset update may have landed in
+#    between, and the tag would pin its dvc.lock instead of this one's.
+git fetch origin main
+RELEASE=$(gh pr view <pr-number> --json mergeCommit --jq .mergeCommit.oid)
+git tag vX.Y.Z "$RELEASE"   # `git tag` lists the last one; new data = minor bump
 git push origin vX.Y.Z
 ```
 
