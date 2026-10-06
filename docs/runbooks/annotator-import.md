@@ -150,7 +150,7 @@ The dials, when the defaults are not what this import needs:
 |---|---|
 | `--force-train ro_00042` (repeatable) | force an artefact that is hurting in production into train — refused if it already has sequences in another split |
 | `--max-per-object N` | lifetime cap of sequences per recurring object (default 1 — maximum diversity) |
-| `--no-fp-quota` | take every new recurring object instead of capping FPs at the smoke count. The builders pin annotator FPs ahead of clustering and rebalance per split, so this only swaps pool FPs for annotator ones — check the pinned count stays well under each split's `n_wf` |
+| `--no-fp-quota` | take every new recurring object instead of capping FPs at the smoke count. The builders pin annotator FPs ahead of clustering and rebalance per split, so this only swaps pool FPs for annotator ones — pins are never dropped, so check they stay well under each builder's per-split quota: WF sequences for the sequential build, WF images ÷ 9 for YOLO train/val (both builders print it) |
 | `--hard-negative-threshold` | score at which an object counts as fooling (default 0.5) |
 | `--same-fire-window` | hours within which same-view smoke alerts count as one fire and share a split (default 12) |
 

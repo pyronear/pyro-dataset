@@ -123,7 +123,8 @@ What differs from the platform loop:
 - **Every smoke alert is imported**, and that count sets the false-positive quota,
   so the pools stay balanced. `--no-fp-quota` lifts that cap and takes every new
   recurring object — safe while pinned annotator FPs stay well under the builders'
-  own per-split quotas (`n_wf`), since those rebalance anyway. One sequence per
+  own per-split quotas (sequential: WF sequences; YOLO train/val: WF images ÷ 9).
+  Pins are never dropped, so past those quotas the balance breaks. One sequence per
   recurring object (`--max-per-object` raises the lifetime cap), ranked
   hard-negatives-first by `temporal_model_score`, then by how often the artefact fires.
 - **Splits come from `data/raw/pyro-annotator/recurring_objects.json`**, the recurring-object
