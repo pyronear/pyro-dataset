@@ -377,7 +377,9 @@
       "pyronear_french:51897",
       "pyronear_french:52266",
       "pyronear_french:54506",
-      "pyronear_french:54857"
+      "pyronear_french:54857",
+      "pyronear_french:61623",
+      "pyronear_french:62221"
     ],
     "split": "train"
   },
@@ -496,7 +498,17 @@
       "pyronear_french:56023",
       "pyronear_french:56205",
       "pyronear_french:56626",
-      "pyronear_french:57325"
+      "pyronear_french:57325",
+      "pyronear_french:52732",
+      "pyronear_french:57497",
+      "pyronear_french:58056",
+      "pyronear_french:59082",
+      "pyronear_french:59992",
+      "pyronear_french:61893",
+      "pyronear_french:63021",
+      "pyronear_french:63318",
+      "pyronear_french:64646",
+      "pyronear_french:64991"
     ],
     "split": "train"
   },
@@ -590,7 +602,26 @@
       "pyronear_french:56732",
       "pyronear_french:56927",
       "pyronear_french:57118",
-      "pyronear_french:57327"
+      "pyronear_french:57327",
+      "pyronear_french:54054",
+      "pyronear_french:57509",
+      "pyronear_french:57661",
+      "pyronear_french:57847",
+      "pyronear_french:58226",
+      "pyronear_french:58430",
+      "pyronear_french:58500",
+      "pyronear_french:58587",
+      "pyronear_french:58740",
+      "pyronear_french:59340",
+      "pyronear_french:59718",
+      "pyronear_french:59998",
+      "pyronear_french:60128",
+      "pyronear_french:60692",
+      "pyronear_french:61305",
+      "pyronear_french:62212",
+      "pyronear_french:62442",
+      "pyronear_french:62728",
+      "pyronear_french:64224"
     ],
     "split": "train"
   },
@@ -795,7 +826,10 @@
       "pyronear_french:51715",
       "pyronear_french:52336",
       "pyronear_french:56086",
-      "pyronear_french:57168"
+      "pyronear_french:57168",
+      "pyronear_french:57684",
+      "pyronear_french:57987",
+      "pyronear_french:64438"
     ],
     "split": "train"
   },
@@ -1019,7 +1053,16 @@
       "pyronear_french:51956",
       "pyronear_french:53101",
       "pyronear_french:53760",
-      "pyronear_french:57121"
+      "pyronear_french:57121",
+      "pyronear_french:57652",
+      "pyronear_french:57850",
+      "pyronear_french:57950",
+      "pyronear_french:58054",
+      "pyronear_french:58207",
+      "pyronear_french:59350",
+      "pyronear_french:62238",
+      "pyronear_french:62643",
+      "pyronear_french:62733"
     ],
     "split": "train"
   },
@@ -2524,7 +2567,12 @@
       "pyronear_french:55541",
       "pyronear_french:56214",
       "pyronear_french:56644",
-      "pyronear_french:57126"
+      "pyronear_french:57126",
+      "pyronear_french:59333",
+      "pyronear_french:63006",
+      "pyronear_french:63309",
+      "pyronear_french:63737",
+      "pyronear_french:64980"
     ],
     "split": "train"
   },
@@ -3962,7 +4010,8 @@
       "sis-67_haguenau-02_280_2026-07-29T14-01-45"
     ],
     "seen_alerts": [
-      "pyronear_french:56158"
+      "pyronear_french:56158",
+      "pyronear_french:59669"
     ],
     "split": "train"
   },
@@ -4099,6 +4148,6106 @@
     ],
     "seen_alerts": [
       "pyronear_french:57289"
+    ],
+    "split": "train"
+  },
+  "ro_00204": {
+    "azimuth": 261,
+    "bbox_xyxyn": [
+      0.967,
+      0.407,
+      0.999,
+      0.439
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_261_2026-07-01T04-11-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50399"
+    ],
+    "split": "train"
+  },
+  "ro_00205": {
+    "azimuth": 49,
+    "bbox_xyxyn": [
+      0.921,
+      0.39,
+      0.93,
+      0.415
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_49_2026-07-01T04-19-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50402"
+    ],
+    "split": "train"
+  },
+  "ro_00206": {
+    "azimuth": 53,
+    "bbox_xyxyn": [
+      0.383,
+      0.444,
+      0.399,
+      0.466
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_53_2026-07-01T04-23-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50403"
+    ],
+    "split": "train"
+  },
+  "ro_00207": {
+    "azimuth": 199,
+    "bbox_xyxyn": [
+      0.5814999999999999,
+      0.3825,
+      0.622,
+      0.416
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_199_2026-07-01T04-24-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50404"
+    ],
+    "split": "train"
+  },
+  "ro_00208": {
+    "azimuth": 56,
+    "bbox_xyxyn": [
+      0.071,
+      0.335,
+      0.086,
+      0.352
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_56_2026-07-01T04-34-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50412"
+    ],
+    "split": "train"
+  },
+  "ro_00209": {
+    "azimuth": 154,
+    "bbox_xyxyn": [
+      0.666,
+      0.424,
+      0.702,
+      0.4645
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_154_2026-07-01T05-14-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50416"
+    ],
+    "split": "train"
+  },
+  "ro_00210": {
+    "azimuth": 288,
+    "bbox_xyxyn": [
+      0.278,
+      0.589,
+      0.295,
+      0.602
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_288_2026-07-26T09-31-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50427",
+      "pyronear_french:55544",
+      "pyronear_french:55561"
+    ],
+    "split": "val"
+  },
+  "ro_00211": {
+    "azimuth": 352,
+    "bbox_xyxyn": [
+      0.571,
+      0.441,
+      0.594,
+      0.467
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_352_2026-07-01T06-14-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50428"
+    ],
+    "split": "train"
+  },
+  "ro_00212": {
+    "azimuth": 51,
+    "bbox_xyxyn": [
+      0.919,
+      0.479,
+      1.0,
+      0.597
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_51_2026-07-01T06-37-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50433"
+    ],
+    "split": "train"
+  },
+  "ro_00213": {
+    "azimuth": 17,
+    "bbox_xyxyn": [
+      0.592,
+      0.3175,
+      0.6054999999999999,
+      0.3395
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_17_2026-07-01T07-30-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50447"
+    ],
+    "split": "test"
+  },
+  "ro_00214": {
+    "azimuth": 339,
+    "bbox_xyxyn": [
+      0.3145,
+      0.4845,
+      0.3315,
+      0.5145
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_339_2026-07-01T07-36-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50450"
+    ],
+    "split": "train"
+  },
+  "ro_00215": {
+    "azimuth": 320,
+    "bbox_xyxyn": [
+      0.848,
+      0.4875,
+      0.87,
+      0.5255000000000001
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_320_2026-07-01T07-57-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50456"
+    ],
+    "split": "train"
+  },
+  "ro_00216": {
+    "azimuth": 54,
+    "bbox_xyxyn": [
+      0.387,
+      0.416,
+      0.419,
+      0.467
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_54_2026-07-01T08-28-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50462"
+    ],
+    "split": "train"
+  },
+  "ro_00217": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.214,
+      0.403,
+      0.226,
+      0.418
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_22_2026-07-01T12-16-02"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50525",
+      "pyronear_french:50578"
+    ],
+    "split": "train"
+  },
+  "ro_00218": {
+    "azimuth": 234,
+    "bbox_xyxyn": [
+      0.7415,
+      0.3855,
+      0.756,
+      0.413
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_234_2026-07-02T03-05-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50666",
+      "pyronear_french:51676"
+    ],
+    "split": "train"
+  },
+  "ro_00219": {
+    "azimuth": 268,
+    "bbox_xyxyn": [
+      0.241,
+      0.433,
+      0.261,
+      0.454
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_268_2026-07-02T03-53-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50671"
+    ],
+    "split": "train"
+  },
+  "ro_00220": {
+    "azimuth": 21,
+    "bbox_xyxyn": [
+      0.747,
+      0.344,
+      0.802,
+      0.451
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_21_2026-07-31T18-47-37"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50700",
+      "pyronear_french:56432"
+    ],
+    "split": "val"
+  },
+  "ro_00221": {
+    "azimuth": 153,
+    "bbox_xyxyn": [
+      0.1955,
+      0.316,
+      0.222,
+      0.435
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_153_2026-07-02T09-55-31"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50748"
+    ],
+    "split": "train"
+  },
+  "ro_00222": {
+    "azimuth": 160,
+    "bbox_xyxyn": [
+      0.322,
+      0.31,
+      0.359,
+      0.428
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_160_2026-07-02T10-02-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50749"
+    ],
+    "split": "train"
+  },
+  "ro_00223": {
+    "azimuth": 119,
+    "bbox_xyxyn": [
+      0.596,
+      0.397,
+      0.612,
+      0.42
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_119_2026-07-02T17-47-42"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50841"
+    ],
+    "split": "test"
+  },
+  "ro_00224": {
+    "azimuth": 202,
+    "bbox_xyxyn": [
+      0.3495,
+      0.487,
+      0.372,
+      0.517
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_202_2026-07-02T19-17-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50860"
+    ],
+    "split": "train"
+  },
+  "ro_00225": {
+    "azimuth": 14,
+    "bbox_xyxyn": [
+      0.281,
+      0.3,
+      0.292,
+      0.322
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_14_2026-07-02T20-16-35"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50868"
+    ],
+    "split": "train"
+  },
+  "ro_00226": {
+    "azimuth": 163,
+    "bbox_xyxyn": [
+      0.537,
+      0.382,
+      0.545,
+      0.403
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_163_2026-07-03T03-44-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50877",
+      "pyronear_french:51462"
+    ],
+    "split": "train"
+  },
+  "ro_00227": {
+    "azimuth": 106,
+    "bbox_xyxyn": [
+      0.66,
+      0.399,
+      0.672,
+      0.415
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_106_2026-07-03T04-16-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50887"
+    ],
+    "split": "train"
+  },
+  "ro_00228": {
+    "azimuth": 60,
+    "bbox_xyxyn": [
+      0.322,
+      0.318,
+      0.331,
+      0.334
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_60_2026-07-04T03-33-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50888",
+      "pyronear_french:51211"
+    ],
+    "split": "train"
+  },
+  "ro_00229": {
+    "azimuth": 119,
+    "bbox_xyxyn": [
+      0.397,
+      0.365,
+      0.406,
+      0.381
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_119_2026-07-03T04-26-25"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50892"
+    ],
+    "split": "train"
+  },
+  "ro_00230": {
+    "azimuth": 263,
+    "bbox_xyxyn": [
+      0.338,
+      0.279,
+      0.44,
+      0.415
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_263_2026-07-03T04-59-54"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50903"
+    ],
+    "split": "test"
+  },
+  "ro_00231": {
+    "azimuth": 133,
+    "bbox_xyxyn": [
+      0.863,
+      0.339,
+      0.871,
+      0.355
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_133_2026-07-03T05-39-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:50916"
+    ],
+    "split": "train"
+  },
+  "ro_00232": {
+    "azimuth": 75,
+    "bbox_xyxyn": [
+      0.598,
+      0.278,
+      0.627,
+      0.309
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_75_2026-07-03T14-08-12"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51088"
+    ],
+    "split": "train"
+  },
+  "ro_00233": {
+    "azimuth": 337,
+    "bbox_xyxyn": [
+      0.443,
+      0.359,
+      0.476,
+      0.413
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_337_2026-07-03T17-57-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51155",
+      "pyronear_french:54447",
+      "pyronear_french:55226"
+    ],
+    "split": "val"
+  },
+  "ro_00234": {
+    "azimuth": 305,
+    "bbox_xyxyn": [
+      0.5714999999999999,
+      0.576,
+      0.582,
+      0.59
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_305_2026-07-03T18-06-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51162",
+      "pyronear_french:51424"
+    ],
+    "split": "train"
+  },
+  "ro_00235": {
+    "azimuth": 230,
+    "bbox_xyxyn": [
+      0.33,
+      0.388,
+      0.362,
+      0.428
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_230_2026-07-03T18-19-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51172"
+    ],
+    "split": "train"
+  },
+  "ro_00236": {
+    "azimuth": 160,
+    "bbox_xyxyn": [
+      0.473,
+      0.297,
+      0.4945,
+      0.326
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_160_2026-07-03T18-22-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51174"
+    ],
+    "split": "train"
+  },
+  "ro_00237": {
+    "azimuth": 37,
+    "bbox_xyxyn": [
+      0.489,
+      0.365,
+      0.498,
+      0.3875
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_37_2026-07-04T03-41-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51212"
+    ],
+    "split": "train"
+  },
+  "ro_00238": {
+    "azimuth": 137,
+    "bbox_xyxyn": [
+      0.349,
+      0.389,
+      0.3655,
+      0.414
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_137_2026-07-04T15-54-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51393"
+    ],
+    "split": "train"
+  },
+  "ro_00239": {
+    "azimuth": 122,
+    "bbox_xyxyn": [
+      0.436,
+      0.345,
+      0.459,
+      0.373
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_122_2026-07-04T15-54-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51394"
+    ],
+    "split": "train"
+  },
+  "ro_00240": {
+    "azimuth": 2,
+    "bbox_xyxyn": [
+      0.884,
+      0.262,
+      0.925,
+      0.375
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_2_2026-07-09T17-24-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51410",
+      "pyronear_french:52711",
+      "pyronear_french:52905"
+    ],
+    "split": "test"
+  },
+  "ro_00241": {
+    "azimuth": 350,
+    "bbox_xyxyn": [
+      0.651,
+      0.328,
+      0.701,
+      0.394
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_350_2026-07-04T18-46-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51429"
+    ],
+    "split": "train"
+  },
+  "ro_00242": {
+    "azimuth": 345,
+    "bbox_xyxyn": [
+      0.4575,
+      0.4685,
+      0.4705,
+      0.487
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_345_2026-07-04T19-54-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51447"
+    ],
+    "split": "train"
+  },
+  "ro_00243": {
+    "azimuth": 345,
+    "bbox_xyxyn": [
+      0.0085,
+      0.371,
+      0.025,
+      0.394
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_345_2026-07-04T20-05-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51449"
+    ],
+    "split": "val"
+  },
+  "ro_00244": {
+    "azimuth": 84,
+    "bbox_xyxyn": [
+      0.757,
+      0.339,
+      0.796,
+      0.367
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_84_2026-07-05T03-05-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51460"
+    ],
+    "split": "train"
+  },
+  "ro_00245": {
+    "azimuth": 59,
+    "bbox_xyxyn": [
+      0.31,
+      0.318,
+      0.331,
+      0.334
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_59_2026-07-05T03-36-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51461"
+    ],
+    "split": "train"
+  },
+  "ro_00246": {
+    "azimuth": 114,
+    "bbox_xyxyn": [
+      0.4515,
+      0.396,
+      0.4695,
+      0.4465
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_114_2026-07-05T06-44-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51491"
+    ],
+    "split": "train"
+  },
+  "ro_00247": {
+    "azimuth": 94,
+    "bbox_xyxyn": [
+      0.78,
+      0.263,
+      0.79,
+      0.288
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_94_2026-07-05T08-08-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51500"
+    ],
+    "split": "train"
+  },
+  "ro_00248": {
+    "azimuth": 330,
+    "bbox_xyxyn": [
+      0.623,
+      0.3695,
+      0.642,
+      0.396
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_330_2026-07-05T08-23-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51507"
+    ],
+    "split": "train"
+  },
+  "ro_00249": {
+    "azimuth": 244,
+    "bbox_xyxyn": [
+      0.925,
+      0.435,
+      0.969,
+      0.516
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_244_2026-07-05T12-44-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51544"
+    ],
+    "split": "train"
+  },
+  "ro_00250": {
+    "azimuth": 190,
+    "bbox_xyxyn": [
+      0.1225,
+      0.402,
+      0.1385,
+      0.4245
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_190_2026-07-21T13-28-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51575",
+      "pyronear_french:52020",
+      "pyronear_french:54611",
+      "pyronear_french:54654",
+      "pyronear_french:54737",
+      "pyronear_french:54832"
+    ],
+    "split": "test"
+  },
+  "ro_00251": {
+    "azimuth": 70,
+    "bbox_xyxyn": [
+      0.522,
+      0.319,
+      0.532,
+      0.365
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_70_2026-07-05T16-57-06"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51620"
+    ],
+    "split": "train"
+  },
+  "ro_00252": {
+    "azimuth": 314,
+    "bbox_xyxyn": [
+      0.0,
+      0.408,
+      0.0205,
+      0.457
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_314_2026-07-05T17-27-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51627"
+    ],
+    "split": "train"
+  },
+  "ro_00253": {
+    "azimuth": 251,
+    "bbox_xyxyn": [
+      0.53,
+      0.161,
+      0.569,
+      0.18
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_251_2026-07-06T06-40-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51702"
+    ],
+    "split": "val"
+  },
+  "ro_00254": {
+    "azimuth": 137,
+    "bbox_xyxyn": [
+      0.931,
+      0.398,
+      0.941,
+      0.428
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_137_2026-07-06T09-48-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51751",
+      "pyronear_french:54503",
+      "pyronear_french:58911"
+    ],
+    "split": "train"
+  },
+  "ro_00255": {
+    "azimuth": 318,
+    "bbox_xyxyn": [
+      0.388,
+      0.363,
+      0.3985,
+      0.385
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_318_2026-07-06T13-14-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51802"
+    ],
+    "split": "train"
+  },
+  "ro_00256": {
+    "azimuth": 112,
+    "bbox_xyxyn": [
+      0.766,
+      0.3935,
+      0.778,
+      0.41
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_112_2026-07-06T17-32-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51919"
+    ],
+    "split": "train"
+  },
+  "ro_00257": {
+    "azimuth": 338,
+    "bbox_xyxyn": [
+      0.436,
+      0.35,
+      0.455,
+      0.412
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_338_2026-07-06T18-33-42"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51945",
+      "pyronear_french:51948"
+    ],
+    "split": "train"
+  },
+  "ro_00258": {
+    "azimuth": 10,
+    "bbox_xyxyn": [
+      0.546,
+      0.429,
+      0.562,
+      0.446
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_10_2026-07-06T20-12-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51975",
+      "pyronear_french:54902"
+    ],
+    "split": "train"
+  },
+  "ro_00259": {
+    "azimuth": 250,
+    "bbox_xyxyn": [
+      0.435,
+      0.355,
+      0.447,
+      0.387
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_250_2026-07-06T20-16-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:51977"
+    ],
+    "split": "train"
+  },
+  "ro_00260": {
+    "azimuth": 64,
+    "bbox_xyxyn": [
+      0.223,
+      0.319,
+      0.235,
+      0.345
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_64_2026-07-07T17-07-15"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52252"
+    ],
+    "split": "val"
+  },
+  "ro_00261": {
+    "azimuth": 13,
+    "bbox_xyxyn": [
+      0.264,
+      0.413,
+      0.2715,
+      0.437
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_13_2026-07-07T19-12-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52271",
+      "pyronear_french:61326"
+    ],
+    "split": "train"
+  },
+  "ro_00262": {
+    "azimuth": 215,
+    "bbox_xyxyn": [
+      0.661,
+      0.19,
+      0.693,
+      0.22
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_215_2026-07-08T04-05-32"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52285",
+      "pyronear_french:52558",
+      "pyronear_french:58777"
+    ],
+    "split": "train"
+  },
+  "ro_00263": {
+    "azimuth": 23,
+    "bbox_xyxyn": [
+      0.785,
+      0.3705,
+      0.828,
+      0.4515
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_23_2026-07-08T06-20-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52308",
+      "pyronear_french:54582"
+    ],
+    "split": "test"
+  },
+  "ro_00264": {
+    "azimuth": 25,
+    "bbox_xyxyn": [
+      0.823,
+      0.377,
+      0.849,
+      0.446
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_25_2026-07-08T06-42-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52311"
+    ],
+    "split": "train"
+  },
+  "ro_00265": {
+    "azimuth": 235,
+    "bbox_xyxyn": [
+      0.9335,
+      0.3445,
+      0.964,
+      0.4115
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_235_2026-07-08T17-46-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52499"
+    ],
+    "split": "train"
+  },
+  "ro_00266": {
+    "azimuth": 305,
+    "bbox_xyxyn": [
+      0.579,
+      0.579,
+      0.588,
+      0.5914999999999999
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_305_2026-07-08T18-01-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52506",
+      "pyronear_french:52717"
+    ],
+    "split": "train"
+  },
+  "ro_00267": {
+    "azimuth": 348,
+    "bbox_xyxyn": [
+      0.635,
+      0.338,
+      0.673,
+      0.395
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_348_2026-07-08T18-43-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52524"
+    ],
+    "split": "train"
+  },
+  "ro_00268": {
+    "azimuth": 201,
+    "bbox_xyxyn": [
+      0.277,
+      0.347,
+      0.313,
+      0.404
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_201_2026-07-09T08-19-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52587"
+    ],
+    "split": "train"
+  },
+  "ro_00269": {
+    "azimuth": 305,
+    "bbox_xyxyn": [
+      0.588,
+      0.583,
+      0.598,
+      0.5994999999999999
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_305_2026-07-09T18-08-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52719"
+    ],
+    "split": "train"
+  },
+  "ro_00270": {
+    "azimuth": 345,
+    "bbox_xyxyn": [
+      0.983,
+      0.391,
+      1.0,
+      0.465
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_345_2026-07-09T19-36-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52737"
+    ],
+    "split": "test"
+  },
+  "ro_00271": {
+    "azimuth": 150,
+    "bbox_xyxyn": [
+      0.316,
+      0.393,
+      0.325,
+      0.408
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_150_2026-07-10T06-38-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52778"
+    ],
+    "split": "train"
+  },
+  "ro_00272": {
+    "azimuth": 46,
+    "bbox_xyxyn": [
+      0.427,
+      0.421,
+      0.434,
+      0.431
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_46_2026-07-11T03-01-12"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52944"
+    ],
+    "split": "train"
+  },
+  "ro_00273": {
+    "azimuth": 120,
+    "bbox_xyxyn": [
+      0.618,
+      0.513,
+      0.627,
+      0.529
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_120_2026-07-11T10-04-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:52981"
+    ],
+    "split": "val"
+  },
+  "ro_00274": {
+    "azimuth": 1,
+    "bbox_xyxyn": [
+      0.88,
+      0.257,
+      0.924,
+      0.375
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_1_2026-07-11T17-27-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53076",
+      "pyronear_french:56307"
+    ],
+    "split": "train"
+  },
+  "ro_00275": {
+    "azimuth": 249,
+    "bbox_xyxyn": [
+      0.757,
+      0.391,
+      0.775,
+      0.419
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_249_2026-07-12T10-10-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53150"
+    ],
+    "split": "train"
+  },
+  "ro_00276": {
+    "azimuth": 145,
+    "bbox_xyxyn": [
+      0.484,
+      0.601,
+      0.494,
+      0.621
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_145_2026-07-12T10-33-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53156"
+    ],
+    "split": "train"
+  },
+  "ro_00277": {
+    "azimuth": 143,
+    "bbox_xyxyn": [
+      0.185,
+      0.3325,
+      0.211,
+      0.378
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_143_2026-07-12T12-20-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53180"
+    ],
+    "split": "train"
+  },
+  "ro_00278": {
+    "azimuth": 188,
+    "bbox_xyxyn": [
+      0.452,
+      0.3945,
+      0.469,
+      0.431
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_188_2026-07-12T14-20-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53212"
+    ],
+    "split": "train"
+  },
+  "ro_00279": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.075,
+      0.36,
+      0.1005,
+      0.382
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_3_2026-07-12T18-12-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53270"
+    ],
+    "split": "train"
+  },
+  "ro_00280": {
+    "azimuth": 337,
+    "bbox_xyxyn": [
+      0.428,
+      0.374,
+      0.453,
+      0.414
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_337_2026-07-13T17-53-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53413"
+    ],
+    "split": "val"
+  },
+  "ro_00281": {
+    "azimuth": 84,
+    "bbox_xyxyn": [
+      0.959,
+      0.46,
+      0.967,
+      0.478
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_84_2026-07-14T04-06-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53444",
+      "pyronear_french:53517",
+      "pyronear_french:64366"
+    ],
+    "split": "train"
+  },
+  "ro_00282": {
+    "azimuth": 80,
+    "bbox_xyxyn": [
+      0.6895,
+      0.305,
+      0.699,
+      0.321
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_80_2026-07-14T05-08-35"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53468"
+    ],
+    "split": "train"
+  },
+  "ro_00283": {
+    "azimuth": 245,
+    "bbox_xyxyn": [
+      0.923,
+      0.438,
+      0.9744999999999999,
+      0.5165
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_245_2026-07-14T05-10-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53469",
+      "pyronear_french:54297",
+      "pyronear_french:60309"
+    ],
+    "split": "test"
+  },
+  "ro_00284": {
+    "azimuth": 222,
+    "bbox_xyxyn": [
+      0.0,
+      0.277,
+      0.026,
+      0.3
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_222_2026-07-14T05-16-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53472"
+    ],
+    "split": "train"
+  },
+  "ro_00285": {
+    "azimuth": 323,
+    "bbox_xyxyn": [
+      0.926,
+      0.289,
+      0.957,
+      0.318
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_323_2026-07-14T05-39-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53482"
+    ],
+    "split": "train"
+  },
+  "ro_00286": {
+    "azimuth": 329,
+    "bbox_xyxyn": [
+      0.676,
+      0.51,
+      0.691,
+      0.526
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_329_2026-07-14T05-46-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53487"
+    ],
+    "split": "train"
+  },
+  "ro_00287": {
+    "azimuth": 273,
+    "bbox_xyxyn": [
+      0.0,
+      0.3265,
+      0.014,
+      0.3655
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_273_2026-07-14T05-47-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53488",
+      "pyronear_french:60967"
+    ],
+    "split": "train"
+  },
+  "ro_00288": {
+    "azimuth": 324,
+    "bbox_xyxyn": [
+      0.1255,
+      0.305,
+      0.153,
+      0.339
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_324_2026-07-14T06-00-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53492"
+    ],
+    "split": "train"
+  },
+  "ro_00289": {
+    "azimuth": 7,
+    "bbox_xyxyn": [
+      0.933,
+      0.268,
+      0.96,
+      0.286
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_7_2026-07-14T06-22-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53496"
+    ],
+    "split": "train"
+  },
+  "ro_00290": {
+    "azimuth": 216,
+    "bbox_xyxyn": [
+      0.391,
+      0.286,
+      0.439,
+      0.374
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_216_2026-07-14T12-14-56"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53543"
+    ],
+    "split": "val"
+  },
+  "ro_00291": {
+    "azimuth": 225,
+    "bbox_xyxyn": [
+      0.794,
+      0.275,
+      0.85,
+      0.383
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_225_2026-07-14T12-16-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53544"
+    ],
+    "split": "train"
+  },
+  "ro_00292": {
+    "azimuth": 189,
+    "bbox_xyxyn": [
+      0.972,
+      0.753,
+      1.0,
+      0.826
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_189_2026-07-14T17-22-51"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53587"
+    ],
+    "split": "train"
+  },
+  "ro_00293": {
+    "azimuth": 234,
+    "bbox_xyxyn": [
+      0.936,
+      0.443,
+      0.9455,
+      0.4585
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_234_2026-07-24T19-41-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53606",
+      "pyronear_french:55427",
+      "pyronear_french:62223",
+      "pyronear_french:62458",
+      "pyronear_french:62727"
+    ],
+    "split": "test"
+  },
+  "ro_00294": {
+    "azimuth": 217,
+    "bbox_xyxyn": [
+      0.238,
+      0.346,
+      0.258,
+      0.409
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_217_2026-07-15T06-08-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53638"
+    ],
+    "split": "train"
+  },
+  "ro_00295": {
+    "azimuth": 149,
+    "bbox_xyxyn": [
+      0.136,
+      0.475,
+      0.148,
+      0.518
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_149_2026-07-15T19-52-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53805",
+      "pyronear_french:54066"
+    ],
+    "split": "train"
+  },
+  "ro_00296": {
+    "azimuth": 132,
+    "bbox_xyxyn": [
+      0.313,
+      0.341,
+      0.345,
+      0.413
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_132_2026-07-16T07-59-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53871"
+    ],
+    "split": "train"
+  },
+  "ro_00297": {
+    "azimuth": 107,
+    "bbox_xyxyn": [
+      0.6715,
+      0.349,
+      0.712,
+      0.4255
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_107_2026-07-16T08-31-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53876"
+    ],
+    "split": "train"
+  },
+  "ro_00298": {
+    "azimuth": 289,
+    "bbox_xyxyn": [
+      0.2815,
+      0.589,
+      0.298,
+      0.6025
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_289_2026-07-16T09-09-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53891"
+    ],
+    "split": "train"
+  },
+  "ro_00299": {
+    "azimuth": 234,
+    "bbox_xyxyn": [
+      0.464,
+      0.355,
+      0.501,
+      0.424
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_234_2026-07-16T09-25-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:53896"
+    ],
+    "split": "train"
+  },
+  "ro_00300": {
+    "azimuth": 323,
+    "bbox_xyxyn": [
+      0.4665,
+      0.354,
+      0.495,
+      0.388
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_323_2026-07-16T16-28-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54003"
+    ],
+    "split": "test"
+  },
+  "ro_00301": {
+    "azimuth": 161,
+    "bbox_xyxyn": [
+      0.345,
+      0.377,
+      0.377,
+      0.434
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_161_2026-07-16T17-43-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54021"
+    ],
+    "split": "train"
+  },
+  "ro_00302": {
+    "azimuth": 143,
+    "bbox_xyxyn": [
+      0.825,
+      0.447,
+      0.852,
+      0.474
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_143_2026-07-16T18-11-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54027",
+      "pyronear_french:60973"
+    ],
+    "split": "train"
+  },
+  "ro_00303": {
+    "azimuth": 18,
+    "bbox_xyxyn": [
+      0.358,
+      0.288,
+      0.394,
+      0.322
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_18_2026-07-16T18-35-34"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54035"
+    ],
+    "split": "val"
+  },
+  "ro_00304": {
+    "azimuth": 85,
+    "bbox_xyxyn": [
+      0.8015000000000001,
+      0.282,
+      0.816,
+      0.315
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_85_2026-07-16T18-38-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54036"
+    ],
+    "split": "train"
+  },
+  "ro_00305": {
+    "azimuth": 174,
+    "bbox_xyxyn": [
+      0.725,
+      0.3665,
+      0.746,
+      0.398
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_174_2026-07-16T18-59-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54044"
+    ],
+    "split": "train"
+  },
+  "ro_00306": {
+    "azimuth": 233,
+    "bbox_xyxyn": [
+      0.2255,
+      0.206,
+      0.2485,
+      0.2375
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_233_2026-07-16T19-01-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54046"
+    ],
+    "split": "train"
+  },
+  "ro_00307": {
+    "azimuth": 69,
+    "bbox_xyxyn": [
+      0.499,
+      0.467,
+      0.577,
+      0.515
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_69_2026-07-16T19-31-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54056"
+    ],
+    "split": "train"
+  },
+  "ro_00308": {
+    "azimuth": 135,
+    "bbox_xyxyn": [
+      0.609,
+      0.687,
+      0.7705,
+      0.7665
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_135_2026-07-16T19-49-37"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54062"
+    ],
+    "split": "train"
+  },
+  "ro_00309": {
+    "azimuth": 299,
+    "bbox_xyxyn": [
+      0.449,
+      0.717,
+      0.519,
+      0.783
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_299_2026-07-17T03-53-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54077"
+    ],
+    "split": "train"
+  },
+  "ro_00310": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.789,
+      0.357,
+      0.81,
+      0.378
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_3_2026-07-17T04-25-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54088"
+    ],
+    "split": "val"
+  },
+  "ro_00311": {
+    "azimuth": 231,
+    "bbox_xyxyn": [
+      0.0505,
+      0.46,
+      0.111,
+      0.503
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_231_2026-07-17T05-11-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54102"
+    ],
+    "split": "train"
+  },
+  "ro_00312": {
+    "azimuth": 227,
+    "bbox_xyxyn": [
+      0.833,
+      0.45,
+      0.86,
+      0.501
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_227_2026-07-17T05-30-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54106"
+    ],
+    "split": "train"
+  },
+  "ro_00313": {
+    "azimuth": 70,
+    "bbox_xyxyn": [
+      0.3235,
+      0.4265,
+      0.372,
+      0.5
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_70_2026-07-17T05-39-31"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54108"
+    ],
+    "split": "test"
+  },
+  "ro_00314": {
+    "azimuth": 25,
+    "bbox_xyxyn": [
+      0.7335,
+      0.3415,
+      0.7535000000000001,
+      0.403
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_25_2026-07-17T05-41-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54109"
+    ],
+    "split": "train"
+  },
+  "ro_00315": {
+    "azimuth": 30,
+    "bbox_xyxyn": [
+      0.3635,
+      0.315,
+      0.387,
+      0.4115
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_30_2026-07-17T05-42-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54110"
+    ],
+    "split": "train"
+  },
+  "ro_00316": {
+    "azimuth": 57,
+    "bbox_xyxyn": [
+      0.075,
+      0.322,
+      0.095,
+      0.36
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_57_2026-07-17T05-46-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54112"
+    ],
+    "split": "train"
+  },
+  "ro_00317": {
+    "azimuth": 192,
+    "bbox_xyxyn": [
+      0.7475,
+      0.3365,
+      0.83,
+      0.43
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_192_2026-07-17T12-31-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54179"
+    ],
+    "split": "train"
+  },
+  "ro_00318": {
+    "azimuth": 311,
+    "bbox_xyxyn": [
+      0.226,
+      0.356,
+      0.26,
+      0.398
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_311_2026-07-17T13-54-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54195"
+    ],
+    "split": "train"
+  },
+  "ro_00319": {
+    "azimuth": 218,
+    "bbox_xyxyn": [
+      0.254,
+      0.468,
+      0.268,
+      0.491
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_218_2026-07-17T14-09-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54202"
+    ],
+    "split": "train"
+  },
+  "ro_00320": {
+    "azimuth": 348,
+    "bbox_xyxyn": [
+      0.677,
+      0.262,
+      0.714,
+      0.292
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_348_2026-07-17T17-00-54"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54248"
+    ],
+    "split": "test"
+  },
+  "ro_00321": {
+    "azimuth": 98,
+    "bbox_xyxyn": [
+      0.214,
+      0.33,
+      0.225,
+      0.369
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_98_2026-07-17T17-00-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54249"
+    ],
+    "split": "train"
+  },
+  "ro_00322": {
+    "azimuth": 322,
+    "bbox_xyxyn": [
+      0.9075,
+      0.241,
+      0.962,
+      0.299
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_322_2026-07-17T17-02-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54250"
+    ],
+    "split": "train"
+  },
+  "ro_00323": {
+    "azimuth": 30,
+    "bbox_xyxyn": [
+      0.5605,
+      0.3375,
+      0.586,
+      0.383
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_30_2026-07-17T17-11-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54251"
+    ],
+    "split": "val"
+  },
+  "ro_00324": {
+    "azimuth": 322,
+    "bbox_xyxyn": [
+      0.08399999999999999,
+      0.256,
+      0.1405,
+      0.32
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_322_2026-07-17T17-53-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54264"
+    ],
+    "split": "train"
+  },
+  "ro_00325": {
+    "azimuth": 204,
+    "bbox_xyxyn": [
+      0.174,
+      0.52,
+      0.247,
+      0.599
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_204_2026-07-17T18-17-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54276"
+    ],
+    "split": "train"
+  },
+  "ro_00326": {
+    "azimuth": 128,
+    "bbox_xyxyn": [
+      0.5015000000000001,
+      0.4785,
+      0.604,
+      0.5605
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_128_2026-07-17T18-21-25"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54279"
+    ],
+    "split": "train"
+  },
+  "ro_00327": {
+    "azimuth": 223,
+    "bbox_xyxyn": [
+      0.507,
+      0.472,
+      0.547,
+      0.521
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_223_2026-07-17T18-23-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54281"
+    ],
+    "split": "train"
+  },
+  "ro_00328": {
+    "azimuth": 2,
+    "bbox_xyxyn": [
+      0.048,
+      0.299,
+      0.068,
+      0.328
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_2_2026-07-17T18-31-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54284"
+    ],
+    "split": "train"
+  },
+  "ro_00329": {
+    "azimuth": 340,
+    "bbox_xyxyn": [
+      0.5365,
+      0.2725,
+      0.5805,
+      0.2985
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_340_2026-07-17T18-31-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54285"
+    ],
+    "split": "train"
+  },
+  "ro_00330": {
+    "azimuth": 140,
+    "bbox_xyxyn": [
+      0.908,
+      0.346,
+      0.948,
+      0.45
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_140_2026-07-17T18-39-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54288"
+    ],
+    "split": "test"
+  },
+  "ro_00331": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.224,
+      0.439,
+      0.242,
+      0.464
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_22_2026-07-17T18-55-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54294"
+    ],
+    "split": "train"
+  },
+  "ro_00332": {
+    "azimuth": 270,
+    "bbox_xyxyn": [
+      0.006,
+      0.41,
+      0.025,
+      0.428
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_270_2026-07-17T19-23-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54300"
+    ],
+    "split": "train"
+  },
+  "ro_00333": {
+    "azimuth": 338,
+    "bbox_xyxyn": [
+      0.505,
+      0.262,
+      0.529,
+      0.298
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_338_2026-07-17T19-30-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54303"
+    ],
+    "split": "val"
+  },
+  "ro_00334": {
+    "azimuth": 11,
+    "bbox_xyxyn": [
+      0.213,
+      0.457,
+      0.222,
+      0.503
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_11_2026-08-11T05-15-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54328",
+      "pyronear_french:57866"
+    ],
+    "split": "train"
+  },
+  "ro_00335": {
+    "azimuth": 195,
+    "bbox_xyxyn": [
+      0.504,
+      0.3325,
+      0.544,
+      0.426
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_195_2026-07-18T05-15-15"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54334"
+    ],
+    "split": "train"
+  },
+  "ro_00336": {
+    "azimuth": 109,
+    "bbox_xyxyn": [
+      0.191,
+      0.43,
+      0.203,
+      0.453
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_109_2026-07-18T05-18-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54338"
+    ],
+    "split": "train"
+  },
+  "ro_00337": {
+    "azimuth": 225,
+    "bbox_xyxyn": [
+      0.7244999999999999,
+      0.418,
+      0.781,
+      0.489
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_225_2026-07-18T05-57-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54350"
+    ],
+    "split": "train"
+  },
+  "ro_00338": {
+    "azimuth": 223,
+    "bbox_xyxyn": [
+      0.253,
+      0.343,
+      0.306,
+      0.433
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_223_2026-07-18T06-07-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54353"
+    ],
+    "split": "train"
+  },
+  "ro_00339": {
+    "azimuth": 344,
+    "bbox_xyxyn": [
+      0.444,
+      0.23,
+      0.558,
+      0.304
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_344_2026-07-18T06-27-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54360"
+    ],
+    "split": "train"
+  },
+  "ro_00340": {
+    "azimuth": 101,
+    "bbox_xyxyn": [
+      0.879,
+      0.257,
+      0.924,
+      0.317
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_101_2026-07-18T06-43-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54366"
+    ],
+    "split": "test"
+  },
+  "ro_00341": {
+    "azimuth": 18,
+    "bbox_xyxyn": [
+      0.338,
+      0.273,
+      0.362,
+      0.301
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_18_2026-07-18T06-46-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54367"
+    ],
+    "split": "train"
+  },
+  "ro_00342": {
+    "azimuth": 289,
+    "bbox_xyxyn": [
+      0.243,
+      0.519,
+      0.377,
+      0.616
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_289_2026-07-18T06-59-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54371"
+    ],
+    "split": "train"
+  },
+  "ro_00343": {
+    "azimuth": 117,
+    "bbox_xyxyn": [
+      0.338,
+      0.366,
+      0.365,
+      0.425
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_117_2026-07-18T06-59-31"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54372"
+    ],
+    "split": "val"
+  },
+  "ro_00344": {
+    "azimuth": 239,
+    "bbox_xyxyn": [
+      0.166,
+      0.4105,
+      0.20500000000000002,
+      0.4535
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_239_2026-07-18T07-07-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54374"
+    ],
+    "split": "train"
+  },
+  "ro_00345": {
+    "azimuth": 248,
+    "bbox_xyxyn": [
+      0.34,
+      0.41,
+      0.38,
+      0.476
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_248_2026-07-18T07-33-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54383"
+    ],
+    "split": "train"
+  },
+  "ro_00346": {
+    "azimuth": 326,
+    "bbox_xyxyn": [
+      0.272,
+      0.256,
+      0.289,
+      0.312
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_326_2026-07-18T08-22-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54389"
+    ],
+    "split": "train"
+  },
+  "ro_00347": {
+    "azimuth": 11,
+    "bbox_xyxyn": [
+      0.5495000000000001,
+      0.39,
+      0.579,
+      0.4515
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_11_2026-07-18T12-19-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54410"
+    ],
+    "split": "train"
+  },
+  "ro_00348": {
+    "azimuth": 69,
+    "bbox_xyxyn": [
+      0.674,
+      0.4185,
+      0.7115,
+      0.4555
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_69_2026-07-18T12-33-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54414"
+    ],
+    "split": "train"
+  },
+  "ro_00349": {
+    "azimuth": 48,
+    "bbox_xyxyn": [
+      0.269,
+      0.371,
+      0.336,
+      0.431
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_48_2026-07-18T12-43-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54415"
+    ],
+    "split": "train"
+  },
+  "ro_00350": {
+    "azimuth": 56,
+    "bbox_xyxyn": [
+      0.43,
+      0.396,
+      0.528,
+      0.469
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_56_2026-07-18T14-15-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54428"
+    ],
+    "split": "test"
+  },
+  "ro_00351": {
+    "azimuth": 252,
+    "bbox_xyxyn": [
+      0.436,
+      0.355,
+      0.453,
+      0.383
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_252_2026-07-18T19-07-42"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54464"
+    ],
+    "split": "train"
+  },
+  "ro_00352": {
+    "azimuth": 348,
+    "bbox_xyxyn": [
+      0.646,
+      0.354,
+      0.662,
+      0.39
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_348_2026-07-19T18-46-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54554"
+    ],
+    "split": "train"
+  },
+  "ro_00353": {
+    "azimuth": 319,
+    "bbox_xyxyn": [
+      0.0365,
+      0.246,
+      0.1035,
+      0.341
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_319_2026-07-20T18-40-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54687"
+    ],
+    "split": "val"
+  },
+  "ro_00354": {
+    "azimuth": 251,
+    "bbox_xyxyn": [
+      0.549,
+      0.172,
+      0.569,
+      0.186
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_251_2026-07-28T08-58-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54760",
+      "pyronear_french:55322",
+      "pyronear_french:55869"
+    ],
+    "split": "train"
+  },
+  "ro_00355": {
+    "azimuth": 136,
+    "bbox_xyxyn": [
+      0.929,
+      0.398,
+      0.938,
+      0.428
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_136_2026-07-21T09-38-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54766"
+    ],
+    "split": "train"
+  },
+  "ro_00356": {
+    "azimuth": 21,
+    "bbox_xyxyn": [
+      0.398,
+      0.27,
+      0.409,
+      0.28
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_21_2026-07-21T12-54-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54815",
+      "pyronear_french:61593"
+    ],
+    "split": "train"
+  },
+  "ro_00357": {
+    "azimuth": 126,
+    "bbox_xyxyn": [
+      0.917,
+      0.4255,
+      0.9624999999999999,
+      0.469
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_126_2026-07-21T13-02-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54816"
+    ],
+    "split": "train"
+  },
+  "ro_00358": {
+    "azimuth": 328,
+    "bbox_xyxyn": [
+      0.2485,
+      0.396,
+      0.2795,
+      0.432
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_328_2026-07-21T16-35-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54865"
+    ],
+    "split": "train"
+  },
+  "ro_00359": {
+    "azimuth": 2,
+    "bbox_xyxyn": [
+      0.908,
+      0.329,
+      0.935,
+      0.371
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_2_2026-07-21T16-43-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54866"
+    ],
+    "split": "train"
+  },
+  "ro_00360": {
+    "azimuth": 303,
+    "bbox_xyxyn": [
+      0.5435000000000001,
+      0.552,
+      0.568,
+      0.594
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_303_2026-07-21T18-50-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:54890"
+    ],
+    "split": "test"
+  },
+  "ro_00361": {
+    "azimuth": 22,
+    "bbox_xyxyn": [
+      0.409,
+      0.139,
+      0.46,
+      0.184
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_22_2026-07-23T04-31-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55094"
+    ],
+    "split": "train"
+  },
+  "ro_00362": {
+    "azimuth": 4,
+    "bbox_xyxyn": [
+      0.7725,
+      0.391,
+      0.792,
+      0.436
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_4_2026-07-23T06-13-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55110"
+    ],
+    "split": "train"
+  },
+  "ro_00363": {
+    "azimuth": 320,
+    "bbox_xyxyn": [
+      0.036,
+      0.254,
+      0.098,
+      0.342
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_320_2026-07-23T18-39-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55235"
+    ],
+    "split": "val"
+  },
+  "ro_00364": {
+    "azimuth": 299,
+    "bbox_xyxyn": [
+      0.459,
+      0.197,
+      0.487,
+      0.214
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_299_2026-07-24T14-31-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55392"
+    ],
+    "split": "train"
+  },
+  "ro_00365": {
+    "azimuth": 348,
+    "bbox_xyxyn": [
+      0.67,
+      0.289,
+      0.688,
+      0.303
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_348_2026-07-24T14-58-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55395"
+    ],
+    "split": "train"
+  },
+  "ro_00366": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.894,
+      0.298,
+      0.928,
+      0.375
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_3_2026-07-24T17-01-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55408"
+    ],
+    "split": "train"
+  },
+  "ro_00367": {
+    "azimuth": 334,
+    "bbox_xyxyn": [
+      0.379,
+      0.375,
+      0.405,
+      0.422
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_334_2026-07-24T17-56-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55415"
+    ],
+    "split": "train"
+  },
+  "ro_00368": {
+    "azimuth": 181,
+    "bbox_xyxyn": [
+      0.595,
+      0.262,
+      0.643,
+      0.432
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_181_2026-07-25T12-47-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55484"
+    ],
+    "split": "train"
+  },
+  "ro_00369": {
+    "azimuth": 91,
+    "bbox_xyxyn": [
+      0.284,
+      0.539,
+      0.31,
+      0.565
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_91_2026-07-25T14-59-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55497"
+    ],
+    "split": "train"
+  },
+  "ro_00370": {
+    "azimuth": 59,
+    "bbox_xyxyn": [
+      0.331,
+      0.309,
+      0.347,
+      0.359
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_59_2026-07-26T18-24-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55614"
+    ],
+    "split": "val"
+  },
+  "ro_00371": {
+    "azimuth": 202,
+    "bbox_xyxyn": [
+      0.296,
+      0.47,
+      0.37,
+      0.531
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_202_2026-07-27T04-24-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55636"
+    ],
+    "split": "train"
+  },
+  "ro_00372": {
+    "azimuth": 227,
+    "bbox_xyxyn": [
+      0.0,
+      0.4505,
+      0.0375,
+      0.505
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_227_2026-07-27T04-28-37"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55639"
+    ],
+    "split": "train"
+  },
+  "ro_00373": {
+    "azimuth": 221,
+    "bbox_xyxyn": [
+      0.709,
+      0.416,
+      0.7715000000000001,
+      0.483
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_221_2026-07-27T05-46-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55650"
+    ],
+    "split": "test"
+  },
+  "ro_00374": {
+    "azimuth": 251,
+    "bbox_xyxyn": [
+      0.54,
+      0.171,
+      0.557,
+      0.185
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_251_2026-07-27T11-59-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55708"
+    ],
+    "split": "train"
+  },
+  "ro_00375": {
+    "azimuth": 267,
+    "bbox_xyxyn": [
+      0.695,
+      0.399,
+      0.7255,
+      0.456
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_267_2026-08-23T15-55-56"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55742",
+      "pyronear_french:60102"
+    ],
+    "split": "train"
+  },
+  "ro_00376": {
+    "azimuth": 306,
+    "bbox_xyxyn": [
+      0.604,
+      0.564,
+      0.613,
+      0.583
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_306_2026-07-28T18-03-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55772",
+      "pyronear_french:56006"
+    ],
+    "split": "train"
+  },
+  "ro_00377": {
+    "azimuth": 12,
+    "bbox_xyxyn": [
+      0.581,
+      0.429,
+      0.589,
+      0.449
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_12_2026-07-28T05-02-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55810"
+    ],
+    "split": "train"
+  },
+  "ro_00378": {
+    "azimuth": 68,
+    "bbox_xyxyn": [
+      0.661,
+      0.53,
+      0.689,
+      0.582
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_68_2026-07-28T05-05-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55811"
+    ],
+    "split": "train"
+  },
+  "ro_00379": {
+    "azimuth": 127,
+    "bbox_xyxyn": [
+      0.15,
+      0.471,
+      0.16,
+      0.482
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_127_2026-07-28T11-56-03"
+    ],
+    "seen_alerts": [
+      "pyronear_french:55908"
+    ],
+    "split": "train"
+  },
+  "ro_00380": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.872,
+      0.285,
+      0.912,
+      0.376
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_3_2026-07-28T17-54-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56004"
+    ],
+    "split": "test"
+  },
+  "ro_00381": {
+    "azimuth": 244,
+    "bbox_xyxyn": [
+      0.7264999999999999,
+      0.388,
+      0.7415,
+      0.412
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_244_2026-07-28T19-50-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56032"
+    ],
+    "split": "train"
+  },
+  "ro_00382": {
+    "azimuth": 36,
+    "bbox_xyxyn": [
+      0.449,
+      0.378,
+      0.462,
+      0.401
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_36_2026-07-29T04-19-02"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56040"
+    ],
+    "split": "train"
+  },
+  "ro_00383": {
+    "azimuth": 28,
+    "bbox_xyxyn": [
+      0.832,
+      0.3655,
+      0.889,
+      0.444
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_28_2026-07-29T05-41-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56050"
+    ],
+    "split": "val"
+  },
+  "ro_00384": {
+    "azimuth": 86,
+    "bbox_xyxyn": [
+      0.626,
+      0.362,
+      0.651,
+      0.445
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_86_2026-07-29T06-57-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56068",
+      "pyronear_french:56566"
+    ],
+    "split": "train"
+  },
+  "ro_00385": {
+    "azimuth": 354,
+    "bbox_xyxyn": [
+      0.753,
+      0.343,
+      0.771,
+      0.383
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_354_2026-07-29T19-33-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56204"
+    ],
+    "split": "train"
+  },
+  "ro_00386": {
+    "azimuth": 336,
+    "bbox_xyxyn": [
+      0.368,
+      0.349,
+      0.3995,
+      0.42
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_336_2026-07-30T17-47-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56311"
+    ],
+    "split": "train"
+  },
+  "ro_00387": {
+    "azimuth": 12,
+    "bbox_xyxyn": [
+      0.579,
+      0.406,
+      0.5965,
+      0.453
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_12_2026-07-31T18-26-34"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56427"
+    ],
+    "split": "train"
+  },
+  "ro_00388": {
+    "azimuth": 120,
+    "bbox_xyxyn": [
+      0.59,
+      0.358,
+      0.662,
+      0.44
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_120_2026-07-31T18-49-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56435"
+    ],
+    "split": "train"
+  },
+  "ro_00389": {
+    "azimuth": 295,
+    "bbox_xyxyn": [
+      0.0025,
+      0.531,
+      0.0805,
+      0.563
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_295_2026-07-31T19-01-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56437"
+    ],
+    "split": "train"
+  },
+  "ro_00390": {
+    "azimuth": 232,
+    "bbox_xyxyn": [
+      0.194,
+      0.218,
+      0.209,
+      0.235
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_232_2026-08-01T05-35-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56454"
+    ],
+    "split": "test"
+  },
+  "ro_00391": {
+    "azimuth": 171,
+    "bbox_xyxyn": [
+      0.635,
+      0.29,
+      0.66,
+      0.335
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_171_2026-08-01T07-01-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56468"
+    ],
+    "split": "train"
+  },
+  "ro_00392": {
+    "azimuth": 110,
+    "bbox_xyxyn": [
+      0.713,
+      0.383,
+      0.733,
+      0.426
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_110_2026-08-01T07-15-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56474"
+    ],
+    "split": "train"
+  },
+  "ro_00393": {
+    "azimuth": 317,
+    "bbox_xyxyn": [
+      0.7945,
+      0.198,
+      0.82,
+      0.215
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_317_2026-08-02T18-32-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56622"
+    ],
+    "split": "val"
+  },
+  "ro_00394": {
+    "azimuth": 274,
+    "bbox_xyxyn": [
+      0.343,
+      0.346,
+      0.378,
+      0.416
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_274_2026-08-03T14-00-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56703"
+    ],
+    "split": "train"
+  },
+  "ro_00395": {
+    "azimuth": 1,
+    "bbox_xyxyn": [
+      0.372,
+      0.396,
+      0.407,
+      0.44
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_1_2026-08-04T19-20-15"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56936"
+    ],
+    "split": "train"
+  },
+  "ro_00396": {
+    "azimuth": 11,
+    "bbox_xyxyn": [
+      0.576,
+      0.419,
+      0.587,
+      0.442
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_11_2026-08-05T03-27-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56948"
+    ],
+    "split": "train"
+  },
+  "ro_00397": {
+    "azimuth": 196,
+    "bbox_xyxyn": [
+      0.301,
+      0.361,
+      0.344,
+      0.396
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_196_2026-08-05T05-41-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56970"
+    ],
+    "split": "train"
+  },
+  "ro_00398": {
+    "azimuth": 303,
+    "bbox_xyxyn": [
+      0.5435000000000001,
+      0.7655000000000001,
+      0.5814999999999999,
+      0.8085
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_303_2026-08-05T06-11-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56975"
+    ],
+    "split": "train"
+  },
+  "ro_00399": {
+    "azimuth": 201,
+    "bbox_xyxyn": [
+      0.297,
+      0.378,
+      0.32,
+      0.404
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_201_2026-08-05T08-38-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:56999"
+    ],
+    "split": "train"
+  },
+  "ro_00400": {
+    "azimuth": 94,
+    "bbox_xyxyn": [
+      0.134,
+      0.4605,
+      0.149,
+      0.492
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_94_2026-08-06T05-21-07"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57147",
+      "pyronear_french:61335"
+    ],
+    "split": "val"
+  },
+  "ro_00401": {
+    "azimuth": 150,
+    "bbox_xyxyn": [
+      0.295,
+      0.47,
+      0.302,
+      0.485
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_150_2026-08-07T10-59-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57418"
+    ],
+    "split": "train"
+  },
+  "ro_00402": {
+    "azimuth": 95,
+    "bbox_xyxyn": [
+      0.965,
+      0.408,
+      1.0,
+      0.456
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_95_2026-08-07T18-14-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57494"
+    ],
+    "split": "train"
+  },
+  "ro_00403": {
+    "azimuth": 134,
+    "bbox_xyxyn": [
+      0.66,
+      0.425,
+      0.671,
+      0.447
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_134_2026-08-08T13-34-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57602"
+    ],
+    "split": "test"
+  },
+  "ro_00404": {
+    "azimuth": 262,
+    "bbox_xyxyn": [
+      0.408,
+      0.451,
+      0.436,
+      0.515
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_262_2026-08-08T15-55-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57636"
+    ],
+    "split": "train"
+  },
+  "ro_00405": {
+    "azimuth": 260,
+    "bbox_xyxyn": [
+      0.36,
+      0.445,
+      0.394,
+      0.523
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_260_2026-08-09T15-46-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57735",
+      "pyronear_french:57920"
+    ],
+    "split": "train"
+  },
+  "ro_00406": {
+    "azimuth": 79,
+    "bbox_xyxyn": [
+      0.054,
+      0.443,
+      0.091,
+      0.495
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_79_2026-08-10T04-44-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57757"
+    ],
+    "split": "train"
+  },
+  "ro_00407": {
+    "azimuth": 11,
+    "bbox_xyxyn": [
+      0.578,
+      0.43,
+      0.585,
+      0.448
+    ],
+    "camera": "sis-67_champ-du-feu-01",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-01_11_2026-08-10T05-01-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57763"
+    ],
+    "split": "train"
+  },
+  "ro_00408": {
+    "azimuth": 186,
+    "bbox_xyxyn": [
+      0.799,
+      0.326,
+      0.851,
+      0.382
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_186_2026-08-10T09-36-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57788"
+    ],
+    "split": "train"
+  },
+  "ro_00409": {
+    "azimuth": 40,
+    "bbox_xyxyn": [
+      0.759,
+      0.913,
+      0.77,
+      0.928
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_40_2026-08-12T05-43-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:57971",
+      "pyronear_french:58085"
+    ],
+    "split": "train"
+  },
+  "ro_00410": {
+    "azimuth": 259,
+    "bbox_xyxyn": [
+      0.361,
+      0.437,
+      0.3905,
+      0.521
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_259_2026-08-12T15-52-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58036",
+      "pyronear_french:58199"
+    ],
+    "split": "val"
+  },
+  "ro_00411": {
+    "azimuth": 152,
+    "bbox_xyxyn": [
+      0.185,
+      0.37,
+      0.221,
+      0.436
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_152_2026-08-12T16-33-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58037",
+      "pyronear_french:58462",
+      "pyronear_french:61991"
+    ],
+    "split": "train"
+  },
+  "ro_00412": {
+    "azimuth": 165,
+    "bbox_xyxyn": [
+      0.876,
+      0.382,
+      0.892,
+      0.41
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_165_2026-08-12T17-50-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58046"
+    ],
+    "split": "train"
+  },
+  "ro_00413": {
+    "azimuth": 142,
+    "bbox_xyxyn": [
+      0.143,
+      0.538,
+      0.159,
+      0.55
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_142_2026-08-12T18-11-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58050"
+    ],
+    "split": "test"
+  },
+  "ro_00414": {
+    "azimuth": 266,
+    "bbox_xyxyn": [
+      0.793,
+      0.206,
+      0.918,
+      0.361
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_266_2026-08-12T18-18-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58055"
+    ],
+    "split": "train"
+  },
+  "ro_00415": {
+    "azimuth": 87,
+    "bbox_xyxyn": [
+      0.015,
+      0.382,
+      0.021,
+      0.394
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_87_2026-08-13T06-21-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58091"
+    ],
+    "split": "train"
+  },
+  "ro_00416": {
+    "azimuth": 167,
+    "bbox_xyxyn": [
+      0.4845,
+      0.382,
+      0.509,
+      0.426
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_167_2026-08-13T17-10-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58203"
+    ],
+    "split": "train"
+  },
+  "ro_00417": {
+    "azimuth": 143,
+    "bbox_xyxyn": [
+      0.169,
+      0.38,
+      0.19,
+      0.403
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_143_2026-08-14T04-59-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58239"
+    ],
+    "split": "train"
+  },
+  "ro_00418": {
+    "azimuth": 85,
+    "bbox_xyxyn": [
+      0.61,
+      0.28,
+      0.631,
+      0.299
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_85_2026-08-14T18-14-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58390"
+    ],
+    "split": "train"
+  },
+  "ro_00419": {
+    "azimuth": 259,
+    "bbox_xyxyn": [
+      0.5794999999999999,
+      0.371,
+      0.607,
+      0.466
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_259_2026-08-15T06-09-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58416"
+    ],
+    "split": "train"
+  },
+  "ro_00420": {
+    "azimuth": 172,
+    "bbox_xyxyn": [
+      0.672,
+      0.278,
+      0.713,
+      0.409
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_172_2026-08-15T06-49-38"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58425"
+    ],
+    "split": "test"
+  },
+  "ro_00421": {
+    "azimuth": 141,
+    "bbox_xyxyn": [
+      0.928,
+      0.513,
+      0.945,
+      0.528
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_141_2026-08-15T17-39-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58498"
+    ],
+    "split": "train"
+  },
+  "ro_00422": {
+    "azimuth": 236,
+    "bbox_xyxyn": [
+      0.51,
+      0.437,
+      0.53,
+      0.472
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_236_2026-08-16T15-56-08"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58582"
+    ],
+    "split": "train"
+  },
+  "ro_00423": {
+    "azimuth": 141,
+    "bbox_xyxyn": [
+      0.784,
+      0.438,
+      0.807,
+      0.464
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_141_2026-08-18T05-25-51"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58769"
+    ],
+    "split": "val"
+  },
+  "ro_00424": {
+    "azimuth": 137,
+    "bbox_xyxyn": [
+      0.005,
+      0.456,
+      0.032,
+      0.475
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_137_2026-08-18T18-36-37"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58887"
+    ],
+    "split": "train"
+  },
+  "ro_00425": {
+    "azimuth": 201,
+    "bbox_xyxyn": [
+      0.316,
+      0.497,
+      0.37,
+      0.536
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_201_2026-08-19T05-03-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58909"
+    ],
+    "split": "train"
+  },
+  "ro_00426": {
+    "azimuth": 313,
+    "bbox_xyxyn": [
+      0.706,
+      0.313,
+      0.835,
+      0.454
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_313_2026-08-19T05-15-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58919"
+    ],
+    "split": "train"
+  },
+  "ro_00427": {
+    "azimuth": 317,
+    "bbox_xyxyn": [
+      0.0,
+      0.452,
+      0.047,
+      0.51
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_317_2026-08-19T05-30-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58928"
+    ],
+    "split": "train"
+  },
+  "ro_00428": {
+    "azimuth": 121,
+    "bbox_xyxyn": [
+      0.412,
+      0.533,
+      0.464,
+      0.57
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_121_2026-08-19T05-50-41"
+    ],
+    "seen_alerts": [
+      "pyronear_french:58933"
+    ],
+    "split": "train"
+  },
+  "ro_00429": {
+    "azimuth": 102,
+    "bbox_xyxyn": [
+      0.218,
+      0.319,
+      0.229,
+      0.333
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_102_2026-08-19T15-16-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59038"
+    ],
+    "split": "train"
+  },
+  "ro_00430": {
+    "azimuth": 104,
+    "bbox_xyxyn": [
+      0.3225,
+      0.359,
+      0.3365,
+      0.3745
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_104_2026-08-19T15-50-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59044",
+      "pyronear_french:59912"
+    ],
+    "split": "val"
+  },
+  "ro_00431": {
+    "azimuth": 145,
+    "bbox_xyxyn": [
+      0.179,
+      0.35,
+      0.21,
+      0.425
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_145_2026-08-19T18-20-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59076"
+    ],
+    "split": "train"
+  },
+  "ro_00432": {
+    "azimuth": 76,
+    "bbox_xyxyn": [
+      0.437,
+      0.339,
+      0.458,
+      0.369
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_76_2026-08-20T04-43-21"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59130"
+    ],
+    "split": "train"
+  },
+  "ro_00433": {
+    "azimuth": 139,
+    "bbox_xyxyn": [
+      0.066,
+      0.43,
+      0.108,
+      0.488
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_139_2026-08-20T06-10-25"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59171"
+    ],
+    "split": "test"
+  },
+  "ro_00434": {
+    "azimuth": 160,
+    "bbox_xyxyn": [
+      0.332,
+      0.38,
+      0.359,
+      0.428
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_160_2026-08-20T11-07-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59241"
+    ],
+    "split": "train"
+  },
+  "ro_00435": {
+    "azimuth": 107,
+    "bbox_xyxyn": [
+      0.3715,
+      0.35,
+      0.3865,
+      0.369
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_107_2026-08-20T14-42-02"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59281"
+    ],
+    "split": "train"
+  },
+  "ro_00436": {
+    "azimuth": 341,
+    "bbox_xyxyn": [
+      0.459,
+      0.584,
+      0.468,
+      0.608
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_341_2026-09-03T17-57-12"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59341",
+      "pyronear_french:62729",
+      "pyronear_french:64221"
+    ],
+    "split": "train"
+  },
+  "ro_00437": {
+    "azimuth": 323,
+    "bbox_xyxyn": [
+      0.213,
+      0.306,
+      0.219,
+      0.32
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_323_2026-08-21T09-48-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59528"
+    ],
+    "split": "train"
+  },
+  "ro_00438": {
+    "azimuth": 189,
+    "bbox_xyxyn": [
+      0.103,
+      0.409,
+      0.113,
+      0.431
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_189_2026-08-21T12-36-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59579"
+    ],
+    "split": "train"
+  },
+  "ro_00439": {
+    "azimuth": 88,
+    "bbox_xyxyn": [
+      0.3105,
+      0.365,
+      0.331,
+      0.43
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_88_2026-08-21T14-09-34"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59618"
+    ],
+    "split": "train"
+  },
+  "ro_00440": {
+    "azimuth": 36,
+    "bbox_xyxyn": [
+      0.057,
+      0.501,
+      0.079,
+      0.545
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_36_2026-08-21T15-39-11"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59644"
+    ],
+    "split": "val"
+  },
+  "ro_00441": {
+    "azimuth": 122,
+    "bbox_xyxyn": [
+      0.082,
+      0.3945,
+      0.0985,
+      0.427
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_122_2026-08-21T15-55-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59651"
+    ],
+    "split": "train"
+  },
+  "ro_00442": {
+    "azimuth": 123,
+    "bbox_xyxyn": [
+      0.961,
+      0.368,
+      0.976,
+      0.403
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_123_2026-08-21T15-55-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59652"
+    ],
+    "split": "train"
+  },
+  "ro_00443": {
+    "azimuth": 300,
+    "bbox_xyxyn": [
+      0.547,
+      0.359,
+      0.578,
+      0.391
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_300_2026-08-21T17-32-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59681"
+    ],
+    "split": "test"
+  },
+  "ro_00444": {
+    "azimuth": 300,
+    "bbox_xyxyn": [
+      0.489,
+      0.3555,
+      0.5025,
+      0.377
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_300_2026-08-21T17-40-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59685"
+    ],
+    "split": "train"
+  },
+  "ro_00445": {
+    "azimuth": 145,
+    "bbox_xyxyn": [
+      0.158,
+      0.259,
+      0.178,
+      0.283
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_145_2026-08-21T17-56-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59696"
+    ],
+    "split": "train"
+  },
+  "ro_00446": {
+    "azimuth": 145,
+    "bbox_xyxyn": [
+      0.166,
+      0.41,
+      0.235,
+      0.46
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_145_2026-08-21T18-45-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59731"
+    ],
+    "split": "train"
+  },
+  "ro_00447": {
+    "azimuth": 227,
+    "bbox_xyxyn": [
+      0.855,
+      0.3935,
+      0.8654999999999999,
+      0.418
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_227_2026-08-22T14-56-53"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59929"
+    ],
+    "split": "train"
+  },
+  "ro_00448": {
+    "azimuth": 260,
+    "bbox_xyxyn": [
+      0.351,
+      0.384,
+      0.37,
+      0.429
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_260_2026-08-22T15-02-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59931"
+    ],
+    "split": "train"
+  },
+  "ro_00449": {
+    "azimuth": 236,
+    "bbox_xyxyn": [
+      0.165,
+      0.405,
+      0.18,
+      0.441
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_236_2026-08-22T15-38-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59941"
+    ],
+    "split": "train"
+  },
+  "ro_00450": {
+    "azimuth": 197,
+    "bbox_xyxyn": [
+      0.219,
+      0.368,
+      0.238,
+      0.397
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_197_2026-08-22T16-03-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59949"
+    ],
+    "split": "test"
+  },
+  "ro_00451": {
+    "azimuth": 218,
+    "bbox_xyxyn": [
+      0.45,
+      0.3845,
+      0.466,
+      0.417
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_218_2026-08-22T16-04-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59951"
+    ],
+    "split": "train"
+  },
+  "ro_00452": {
+    "azimuth": 302,
+    "bbox_xyxyn": [
+      0.524,
+      0.539,
+      0.547,
+      0.583
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_302_2026-08-22T17-08-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:59972"
+    ],
+    "split": "train"
+  },
+  "ro_00453": {
+    "azimuth": 255,
+    "bbox_xyxyn": [
+      0.6154999999999999,
+      0.184,
+      0.637,
+      0.197
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_255_2026-09-10T05-54-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60030",
+      "pyronear_french:64321"
+    ],
+    "split": "val"
+  },
+  "ro_00454": {
+    "azimuth": 280,
+    "bbox_xyxyn": [
+      0.969,
+      0.393,
+      1.0,
+      0.468
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_280_2026-08-23T09-53-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60062"
+    ],
+    "split": "train"
+  },
+  "ro_00455": {
+    "azimuth": 349,
+    "bbox_xyxyn": [
+      0.659,
+      0.353,
+      0.673,
+      0.39
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_349_2026-08-23T10-28-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60066"
+    ],
+    "split": "train"
+  },
+  "ro_00456": {
+    "azimuth": 319,
+    "bbox_xyxyn": [
+      0.849,
+      0.4405,
+      0.864,
+      0.48
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_319_2026-08-23T10-42-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60067"
+    ],
+    "split": "train"
+  },
+  "ro_00457": {
+    "azimuth": 193,
+    "bbox_xyxyn": [
+      0.1545,
+      0.338,
+      0.1735,
+      0.388
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_193_2026-08-23T12-21-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60077"
+    ],
+    "split": "train"
+  },
+  "ro_00458": {
+    "azimuth": 1,
+    "bbox_xyxyn": [
+      0.732,
+      0.444,
+      0.744,
+      0.466
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_1_2026-09-07T17-00-26"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60118",
+      "pyronear_french:62426",
+      "pyronear_french:63312",
+      "pyronear_french:63739",
+      "pyronear_french:64987"
+    ],
+    "split": "train"
+  },
+  "ro_00459": {
+    "azimuth": 153,
+    "bbox_xyxyn": [
+      0.201,
+      0.35,
+      0.256,
+      0.435
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_153_2026-08-24T08-56-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60168"
+    ],
+    "split": "train"
+  },
+  "ro_00460": {
+    "azimuth": 196,
+    "bbox_xyxyn": [
+      0.318,
+      0.3405,
+      0.348,
+      0.3755
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_196_2026-08-24T13-54-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60200"
+    ],
+    "split": "val"
+  },
+  "ro_00461": {
+    "azimuth": 100,
+    "bbox_xyxyn": [
+      0.174,
+      0.5425,
+      0.187,
+      0.5645
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_100_2026-08-24T18-58-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60246"
+    ],
+    "split": "train"
+  },
+  "ro_00462": {
+    "azimuth": 186,
+    "bbox_xyxyn": [
+      0.737,
+      0.256,
+      0.7975000000000001,
+      0.426
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_186_2026-08-25T07-30-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60315"
+    ],
+    "split": "train"
+  },
+  "ro_00463": {
+    "azimuth": 261,
+    "bbox_xyxyn": [
+      0.256,
+      0.208,
+      0.3675,
+      0.43
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_261_2026-08-25T07-47-51"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60318"
+    ],
+    "split": "test"
+  },
+  "ro_00464": {
+    "azimuth": 241,
+    "bbox_xyxyn": [
+      0.609,
+      0.383,
+      0.627,
+      0.424
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_241_2026-08-25T08-01-53"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60323"
+    ],
+    "split": "train"
+  },
+  "ro_00465": {
+    "azimuth": 222,
+    "bbox_xyxyn": [
+      0.247,
+      0.372,
+      0.3,
+      0.431
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_222_2026-08-25T08-03-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60324"
+    ],
+    "split": "train"
+  },
+  "ro_00466": {
+    "azimuth": 155,
+    "bbox_xyxyn": [
+      0.699,
+      0.291,
+      0.745,
+      0.433
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_155_2026-08-25T08-09-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60325"
+    ],
+    "split": "train"
+  },
+  "ro_00467": {
+    "azimuth": 247,
+    "bbox_xyxyn": [
+      0.721,
+      0.363,
+      0.746,
+      0.42
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_247_2026-08-25T08-12-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60326"
+    ],
+    "split": "train"
+  },
+  "ro_00468": {
+    "azimuth": 146,
+    "bbox_xyxyn": [
+      0.5065,
+      0.304,
+      0.5645,
+      0.4355
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_146_2026-08-25T08-17-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60327"
+    ],
+    "split": "train"
+  },
+  "ro_00469": {
+    "azimuth": 36,
+    "bbox_xyxyn": [
+      0.927,
+      0.489,
+      0.9635,
+      0.538
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_36_2026-08-25T10-19-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60348"
+    ],
+    "split": "train"
+  },
+  "ro_00470": {
+    "azimuth": 274,
+    "bbox_xyxyn": [
+      0.0,
+      0.319,
+      0.028,
+      0.37
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_274_2026-08-26T05-26-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60537"
+    ],
+    "split": "test"
+  },
+  "ro_00471": {
+    "azimuth": 257,
+    "bbox_xyxyn": [
+      0.654,
+      0.209,
+      0.679,
+      0.228
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_257_2026-08-26T05-43-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60542"
+    ],
+    "split": "train"
+  },
+  "ro_00472": {
+    "azimuth": 222,
+    "bbox_xyxyn": [
+      0.0,
+      0.264,
+      0.024,
+      0.283
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_222_2026-08-26T05-54-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60549"
+    ],
+    "split": "train"
+  },
+  "ro_00473": {
+    "azimuth": 23,
+    "bbox_xyxyn": [
+      0.224,
+      0.439,
+      0.242,
+      0.461
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_23_2026-08-26T06-01-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60553"
+    ],
+    "split": "val"
+  },
+  "ro_00474": {
+    "azimuth": 204,
+    "bbox_xyxyn": [
+      0.45,
+      0.136,
+      0.479,
+      0.1875
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_204_2026-08-26T08-18-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60577"
+    ],
+    "split": "train"
+  },
+  "ro_00475": {
+    "azimuth": 188,
+    "bbox_xyxyn": [
+      0.1605,
+      0.1255,
+      0.192,
+      0.199
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_188_2026-08-26T08-47-34"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60582"
+    ],
+    "split": "train"
+  },
+  "ro_00476": {
+    "azimuth": 5,
+    "bbox_xyxyn": [
+      0.109,
+      0.34,
+      0.124,
+      0.371
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_5_2026-08-26T09-20-05"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60591"
+    ],
+    "split": "train"
+  },
+  "ro_00477": {
+    "azimuth": 195,
+    "bbox_xyxyn": [
+      0.1895,
+      0.348,
+      0.213,
+      0.391
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_195_2026-08-26T09-22-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60592"
+    ],
+    "split": "train"
+  },
+  "ro_00478": {
+    "azimuth": 51,
+    "bbox_xyxyn": [
+      0.3405,
+      0.354,
+      0.39,
+      0.466
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_51_2026-08-26T12-56-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60629"
+    ],
+    "split": "train"
+  },
+  "ro_00479": {
+    "azimuth": 33,
+    "bbox_xyxyn": [
+      0.0,
+      0.385,
+      0.034,
+      0.462
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_33_2026-08-26T15-20-35"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60653"
+    ],
+    "split": "train"
+  },
+  "ro_00480": {
+    "azimuth": 291,
+    "bbox_xyxyn": [
+      0.301,
+      0.501,
+      0.364,
+      0.563
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_291_2026-08-28T04-52-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60961"
+    ],
+    "split": "val"
+  },
+  "ro_00481": {
+    "azimuth": 301,
+    "bbox_xyxyn": [
+      0.528,
+      0.733,
+      0.585,
+      0.796
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_301_2026-08-28T05-15-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60974"
+    ],
+    "split": "train"
+  },
+  "ro_00482": {
+    "azimuth": 318,
+    "bbox_xyxyn": [
+      0.018,
+      0.261,
+      0.042,
+      0.282
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_318_2026-08-28T05-29-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60983"
+    ],
+    "split": "train"
+  },
+  "ro_00483": {
+    "azimuth": 318,
+    "bbox_xyxyn": [
+      0.832,
+      0.232,
+      0.852,
+      0.251
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_318_2026-08-28T05-30-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60986"
+    ],
+    "split": "test"
+  },
+  "ro_00484": {
+    "azimuth": 276,
+    "bbox_xyxyn": [
+      0.041499999999999995,
+      0.4965,
+      0.1105,
+      0.529
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_276_2026-08-28T05-31-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60987"
+    ],
+    "split": "train"
+  },
+  "ro_00485": {
+    "azimuth": 172,
+    "bbox_xyxyn": [
+      0.487,
+      0.406,
+      0.501,
+      0.426
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_172_2026-08-28T05-43-59"
+    ],
+    "seen_alerts": [
+      "pyronear_french:60997"
+    ],
+    "split": "train"
+  },
+  "ro_00486": {
+    "azimuth": 118,
+    "bbox_xyxyn": [
+      0.5275000000000001,
+      0.771,
+      0.5445,
+      0.786
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_118_2026-08-28T06-09-28"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61013"
+    ],
+    "split": "train"
+  },
+  "ro_00487": {
+    "azimuth": 274,
+    "bbox_xyxyn": [
+      0.971,
+      0.409,
+      0.99,
+      0.438
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_274_2026-08-28T06-32-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61026"
+    ],
+    "split": "train"
+  },
+  "ro_00488": {
+    "azimuth": 0,
+    "bbox_xyxyn": [
+      0.712,
+      0.422,
+      0.731,
+      0.447
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_0_2026-08-28T06-45-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61030"
+    ],
+    "split": "train"
+  },
+  "ro_00489": {
+    "azimuth": 138,
+    "bbox_xyxyn": [
+      0.824,
+      0.4,
+      0.879,
+      0.46799999999999997
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_138_2026-08-28T06-55-32"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61036"
+    ],
+    "split": "train"
+  },
+  "ro_00490": {
+    "azimuth": 184,
+    "bbox_xyxyn": [
+      0.584,
+      0.349,
+      0.663,
+      0.4285
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_184_2026-08-28T08-05-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61077"
+    ],
+    "split": "val"
+  },
+  "ro_00491": {
+    "azimuth": 240,
+    "bbox_xyxyn": [
+      0.0,
+      0.38,
+      0.011,
+      0.4325
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_240_2026-09-10T08-47-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61140",
+      "pyronear_french:64422"
+    ],
+    "split": "train"
+  },
+  "ro_00492": {
+    "azimuth": 237,
+    "bbox_xyxyn": [
+      0.182,
+      0.373,
+      0.204,
+      0.44
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_237_2026-08-28T12-05-14"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61157"
+    ],
+    "split": "train"
+  },
+  "ro_00493": {
+    "azimuth": 319,
+    "bbox_xyxyn": [
+      0.033,
+      0.244,
+      0.068,
+      0.301
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_319_2026-08-28T12-42-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61167"
+    ],
+    "split": "test"
+  },
+  "ro_00494": {
+    "azimuth": 105,
+    "bbox_xyxyn": [
+      0.1875,
+      0.257,
+      0.2575,
+      0.368
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_105_2026-08-29T05-22-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61333"
+    ],
+    "split": "train"
+  },
+  "ro_00495": {
+    "azimuth": 153,
+    "bbox_xyxyn": [
+      0.191,
+      0.4,
+      0.229,
+      0.431
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_153_2026-08-29T07-43-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61369"
+    ],
+    "split": "train"
+  },
+  "ro_00496": {
+    "azimuth": 60,
+    "bbox_xyxyn": [
+      0.145,
+      0.326,
+      0.161,
+      0.345
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_60_2026-08-29T14-21-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61440"
+    ],
+    "split": "train"
+  },
+  "ro_00497": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.87,
+      0.2425,
+      0.886,
+      0.2745
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_3_2026-08-30T11-06-15"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61550"
+    ],
+    "split": "train"
+  },
+  "ro_00498": {
+    "azimuth": 3,
+    "bbox_xyxyn": [
+      0.0665,
+      0.267,
+      0.08499999999999999,
+      0.3025
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_3_2026-08-30T11-07-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61551"
+    ],
+    "split": "train"
+  },
+  "ro_00499": {
+    "azimuth": 317,
+    "bbox_xyxyn": [
+      0.015,
+      0.262,
+      0.033,
+      0.296
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_317_2026-08-30T11-07-53"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61552"
+    ],
+    "split": "train"
+  },
+  "ro_00500": {
+    "azimuth": 65,
+    "bbox_xyxyn": [
+      0.242,
+      0.331,
+      0.252,
+      0.345
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_65_2026-08-30T16-45-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61625"
+    ],
+    "split": "test"
+  },
+  "ro_00501": {
+    "azimuth": 52,
+    "bbox_xyxyn": [
+      0.188,
+      0.332,
+      0.199,
+      0.347
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_52_2026-08-30T17-51-57"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61647"
+    ],
+    "split": "train"
+  },
+  "ro_00502": {
+    "azimuth": 94,
+    "bbox_xyxyn": [
+      0.1415,
+      0.472,
+      0.155,
+      0.49
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_94_2026-09-04T05-57-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61705",
+      "pyronear_french:61932",
+      "pyronear_french:62808",
+      "pyronear_french:65052"
+    ],
+    "split": "train"
+  },
+  "ro_00503": {
+    "azimuth": 152,
+    "bbox_xyxyn": [
+      0.198,
+      0.407,
+      0.218,
+      0.433
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_152_2026-08-31T07-47-45"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61725"
+    ],
+    "split": "val"
+  },
+  "ro_00504": {
+    "azimuth": 60,
+    "bbox_xyxyn": [
+      0.132,
+      0.314,
+      0.148,
+      0.344
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_60_2026-08-31T13-11-09"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61783"
+    ],
+    "split": "train"
+  },
+  "ro_00505": {
+    "azimuth": 76,
+    "bbox_xyxyn": [
+      0.63,
+      0.297,
+      0.642,
+      0.316
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_76_2026-08-31T13-22-00"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61786"
+    ],
+    "split": "train"
+  },
+  "ro_00506": {
+    "azimuth": 290,
+    "bbox_xyxyn": [
+      0.31,
+      0.224,
+      0.33,
+      0.243
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_290_2026-08-31T14-15-40"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61803"
+    ],
+    "split": "train"
+  },
+  "ro_00507": {
+    "azimuth": 301,
+    "bbox_xyxyn": [
+      0.486,
+      0.222,
+      0.497,
+      0.267
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_301_2026-08-31T14-24-42"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61806"
+    ],
+    "split": "train"
+  },
+  "ro_00508": {
+    "azimuth": 260,
+    "bbox_xyxyn": [
+      0.689,
+      0.477,
+      0.739,
+      0.538
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_260_2026-08-31T14-52-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61816"
+    ],
+    "split": "train"
+  },
+  "ro_00509": {
+    "azimuth": 18,
+    "bbox_xyxyn": [
+      0.3755,
+      0.49,
+      0.4325,
+      0.5645
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_18_2026-08-31T15-28-04"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61837"
+    ],
+    "split": "train"
+  },
+  "ro_00510": {
+    "azimuth": 139,
+    "bbox_xyxyn": [
+      0.0,
+      0.692,
+      0.146,
+      0.875
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_139_2026-08-31T15-29-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61838"
+    ],
+    "split": "val"
+  },
+  "ro_00511": {
+    "azimuth": 134,
+    "bbox_xyxyn": [
+      0.717,
+      0.661,
+      0.908,
+      0.833
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_134_2026-08-31T15-29-50"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61840"
+    ],
+    "split": "train"
+  },
+  "ro_00512": {
+    "azimuth": 141,
+    "bbox_xyxyn": [
+      0.083,
+      0.405,
+      0.105,
+      0.422
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_141_2026-08-31T17-47-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61874"
+    ],
+    "split": "train"
+  },
+  "ro_00513": {
+    "azimuth": 319,
+    "bbox_xyxyn": [
+      0.831,
+      0.233,
+      0.851,
+      0.254
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_319_2026-09-01T05-16-55"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61916"
+    ],
+    "split": "test"
+  },
+  "ro_00514": {
+    "azimuth": 168,
+    "bbox_xyxyn": [
+      0.59,
+      0.288,
+      0.6405000000000001,
+      0.316
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_168_2026-09-01T05-19-24"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61920"
+    ],
+    "split": "train"
+  },
+  "ro_00515": {
+    "azimuth": 118,
+    "bbox_xyxyn": [
+      0.42,
+      0.178,
+      0.443,
+      0.212
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_118_2026-09-01T07-16-06"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61953"
+    ],
+    "split": "train"
+  },
+  "ro_00516": {
+    "azimuth": 303,
+    "bbox_xyxyn": [
+      0.1815,
+      0.387,
+      0.219,
+      0.4775
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_303_2026-09-01T07-56-01"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61968"
+    ],
+    "split": "train"
+  },
+  "ro_00517": {
+    "azimuth": 302,
+    "bbox_xyxyn": [
+      0.9724999999999999,
+      0.3215,
+      1.0,
+      0.4635
+    ],
+    "camera": "sis-67_champ-du-feu-02",
+    "ingested_folders": [
+      "sis-67_champ-du-feu-02_302_2026-09-01T08-15-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61979"
+    ],
+    "split": "train"
+  },
+  "ro_00518": {
+    "azimuth": 263,
+    "bbox_xyxyn": [
+      0.4045,
+      0.337,
+      0.464,
+      0.407
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_263_2026-09-01T08-19-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61982"
+    ],
+    "split": "train"
+  },
+  "ro_00519": {
+    "azimuth": 351,
+    "bbox_xyxyn": [
+      0.553,
+      0.4535,
+      0.5645,
+      0.4755
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_351_2026-09-01T08-39-46"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61995"
+    ],
+    "split": "train"
+  },
+  "ro_00520": {
+    "azimuth": 337,
+    "bbox_xyxyn": [
+      0.295,
+      0.477,
+      0.326,
+      0.516
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_337_2026-09-01T08-42-16"
+    ],
+    "seen_alerts": [
+      "pyronear_french:61998"
+    ],
+    "split": "val"
+  },
+  "ro_00521": {
+    "azimuth": 317,
+    "bbox_xyxyn": [
+      0.805,
+      0.492,
+      0.837,
+      0.5345
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_317_2026-09-01T08-58-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62009"
+    ],
+    "split": "train"
+  },
+  "ro_00522": {
+    "azimuth": 158,
+    "bbox_xyxyn": [
+      0.296,
+      0.38,
+      0.327,
+      0.424
+    ],
+    "camera": "sis-67_col-saverne-01",
+    "ingested_folders": [
+      "sis-67_col-saverne-01_158_2026-09-01T09-30-58"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62023"
+    ],
+    "split": "train"
+  },
+  "ro_00523": {
+    "azimuth": 281,
+    "bbox_xyxyn": [
+      0.136,
+      0.203,
+      0.15,
+      0.222
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_281_2026-09-01T14-00-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62119"
+    ],
+    "split": "test"
+  },
+  "ro_00524": {
+    "azimuth": 86,
+    "bbox_xyxyn": [
+      0.8075000000000001,
+      0.295,
+      0.823,
+      0.317
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_86_2026-09-07T11-50-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62155",
+      "pyronear_french:63667"
+    ],
+    "split": "train"
+  },
+  "ro_00525": {
+    "azimuth": 47,
+    "bbox_xyxyn": [
+      0.6715,
+      0.32,
+      0.7024999999999999,
+      0.3615
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_47_2026-09-01T17-02-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62195"
+    ],
+    "split": "train"
+  },
+  "ro_00526": {
+    "azimuth": 255,
+    "bbox_xyxyn": [
+      0.593,
+      0.074,
+      0.654,
+      0.0955
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_255_2026-09-02T05-05-30"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62235"
+    ],
+    "split": "train"
+  },
+  "ro_00527": {
+    "azimuth": 347,
+    "bbox_xyxyn": [
+      0.628,
+      0.373,
+      0.638,
+      0.393
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_347_2026-09-02T17-27-52"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62436"
+    ],
+    "split": "train"
+  },
+  "ro_00528": {
+    "azimuth": 313,
+    "bbox_xyxyn": [
+      0.0,
+      0.3925,
+      0.0135,
+      0.456
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_313_2026-09-02T17-33-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62440"
+    ],
+    "split": "train"
+  },
+  "ro_00529": {
+    "azimuth": 10,
+    "bbox_xyxyn": [
+      0.209,
+      0.457,
+      0.219,
+      0.503
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_10_2026-09-03T05-37-17"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62523"
+    ],
+    "split": "train"
+  },
+  "ro_00530": {
+    "azimuth": 106,
+    "bbox_xyxyn": [
+      0.211,
+      0.2665,
+      0.282,
+      0.3735
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_106_2026-09-04T05-25-35"
+    ],
+    "seen_alerts": [
+      "pyronear_french:62795"
+    ],
+    "split": "test"
+  },
+  "ro_00531": {
+    "azimuth": 232,
+    "bbox_xyxyn": [
+      0.108,
+      0.41,
+      0.118,
+      0.427
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_232_2026-09-04T17-41-13"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63027"
+    ],
+    "split": "train"
+  },
+  "ro_00532": {
+    "azimuth": 14,
+    "bbox_xyxyn": [
+      0.26,
+      0.406,
+      0.2675,
+      0.431
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_14_2026-09-05T04-54-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63091"
+    ],
+    "split": "train"
+  },
+  "ro_00533": {
+    "azimuth": 353,
+    "bbox_xyxyn": [
+      0.734,
+      0.384,
+      0.747,
+      0.4005
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_353_2026-09-05T05-23-29"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63107"
+    ],
+    "split": "val"
+  },
+  "ro_00534": {
+    "azimuth": 252,
+    "bbox_xyxyn": [
+      0.14150000000000001,
+      0.366,
+      0.2505,
+      0.423
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_252_2026-09-05T06-19-10"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63133"
+    ],
+    "split": "train"
+  },
+  "ro_00535": {
+    "azimuth": 202,
+    "bbox_xyxyn": [
+      0.339,
+      0.397,
+      0.355,
+      0.413
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_202_2026-09-05T14-00-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63263"
+    ],
+    "split": "train"
+  },
+  "ro_00536": {
+    "azimuth": 173,
+    "bbox_xyxyn": [
+      0.4215,
+      0.396,
+      0.4575,
+      0.424
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_173_2026-09-05T17-39-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63320"
+    ],
+    "split": "train"
+  },
+  "ro_00537": {
+    "azimuth": 178,
+    "bbox_xyxyn": [
+      0.796,
+      0.286,
+      0.823,
+      0.322
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_178_2026-09-05T17-41-48"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63323"
+    ],
+    "split": "train"
+  },
+  "ro_00538": {
+    "azimuth": 99,
+    "bbox_xyxyn": [
+      0.2405,
+      0.403,
+      0.247,
+      0.411
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_99_2026-09-06T06-11-39"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63392"
+    ],
+    "split": "train"
+  },
+  "ro_00539": {
+    "azimuth": 26,
+    "bbox_xyxyn": [
+      0.513,
+      0.267,
+      0.531,
+      0.316
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_26_2026-09-07T06-03-53"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63609"
+    ],
+    "split": "train"
+  },
+  "ro_00540": {
+    "azimuth": 292,
+    "bbox_xyxyn": [
+      0.94,
+      0.3885,
+      0.9535,
+      0.405
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_292_2026-09-07T06-46-56"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63619"
+    ],
+    "split": "val"
+  },
+  "ro_00541": {
+    "azimuth": 293,
+    "bbox_xyxyn": [
+      0.355,
+      0.191,
+      0.376,
+      0.209
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_293_2026-09-07T14-30-23"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63699"
+    ],
+    "split": "train"
+  },
+  "ro_00542": {
+    "azimuth": 133,
+    "bbox_xyxyn": [
+      0.0,
+      0.362,
+      0.01,
+      0.407
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_133_2026-09-07T15-00-31"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63707"
+    ],
+    "split": "train"
+  },
+  "ro_00543": {
+    "azimuth": 335,
+    "bbox_xyxyn": [
+      0.696,
+      0.34,
+      0.725,
+      0.388
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_335_2026-09-07T17-33-22"
+    ],
+    "seen_alerts": [
+      "pyronear_french:63750"
+    ],
+    "split": "test"
+  },
+  "ro_00544": {
+    "azimuth": 158,
+    "bbox_xyxyn": [
+      0.244,
+      0.417,
+      0.258,
+      0.432
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_158_2026-09-09T06-36-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64025"
+    ],
+    "split": "train"
+  },
+  "ro_00545": {
+    "azimuth": 111,
+    "bbox_xyxyn": [
+      0.316,
+      0.378,
+      0.322,
+      0.408
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_111_2026-09-09T10-34-33"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64122"
+    ],
+    "split": "train"
+  },
+  "ro_00546": {
+    "azimuth": 69,
+    "bbox_xyxyn": [
+      0.5125,
+      0.286,
+      0.5285,
+      0.307
+    ],
+    "camera": "sis-67_cis-petersbach-02",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-02_69_2026-09-09T13-10-20"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64156"
+    ],
+    "split": "train"
+  },
+  "ro_00547": {
+    "azimuth": 307,
+    "bbox_xyxyn": [
+      0.615,
+      0.201,
+      0.63,
+      0.212
+    ],
+    "camera": "sis-67_donon-sarrebourg-02",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-02_307_2026-09-09T17-55-18"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64250"
+    ],
+    "split": "train"
+  },
+  "ro_00548": {
+    "azimuth": 110,
+    "bbox_xyxyn": [
+      0.421,
+      0.412,
+      0.443,
+      0.436
+    ],
+    "camera": "sis-67_col-saverne-02",
+    "ingested_folders": [
+      "sis-67_col-saverne-02_110_2026-09-10T06-59-43"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64371"
+    ],
+    "split": "train"
+  },
+  "ro_00549": {
+    "azimuth": 134,
+    "bbox_xyxyn": [
+      0.646,
+      0.3825,
+      0.6815,
+      0.421
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_134_2026-09-10T15-10-06"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64598"
+    ],
+    "split": "train"
+  },
+  "ro_00550": {
+    "azimuth": 53,
+    "bbox_xyxyn": [
+      0.382,
+      0.42,
+      0.391,
+      0.436
+    ],
+    "camera": "sis-67_bischwiller-01",
+    "ingested_folders": [
+      "sis-67_bischwiller-01_53_2026-09-10T16-47-27"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64638"
+    ],
+    "split": "test"
+  },
+  "ro_00551": {
+    "azimuth": 278,
+    "bbox_xyxyn": [
+      0.051,
+      0.584,
+      0.078,
+      0.614
+    ],
+    "camera": "sis-67_haguenau-01",
+    "ingested_folders": [
+      "sis-67_haguenau-01_278_2026-09-11T06-52-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64766"
+    ],
+    "split": "train"
+  },
+  "ro_00552": {
+    "azimuth": 281,
+    "bbox_xyxyn": [
+      0.725,
+      0.375,
+      0.754,
+      0.4
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_281_2026-09-11T06-52-53"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64767"
+    ],
+    "split": "train"
+  },
+  "ro_00553": {
+    "azimuth": 117,
+    "bbox_xyxyn": [
+      0.3535,
+      0.485,
+      0.3975,
+      0.5725
+    ],
+    "camera": "sis-67_haguenau-02",
+    "ingested_folders": [
+      "sis-67_haguenau-02_117_2026-09-12T08-08-19"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64802",
+      "pyronear_french:65106"
+    ],
+    "split": "val"
+  },
+  "ro_00554": {
+    "azimuth": 154,
+    "bbox_xyxyn": [
+      0.676,
+      0.3755,
+      0.687,
+      0.41
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_154_2026-09-11T08-39-36"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64818"
+    ],
+    "split": "train"
+  },
+  "ro_00555": {
+    "azimuth": 114,
+    "bbox_xyxyn": [
+      0.502,
+      0.3465,
+      0.515,
+      0.366
+    ],
+    "camera": "sis-67_bischwiller-02",
+    "ingested_folders": [
+      "sis-67_bischwiller-02_114_2026-09-11T08-55-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64827"
+    ],
+    "split": "train"
+  },
+  "ro_00556": {
+    "azimuth": 157,
+    "bbox_xyxyn": [
+      0.683,
+      0.3085,
+      0.7364999999999999,
+      0.412
+    ],
+    "camera": "sis-67_betschdorf-01",
+    "ingested_folders": [
+      "sis-67_betschdorf-01_157_2026-09-11T09-05-49"
+    ],
+    "seen_alerts": [
+      "pyronear_french:64832"
+    ],
+    "split": "train"
+  },
+  "ro_00557": {
+    "azimuth": 308,
+    "bbox_xyxyn": [
+      0.721,
+      0.279,
+      0.734,
+      0.301
+    ],
+    "camera": "sis-67_cis-petersbach-01",
+    "ingested_folders": [
+      "sis-67_cis-petersbach-01_308_2026-09-12T06-34-47"
+    ],
+    "seen_alerts": [
+      "pyronear_french:65074"
+    ],
+    "split": "train"
+  },
+  "ro_00558": {
+    "azimuth": 110,
+    "bbox_xyxyn": [
+      0.286,
+      0.234,
+      0.338,
+      0.444
+    ],
+    "camera": "sis-67_donon-sarrebourg-01",
+    "ingested_folders": [
+      "sis-67_donon-sarrebourg-01_110_2026-09-12T07-29-44"
+    ],
+    "seen_alerts": [
+      "pyronear_french:65094"
     ],
     "split": "train"
   }
