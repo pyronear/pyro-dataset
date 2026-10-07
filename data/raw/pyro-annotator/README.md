@@ -100,8 +100,10 @@ with `source: pyro-annotator-testbed`, so temporal-model can evaluate on
 - **Splits are 40/10/50** by groups, so one source never spans two splits. Smoke
   is grouped by camera view, or by a start within 30 min on any camera. FP is
   grouped by camera view plus box IoU >= 0.3. Sequences that share an image
-  (the platform opens one sequence per detected area, so concurrent ones share
-  frames) are always grouped. Result: 17/4/21 smoke and 102/25/127 FP.
+  are always grouped, compared by content (MD5), across smoke and FP. The
+  platform opens one sequence per detected area, so concurrent sequences share
+  frames, and it stores identical frames under different timestamps, which
+  file names do not reveal. Result: 17/4/21 smoke and 102/25/127 FP.
 - **Left out** (`skipped`): 19 FP sequences the detector no longer fires on, and
   2 smoke sequences dropped after a visual review.
 

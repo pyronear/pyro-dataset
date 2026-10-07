@@ -1,5 +1,5 @@
 {
-  "about": "temporal-model's former pyro-annotator testbed, registered with --source pyro-annotator-testbed. Labels from the testbed; boxes from pyronear/yolov11s v8.2.0 (1024 px, NMS IoU 0.2) matched to the platform detection box (IoU >= 0.1); smoke class 0, fp class 99 + score. Splits 40/10/50 by groups: smoke by camera view or start within 30 min on any camera, fp by camera view + box IoU >= 0.3; any two sequences sharing an image share a split.",
+  "about": "temporal-model's former pyro-annotator testbed, registered with --source pyro-annotator-testbed. Labels from the testbed; boxes from pyronear/yolov11s v8.2.0 (1024 px, NMS IoU 0.2) matched to the platform detection box (IoU >= 0.1); smoke class 0, fp class 99 + score. Splits 40/10/50 by groups: smoke by camera view or start within 30 min on any camera, fp by camera view + box IoU >= 0.3; any two sequences sharing an image (by content, across smoke and fp) share a split.",
   "sequences": {
     "sdis-77_croix-augas-01_15_2026-05-10T15-42-34": {
       "box_conf_threshold": 0.1,
@@ -14,7 +14,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41237,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41237"
     },
     "sdis-77_croix-augas-01_15_2026-05-10T17-37-52": {
@@ -22,7 +22,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41258,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41258"
     },
     "sdis-77_croix-augas-01_285_2026-05-05T15-39-43": {
@@ -38,7 +38,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 40733,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40733"
     },
     "sdis-77_croix-augas-01_285_2026-05-07T17-12-43": {
@@ -54,7 +54,7 @@
       "label": "fp",
       "label_detail": "light",
       "platform_sequence_id": 40741,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_40741"
     },
     "sdis-77_croix-augas-01_285_2026-05-07T17-56-13": {
@@ -70,7 +70,7 @@
       "label": "fp",
       "label_detail": "light",
       "platform_sequence_id": 40762,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40762"
     },
     "sdis-77_croix-augas-01_285_2026-05-08T13-31-38": {
@@ -86,7 +86,7 @@
       "label": "fp",
       "label_detail": "light",
       "platform_sequence_id": 40882,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40882"
     },
     "sdis-77_croix-augas-01_285_2026-05-09T14-43-57": {
@@ -94,7 +94,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40970,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40970"
     },
     "sdis-77_croix-augas-01_285_2026-05-09T17-08-03": {
@@ -102,7 +102,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40997,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40997"
     },
     "sdis-77_croix-augas-01_285_2026-05-10T13-04-47": {
@@ -118,7 +118,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41192,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41192"
     },
     "sdis-77_croix-augas-01_285_2026-05-10T16-49-47": {
@@ -126,7 +126,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41193,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41193"
     },
     "sdis-77_croix-augas-01_285_2026-05-10T16-53-12": {
@@ -134,7 +134,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41201,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41201"
     },
     "sdis-77_croix-augas-01_285_2026-05-10T16-55-46": {
@@ -142,7 +142,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41202,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41202"
     },
     "sdis-77_croix-augas-01_285_2026-05-10T18-02-44": {
@@ -158,7 +158,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40312,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40312"
     },
     "sdis-77_croix-augas-01_327_2026-05-05T14-46-13": {
@@ -166,7 +166,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40421,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40421"
     },
     "sdis-77_croix-augas-01_327_2026-05-05T14-57-12": {
@@ -174,7 +174,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40427,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40427"
     },
     "sdis-77_croix-augas-01_327_2026-05-06T10-34-43": {
@@ -190,7 +190,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40862,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40862"
     },
     "sdis-77_croix-augas-01_327_2026-05-08T15-46-21": {
@@ -198,7 +198,7 @@
       "label": "fp",
       "label_detail": "antenna",
       "platform_sequence_id": 40864,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40864"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T15-59-04": {
@@ -206,7 +206,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41154,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41154"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T16-10-42": {
@@ -214,7 +214,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41161,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41161"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T16-12-42": {
@@ -230,7 +230,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41179,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41179"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T16-55-12": {
@@ -238,7 +238,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41200,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_41200"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T17-03-44": {
@@ -246,7 +246,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41216,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_41216"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T17-08-49": {
@@ -262,7 +262,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41252,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41252"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T18-29-16": {
@@ -278,7 +278,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41314,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41314"
     },
     "sdis-77_croix-augas-01_327_2026-05-10T19-06-45": {
@@ -294,7 +294,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41441,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41441"
     },
     "sdis-77_croix-augas-01_60_2026-05-05T04-37-39": {
@@ -302,7 +302,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40320,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40320"
     },
     "sdis-77_croix-augas-01_60_2026-05-08T14-36-44": {
@@ -310,7 +310,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40844,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40844"
     },
     "sdis-77_croix-augas-01_60_2026-05-08T19-09-32": {
@@ -326,7 +326,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40909,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40909"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T06-32-45": {
@@ -334,7 +334,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 41039,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41039"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T14-10-56": {
@@ -350,7 +350,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41118,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41118"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T14-40-56": {
@@ -358,7 +358,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41123,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41123"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T16-07-12": {
@@ -366,7 +366,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41159,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41159"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T16-14-13": {
@@ -374,7 +374,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41164,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_41164"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T16-14-44": {
@@ -382,7 +382,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41170,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_41170"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T16-32-12": {
@@ -398,7 +398,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41204,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41204"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T17-10-15": {
@@ -406,7 +406,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41221,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41221"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T17-12-14": {
@@ -414,7 +414,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41223,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41223"
     },
     "sdis-77_croix-augas-01_60_2026-05-10T19-17-15": {
@@ -438,7 +438,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40404,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40404"
     },
     "sdis-77_croix-augas-02_100_2026-05-05T15-19-13": {
@@ -446,7 +446,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40432,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_40432"
     },
     "sdis-77_croix-augas-02_100_2026-05-10T15-15-06": {
@@ -470,7 +470,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41152,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41152"
     },
     "sdis-77_croix-augas-02_100_2026-05-10T17-48-14": {
@@ -478,7 +478,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41267,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41267"
     },
     "sdis-77_croix-augas-02_100_2026-05-10T18-17-45": {
@@ -494,7 +494,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41313,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41313"
     },
     "sdis-77_croix-augas-02_100_2026-05-10T18-47-45": {
@@ -502,7 +502,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 41322,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41322"
     },
     "sdis-77_croix-augas-02_146_2026-05-10T16-14-46": {
@@ -510,7 +510,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41166,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41166"
     },
     "sdis-77_croix-augas-02_146_2026-05-10T16-39-42": {
@@ -518,7 +518,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41184,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41184"
     },
     "sdis-77_croix-augas-02_146_2026-05-10T16-48-13": {
@@ -534,7 +534,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41326,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_41326"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T04-09-09": {
@@ -542,7 +542,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40315,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40315"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T13-47-41": {
@@ -558,7 +558,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40405,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40405"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T14-15-12": {
@@ -566,7 +566,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40406,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40406"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T15-03-44": {
@@ -574,7 +574,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40430,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40430"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T15-29-47": {
@@ -590,7 +590,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40447,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40447"
     },
     "sdis-77_croix-augas-02_190_2026-05-05T16-00-14": {
@@ -598,7 +598,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40449,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_40449"
     },
     "sdis-77_croix-augas-02_190_2026-05-08T17-25-10": {
@@ -614,7 +614,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41225,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_41225"
     },
     "sdis-77_croix-augas-02_190_2026-05-10T17-29-44": {
@@ -622,7 +622,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41248,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41248"
     },
     "sdis-77_croix-augas-02_190_2026-05-10T17-42-45": {
@@ -630,7 +630,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41264,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41264"
     },
     "sdis-77_croix-augas-02_190_2026-05-10T18-32-16": {
@@ -638,7 +638,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41304,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41304"
     },
     "sdis-77_croix-augas-02_235_2026-05-05T13-46-11": {
@@ -646,7 +646,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40391,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40391"
     },
     "sdis-77_croix-augas-02_235_2026-05-05T14-43-12": {
@@ -654,7 +654,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40420,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40420"
     },
     "sdis-77_croix-augas-02_235_2026-05-05T15-15-15": {
@@ -670,7 +670,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40671,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40671"
     },
     "sdis-77_croix-augas-02_235_2026-05-09T17-00-03": {
@@ -678,7 +678,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40992,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40992"
     },
     "sdis-77_croix-augas-02_235_2026-05-10T16-19-12": {
@@ -686,7 +686,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41171,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41171"
     },
     "sdis-77_croix-augas-02_235_2026-05-10T16-38-42": {
@@ -694,7 +694,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41183,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_41183"
     },
     "sdis-77_croix-augas-02_235_2026-05-10T16-51-44": {
@@ -710,7 +710,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41212,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41212"
     },
     "sdis-77_croix-augas-02_235_2026-05-10T17-20-15": {
@@ -718,7 +718,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41235,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41235"
     },
     "sdis-77_croix-augas-02_235_2026-05-10T17-24-20": {
@@ -726,7 +726,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41241,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41241"
     },
     "sdis-77_moret-sur-loing-01_144_2026-05-05T14-34-14": {
@@ -734,7 +734,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40416,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40416"
     },
     "sdis-77_moret-sur-loing-01_144_2026-05-07T07-26-02": {
@@ -742,7 +742,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40692,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40692"
     },
     "sdis-77_moret-sur-loing-01_144_2026-05-10T19-40-18": {
@@ -750,7 +750,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41372,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41372"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-05T10-55-04": {
@@ -758,7 +758,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40356,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40356"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-05T13-30-36": {
@@ -774,7 +774,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40413,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40413"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-05T17-30-34": {
@@ -806,7 +806,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40505,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40505"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-05T18-15-06": {
@@ -814,7 +814,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40506,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40506"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-06T14-38-35": {
@@ -822,7 +822,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40613,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40613"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-07T04-24-38": {
@@ -830,7 +830,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40655,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40655"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-07T05-03-47": {
@@ -838,7 +838,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40668,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40668"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-07T16-19-10": {
@@ -846,7 +846,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40732,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40732"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-07T18-22-59": {
@@ -854,7 +854,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 40750,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40750"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-09T04-05-24": {
@@ -862,7 +862,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40906,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40906"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T10-51-19": {
@@ -870,7 +870,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41083,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41083"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T16-33-10": {
@@ -886,7 +886,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41206,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41206"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T16-59-47": {
@@ -902,7 +902,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41253,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41253"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T17-50-13": {
@@ -918,7 +918,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41328,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41328"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T19-18-46": {
@@ -926,7 +926,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41347,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41347"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T19-24-19": {
@@ -934,7 +934,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41350,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41350"
     },
     "sdis-77_moret-sur-loing-01_189_2026-05-10T19-36-51": {
@@ -942,7 +942,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41367,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41367"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T11-16-12": {
@@ -950,7 +950,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40359,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40359"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T12-42-59": {
@@ -966,7 +966,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40375,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40375"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T13-51-39": {
@@ -974,7 +974,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40394,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40394"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T14-05-14": {
@@ -990,7 +990,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40446,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40446"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T17-29-04": {
@@ -998,7 +998,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40481,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40481"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-05T18-10-05": {
@@ -1006,7 +1006,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40503,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40503"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-07T05-52-47": {
@@ -1022,7 +1022,7 @@
       "label": "fp",
       "label_detail": "lens_droplet",
       "platform_sequence_id": 41106,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41106"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T14-42-07": {
@@ -1030,7 +1030,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41124,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41124"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T15-42-08": {
@@ -1038,7 +1038,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41142,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41142"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T16-44-10": {
@@ -1054,7 +1054,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41189,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41189"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T17-01-11": {
@@ -1062,7 +1062,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41211,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41211"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T17-02-41": {
@@ -1070,7 +1070,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41215,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41215"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T17-10-10": {
@@ -1078,7 +1078,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41222,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41222"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T17-28-43": {
@@ -1086,7 +1086,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41247,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41247"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T17-57-43": {
@@ -1094,7 +1094,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41273,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41273"
     },
     "sdis-77_moret-sur-loing-01_235_2026-05-10T18-03-13": {
@@ -1110,7 +1110,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41330,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41330"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-05T05-24-20": {
@@ -1118,7 +1118,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40330,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40330"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-05T12-15-28": {
@@ -1126,7 +1126,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40367,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40367"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-05T17-57-04": {
@@ -1134,7 +1134,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40501,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40501"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-07T19-09-38": {
@@ -1150,7 +1150,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40822,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40822"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-08T13-36-23": {
@@ -1158,7 +1158,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40830,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40830"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-08T18-09-18": {
@@ -1166,7 +1166,7 @@
       "label": "fp",
       "label_detail": "light",
       "platform_sequence_id": 40889,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_40889"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-10T10-39-49": {
@@ -1174,7 +1174,7 @@
       "label": "fp",
       "label_detail": "lens_droplet",
       "platform_sequence_id": 41080,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41080"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-10T17-55-45": {
@@ -1182,7 +1182,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41271,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41271"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-10T18-25-47": {
@@ -1190,7 +1190,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41296,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41296"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-10T19-26-17": {
@@ -1198,7 +1198,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41353,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41353"
     },
     "sdis-77_moret-sur-loing-01_280_2026-05-11T14-12-50": {
@@ -1206,7 +1206,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41443,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41443"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-05T05-07-20": {
@@ -1214,7 +1214,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40325,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40325"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-05T14-04-44": {
@@ -1222,7 +1222,7 @@
       "label": "fp",
       "label_detail": "water_body",
       "platform_sequence_id": 40402,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40402"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-05T14-28-14": {
@@ -1254,7 +1254,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40917,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40917"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-10T04-33-09": {
@@ -1262,7 +1262,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 41019,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41019"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-10T14-24-08": {
@@ -1270,7 +1270,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41119,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41119"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-10T16-30-10": {
@@ -1286,7 +1286,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41344,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41344"
     },
     "sdis-77_moret-sur-loing-02_316_2026-05-11T14-12-20": {
@@ -1294,7 +1294,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41440,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41440"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-05T11-20-12": {
@@ -1318,7 +1318,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40448,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40448"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-07T04-40-38": {
@@ -1326,7 +1326,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40659,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40659"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-07T04-48-08": {
@@ -1334,7 +1334,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40662,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40662"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-07T05-13-47": {
@@ -1342,7 +1342,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40673,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40673"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-08T04-02-41": {
@@ -1350,7 +1350,7 @@
       "label": "fp",
       "label_detail": "antenna",
       "platform_sequence_id": 40766,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40766"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T14-01-28": {
@@ -1358,7 +1358,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41112,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41112"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T14-51-07": {
@@ -1366,7 +1366,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41129,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41129"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T15-11-38": {
@@ -1374,7 +1374,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41135,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41135"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T17-41-14": {
@@ -1390,7 +1390,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41269,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_41269"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T18-53-17": {
@@ -1398,7 +1398,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41329,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41329"
     },
     "sdis-77_moret-sur-loing-02_359_2026-05-10T19-39-47": {
@@ -1414,7 +1414,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40425,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40425"
     },
     "sdis-77_moret-sur-loing-02_44_2026-05-10T18-57-17": {
@@ -1438,7 +1438,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40475,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40475"
     },
     "sdis-77_nemours-01_100_2026-05-10T14-13-35": {
@@ -1462,7 +1462,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41319,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41319"
     },
     "sdis-77_nemours-01_147_2026-05-05T16-06-53": {
@@ -1470,7 +1470,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40451,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40451"
     },
     "sdis-77_nemours-01_147_2026-05-05T16-39-52": {
@@ -1478,7 +1478,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40458,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40458"
     },
     "sdis-77_nemours-01_147_2026-05-05T16-50-53": {
@@ -1486,7 +1486,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40464,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40464"
     },
     "sdis-77_nemours-01_147_2026-05-08T17-15-18": {
@@ -1494,7 +1494,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40875,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40875"
     },
     "sdis-77_nemours-01_147_2026-05-10T15-07-14": {
@@ -1502,7 +1502,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41133,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41133"
     },
     "sdis-77_nemours-01_147_2026-05-10T16-45-45": {
@@ -1510,7 +1510,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41188,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41188"
     },
     "sdis-77_nemours-01_147_2026-05-10T17-09-46": {
@@ -1558,7 +1558,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40457,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40457"
     },
     "sdis-77_nemours-01_194_2026-05-05T17-04-32": {
@@ -1590,7 +1590,7 @@
       "label": "fp",
       "label_detail": "other",
       "platform_sequence_id": 40574,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40574"
     },
     "sdis-77_nemours-01_194_2026-05-06T17-54-59": {
@@ -1598,7 +1598,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40630,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40630"
     },
     "sdis-77_nemours-01_194_2026-05-08T19-14-22": {
@@ -1606,7 +1606,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40903,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40903"
     },
     "sdis-77_nemours-01_194_2026-05-09T04-16-23": {
@@ -1630,7 +1630,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41289,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41289"
     },
     "sdis-77_nemours-01_194_2026-05-10T18-26-53": {
@@ -1638,7 +1638,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41298,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41298"
     },
     "sdis-77_nemours-01_194_2026-05-10T18-37-20": {
@@ -1646,7 +1646,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41310,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41310"
     },
     "sdis-77_nemours-01_52_2026-05-05T13-19-20": {
@@ -1654,7 +1654,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40381,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40381"
     },
     "sdis-77_nemours-01_52_2026-05-05T17-03-31": {
@@ -1662,7 +1662,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 40472,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40472"
     },
     "sdis-77_nemours-01_52_2026-05-07T05-07-05": {
@@ -1670,7 +1670,7 @@
       "label": "fp",
       "label_detail": "light",
       "platform_sequence_id": 40672,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40672"
     },
     "sdis-77_nemours-01_52_2026-05-10T07-21-32": {
@@ -1694,7 +1694,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41228,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41228"
     },
     "sdis-77_nemours-01_52_2026-05-10T19-33-23": {
@@ -1702,7 +1702,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41360,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41360"
     },
     "sdis-77_nemours-01_52_2026-05-10T19-34-21": {
@@ -1726,7 +1726,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40631,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40631"
     },
     "sdis-77_nemours-02_246_2026-05-06T18-16-06": {
@@ -1734,7 +1734,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 40634,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40634"
     },
     "sdis-77_nemours-02_246_2026-05-08T18-10-50": {
@@ -1742,7 +1742,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 40891,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40891"
     },
     "sdis-77_nemours-02_246_2026-05-09T18-04-21": {
@@ -1750,7 +1750,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 41003,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41003"
     },
     "sdis-77_nemours-02_246_2026-05-10T19-07-21": {
@@ -1758,7 +1758,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41339,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41339"
     },
     "sdis-77_nemours-02_25_2026-05-05T13-17-20": {
@@ -1774,7 +1774,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40473,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40473"
     },
     "sdis-77_nemours-02_25_2026-05-05T17-46-31": {
@@ -1782,7 +1782,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40497,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40497"
     },
     "sdis-77_nemours-02_25_2026-05-05T17-53-31": {
@@ -1846,7 +1846,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41145,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41145"
     },
     "sdis-77_nemours-02_25_2026-05-10T15-56-45": {
@@ -1854,7 +1854,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41150,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41150"
     },
     "sdis-77_nemours-02_25_2026-05-10T15-56-49": {
@@ -1862,7 +1862,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41151,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41151"
     },
     "sdis-77_nemours-02_25_2026-05-10T16-37-51": {
@@ -1870,7 +1870,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41181,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41181"
     },
     "sdis-77_nemours-02_25_2026-05-10T16-51-21": {
@@ -1894,7 +1894,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41210,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41210"
     },
     "sdis-77_nemours-02_25_2026-05-10T17-13-46": {
@@ -1902,7 +1902,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41227,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41227"
     },
     "sdis-77_nemours-02_25_2026-05-10T17-26-18": {
@@ -1910,7 +1910,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41243,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41243"
     },
     "sdis-77_nemours-02_25_2026-05-10T17-35-17": {
@@ -1926,7 +1926,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41265,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41265"
     },
     "sdis-77_nemours-02_25_2026-05-10T18-05-25": {
@@ -1934,7 +1934,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41282,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41282"
     },
     "sdis-77_nemours-02_25_2026-05-10T19-25-23": {
@@ -1942,7 +1942,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41352,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41352"
     },
     "sdis-77_nemours-02_25_2026-05-10T19-25-53": {
@@ -1950,7 +1950,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41355,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41355"
     },
     "sdis-77_nemours-02_25_2026-05-10T19-35-40": {
@@ -1974,7 +1974,7 @@
       "label": "fp",
       "label_detail": "high_cloud",
       "platform_sequence_id": 41374,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41374"
     },
     "sdis-77_nemours-02_25_2026-05-11T12-01-39": {
@@ -1998,7 +1998,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40429,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40429"
     },
     "sdis-77_nemours-02_291_2026-05-05T16-22-52": {
@@ -2006,7 +2006,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40454,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40454"
     },
     "sdis-77_nemours-02_291_2026-05-09T15-03-49": {
@@ -2014,7 +2014,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40972,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_40972"
     },
     "sdis-77_nemours-02_291_2026-05-09T19-40-29": {
@@ -2022,7 +2022,7 @@
       "label": "fp",
       "label_detail": "building",
       "platform_sequence_id": 41016,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41016"
     },
     "sdis-77_nemours-02_291_2026-05-10T08-09-48": {
@@ -2030,7 +2030,7 @@
       "label": "fp",
       "label_detail": "building",
       "platform_sequence_id": 41047,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41047"
     },
     "sdis-77_nemours-02_291_2026-05-10T08-34-18": {
@@ -2038,7 +2038,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 41053,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41053"
     },
     "sdis-77_nemours-02_291_2026-05-10T17-16-47": {
@@ -2054,7 +2054,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41275,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41275"
     },
     "sdis-77_nemours-02_291_2026-05-10T18-05-18": {
@@ -2062,7 +2062,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41281,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41281"
     },
     "sdis-77_nemours-02_291_2026-05-10T18-36-20": {
@@ -2078,7 +2078,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41356,
-      "split": "test",
+      "split": "val",
       "testbed_key": "pyro_annotator_41356"
     },
     "sdis-77_nemours-02_291_2026-05-10T19-36-44": {
@@ -2094,7 +2094,7 @@
       "label": "fp",
       "label_detail": "building",
       "platform_sequence_id": 41423,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41423"
     },
     "sdis-77_nemours-02_291_2026-05-11T16-00-16": {
@@ -2110,7 +2110,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40467,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40467"
     },
     "sdis-77_nemours-02_340_2026-05-05T17-13-40": {
@@ -2118,7 +2118,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40477,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40477"
     },
     "sdis-77_nemours-02_340_2026-05-05T17-13-46": {
@@ -2126,7 +2126,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40478,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40478"
     },
     "sdis-77_nemours-02_340_2026-05-05T17-18-01": {
@@ -2134,7 +2134,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 40479,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40479"
     },
     "sdis-77_nemours-02_340_2026-05-10T15-56-14": {
@@ -2158,7 +2158,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41185,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41185"
     },
     "sdis-77_nemours-02_340_2026-05-10T17-01-46": {
@@ -2214,7 +2214,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 41439,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41439"
     },
     "sdis-77_videlles-01_109_2026-05-09T17-03-18": {
@@ -2222,7 +2222,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40995,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_40995"
     },
     "sdis-77_videlles-01_109_2026-05-09T17-50-48": {
@@ -2230,7 +2230,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41001,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41001"
     },
     "sdis-77_videlles-01_109_2026-05-10T17-35-32": {
@@ -2238,7 +2238,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41256,
-      "split": "train",
+      "split": "val",
       "testbed_key": "pyro_annotator_41256"
     },
     "sdis-77_videlles-01_109_2026-05-10T18-34-27": {
@@ -2254,7 +2254,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 41434,
-      "split": "val",
+      "split": "test",
       "testbed_key": "pyro_annotator_41434"
     },
     "sdis-77_videlles-01_157_2026-05-07T06-42-27": {
@@ -2262,7 +2262,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40686,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40686"
     },
     "sdis-77_videlles-01_157_2026-05-07T12-42-38": {
@@ -2270,7 +2270,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40721,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_40721"
     },
     "sdis-77_videlles-01_157_2026-05-10T15-55-43": {
@@ -2302,7 +2302,7 @@
       "label": "fp",
       "label_detail": "low_cloud",
       "platform_sequence_id": 41229,
-      "split": "train",
+      "split": "test",
       "testbed_key": "pyro_annotator_41229"
     },
     "sdis-77_videlles-01_157_2026-05-10T18-15-27": {
@@ -2318,7 +2318,7 @@
       "label": "smoke",
       "label_detail": "wildfire",
       "platform_sequence_id": 40700,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40700"
     },
     "sdis-77_videlles-02_80_2026-05-08T05-38-32": {
@@ -2326,7 +2326,7 @@
       "label": "fp",
       "label_detail": "tree",
       "platform_sequence_id": 40787,
-      "split": "val",
+      "split": "train",
       "testbed_key": "pyro_annotator_40787"
     },
     "sdis-77_videlles-02_80_2026-05-08T06-08-00": {
@@ -2342,7 +2342,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40810,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40810"
     },
     "sdis-77_videlles-02_80_2026-05-08T11-02-52": {
@@ -2350,7 +2350,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 40821,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40821"
     },
     "sdis-77_videlles-02_80_2026-05-09T13-36-51": {
@@ -2358,7 +2358,7 @@
       "label": "smoke",
       "label_detail": "other",
       "platform_sequence_id": 40965,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_40965"
     },
     "sdis-77_videlles-02_80_2026-05-11T14-12-53": {
@@ -2366,7 +2366,7 @@
       "label": "smoke",
       "label_detail": "industrial",
       "platform_sequence_id": 41444,
-      "split": "test",
+      "split": "train",
       "testbed_key": "pyro_annotator_41444"
     }
   },
