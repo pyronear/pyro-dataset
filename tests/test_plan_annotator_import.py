@@ -55,6 +55,21 @@ def test_the_fp_quota_equals_the_smoke_count(tmp_path):
     assert len(kinds(plan, "fp")) == 2, "FP quota equals the smoke count"
 
 
+def test_no_fp_quota_takes_every_recurring_object(tmp_path):
+    export = tmp_path / "export"
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a")]
+        + [make_alert(10 + i, "fp", f"cam-fp{i}") for i in range(5)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json", ["--no-fp-quota"])
+    assert result.returncode == 0, result.stderr
+
+    plan = read_plan(plan_path)
+    assert len(kinds(plan, "fp")) == 5, "one sequence per object, uncapped"
+
+
 def test_each_entry_carries_kind_split_and_recurring_object(tmp_path):
     plan_path = tmp_path / "plan.json"
     run_plan(small_export(tmp_path), plan_path, tmp_path / "ledger.json")

@@ -29,6 +29,9 @@ Arguments:
                        (default: data/raw/pyro-annotator/import_plan.json).
     --ledger           Recurring-object ledger (default: data/raw/pyro-annotator/recurring_objects.json).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
+    --no-fp-quota      Take every new recurring object instead of capping false
+                       positives at the smoke count. Safe while the builders' own
+                       quotas (n_wf per split) stay well above the pinned count.
     --hard-negative-threshold  Score at or above which an object counts as fooling (default: 0.5).
     --match-iou        IoU for matching an alert to an existing recurring object (default: 0.3).
     --same-fire-window Hours within which same-view smoke alerts count as one fire (default: 12).
@@ -68,6 +71,11 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("data/raw/pyro-annotator/recurring_objects.json"),
     )
     parser.add_argument("--max-per-object", type=int, default=1)
+    parser.add_argument(
+        "--no-fp-quota",
+        action="store_true",
+        help="Take every new recurring object, not just as many as the smoke count.",
+    )
     parser.add_argument("--hard-negative-threshold", type=float, default=0.5)
     parser.add_argument("--match-iou", type=float, default=0.3)
     parser.add_argument(
@@ -217,9 +225,14 @@ def main() -> None:
     # runs contributed, or the quota pays twice for the same smoke.
     already_ingested = sum(len(e["ingested_folders"]) for e in ledger.entries.values())
     quota = max(len(smoke) - already_ingested, 0)
+    if args["no_fp_quota"]:
+        # The builders rebalance per split and pin annotator FPs ahead of
+        # clustering, so the import-side cap only throws annotated objects away.
+        quota = sys.maxsize
     logging.info(
         f"{len(alerts)} alerts: {len(smoke)} smoke, {len(fp_alerts)} false positive; "
-        f"FP quota {quota} ({already_ingested} already ingested)"
+        f"FP quota {'none' if args['no_fp_quota'] else quota} "
+        f"({already_ingested} already ingested)"
     )
 
     # Seed from the ledger *and* from smoke folders earlier runs planned: smoke
@@ -281,7 +294,7 @@ def main() -> None:
         max_per_object=args["max_per_object"],
         ingested={ro_id: ledger.ingested(ro_id) for ro_id in ledger.entries},
     )
-    logging.info(f"selected {len(picked)}/{quota} false-positive sequences")
+    logging.info(f"selected {len(picked)} false-positive sequences")
 
     chosen: list[tuple[dict[str, Any], str, str | None]] = [
         (alert, "wildfire", None) for alert in smoke
@@ -341,7 +354,10 @@ def main() -> None:
 
     print(f"\n{'DRY RUN — ' if dry_run else ''}Annotator import plan")
     print(f"  wildfire : {len(smoke)}")
-    print(f"  fp       : {len(picked)} of a {quota} quota, {fooling} objects fooling")
+    quota_label = "no" if args["no_fp_quota"] else f"a {quota}"
+    print(
+        f"  fp       : {len(picked)} of {quota_label} quota, {fooling} objects fooling"
+    )
     print(
         f"  splits   : train {sum(1 for e in plan.values() if e['split'] == 'train')}, "
         f"val {sum(1 for e in plan.values() if e['split'] == 'val')}, "
