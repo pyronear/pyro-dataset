@@ -57,31 +57,3 @@ def test_an_unregistered_or_missing_folder_is_an_error(tmp_path):
     lock = make_lock(tmp_path, ["f1"])
     with pytest.raises(SystemExit, match="f1"):
         module.frozen_test_selection(lock, quota=1, registered=set(), data_dir=tmp_path)
-
-
-def make_extra(tmp_path, wildfire=(), fp=()):
-    for kind, names in (("wildfire", wildfire), ("fp", fp)):
-        (tmp_path / "extra" / kind).mkdir(parents=True, exist_ok=True)
-        for name in names:
-            (tmp_path / "extra" / kind / name / "images").mkdir(parents=True)
-    return tmp_path / "extra"
-
-
-def test_extra_test_sequences_lists_both_kinds(tmp_path):
-    extra = make_extra(tmp_path, wildfire=["w2", "w1"], fp=["f1"])
-    found = module.extra_test_sequences(extra, registered={"other"})
-    assert [p.name for p in found["wildfire"]] == ["w1", "w2"]
-    assert [p.name for p in found["fp"]] == ["f1"]
-
-
-def test_no_extra_dir_adds_nothing():
-    assert module.extra_test_sequences(None, registered=set()) == {
-        "wildfire": [],
-        "fp": [],
-    }
-
-
-def test_an_extra_folder_also_registered_is_an_error(tmp_path):
-    extra = make_extra(tmp_path, fp=["f1"])
-    with pytest.raises(SystemExit, match="f1"):
-        module.extra_test_sequences(extra, registered={"f1"})

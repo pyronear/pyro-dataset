@@ -1,7 +1,0 @@
-outs:
-- md5: 60c11be0bdb973d35a2eb69be8dd2727.dir
-  size: 501396964
-  nfiles: 8231
-  hash: md5
-  path: pyro-annotator-testbed
-  remote: awspyronear-private

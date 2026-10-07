@@ -164,7 +164,6 @@ LEDGER_PATH = RAW / "pyro-annotator" / "recurring_objects.json"
 FP_REGISTRY_PATH = RAW / "fp" / "registry.json"
 WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
 TEST_LOCKFILE_PATH = RAW / "sequential_test_lock.json"
-TESTBED_PATH = RAW / "pyro-annotator-testbed"
 
 
 def test_no_recurring_object_spans_splits() -> None:
@@ -202,17 +201,3 @@ def test_lockfile_matches_the_test_quota() -> None:
     }
     assert len(folders) == len(set(folders)) == n_wf_test
     assert set(folders) <= fp_test
-
-
-def test_testbed_sequences_are_not_registered() -> None:
-    """Test-only testbed sequences never enter a registry (or the YOLO builds)."""
-    _skip_if_missing(TESTBED_PATH, WF_REGISTRY_PATH, FP_REGISTRY_PATH)
-    testbed = {
-        p.name for kind in ("wildfire", "fp") for p in (TESTBED_PATH / kind).iterdir()
-    }
-    registered = {
-        s["folder"]
-        for path in (WF_REGISTRY_PATH, FP_REGISTRY_PATH)
-        for s in json.loads(path.read_text())["sequences"]
-    }
-    assert not testbed & registered, sorted(testbed & registered)[:5]

@@ -710,8 +710,7 @@ stages:
       --wf-data-dir data/raw/wildfire/data --fp-registry data/raw/fp/registry.json
       --fp-data-dir data/raw/fp/data --embeddings-dir data/interim/fp_sequence_embeddings
       --output-train-val data/processed/sequential_train_val --output-test data/processed/sequential_test
-      --test-lockfile data/raw/sequential_test_lock.json --extra-test-dir data/raw/pyro-annotator-testbed
-      --random-seed 0
+      --test-lockfile data/raw/sequential_test_lock.json --random-seed 0
     deps:
     - path: data/interim/fp_sequence_embeddings/train
       hash: md5
@@ -732,11 +731,6 @@ stages:
       hash: md5
       md5: 7a728c1982aced8c3b062b6be8a2e039
       size: 1422787
-    - path: data/raw/pyro-annotator-testbed
-      hash: md5
-      md5: 60c11be0bdb973d35a2eb69be8dd2727.dir
-      size: 501396964
-      nfiles: 8231
     - path: data/raw/sequential_test_lock.json
       hash: md5
       md5: dee304967e881c32833c62a907b0d075
@@ -752,8 +746,8 @@ stages:
       size: 422104
     - path: scripts/build_sequential_dataset.py
       hash: md5
-      md5: 2a0ab76c3b16f1f5c8b2874272cd2985
-      size: 13752
+      md5: a279800d6a6e0a1c507b77256174d805
+      size: 11749
     - path: src/pyro_dataset/fp/lockfile.py
       hash: md5
       md5: cfd051c856b57783e3201555d1b4b8c6
@@ -765,9 +759,9 @@ stages:
     outs:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 667e0547e126ff6221b50db54a04d735.dir
-      size: 1581571677
-      nfiles: 27224
+      md5: 9051fc5969abe6628972bfa4499a9c60.dir
+      size: 1080242349
+      nfiles: 18996
     - path: data/processed/sequential_train_val
       hash: md5
       md5: bb9c5698178d476daf4daf0df3790768.dir
@@ -808,9 +802,9 @@ stages:
     deps:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 667e0547e126ff6221b50db54a04d735.dir
-      size: 1581571677
-      nfiles: 27224
+      md5: 9051fc5969abe6628972bfa4499a9c60.dir
+      size: 1080242349
+      nfiles: 18996
     - path: data/processed/sequential_train_val
       hash: md5
       md5: bb9c5698178d476daf4daf0df3790768.dir
@@ -835,11 +829,6 @@ stages:
       hash: md5
       md5: 7a728c1982aced8c3b062b6be8a2e039
       size: 1422787
-    - path: data/raw/pyro-annotator-testbed
-      hash: md5
-      md5: 60c11be0bdb973d35a2eb69be8dd2727.dir
-      size: 501396964
-      nfiles: 8231
     - path: data/raw/pyro-annotator/recurring_objects.json
       hash: md5
       md5: e9eb111102d040135e4fb40d75f95828
@@ -854,8 +843,8 @@ stages:
       size: 422104
     - path: tests/test_data_leakage.py
       hash: md5
-      md5: a3bd6fb2353556c0085dcf8b5653437f
-      size: 8192
+      md5: 6a139392d901fc3f14ac20ec8162d515
+      size: 7593
   compute_fp_embeddings:
     cmd: uv run python scripts/embed_fp_for_selection.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --output data/interim/fp_sequence_embeddings --splits

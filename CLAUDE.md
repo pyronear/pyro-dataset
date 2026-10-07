@@ -159,15 +159,6 @@ What differs from the platform loop:
   left out of `labels/`, so an object-level dataset can be derived later without
   re-exporting.
 
-### pyro-annotator Testbed (test only)
-
-`data/raw/pyro-annotator-testbed/` holds temporal-model's former fixed testbed
-(42 smoke + 254 FP sequences, May 2026). `build_sequential_dataset.py
---extra-test-dir` copies it verbatim into `sequential_test`; it is **never
-registered**, because its boxes are detector output and the registries also feed
-the YOLO builds. It sits outside the lockfile and the FP quota. Provenance:
-`data/raw/pyro-annotator-testbed/README.md`.
-
 ### Bounding Box Formats
 
 YOLO uses `xywhn` (center_x, center_y, width, height, normalized). Internally we also use `xyxyn` (x1, y1, x2, y2, normalized). Conversion utilities are in `src/pyro_dataset/yolo/utils.py`.

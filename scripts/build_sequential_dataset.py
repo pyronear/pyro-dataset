@@ -49,8 +49,6 @@ Arguments:
     --output-test       Output directory for test (default: data/processed/sequential_test).
     --test-lockfile     Append-only lockfile holding the test FP folders
                         (default: data/raw/sequential_test_lock.json).
-    --extra-test-dir    Test-only sequences ({wildfire,fp}/<folder>) copied verbatim
-                        into the test split, never registered (default: none).
     --random-seed       Random seed for KMeans init (default: 0).
     --nms-iou           NMS IoU for intra-sequence main bbox (default: 0.3).
     --match-iou         IoU threshold for intra-camera atoms (default: 0.7).
@@ -109,12 +107,6 @@ def make_cli_parser() -> argparse.ArgumentParser:
         default=Path("data/raw/sequential_test_lock.json"),
         help="Append-only lockfile that IS the FP half of the test split.",
     )
-    parser.add_argument(
-        "--extra-test-dir",
-        type=Path,
-        default=None,
-        help="Test-only sequences ({wildfire,fp}/<folder>) copied verbatim into test.",
-    )
     parser.add_argument("--random-seed", type=int, default=0)
     parser.add_argument("--nms-iou", type=float, default=0.3)
     parser.add_argument("--match-iou", type=float, default=0.7)
@@ -168,33 +160,6 @@ def frozen_test_selection(
     return [data_dir / folder for folder in folders]
 
 
-def extra_test_sequences(
-    extra_dir: Path | None, registered: set[str]
-) -> dict[str, list[Path]]:
-    """Test-only sequence folders under extra_dir/{wildfire,fp}/, copied verbatim.
-
-    They stay out of the registries because their labels are detector output:
-    the registries also feed the YOLO builds, which would then score detectors
-    against a detector. A name also found in a registry would put one sequence
-    in the dataset twice, so it is an error.
-    """
-    if extra_dir is None:
-        return {"wildfire": [], "fp": []}
-    extra = {
-        kind: sorted(p for p in (extra_dir / kind).iterdir() if p.is_dir())
-        for kind in ("wildfire", "fp")
-    }
-    clashes = sorted(
-        p.name for paths in extra.values() for p in paths if p.name in registered
-    )
-    if clashes:
-        raise SystemExit(
-            f"{len(clashes)} extra test folder(s) also in a registry: "
-            + ", ".join(clashes[:5])
-        )
-    return extra
-
-
 if __name__ == "__main__":
     cli_parser = make_cli_parser()
     args = vars(cli_parser.parse_args())
@@ -213,19 +178,13 @@ if __name__ == "__main__":
     match_iou: float = args["match_iou"]
     seed: int = args["random_seed"]
 
-    wf_sequences = load_registry(wf_registry_path)
-    fp_sequences = load_registry(fp_registry_path)
-    # Checked before anything is deleted, so a clash leaves the outputs intact.
-    extra_test = extra_test_sequences(
-        args["extra_test_dir"],
-        {s["folder"] for s in wf_sequences + fp_sequences},
-    )
-
     if not dry_run:
         for out in (output_train_val, output_test):
             if out.exists():
                 shutil.rmtree(out)
 
+    wf_sequences = load_registry(wf_registry_path)
+    fp_sequences = load_registry(fp_registry_path)
     logging.info(
         f"Loaded {len(wf_sequences)} WF sequences, {len(fp_sequences)} FP sequences"
     )
@@ -329,17 +288,6 @@ if __name__ == "__main__":
             copy_sequence(seq_path, out / split / "fp" / seq_path.name, dry_run)
 
         counters[split] = {"wf": n_wf - wf_missing, "fp": n_fp}
-
-    for kind, key in (("wildfire", "wf"), ("fp", "fp")):
-        for src in extra_test[kind]:
-            if not dry_run:
-                shutil.copytree(src, output_test / "test" / kind / src.name)
-        counters["test"][key] += len(extra_test[kind])
-    if args["extra_test_dir"]:
-        logging.info(
-            f"test: +{len(extra_test['wildfire'])} WF + {len(extra_test['fp'])} FP "
-            f"extra sequences from {args['extra_test_dir']}"
-        )
     fp_missing = fp_missing_total
 
     print(f"\n{'=' * 55}")
