@@ -46,9 +46,9 @@ def make_cli_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--splits",
         nargs="+",
-        default=["val", "train", "test"],
-        help="Which splits to embed. Defaults to val + train + test "
-        "(YOLO test uses round-robin and ignores embeddings; sequential test uses them).",
+        default=["val", "train"],
+        help="Which splits to embed. Defaults to val + train: both test builds "
+        "ignore embeddings (YOLO test is round-robin, sequential test takes every FP).",
     )
     p.add_argument(
         "--output",

@@ -162,7 +162,6 @@ def test_sequential_no_image_leakage(
 RAW = Path(__file__).parent.parent / "data" / "raw"
 LEDGER_PATH = RAW / "pyro-annotator" / "recurring_objects.json"
 FP_REGISTRY_PATH = RAW / "fp" / "registry.json"
-WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
 TEST_LOCKFILE_PATH = RAW / "sequential_test_lock.json"
 
 
@@ -185,19 +184,14 @@ def test_no_recurring_object_spans_splits() -> None:
         )
 
 
-def test_lockfile_matches_the_test_quota() -> None:
-    """The frozen negatives are exactly quota-many registered test FPs."""
-    _skip_if_missing(TEST_LOCKFILE_PATH, WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+def test_lockfile_holds_every_test_fp() -> None:
+    """The frozen negatives are exactly the registered test FPs."""
+    _skip_if_missing(TEST_LOCKFILE_PATH, FP_REGISTRY_PATH)
     folders = json.loads(TEST_LOCKFILE_PATH.read_text())["folders"]
-    n_wf_test = sum(
-        1
-        for s in json.loads(WF_REGISTRY_PATH.read_text())["sequences"]
-        if s["split"] == "test"
-    )
     fp_test = {
         s["folder"]
         for s in json.loads(FP_REGISTRY_PATH.read_text())["sequences"]
         if s["split"] == "test"
     }
-    assert len(folders) == len(set(folders)) == n_wf_test
-    assert set(folders) <= fp_test
+    assert len(folders) == len(set(folders))
+    assert set(folders) == fp_test
