@@ -26,6 +26,7 @@ import shutil
 from pathlib import Path
 
 from pyro_dataset.ingest import (
+    ANNOTATOR_SOURCE,
     assignments_from_splits,
     compute_new_assignments,
     load_registry,
@@ -64,6 +65,12 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "recurring-object ledger so an artefact stays in one split.",
         type=Path,
         default=None,
+    )
+    parser.add_argument(
+        "--source",
+        help="Source stamped on --splits-from entries (default: pyro-annotator). "
+        "Only pyro-annotator entries are pinned and identified by the ledger.",
+        default=ANNOTATOR_SOURCE,
     )
     parser.add_argument(
         "--random-seed",
@@ -191,7 +198,7 @@ if __name__ == "__main__":
     if args["splits_from"]:
         splits = json.loads(Path(args["splits_from"]).read_text())
         new_assignments = assignments_from_splits(
-            to_copy, existing, start_id, prefix, splits
+            to_copy, existing, start_id, prefix, splits, source=args["source"]
         )
     else:
         new_assignments = compute_new_assignments(
