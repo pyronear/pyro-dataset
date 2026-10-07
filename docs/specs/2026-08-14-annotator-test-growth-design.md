@@ -8,6 +8,15 @@ Successor to the deferred "Growing the test set from annotator data" item in
 [2026-08-13-annotator-export-sequential-import-design.md](2026-08-13-annotator-export-sequential-import-design.md),
 whose §4 ("Splits: train and val only") this design supersedes.
 
+> **Update 2026-10-07: test takes every FP.** The quota is now the number of
+> registered test FPs, not `n_wf`. The freeze appends every test FP not yet frozen,
+> in registry order, with no pinning cap and no two-stage fill. Test embeddings are
+> no longer computed. The lockfile, its append-only rule and the build's hard
+> errors are unchanged. Why: the 1:1 balance only matters for training, the FP rate
+> does not depend on prevalence, and the quota left most clean test FPs unused
+> (202 of about 700). Where this document says "quota = n_wf", "pinned up to the
+> quota" or "filled by two-stage", read "every test FP".
+
 ## Goal
 
 Let annotator imports assign sequences to **all three splits** — automatic 80/10/10 —

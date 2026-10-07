@@ -193,6 +193,18 @@ def test_assignments_from_splits_honours_the_given_split():
     ]
 
 
+def test_assignments_from_splits_stamps_the_given_source():
+    (entry,) = assignments_from_splits(
+        [ANNOTATOR_FOLDER],
+        existing=[],
+        start_id=1,
+        prefix="fp",
+        splits={ANNOTATOR_FOLDER: "test"},
+        source="pyro-annotator-testbed",
+    )
+    assert entry["source"] == "pyro-annotator-testbed"
+
+
 def test_assignments_from_splits_ignores_per_camera_balance():
     """Two sequences of one camera may share a split — that is the point: the
     recurring-object ledger decides, not the camera's ratio."""

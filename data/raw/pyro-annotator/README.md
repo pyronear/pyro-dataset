@@ -10,6 +10,7 @@ data/raw/pyro-annotator/
 │   └── images/{source_api}/{platform_alert_id}/{detection_id}.jpg
 ├── recurring_objects.json     # git-tracked — the recurring-object ledger
 ├── import_plan.json           # git-tracked — which alerts to import, and where
+├── testbed_provenance.json    # git-tracked — the one-off May 2026 testbed import
 └── README.md
 ```
 
@@ -79,6 +80,35 @@ and a stale entry cannot put one artefact in two splits.
 
 It is also what makes staging disposable: with the plan in git, materialisation
 rebuilds `data/interim/pyro-annotator/sequences/` from the export at any time.
+
+## `testbed_provenance.json` — the May 2026 testbed
+
+A one-off import, separate from the export flow above. temporal-model used to
+compare releases on its own fixed testbed: 332 pyro-annotator sequences from 8
+sdis-77 cameras, 2026-05-05 to 2026-05-11, labeled smoke / fp / unknown, with
+images only. These sequences are now registered in `raw/wildfire` and `raw/fp`
+with `source: pyro-annotator-testbed`, so temporal-model can evaluate on
+`sequential_test` alone.
+
+- **Labels** come from the testbed only. The 15 `unknown` sequences are excluded.
+- **Platform API**, metadata only: the camera azimuth, the frame timestamps, and
+  the detection box used to pick the right YOLO box. Testbed ids are platform
+  sequence ids, and the images are byte-identical.
+- **Boxes** come from `pyronear/yolov11s` v8.2.0: per frame, the box that best
+  overlaps the platform box. Smoke boxes are class 0; FP boxes are class 99 plus
+  their score. They are detector output, not human boxes.
+- **Splits are 40/10/50** by groups, so one source never spans two splits. Smoke
+  is grouped by camera view, or by a start within 30 min on any camera. FP is
+  grouped by camera view plus box IoU >= 0.3. Sequences that share an image
+  are always grouped, compared by content (MD5), across smoke and FP. The
+  platform opens one sequence per detected area, so concurrent sequences share
+  frames, and it stores identical frames under different timestamps, which
+  file names do not reveal. Result: 17/4/21 smoke and 102/25/127 FP.
+- **Left out** (`skipped`): 19 FP sequences the detector no longer fires on, and
+  2 smoke sequences dropped after a visual review.
+
+The FP sequences are not `pyro-annotator`-sourced, so they are embedded and
+selected like any pool FP, not pinned through the ledger.
 
 ## Using it
 

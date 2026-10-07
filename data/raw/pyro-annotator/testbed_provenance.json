@@ -1,0 +1,2400 @@
+{
+  "about": "temporal-model's former pyro-annotator testbed, registered with --source pyro-annotator-testbed. Labels from the testbed; boxes from pyronear/yolov11s v8.2.0 (1024 px, NMS IoU 0.2) matched to the platform detection box (IoU >= 0.1); smoke class 0, fp class 99 + score. Splits 40/10/50 by groups: smoke by camera view or start within 30 min on any camera, fp by camera view + box IoU >= 0.3; any two sequences sharing an image (by content, across smoke and fp) share a split.",
+  "sequences": {
+    "sdis-77_croix-augas-01_15_2026-05-10T15-42-34": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41143,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41143"
+    },
+    "sdis-77_croix-augas-01_15_2026-05-10T17-21-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41237,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41237"
+    },
+    "sdis-77_croix-augas-01_15_2026-05-10T17-37-52": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41258,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41258"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-05T15-39-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40442,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40442"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-07T16-29-34": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40733,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40733"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-07T17-12-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40737,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40737"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-07T17-24-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40741,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40741"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-07T17-56-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40743,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40743"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-07T19-12-30": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40762,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40762"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-08T13-31-38": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "antenna",
+      "platform_sequence_id": 40828,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40828"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-08T17-32-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40882,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40882"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-09T14-43-57": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40970,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40970"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-09T17-08-03": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40997,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40997"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T13-04-47": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41105,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41105"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T16-49-42": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41192,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41192"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T16-49-47": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41193,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41193"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T16-53-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41201,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41201"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T16-55-46": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41202,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41202"
+    },
+    "sdis-77_croix-augas-01_285_2026-05-10T18-02-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41278,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41278"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-05T04-00-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40312,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40312"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-05T14-46-13": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40421,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40421"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-05T14-57-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40427,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40427"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-06T10-34-43": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "lens_droplet",
+      "platform_sequence_id": 40587,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40587"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-08T15-36-51": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40862,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40862"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-08T15-46-21": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "antenna",
+      "platform_sequence_id": 40864,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40864"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T15-59-04": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41154,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41154"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T16-10-42": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41161,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41161"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T16-12-42": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41163,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41163"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T16-34-42": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41179,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41179"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T16-55-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41200,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41200"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T17-03-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41216,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41216"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T17-08-49": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41219,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41219"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T17-33-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41252,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41252"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T18-29-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41300,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41300"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T18-42-15": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41314,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41314"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-10T19-06-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41338,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41338"
+    },
+    "sdis-77_croix-augas-01_327_2026-05-11T14-12-21": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41441,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41441"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-05T04-37-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40320,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40320"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-08T14-36-44": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40844,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40844"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-08T19-09-32": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40902,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40902"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-09T04-37-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40909,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40909"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T06-32-45": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 41039,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41039"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T14-10-56": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41116,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41116"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T14-17-26": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41118,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41118"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T14-40-56": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41123,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41123"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T16-07-12": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41159,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41159"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T16-14-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41164,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41164"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T16-14-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41170,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41170"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T16-32-12": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41177,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41177"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T16-54-42": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41204,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41204"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T17-10-15": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41221,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41221"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T17-12-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41223,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41223"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T19-17-15": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41343,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41343"
+    },
+    "sdis-77_croix-augas-01_60_2026-05-10T19-24-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41351,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41351"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-05T14-09-42": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40404,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40404"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-05T15-19-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40432,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40432"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T15-15-06": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41137,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41137"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T15-18-40": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41139,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41139"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T15-57-34": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41152,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41152"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T17-48-14": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41267,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41267"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T18-17-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41287,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41287"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T18-41-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41313,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41313"
+    },
+    "sdis-77_croix-augas-02_100_2026-05-10T18-47-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41322,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41322"
+    },
+    "sdis-77_croix-augas-02_146_2026-05-10T16-14-46": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41166,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41166"
+    },
+    "sdis-77_croix-augas-02_146_2026-05-10T16-39-42": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41184,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41184"
+    },
+    "sdis-77_croix-augas-02_146_2026-05-10T16-48-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41190,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41190"
+    },
+    "sdis-77_croix-augas-02_146_2026-05-10T18-51-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41326,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41326"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T04-09-09": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40315,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40315"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T13-47-41": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40392,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40392"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T14-09-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40405,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40405"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T14-15-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40406,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40406"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T15-03-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40430,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40430"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T15-29-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40436,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40436"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T15-53-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40447,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40447"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-05T16-00-14": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40449,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40449"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-08T17-25-10": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40880,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40880"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-10T17-13-15": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41225,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41225"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-10T17-29-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41248,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41248"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-10T17-42-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41264,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41264"
+    },
+    "sdis-77_croix-augas-02_190_2026-05-10T18-32-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41304,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41304"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-05T13-46-11": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40391,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40391"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-05T14-43-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40420,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40420"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-05T15-15-15": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40431,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40431"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-07T05-05-22": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40671,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40671"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-09T17-00-03": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40992,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40992"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T16-19-12": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41171,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41171"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T16-38-42": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41183,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41183"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T16-51-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41195,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41195"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T17-01-20": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41212,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41212"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T17-20-15": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41235,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41235"
+    },
+    "sdis-77_croix-augas-02_235_2026-05-10T17-24-20": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41241,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41241"
+    },
+    "sdis-77_moret-sur-loing-01_144_2026-05-05T14-34-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40416,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40416"
+    },
+    "sdis-77_moret-sur-loing-01_144_2026-05-07T07-26-02": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40692,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40692"
+    },
+    "sdis-77_moret-sur-loing-01_144_2026-05-10T19-40-18": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41372,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41372"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T10-55-04": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40356,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40356"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T13-30-36": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40386,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40386"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T14-29-44": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40413,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40413"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T17-30-34": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40483,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40483"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T17-43-34": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40493,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40493"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T17-43-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40494,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40494"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T18-15-05": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40505,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40505"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-05T18-15-06": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40506,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40506"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-06T14-38-35": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40613,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40613"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-07T04-24-38": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40655,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40655"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-07T05-03-47": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40668,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40668"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-07T16-19-10": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40732,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40732"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-07T18-22-59": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40750,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40750"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-09T04-05-24": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40906,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40906"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T10-51-19": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41083,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41083"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T16-33-10": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41178,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41178"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T16-59-40": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41206,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41206"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T16-59-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41208,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41208"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T17-34-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41253,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41253"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T17-50-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41268,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41268"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T18-52-46": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41328,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41328"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T19-18-46": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41347,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41347"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T19-24-19": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41350,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41350"
+    },
+    "sdis-77_moret-sur-loing-01_189_2026-05-10T19-36-51": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41367,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41367"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T11-16-12": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40359,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40359"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T12-42-59": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40370,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40370"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T13-06-06": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40375,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40375"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T13-51-39": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40394,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40394"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T14-05-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40403,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40403"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T15-51-24": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40446,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40446"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T17-29-04": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40481,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40481"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-05T18-10-05": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40503,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40503"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-07T05-52-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40679,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40679"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T13-23-58": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "lens_droplet",
+      "platform_sequence_id": 41106,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41106"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T14-42-07": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41124,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41124"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T15-42-08": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41142,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41142"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T16-44-10": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41187,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41187"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T16-47-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41189,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41189"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T17-01-11": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41211,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41211"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T17-02-41": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41215,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41215"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T17-10-10": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41222,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41222"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T17-28-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41247,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41247"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T17-57-43": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41273,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41273"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T18-03-13": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41279,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41279"
+    },
+    "sdis-77_moret-sur-loing-01_235_2026-05-10T18-54-17": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41330,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41330"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-05T05-24-20": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40330,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40330"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-05T12-15-28": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40367,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40367"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-05T17-57-04": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40501,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40501"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-07T19-09-38": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40761,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40761"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-08T12-05-14": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40822,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40822"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-08T13-36-23": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40830,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40830"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-08T18-09-18": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40889,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40889"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-10T10-39-49": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "lens_droplet",
+      "platform_sequence_id": 41080,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41080"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-10T17-55-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41271,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41271"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-10T18-25-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41296,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41296"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-10T19-26-17": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41353,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41353"
+    },
+    "sdis-77_moret-sur-loing-01_280_2026-05-11T14-12-50": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41443,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41443"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-05T05-07-20": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40325,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40325"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-05T14-04-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "water_body",
+      "platform_sequence_id": 40402,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40402"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-05T14-28-14": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40412,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40412"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-05T17-01-33": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40471,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40471"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-06T08-53-12": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "lens_droplet",
+      "platform_sequence_id": 40577,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40577"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-09T05-47-55": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40917,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40917"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-10T04-33-09": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41019,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41019"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-10T14-24-08": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41119,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41119"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-10T16-30-10": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41174,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41174"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-10T19-17-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41344,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41344"
+    },
+    "sdis-77_moret-sur-loing-02_316_2026-05-11T14-12-20": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41440,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41440"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-05T11-20-12": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40360,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40360"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-05T14-54-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40426,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40426"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-05T15-55-25": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40448,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40448"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-07T04-40-38": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40659,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40659"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-07T04-48-08": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40662,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40662"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-07T05-13-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40673,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40673"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-08T04-02-41": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "antenna",
+      "platform_sequence_id": 40766,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40766"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T14-01-28": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41112,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41112"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T14-51-07": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41129,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41129"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T15-11-38": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41135,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41135"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T17-41-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41262,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41262"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T17-51-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41269,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41269"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T18-53-17": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41329,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41329"
+    },
+    "sdis-77_moret-sur-loing-02_359_2026-05-10T19-39-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41371,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41371"
+    },
+    "sdis-77_moret-sur-loing-02_44_2026-05-05T14-53-44": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40425,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40425"
+    },
+    "sdis-77_moret-sur-loing-02_44_2026-05-10T18-57-17": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41333,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41333"
+    },
+    "sdis-77_moret-sur-loing-02_89_2026-05-10T19-34-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41361,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41361"
+    },
+    "sdis-77_nemours-01_100_2026-05-05T17-12-31": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40475,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40475"
+    },
+    "sdis-77_nemours-01_100_2026-05-10T14-13-35": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41117,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41117"
+    },
+    "sdis-77_nemours-01_100_2026-05-10T16-37-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41180,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41180"
+    },
+    "sdis-77_nemours-01_100_2026-05-10T18-42-50": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41319,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41319"
+    },
+    "sdis-77_nemours-01_147_2026-05-05T16-06-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40451,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40451"
+    },
+    "sdis-77_nemours-01_147_2026-05-05T16-39-52": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40458,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40458"
+    },
+    "sdis-77_nemours-01_147_2026-05-05T16-50-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40464,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40464"
+    },
+    "sdis-77_nemours-01_147_2026-05-08T17-15-18": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40875,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40875"
+    },
+    "sdis-77_nemours-01_147_2026-05-10T15-07-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41133,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41133"
+    },
+    "sdis-77_nemours-01_147_2026-05-10T16-45-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41188,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41188"
+    },
+    "sdis-77_nemours-01_147_2026-05-10T17-09-46": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41220,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41220"
+    },
+    "sdis-77_nemours-01_147_2026-05-10T17-20-17": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41236,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41236"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T15-28-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40434,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40434"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T15-43-51": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40443,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40443"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T15-48-22": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40445,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40445"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T16-33-52": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40457,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40457"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T17-04-32": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40474,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40474"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T17-13-32": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40476,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40476"
+    },
+    "sdis-77_nemours-01_194_2026-05-05T17-36-02": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40488,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40488"
+    },
+    "sdis-77_nemours-01_194_2026-05-06T08-20-54": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "other",
+      "platform_sequence_id": 40574,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40574"
+    },
+    "sdis-77_nemours-01_194_2026-05-06T17-54-59": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40630,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40630"
+    },
+    "sdis-77_nemours-01_194_2026-05-08T19-14-22": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40903,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40903"
+    },
+    "sdis-77_nemours-01_194_2026-05-09T04-16-23": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40908,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40908"
+    },
+    "sdis-77_nemours-01_194_2026-05-10T16-16-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41168,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41168"
+    },
+    "sdis-77_nemours-01_194_2026-05-10T18-19-20": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41289,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41289"
+    },
+    "sdis-77_nemours-01_194_2026-05-10T18-26-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41298,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41298"
+    },
+    "sdis-77_nemours-01_194_2026-05-10T18-37-20": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41310,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41310"
+    },
+    "sdis-77_nemours-01_52_2026-05-05T13-19-20": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40381,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40381"
+    },
+    "sdis-77_nemours-01_52_2026-05-05T17-03-31": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 40472,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40472"
+    },
+    "sdis-77_nemours-01_52_2026-05-07T05-07-05": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 40672,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40672"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T07-21-32": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41040,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41040"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T17-00-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41209,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41209"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T17-14-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41228,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41228"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T19-33-23": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41360,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41360"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T19-34-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41362,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41362"
+    },
+    "sdis-77_nemours-01_52_2026-05-10T19-34-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41366,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41366"
+    },
+    "sdis-77_nemours-02_246_2026-05-06T17-55-05": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40631,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40631"
+    },
+    "sdis-77_nemours-02_246_2026-05-06T18-16-06": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40634,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40634"
+    },
+    "sdis-77_nemours-02_246_2026-05-08T18-10-50": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40891,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40891"
+    },
+    "sdis-77_nemours-02_246_2026-05-09T18-04-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 41003,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41003"
+    },
+    "sdis-77_nemours-02_246_2026-05-10T19-07-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41339,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41339"
+    },
+    "sdis-77_nemours-02_25_2026-05-05T13-17-20": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40380,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40380"
+    },
+    "sdis-77_nemours-02_25_2026-05-05T17-04-01": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40473,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40473"
+    },
+    "sdis-77_nemours-02_25_2026-05-05T17-46-31": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40497,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40497"
+    },
+    "sdis-77_nemours-02_25_2026-05-05T17-53-31": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40498,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40498"
+    },
+    "sdis-77_nemours-02_25_2026-05-06T13-03-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40597,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40597"
+    },
+    "sdis-77_nemours-02_25_2026-05-07T11-01-56": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40710,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40710"
+    },
+    "sdis-77_nemours-02_25_2026-05-09T09-30-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40949,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40949"
+    },
+    "sdis-77_nemours-02_25_2026-05-09T19-09-29": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 41010,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41010"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T07-25-02": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41042,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41042"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T10-02-34": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41075,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41075"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T15-45-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41145,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41145"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T15-56-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41150,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41150"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T15-56-49": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41151,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41151"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T16-37-51": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41181,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41181"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T16-51-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41194,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41194"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T16-53-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41199,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41199"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T16-59-46": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41210,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41210"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T17-13-46": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41227,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41227"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T17-26-18": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41243,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41243"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T17-35-17": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41255,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41255"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T17-42-46": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41265,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41265"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T18-05-25": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41282,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41282"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T19-25-23": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41352,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41352"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T19-25-53": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41355,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41355"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T19-35-40": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41364,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41364"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T19-35-42": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41365,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41365"
+    },
+    "sdis-77_nemours-02_25_2026-05-10T19-42-45": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "high_cloud",
+      "platform_sequence_id": 41374,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41374"
+    },
+    "sdis-77_nemours-02_25_2026-05-11T12-01-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 41429,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41429"
+    },
+    "sdis-77_nemours-02_25_2026-05-11T12-07-39": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "lens_droplet",
+      "platform_sequence_id": 41431,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41431"
+    },
+    "sdis-77_nemours-02_291_2026-05-05T15-03-21": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40429,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40429"
+    },
+    "sdis-77_nemours-02_291_2026-05-05T16-22-52": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40454,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40454"
+    },
+    "sdis-77_nemours-02_291_2026-05-09T15-03-49": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40972,
+      "split": "val",
+      "testbed_key": "pyro_annotator_40972"
+    },
+    "sdis-77_nemours-02_291_2026-05-09T19-40-29": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "building",
+      "platform_sequence_id": 41016,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41016"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T08-09-48": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "building",
+      "platform_sequence_id": 41047,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41047"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T08-34-18": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 41053,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41053"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T17-16-47": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41233,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41233"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T18-01-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41275,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41275"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T18-05-18": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41281,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41281"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T18-36-20": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41309,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41309"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T19-28-22": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41356,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41356"
+    },
+    "sdis-77_nemours-02_291_2026-05-10T19-36-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41368,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41368"
+    },
+    "sdis-77_nemours-02_291_2026-05-11T11-00-25": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "building",
+      "platform_sequence_id": 41423,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41423"
+    },
+    "sdis-77_nemours-02_291_2026-05-11T16-00-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "light",
+      "platform_sequence_id": 41458,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41458"
+    },
+    "sdis-77_nemours-02_340_2026-05-05T16-54-52": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40467,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40467"
+    },
+    "sdis-77_nemours-02_340_2026-05-05T17-13-40": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40477,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40477"
+    },
+    "sdis-77_nemours-02_340_2026-05-05T17-13-46": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40478,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40478"
+    },
+    "sdis-77_nemours-02_340_2026-05-05T17-18-01": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40479,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40479"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T15-56-14": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41149,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41149"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T15-56-44": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41153,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41153"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T16-41-15": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41185,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41185"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T17-01-46": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41213,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41213"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T17-25-16": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41242,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41242"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T17-31-46": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41251,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41251"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T18-23-21": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41295,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41295"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T18-35-20": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41307,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41307"
+    },
+    "sdis-77_nemours-02_340_2026-05-10T19-10-52": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41341,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41341"
+    },
+    "sdis-77_nemours-02_340_2026-05-11T14-12-03": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 41439,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41439"
+    },
+    "sdis-77_videlles-01_109_2026-05-09T17-03-18": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40995,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40995"
+    },
+    "sdis-77_videlles-01_109_2026-05-09T17-50-48": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41001,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41001"
+    },
+    "sdis-77_videlles-01_109_2026-05-10T17-35-32": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41256,
+      "split": "val",
+      "testbed_key": "pyro_annotator_41256"
+    },
+    "sdis-77_videlles-01_109_2026-05-10T18-34-27": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41306,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41306"
+    },
+    "sdis-77_videlles-01_109_2026-05-11T12-33-24": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 41434,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41434"
+    },
+    "sdis-77_videlles-01_157_2026-05-07T06-42-27": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40686,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40686"
+    },
+    "sdis-77_videlles-01_157_2026-05-07T12-42-38": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40721,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40721"
+    },
+    "sdis-77_videlles-01_157_2026-05-10T15-55-43": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41148,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41148"
+    },
+    "sdis-77_videlles-01_157_2026-05-10T15-59-45": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41156,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41156"
+    },
+    "sdis-77_videlles-01_157_2026-05-10T16-38-07": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41182,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41182"
+    },
+    "sdis-77_videlles-01_157_2026-05-10T17-14-32": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41229,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41229"
+    },
+    "sdis-77_videlles-01_157_2026-05-10T18-15-27": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 41286,
+      "split": "test",
+      "testbed_key": "pyro_annotator_41286"
+    },
+    "sdis-77_videlles-02_80_2026-05-07T08-39-50": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "wildfire",
+      "platform_sequence_id": 40700,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40700"
+    },
+    "sdis-77_videlles-02_80_2026-05-08T05-38-32": {
+      "box_conf_threshold": 0.1,
+      "label": "fp",
+      "label_detail": "tree",
+      "platform_sequence_id": 40787,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40787"
+    },
+    "sdis-77_videlles-02_80_2026-05-08T06-08-00": {
+      "box_conf_threshold": 0.01,
+      "label": "fp",
+      "label_detail": "low_cloud",
+      "platform_sequence_id": 40791,
+      "split": "test",
+      "testbed_key": "pyro_annotator_40791"
+    },
+    "sdis-77_videlles-02_80_2026-05-08T08-49-29": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40810,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40810"
+    },
+    "sdis-77_videlles-02_80_2026-05-08T11-02-52": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 40821,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40821"
+    },
+    "sdis-77_videlles-02_80_2026-05-09T13-36-51": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "other",
+      "platform_sequence_id": 40965,
+      "split": "train",
+      "testbed_key": "pyro_annotator_40965"
+    },
+    "sdis-77_videlles-02_80_2026-05-11T14-12-53": {
+      "box_conf_threshold": 0.1,
+      "label": "smoke",
+      "label_detail": "industrial",
+      "platform_sequence_id": 41444,
+      "split": "train",
+      "testbed_key": "pyro_annotator_41444"
+    }
+  },
+  "skipped": {
+    "fp_no_detection": [
+      "pyro_annotator_40584",
+      "pyro_annotator_40640",
+      "pyro_annotator_40749",
+      "pyro_annotator_40991",
+      "pyro_annotator_41079",
+      "pyro_annotator_41136",
+      "pyro_annotator_41138",
+      "pyro_annotator_41141",
+      "pyro_annotator_41146",
+      "pyro_annotator_41196",
+      "pyro_annotator_41207",
+      "pyro_annotator_41218",
+      "pyro_annotator_41272",
+      "pyro_annotator_41276",
+      "pyro_annotator_41335",
+      "pyro_annotator_41358",
+      "pyro_annotator_41404",
+      "pyro_annotator_40781",
+      "pyro_annotator_40911"
+    ],
+    "smoke_dropped_after_review": [
+      "pyro_annotator_40993",
+      "pyro_annotator_41442"
+    ]
+  }
+}

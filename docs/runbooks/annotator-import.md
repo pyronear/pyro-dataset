@@ -260,9 +260,9 @@ dvc commit data/raw/wildfire data/raw/fp
 dvc repro compute_fp_embeddings
 ```
 
-Required **before** the freeze whenever the import added FP sequences: the
-freeze fills open test slots by clustering over the test pool's DINOv2
-embeddings, and stale embeddings make new test FPs invisible to that selection.
+Required whenever the import added FP sequences: train and val select their
+negatives by clustering over these DINOv2 embeddings, and the YOLO FP build
+reads them too.
 
 ## 7. Freeze the test negatives
 
@@ -276,18 +276,15 @@ only thing that writes it. The output:
 
 ```
 Test selection freeze
-  quota    : 160        # test WF sequences in the registry
-  frozen   : 151        # already in the lockfile — never touched
-  pinned   : +6 annotator (0 deferred beyond quota)
-  filled   : +3 by two-stage selection
+  test FPs : 520        # test FP sequences in the registry
+  frozen   : 456        # already in the lockfile — never touched
+  appended : +64        # every test FP not yet frozen, in registry order
 ```
 
-- `pinned` are annotator test FPs, taken in registry order up to the quota;
-  `deferred` ones wait in the pool for a later freeze — nothing is dropped.
-- `filled` covers whatever quota the pins did not, selected from the historical
-  pool.
-- An import that added no test WF sequences opens no slots: the freeze prints
-  `+0 / +0` and is a harmless no-op. Run it anyway; it is the check.
+- Test takes every registered test FP, not a 1:1 match with test smoke: the
+  balance only matters for training, and the FP rate does not depend on it.
+- An import that added no test FP sequences prints `+0` and is a harmless
+  no-op. Run it anyway; it is the check.
 
 Then look at the diff — this is the test set changing, the most consequential
 diff of the whole import:
@@ -299,9 +296,8 @@ git diff data/raw/sequential_test_lock.json
 **Additions at the end of the list only.** Any removed or reordered line means
 the append-only guarantee broke; do not commit it.
 
-This applies beyond annotator imports: **any** ingest that adds test WF
-sequences (the platform loop included) grows the quota and needs a freeze
-before the next build.
+This applies beyond annotator imports: **any** ingest that adds test FP
+sequences (the platform loop included) needs a freeze before the next build.
 
 ## 8. Rebuild and check
 
@@ -315,7 +311,8 @@ dvc repro
   scripts/freeze_test_selection.py`. That error is the system working.
 - `test_data_leakage` runs as a stage: split leakage, recurring-object pinning,
   and lockfile-vs-quota consistency, against the real data.
-- The build summary must show `n_fp == n_wf` in every split (50% FP).
+- The build summary must show `n_fp == n_wf` in train and val (50% FP); test
+  shows every registered test FP.
 
 Note that a full `dvc repro` needs the export on disk (the materialise stage
 reads it); that is why step 0 pulls it.

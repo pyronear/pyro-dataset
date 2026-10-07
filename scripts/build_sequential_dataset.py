@@ -2,7 +2,8 @@
 Build a sequential dataset from wildfire (wf) and false-positive (fp) sequences.
 
 Each sequence is copied as a folder (images/ + labels/ preserved as-is).
-FP sequences are balanced to 50% per split at the sequence level.
+FP sequences are balanced to 50% at the sequence level in train and val;
+test takes every registered test FP.
 
 Output structure:
     <output-train-val>/
@@ -140,7 +141,7 @@ def frozen_test_selection(
     Errors, never warns: a test set that cannot be materialised exactly as
     the lockfile records breaks comparability across releases, which is the
     lockfile's whole purpose. A quota mismatch usually means an import grew
-    the test WF pool and `scripts/freeze_test_selection.py` was not rerun.
+    the test FP pool and `scripts/freeze_test_selection.py` was not rerun.
     """
     if not lockfile_path.is_file():
         raise SystemExit(
@@ -151,8 +152,7 @@ def frozen_test_selection(
     if len(folders) != quota:
         raise SystemExit(
             f"test lockfile has {len(folders)} folders but the quota is {quota} "
-            "— run scripts/freeze_test_selection.py (a persistent shortfall "
-            "means the test FP pool is exhausted)"
+            "— run scripts/freeze_test_selection.py"
         )
     problems = validate_lockfile(folders, registered, data_dir)
     if problems:
@@ -211,12 +211,11 @@ if __name__ == "__main__":
 
         if split == "test":
             # Test negatives are frozen: the lockfile is the selection
-            # (docs/specs/2026-08-14-annotator-test-growth-design.md §3).
+            # (docs/specs/2026-08-14-annotator-test-growth-design.md §3), and
+            # it holds every registered test FP — no 1:1 balance for test.
+            test_fp = {s["folder"] for s in fp_sequences if s["split"] == "test"}
             selected_fp_paths = frozen_test_selection(
-                test_lockfile,
-                quota,
-                {s["folder"] for s in fp_sequences if s["split"] == "test"},
-                fp_data_dir,
+                test_lockfile, len(test_fp), test_fp, fp_data_dir
             )
             n_fp = len(selected_fp_paths)
             strategy = "frozen lockfile"

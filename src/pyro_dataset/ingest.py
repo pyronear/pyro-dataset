@@ -304,6 +304,7 @@ def assignments_from_splits(
     start_id: int,
     prefix: str,
     splits: dict[str, str],
+    source: str = ANNOTATOR_SOURCE,
 ) -> list[dict]:
     """Assign ids to new_folders using splits the caller already decided.
 
@@ -330,7 +331,7 @@ def assignments_from_splits(
                 "folder": folder,
                 "camera": extract_camera(folder),
                 "split": split,
-                "source": ANNOTATOR_SOURCE,
+                "source": source,
             }
         )
         current_id += 1

@@ -99,7 +99,7 @@ uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/wi
 uv run python scripts/add_data.py --src data/interim/pyro-annotator/sequences/fp \
   --type fp --splits-from data/interim/pyro-annotator/sequences/splits.json
 
-# 4. Refresh embeddings, then grow the frozen test negatives to the new quota
+# 4. Refresh embeddings, then append the new test negatives to the lockfile
 dvc repro compute_fp_embeddings
 uv run python scripts/freeze_test_selection.py
 ```
@@ -143,17 +143,18 @@ What differs from the platform loop:
   copied verbatim by the build, which errors on any mismatch instead of
   re-selecting. Every release's test set is a superset of the previous one,
   so models stay comparable across releases. Commit the lockfile with the
-  ledger and plan from the same import. Any ingest that adds test WF
-  sequences — annotator or not — grows the quota and needs a freeze before
-  the next `dvc repro`, or the build errors on the stale lockfile.
+  ledger and plan from the same import. The lockfile holds **every**
+  registered test FP — no 1:1 balance for test, since FPR does not depend on
+  prevalence — so any ingest that adds test FP sequences, annotator or not,
+  needs a freeze before the next `dvc repro`, or the build errors on the
+  stale lockfile.
   Design: `docs/specs/2026-08-14-annotator-test-growth-design.md`.
 - **False-positive boxes are class 99**, not `0`: they mark where the detector
   fired, not smoke. Annotator-sourced FP sequences are never embedded — their
   identity comes from `recurring_objects.json` — and in train and val both
   builders pin them ahead of clustering: the sequential build takes every
   sequence, the YOLO build one image per recurring object. In test they reach
-  `sequential_test` only through `freeze_test_selection.py`, up to the quota —
-  surplus pins are deferred until new test smoke opens slots. See
+  `sequential_test` through `freeze_test_selection.py`, like every test FP. See
   `docs/specs/2026-08-14-recurring-object-fp-identity-design.md`.
 - Each folder carries a `meta.json` with every lane's full track, including boxes
   left out of `labels/`, so an object-level dataset can be derived later without

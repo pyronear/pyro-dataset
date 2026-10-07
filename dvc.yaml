@@ -21,7 +21,7 @@ stages:
       --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data
       --output data/interim/fp_sequence_embeddings
-      --splits val train test
+      --splits val train
     deps:
       - scripts/embed_fp_for_selection.py
       - src/pyro_dataset/fp/selection.py
@@ -30,7 +30,6 @@ stages:
     outs:
       - data/interim/fp_sequence_embeddings/val
       - data/interim/fp_sequence_embeddings/train
-      - data/interim/fp_sequence_embeddings/test
 
   build_fp_yolo_dataset:
     cmd: >-
