@@ -35,6 +35,8 @@ from transformers import AutoImageProcessor, AutoModel
 from pyro_dataset.fp.selection import partition_pinned
 
 HF_REPO = "facebook/dinov2-base"
+# Pinned so a forced rebuild selects the same FP clusters as the release.
+HF_REVISION = "f9e44c814b77203eaa57a6bdbbd535f21ede1415"
 PADDING = 0.2
 OUT_SIZE = 224
 
@@ -210,8 +212,8 @@ def main() -> None:
     device = detect_device(args.device)
     print(f"device: {device}")
 
-    proc = AutoImageProcessor.from_pretrained(HF_REPO)
-    model = AutoModel.from_pretrained(HF_REPO).eval().to(device)
+    proc = AutoImageProcessor.from_pretrained(HF_REPO, revision=HF_REVISION)
+    model = AutoModel.from_pretrained(HF_REPO, revision=HF_REVISION).eval().to(device)
 
     for split in args.splits:
         seqs = by_split.get(split, [])
@@ -235,6 +237,7 @@ def main() -> None:
                 {
                     "split": split,
                     "model": HF_REPO,
+                    "revision": HF_REVISION,
                     "feature_dim": int(feats.shape[1]),
                     "n_items": len(meta),
                     "padding": PADDING,
