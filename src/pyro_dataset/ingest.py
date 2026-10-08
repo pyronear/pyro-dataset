@@ -17,10 +17,11 @@ _FOLDER_RE = re.compile(
 _FILE_RE = re.compile(
     r"^[a-zA-Z0-9-]+_[a-zA-Z0-9-]+_\d{1,3}_\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}\.[a-zA-Z]+$"
 )
-# JPEG only: every pool image is a .jpg, the annotator import writes .jpg, and the
-# builders, the freeze, the planner and the leakage tests all glob "*.jpg". A
-# .png accepted here would be invisible to every one of them.
-_IMAGE_EXTENSIONS = {".jpg"}
+# Exactly ".jpg", lower case: every pool image is one, the annotator import writes
+# them, and the builders, the freeze, the planner and the leakage tests all glob
+# "*.jpg". A .png or .JPG let through would be copied by add_data and then be
+# invisible to every one of them.
+IMAGE_SUFFIX = ".jpg"
 
 
 @dataclasses.dataclass
@@ -86,11 +87,24 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
             folder=name, naming_issues=naming, structural_issues=structural
         )
 
+    # Anything in images/ that is not a .jpg is copied by add_data and then
+    # ignored by every consumer — refused rather than silently carried.
+    foreign = [
+        f.name
+        for f in dir_images.iterdir()
+        if f.suffix != IMAGE_SUFFIX and not f.name.startswith(".")
+    ]
+    if foreign:
+        extra = f" (+{len(foreign) - 3} more)" if len(foreign) > 3 else ""
+        structural.append(
+            f"{len(foreign)} non-{IMAGE_SUFFIX} file(s) in images/: {foreign[:3]}{extra}"
+        )
+
     # Image filename format (naming warning)
     bad_images = [
         f.name
         for f in dir_images.iterdir()
-        if f.suffix.lower() in _IMAGE_EXTENSIONS and not _FILE_RE.match(f.name)
+        if f.suffix == IMAGE_SUFFIX and not _FILE_RE.match(f.name)
     ]
     if bad_images:
         sample = bad_images[:3]
@@ -99,9 +113,7 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
             f"{len(bad_images)} image(s) with invalid filename: {sample}{extra}"
         )
 
-    total_images = sum(
-        1 for f in dir_images.iterdir() if f.suffix.lower() in _IMAGE_EXTENSIONS
-    )
+    total_images = sum(1 for f in dir_images.iterdir() if f.suffix == IMAGE_SUFFIX)
     non_empty_labels = [f for f in dir_labels.glob("*.txt") if f.stat().st_size > 0]
     if not has_enough_labels(len(non_empty_labels), total_images):
         structural.append(
@@ -132,9 +144,7 @@ def find_duplicate_images(
     """
     incoming = {
         folder: [
-            p
-            for p in (src / folder / "images").iterdir()
-            if p.suffix.lower() in _IMAGE_EXTENSIONS
+            p for p in (src / folder / "images").iterdir() if p.suffix == IMAGE_SUFFIX
         ]
         for folder in folders
     }
@@ -143,7 +153,7 @@ def find_duplicate_images(
         file_md5(p)
         for pool in pool_dirs
         for p in pool.glob("*/images/*")
-        if p.suffix.lower() in _IMAGE_EXTENSIONS and p.stat().st_size in sizes
+        if p.suffix == IMAGE_SUFFIX and p.stat().st_size in sizes
     }
     duplicates: dict[str, list[str]] = {}
     for folder in folders:

@@ -134,3 +134,15 @@ def test_distinct_images_are_accepted(tmp_path):
     result = run_add_data(tmp_path, src, splits)
     assert result.returncode == 0, result.stderr
     assert len(list(pool.iterdir())) == 1
+
+
+def test_a_folder_with_a_png_is_neither_copied_nor_registered(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    folder = next(src.iterdir())
+    for img in (folder / "images").iterdir():
+        img.rename(img.with_suffix(".png"))
+    result = run_add_data(tmp_path, src, splits)
+    assert result.returncode != 0
+    assert "non-.jpg file(s) in images/" in result.stdout
+    assert list(pool.iterdir()) == []
+    assert not (tmp_path / "data" / "raw" / "wildfire" / "registry.json").exists()
