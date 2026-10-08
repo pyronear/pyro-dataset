@@ -558,3 +558,24 @@ def test_a_clash_with_a_new_smoke_alert_falls_back_on_the_first_run(tmp_path):
     plan = read_plan(plan_path)
     assert len(kinds(plan, "wildfire")) == 1, "smoke wins the shared frame"
     assert kinds(plan, "fp") == ["sdis-91_cam-f_285_2026-08-05T13-11-00"]
+
+
+def test_two_alerts_sharing_a_folder_name_keep_the_latter(tmp_path):
+    """Second-resolution names collapse two alerts into one folder; the
+    materialiser keeps the latter, and so must the content check — dropping
+    one of the pair by name must not drop both."""
+    first, second = make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-a")
+    second["recorded_at"] = first["recorded_at"]
+    export = tmp_path / "export"
+    write_export(export, [first, second])
+    (export / "images" / "pyronear_french" / "2" / "0.jpg").write_bytes(
+        (export / "images" / "pyronear_french" / "1" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "wildfire") == [
+        "sdis-91_cam-a_285_2026-08-05T13-01-00"
+    ]
+    assert "share a folder name, keeping the latter" in result.stderr

@@ -314,6 +314,20 @@ def main() -> None:
                 f"alert {alert['platform_alert_id']}: too few images or labelled "
                 "images, not planned"
             )
+    # Folder names are second-resolution, so two alerts on one camera view in
+    # the same second collapse into one folder. Keep the latter, as the
+    # materialiser does, before deduplicating by content: a name must stand
+    # for one alert there, or dropping one of the pair would drop both.
+    by_folder: dict[str, dict[str, Any]] = {}
+    for alert in usable:
+        name = folder_name(alert)
+        if name in by_folder:
+            logging.warning(
+                f"{name}: alerts {by_folder[name]['platform_alert_id']} and "
+                f"{alert['platform_alert_id']} share a folder name, keeping the latter"
+            )
+        by_folder[name] = alert
+    usable = list(by_folder.values())
     usable = without_known_images(export_dir, alerts, usable, plan, pools)
     smoke = [a for a in usable if alert_kind(a) == "wildfire"]
     fp_alerts = [a for a in usable if alert_kind(a) == "fp"]
