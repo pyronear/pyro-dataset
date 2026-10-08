@@ -24,9 +24,11 @@ def write_registry(path: Path, entries: list[dict]) -> None:
     path.write_text(json.dumps({"sequences": entries}))
 
 
-def make_seq_dir(root: Path, name: str) -> None:
+def make_seq_dir(root: Path, name: str, n_images: int = 4) -> None:
     (root / name / "images").mkdir(parents=True)
     (root / name / "labels").mkdir(parents=True)
+    for i in range(n_images):
+        (root / name / "images" / f"{i}.jpg").write_bytes(b"x")
 
 
 def setup_world(tmp_path: Path, fp_test_folders: list[str]) -> dict:
@@ -122,3 +124,17 @@ def test_dry_run_writes_nothing(tmp_path):
     )
     assert result.returncode == 0, result.stderr
     assert not world["lockfile"].exists()
+
+
+def test_a_sequence_too_short_for_the_build_is_never_frozen(tmp_path, monkeypatch):
+    world = setup_world(tmp_path, fp_test_folders=["f1"])
+    make_seq_dir(world["fp_data"], "short", n_images=3)
+    entries = json.loads(world["fp_registry"].read_text())["sequences"]
+    entries.append(
+        {"id": "fp_short", "folder": "short", "camera": "c", "split": "test"}
+    )
+    write_registry(world["fp_registry"], entries)
+    world["lockfile"].write_text(json.dumps({"folders": []}))
+    monkeypatch.setattr(sys, "argv", world["argv"])
+    module.main()
+    assert read_lock(world) == ["f1"]

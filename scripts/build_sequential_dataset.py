@@ -2,8 +2,9 @@
 Build a sequential dataset from wildfire (wf) and false-positive (fp) sequences.
 
 Each sequence is copied as a folder (images/ + labels/ preserved as-is).
+Sequences with fewer than MIN_SEQUENCE_IMAGES images are left out.
 FP sequences are balanced to 50% at the sequence level in train and val;
-test takes every registered test FP.
+test takes every eligible registered test FP.
 
 Output structure:
     <output-train-val>/
@@ -63,6 +64,7 @@ import logging
 import shutil
 from pathlib import Path
 
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
 from pyro_dataset.fp.lockfile import load_lockfile, validate_lockfile
 from pyro_dataset.fp.selection import (
     load_embeddings,
@@ -114,6 +116,11 @@ def make_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument("--dry-run", action="store_true", default=False)
     parser.add_argument("-log", "--loglevel", default="info")
     return parser
+
+
+def long_enough(folder: Path) -> bool:
+    """At least MIN_SEQUENCE_IMAGES images: shorter ones are left out."""
+    return len(list((folder / "images").glob("*.jpg"))) >= MIN_SEQUENCE_IMAGES
 
 
 def load_registry(registry_path: Path) -> list[dict]:
@@ -190,9 +197,12 @@ if __name__ == "__main__":
     )
 
     # Group WF sequences by split
+    # Missing folders pass here and are warned about at copy time.
     wf_by_split: dict[str, list[dict]] = {s: [] for s in SPLITS}
     for seq in wf_sequences:
-        wf_by_split[seq["split"]].append(seq)
+        src = wf_data_dir / seq["folder"]
+        if not src.is_dir() or long_enough(src):
+            wf_by_split[seq["split"]].append(seq)
 
     # Map split → output root
     split_output = {
@@ -213,7 +223,11 @@ if __name__ == "__main__":
             # Test negatives are frozen: the lockfile is the selection
             # (docs/specs/2026-08-14-annotator-test-growth-design.md §3), and
             # it holds every registered test FP — no 1:1 balance for test.
-            test_fp = {s["folder"] for s in fp_sequences if s["split"] == "test"}
+            test_fp = {
+                s["folder"]
+                for s in fp_sequences
+                if s["split"] == "test" and long_enough(fp_data_dir / s["folder"])
+            }
             selected_fp_paths = frozen_test_selection(
                 test_lockfile, len(test_fp), test_fp, fp_data_dir
             )
@@ -225,6 +239,12 @@ if __name__ == "__main__":
             pinned_seqs, _pool_seqs = partition_pinned(
                 [s for s in fp_sequences if s["split"] == split]
             )
+            pinned_seqs = [
+                s
+                for s in pinned_seqs
+                if not (fp_data_dir / s["folder"]).is_dir()
+                or long_enough(fp_data_dir / s["folder"])
+            ]
             # Registered but absent from disk: warn like the WF path does rather
             # than copying an empty folder into the dataset. Not counted as missing
             # here — the embeddings loop below counts the same folder.
@@ -244,9 +264,10 @@ if __name__ == "__main__":
             keep_mask = []
             items_kept: list[dict] = []
             for it in items:
-                ok = (fp_data_dir / it["sequence_folder"]).is_dir()
+                folder = fp_data_dir / it["sequence_folder"]
+                ok = folder.is_dir() and long_enough(folder)
                 keep_mask.append(ok)
-                if not ok:
+                if not folder.is_dir():
                     fp_missing_total += 1
                 if ok:
                     items_kept.append(it)

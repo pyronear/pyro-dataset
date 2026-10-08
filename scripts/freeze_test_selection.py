@@ -10,8 +10,9 @@ superset of the previous one, and models stay comparable across releases.
 
 Each run: the lockfile is loaded (or, once, bootstrapped from the built
 dataset — never recomputed), then every registered test FP not yet frozen is
-appended in registry order. Test takes all its negatives: the 1:1 balance only
-matters for training, and FPR is prevalence-free, so more negatives just give
+appended in registry order, unless it has fewer than MIN_SEQUENCE_IMAGES
+images. Test takes all its negatives: the 1:1 balance only matters for
+training, and FPR is prevalence-free, so more negatives just give
 a tighter estimate. Entries are never removed or reordered.
 
 See docs/specs/2026-08-14-annotator-test-growth-design.md.
@@ -36,6 +37,7 @@ import logging
 import sys
 from pathlib import Path
 
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
 from pyro_dataset.fp.lockfile import (
     extend_with_pins,
     load_lockfile,
@@ -99,7 +101,14 @@ def main() -> None:
     dry_run: bool = args["dry_run"]
 
     fp_sequences = load_registry(args["fp_registry"])
-    test_fp = [s["folder"] for s in fp_sequences if s["split"] == "test"]
+    # Too short for the sequential build, which leaves them out of test too.
+    test_fp = [
+        s["folder"]
+        for s in fp_sequences
+        if s["split"] == "test"
+        and len(list((data_dir / s["folder"] / "images").glob("*.jpg")))
+        >= MIN_SEQUENCE_IMAGES
+    ]
     quota = len(test_fp)
 
     bootstrapped = not lockfile_path.is_file()

@@ -83,6 +83,7 @@ stages:
       --random-seed 0
     deps:
       - scripts/build_sequential_dataset.py
+      - src/pyro_dataset/constants.py
       - src/pyro_dataset/fp/selection.py
       - src/pyro_dataset/fp/lockfile.py
       - data/raw/wildfire/registry.json
@@ -103,6 +104,7 @@ stages:
       --junit-xml=data/reporting/leakage_results.xml
     deps:
       - tests/test_data_leakage.py
+      - src/pyro_dataset/constants.py
       - data/processed/wildfire_yolo
       - data/processed/yolo_train_val
       - data/processed/yolo_test

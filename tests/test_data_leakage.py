@@ -30,6 +30,8 @@ from pathlib import Path
 
 import pytest
 
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
+
 PROCESSED = Path(__file__).parent.parent / "data" / "processed"
 
 
@@ -161,6 +163,19 @@ def test_sequential_no_image_leakage(
     )
 
 
+@pytest.mark.parametrize("split_dir", [SEQ_TRAIN_VAL, SEQ_TEST])
+def test_sequential_sequences_have_enough_images(split_dir: Path) -> None:
+    """The temporal model gets at least MIN_SEQUENCE_IMAGES frames per sequence."""
+    _skip_if_missing(split_dir)
+    short = sorted(
+        str(seq.relative_to(split_dir))
+        for seq in split_dir.glob("*/*/*")
+        if seq.is_dir()
+        and len(list((seq / "images").glob("*.jpg"))) < MIN_SEQUENCE_IMAGES
+    )
+    assert not short, f"{len(short)} short sequence(s), e.g. {short[:3]}"
+
+
 # ---------------------------------------------------------------------------
 # Registry-level consistency: recurring-object pinning and the test lockfile
 # ---------------------------------------------------------------------------
@@ -191,13 +206,16 @@ def test_no_recurring_object_spans_splits() -> None:
 
 
 def test_lockfile_holds_every_test_fp() -> None:
-    """The frozen negatives are exactly the registered test FPs."""
+    """The frozen negatives are exactly the registered test FPs long enough for
+    the sequential build."""
     _skip_if_missing(TEST_LOCKFILE_PATH, FP_REGISTRY_PATH)
     folders = json.loads(TEST_LOCKFILE_PATH.read_text())["folders"]
     fp_test = {
         s["folder"]
         for s in json.loads(FP_REGISTRY_PATH.read_text())["sequences"]
         if s["split"] == "test"
+        and len(list((RAW / "fp" / "data" / s["folder"] / "images").glob("*.jpg")))
+        >= MIN_SEQUENCE_IMAGES
     }
     assert len(folders) == len(set(folders))
     assert set(folders) == fp_test
