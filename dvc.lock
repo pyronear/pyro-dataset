@@ -891,8 +891,8 @@ stages:
       nfiles: 41552
     - path: data/raw/pyro-annotator/import_plan.json
       hash: md5
-      md5: 9418c33f5e1466afb215f3a42940294d
-      size: 129483
+      md5: cbaf90e433afa5b14c64f75e08bebcf2
+      size: 129075
     - path: scripts/materialise_annotator_sequences.py
       hash: md5
       md5: 1006a14b5361eb77f8b22c8c17719344
@@ -908,6 +908,6 @@ stages:
     outs:
     - path: data/interim/pyro-annotator/sequences
       hash: md5
-      md5: 528cb8aba10b870627e3991d38a43862.dir
-      size: 1341541648
-      nfiles: 20050
+      md5: 6ca37331b58eaf0ecb6abc67a5effd3a.dir
+      size: 1337641495
+      nfiles: 19988

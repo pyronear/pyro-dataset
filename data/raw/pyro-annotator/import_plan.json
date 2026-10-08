@@ -2389,11 +2389,6 @@
     "recurring_object": null,
     "split": "test"
   },
-  "sis-67_bischwiller-02_176_2026-07-12T14-19-18": {
-    "kind": "wildfire",
-    "recurring_object": null,
-    "split": "test"
-  },
   "sis-67_bischwiller-02_178_2026-09-08T08-22-34": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -3759,11 +3754,6 @@
     "recurring_object": "ro_00470",
     "split": "test"
   },
-  "sis-67_donon-sarrebourg-02_276_2026-08-28T05-31-10": {
-    "kind": "fp",
-    "recurring_object": "ro_00484",
-    "split": "train"
-  },
   "sis-67_donon-sarrebourg-02_281_2026-09-01T14-00-19": {
     "kind": "fp",
     "recurring_object": "ro_00523",
@@ -3847,11 +3837,6 @@
   "sis-67_donon-sarrebourg-02_317_2026-08-19T05-30-20": {
     "kind": "fp",
     "recurring_object": "ro_00427",
-    "split": "train"
-  },
-  "sis-67_donon-sarrebourg-02_317_2026-08-30T11-07-53": {
-    "kind": "fp",
-    "recurring_object": "ro_00499",
     "split": "train"
   },
   "sis-67_donon-sarrebourg-02_318_2026-08-28T05-29-33": {
