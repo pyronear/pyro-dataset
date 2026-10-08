@@ -612,17 +612,17 @@ stages:
       nfiles: 40350
     - path: data/raw/fp/data
       hash: md5
-      md5: 5b11418348bee92bdc901e315809166a.dir
-      size: 13018981408
-      nfiles: 234715
+      md5: 4a63396a6c849f1e91cdbbb0bb3e3816.dir
+      size: 13012073194
+      nfiles: 234588
     - path: data/raw/fp/registry.json
       hash: md5
       md5: 7f60e3ec0379ac49038555c808d55aba
       size: 1474737
     - path: data/raw/pyro-annotator/recurring_objects.json
       hash: md5
-      md5: e9eb111102d040135e4fb40d75f95828
-      size: 206152
+      md5: ab1dd88cb84714428207cfcbfb6621e1
+      size: 206024
     - path: scripts/build_fp_yolo_dataset.py
       hash: md5
       md5: 7017e8e7f6d9d2d9e1ca981b63f25e7c
@@ -724,9 +724,9 @@ stages:
       nfiles: 2
     - path: data/raw/fp/data
       hash: md5
-      md5: 5b11418348bee92bdc901e315809166a.dir
-      size: 13018981408
-      nfiles: 234715
+      md5: 4a63396a6c849f1e91cdbbb0bb3e3816.dir
+      size: 13012073194
+      nfiles: 234588
     - path: data/raw/fp/registry.json
       hash: md5
       md5: 7f60e3ec0379ac49038555c808d55aba
@@ -827,13 +827,13 @@ stages:
       nfiles: 40391
     - path: data/raw/fp
       hash: md5
-      md5: 508e9a8a8e9f5c50380cef56914d097c.dir
-      size: 13020462293
-      nfiles: 234717
+      md5: e3d2ee7a87b916c79ae3bf9868ea507c.dir
+      size: 13013554079
+      nfiles: 234590
     - path: data/raw/pyro-annotator/recurring_objects.json
       hash: md5
-      md5: e9eb111102d040135e4fb40d75f95828
-      size: 206152
+      md5: ab1dd88cb84714428207cfcbfb6621e1
+      size: 206024
     - path: data/raw/sequential_test_lock.json
       hash: md5
       md5: 3bb96007752b152ed81b2dbecd11bf7e
@@ -845,8 +845,8 @@ stages:
       nfiles: 125979
     - path: tests/test_data_leakage.py
       hash: md5
-      md5: 58381e7c914ad4bce34a2013216f7a52
-      size: 8993
+      md5: 7c48e2ccc3f13038214fecc6bde162ca
+      size: 9594
   compute_fp_embeddings:
     cmd: uv run python scripts/embed_fp_for_selection.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --output data/interim/fp_sequence_embeddings --splits
@@ -854,9 +854,9 @@ stages:
     deps:
     - path: data/raw/fp/data
       hash: md5
-      md5: 5b11418348bee92bdc901e315809166a.dir
-      size: 13018981408
-      nfiles: 234715
+      md5: 4a63396a6c849f1e91cdbbb0bb3e3816.dir
+      size: 13012073194
+      nfiles: 234588
     - path: data/raw/fp/registry.json
       hash: md5
       md5: 7f60e3ec0379ac49038555c808d55aba

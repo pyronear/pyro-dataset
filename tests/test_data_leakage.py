@@ -234,3 +234,16 @@ def test_every_raw_image_is_in_one_folder_only() -> None:
     assert not shared, (
         f"{len(shared)} image(s) held by several folders, e.g. {shared[:3]}"
     )
+
+
+@pytest.mark.parametrize("pool", ["wildfire", "fp"])
+def test_pool_folders_are_exactly_the_registry(pool: str) -> None:
+    """An unregistered folder is invisible to the builders and to the checks
+    above, but add_data.py still compares new images against it."""
+    _skip_if_missing(RAW / pool / "registry.json")
+    on_disk = {p.name for p in (RAW / pool / "data").iterdir() if p.is_dir()}
+    registered = set(_registered(pool))
+    assert on_disk == registered, (
+        f"{pool}: unregistered {sorted(on_disk - registered)[:3]}, "
+        f"missing {sorted(registered - on_disk)[:3]}"
+    )
