@@ -733,8 +733,8 @@ stages:
       size: 1474737
     - path: data/raw/sequential_test_lock.json
       hash: md5
-      md5: 3bb96007752b152ed81b2dbecd11bf7e
-      size: 49782
+      md5: 975462c1c0bfa8018eecbdfe8adb0e2b
+      size: 49577
     - path: data/raw/wildfire/data
       hash: md5
       md5: f1abbec6a6c55243eecb4fae68afe504.dir
@@ -746,8 +746,12 @@ stages:
       size: 430750
     - path: scripts/build_sequential_dataset.py
       hash: md5
-      md5: 7b6f9b350ef30b6746cd8e7a9fef044b
-      size: 11786
+      md5: a950aad68eed89cd267fa098a062f056
+      size: 12660
+    - path: src/pyro_dataset/constants.py
+      hash: md5
+      md5: 385dd764a3296d1936a1e98f07454b64
+      size: 610
     - path: src/pyro_dataset/fp/lockfile.py
       hash: md5
       md5: cfd051c856b57783e3201555d1b4b8c6
@@ -759,14 +763,14 @@ stages:
     outs:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 6f1e72854a09ac373047856a51c01816.dir
-      size: 2166853988
-      nfiles: 39184
+      md5: 86c668db2aee61363ba4f94aeb92edad.dir
+      size: 2163998855
+      nfiles: 39138
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: e98c6c79442b41edbc2383f080aa7228.dir
-      size: 10455033592
-      nfiles: 171176
+      md5: 9a166c4e9ec15caafa54ce6bd10d86ef.dir
+      size: 10171982803
+      nfiles: 166794
   build_toy_dataset:
     cmd: uv run python scripts/build_toy_dataset.py --yolo-src data/processed/yolo_train_val
       --seq-src data/processed/sequential_train_val --yolo-output data/processed/yolo_toy
@@ -774,9 +778,9 @@ stages:
     deps:
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: e98c6c79442b41edbc2383f080aa7228.dir
-      size: 10455033592
-      nfiles: 171176
+      md5: 9a166c4e9ec15caafa54ce6bd10d86ef.dir
+      size: 10171982803
+      nfiles: 166794
     - path: data/processed/yolo_train_val
       hash: md5
       md5: 268c8efc8cab897383008b5d5b7251bf.dir
@@ -789,9 +793,9 @@ stages:
     outs:
     - path: data/processed/sequential_toy
       hash: md5
-      md5: 4944f78eadc8c747cac7fc34c987ce2c.dir
-      size: 518891260
-      nfiles: 8458
+      md5: bfabbf5f5149146933fed225578c46ef.dir
+      size: 465742418
+      nfiles: 8322
     - path: data/processed/yolo_toy
       hash: md5
       md5: 79fe5fa675dc83ffd578c924f74c1f64.dir
@@ -802,14 +806,14 @@ stages:
     deps:
     - path: data/processed/sequential_test
       hash: md5
-      md5: 6f1e72854a09ac373047856a51c01816.dir
-      size: 2166853988
-      nfiles: 39184
+      md5: 86c668db2aee61363ba4f94aeb92edad.dir
+      size: 2163998855
+      nfiles: 39138
     - path: data/processed/sequential_train_val
       hash: md5
-      md5: e98c6c79442b41edbc2383f080aa7228.dir
-      size: 10455033592
-      nfiles: 171176
+      md5: 9a166c4e9ec15caafa54ce6bd10d86ef.dir
+      size: 10171982803
+      nfiles: 166794
     - path: data/processed/wildfire_yolo
       hash: md5
       md5: 90dfd5ce74ec35cc6bec9d810117aee9.dir
@@ -836,17 +840,21 @@ stages:
       size: 206024
     - path: data/raw/sequential_test_lock.json
       hash: md5
-      md5: 3bb96007752b152ed81b2dbecd11bf7e
-      size: 49782
+      md5: 975462c1c0bfa8018eecbdfe8adb0e2b
+      size: 49577
     - path: data/raw/wildfire
       hash: md5
       md5: 0cde84179e22b7029fc0f0563af9d3a6.dir
       size: 7382598197
       nfiles: 125979
+    - path: src/pyro_dataset/constants.py
+      hash: md5
+      md5: 385dd764a3296d1936a1e98f07454b64
+      size: 610
     - path: tests/test_data_leakage.py
       hash: md5
-      md5: 7c48e2ccc3f13038214fecc6bde162ca
-      size: 9594
+      md5: 4ed66e42f4f7ed5645d6aa3c5a5322df
+      size: 10347
   compute_fp_embeddings:
     cmd: uv run python scripts/embed_fp_for_selection.py --registry data/raw/fp/registry.json
       --data-dir data/raw/fp/data --output data/interim/fp_sequence_embeddings --splits
@@ -903,8 +911,8 @@ stages:
       size: 6133
     - path: src/pyro_dataset/constants.py
       hash: md5
-      md5: 80c49b6e8bdd8485c3595f28fbb65244
-      size: 430
+      md5: 385dd764a3296d1936a1e98f07454b64
+      size: 610
     outs:
     - path: data/interim/pyro-annotator/sequences
       hash: md5
