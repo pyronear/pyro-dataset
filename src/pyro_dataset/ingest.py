@@ -1,6 +1,7 @@
 """Core logic for sequence registry management and train/val/test split assignment."""
 
 import dataclasses
+import hashlib
 import json
 import random
 import re
@@ -103,6 +104,48 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
     return ValidationResult(
         folder=name, naming_issues=naming, structural_issues=structural
     )
+
+
+def _md5(path: Path) -> str:
+    return hashlib.md5(path.read_bytes()).hexdigest()
+
+
+def find_duplicate_images(
+    src: Path, folders: list[str], pool_dirs: list[Path]
+) -> dict[str, list[str]]:
+    """Incoming folders holding an image whose content is already in a pool, or
+    in an earlier incoming folder, mapped to the clashing image names.
+
+    The platform raises overlapping alerts that share frames, so the same image
+    can arrive under two folder names — and land in two splits. Repeats inside
+    one folder are allowed: the camera does send unchanged frames.
+
+    Only pool images whose size matches an incoming one are hashed.
+    """
+    incoming = {
+        folder: [
+            p
+            for p in (src / folder / "images").iterdir()
+            if p.suffix.lower() in _IMAGE_EXTENSIONS
+        ]
+        for folder in folders
+    }
+    sizes = {p.stat().st_size for paths in incoming.values() for p in paths}
+    seen = {
+        _md5(p)
+        for pool in pool_dirs
+        for p in pool.glob("*/images/*")
+        if p.suffix.lower() in _IMAGE_EXTENSIONS and p.stat().st_size in sizes
+    }
+    duplicates: dict[str, list[str]] = {}
+    for folder in folders:
+        hashes = {p.name: _md5(p) for p in incoming[folder]}
+        clashing = sorted(name for name, h in hashes.items() if h in seen)
+        if clashing:
+            duplicates[folder] = clashing
+        else:
+            seen |= set(hashes.values())
+    return duplicates
 
 
 @dataclasses.dataclass

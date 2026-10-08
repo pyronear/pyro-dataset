@@ -3,7 +3,8 @@ CLI Script to add new sequence folders to a raw dataset and update its registry.
 
 Copies sequence subfolders from a source directory into data/raw/<type>/data/,
 validates naming (strict: source_cam_azimuth_YYYY-MM-DDTHH-MM-SS, azimuth 0-360 or 999)
-and structure (images/, labels/, ≥2 non-empty labels).
+and structure (images/, labels/, ≥2 non-empty labels), and refuses a folder already
+registered in the other pool or holding an image already in either pool (by content).
 Rejected folders are reported and skipped. Existing entries are never modified.
 
 Usage:
@@ -29,6 +30,7 @@ from pyro_dataset.ingest import (
     ANNOTATOR_SOURCE,
     assignments_from_splits,
     compute_new_assignments,
+    find_duplicate_images,
     load_registry,
     next_id,
     print_summary,
@@ -186,9 +188,38 @@ if __name__ == "__main__":
 
     to_copy = list(summary.valid)
 
+    # A sequence filed in both pools is both a positive and a negative, and the
+    # YOLO merge would keep only one of the two by name.
+    other_raw = Path(
+        next(d for t, (d, _) in DATASET_TYPES.items() if t != args["type"])
+    )
+    in_other_pool = {s["folder"] for s in load_registry(other_raw / "registry.json")}
+    refused = {
+        folder: [f"already registered in {other_raw}"]
+        for folder in to_copy
+        if folder in in_other_pool
+    }
+    to_copy = [f for f in to_copy if f not in refused]
+    for folder, names in find_duplicate_images(
+        src, to_copy, [dir_data, other_raw / "data"]
+    ).items():
+        extra = f" (+{len(names) - 3} more)" if len(names) > 3 else ""
+        refused[folder] = [
+            f"{len(names)} image(s) already in a pool by content: {names[:3]}{extra}"
+        ]
+    to_copy = [f for f in to_copy if f not in refused]
+    if refused:
+        print(f"\n{'=' * 60}")
+        print(f"DUPLICATES — {len(refused)} folder(s) skipped")
+        print("An image may only exist once across both pools.\n")
+        for folder, issues in refused.items():
+            print(f"  {folder}")
+            for issue in issues:
+                print(f"    ✗ {issue}")
+
     if not to_copy:
         print("Nothing to copy.")
-        exit(0 if not summary.rejected else 1)
+        exit(0 if not (summary.rejected or refused) else 1)
 
     # Resolve splits BEFORE copying. assignments_from_splits rejects a folder
     # missing from the file; raising after the copy would leave folders in
@@ -220,8 +251,8 @@ if __name__ == "__main__":
         save_registry(registry_path, all_sequences)
         logging.info(f"Registry updated: {registry_path}")
 
-    if summary.rejected:
-        skipped = [r.folder for r in summary.rejected]
+    if summary.rejected or refused:
+        skipped = [r.folder for r in summary.rejected] + list(refused)
         print(f"\nSkipped ({len(skipped)}):")
         for name in skipped:
             print(f"  {name}")
