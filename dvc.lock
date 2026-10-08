@@ -572,13 +572,13 @@ stages:
     deps:
     - path: data/raw/wildfire/data
       hash: md5
-      md5: 58ed1caa5dd84d18b3c9d26e5b413dd8.dir
-      size: 7383471485
-      nfiles: 125993
+      md5: 48328c146bc3bdc13868447f02e695d6.dir
+      size: 7383486275
+      nfiles: 125994
     - path: data/raw/wildfire/registry.json
       hash: md5
-      md5: 81e4b06135c104dd53d83393a7f28e23
-      size: 430534
+      md5: b804e6e346d8060afdd81e5c85097303
+      size: 430568
     - path: scripts/build_wf_yolo_dataset.py
       hash: md5
       md5: 975a917e3e98a137c0fbdb4d6a7b6c25
@@ -737,13 +737,13 @@ stages:
       size: 49173
     - path: data/raw/wildfire/data
       hash: md5
-      md5: 58ed1caa5dd84d18b3c9d26e5b413dd8.dir
-      size: 7383471485
-      nfiles: 125993
+      md5: 48328c146bc3bdc13868447f02e695d6.dir
+      size: 7383486275
+      nfiles: 125994
     - path: data/raw/wildfire/registry.json
       hash: md5
-      md5: 81e4b06135c104dd53d83393a7f28e23
-      size: 430534
+      md5: b804e6e346d8060afdd81e5c85097303
+      size: 430568
     - path: scripts/build_sequential_dataset.py
       hash: md5
       md5: a950aad68eed89cd267fa098a062f056
@@ -844,9 +844,9 @@ stages:
       size: 49173
     - path: data/raw/wildfire
       hash: md5
-      md5: f4661cf48a3e5fc5f84d963a320cacbc.dir
-      size: 7383912263
-      nfiles: 125995
+      md5: 09f637be842de28e10a06ee9c2526f88.dir
+      size: 7383927087
+      nfiles: 125996
     - path: src/pyro_dataset/constants.py
       hash: md5
       md5: 385dd764a3296d1936a1e98f07454b64
@@ -899,8 +899,8 @@ stages:
       nfiles: 41552
     - path: data/raw/pyro-annotator/import_plan.json
       hash: md5
-      md5: 62e26a0d41a8140e4b6bc668efc6c0f0
-      size: 128803
+      md5: 885dd26e52967c8dbea68b112a5239d3
+      size: 128939
     - path: scripts/materialise_annotator_sequences.py
       hash: md5
       md5: 1006a14b5361eb77f8b22c8c17719344
