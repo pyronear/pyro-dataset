@@ -82,12 +82,8 @@ def move_sequences(folders: list[str], dry_run: bool = False) -> None:
         src = WF_DIR / "data" / folder
         dst = FP_DIR / "data" / folder
         new_id = next_fp_id(fp_reg["sequences"])
-        new_entry = {
-            "id": new_id,
-            "folder": folder,
-            "camera": entry["camera"],
-            "split": entry["split"],
-        }
+        # Keep every field (e.g. `source`, which pins annotator sequences).
+        new_entry = {**entry, "id": new_id}
 
         print(f"  {entry['id']} → {new_id}  {folder}  (split={entry['split']})")
         if not dry_run:
