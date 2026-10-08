@@ -3910,6 +3910,7 @@
     "split": "val"
   },
   "sis-67_col-saverne-02_5_2026-07-25T13-15-01": {
+    "excluded": "not a wildfire (viewer review of the v4.5.0 test, 2026-10-08)",
     "kind": "wildfire",
     "recurring_object": null,
     "split": "test"

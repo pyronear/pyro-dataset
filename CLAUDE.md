@@ -156,6 +156,13 @@ What differs from the platform loop:
   sequence, the YOLO build one image per recurring object. In test they reach
   `sequential_test` through `freeze_test_selection.py`, like every test FP. See
   `docs/specs/2026-08-14-recurring-object-fp-identity-design.md`.
+- **Removing a sequence** (e.g. not really a wildfire after review) is the one
+  exception to the append-only registry: delete its registry entry and its
+  folder under `data/raw/<type>/data/`, then `dvc commit`. For an
+  annotator-sourced one, also set `"excluded": "<reason>"` on its
+  `import_plan.json` entry: planning keeps the entry, so the alert is not picked
+  again, and materialisation skips it. A removed test WF sequence shrinks test,
+  so say so in the release notes.
 - Each folder carries a `meta.json` with every lane's full track, including boxes
   left out of `labels/`, so an object-level dataset can be derived later without
   re-exporting.
