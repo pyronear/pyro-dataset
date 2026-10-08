@@ -12,6 +12,10 @@ Note: same-camera images across splits are acceptable (a camera can contribute
 to both train and test on different events). Only exact duplicates (images) or
 the same sequence event (sequential datasets) are flagged.
 
+Raw pools are also checked by content: a folder name may sit in one registry
+only, and an image (md5) in one folder only — overlapping platform alerts share
+frames under different names, which name-based checks cannot see.
+
 Datasets covered:
 - wildfire_yolo      – merged YOLO dataset (images/train, images/val, images/test)
 - yolo_train_val     – YOLO train/val (images/train, images/val)  \\ checked against
@@ -19,6 +23,8 @@ Datasets covered:
 - sequential_train_val + sequential_test – sequential datasets for wildfire and fp
 """
 
+import collections
+import hashlib
 import json
 from pathlib import Path
 
@@ -195,3 +201,36 @@ def test_lockfile_holds_every_test_fp() -> None:
     }
     assert len(folders) == len(set(folders))
     assert set(folders) == fp_test
+
+
+WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
+
+
+def _registered(pool: str) -> list[str]:
+    registry = json.loads((RAW / pool / "registry.json").read_text())
+    return [s["folder"] for s in registry["sequences"]]
+
+
+def test_no_folder_in_both_registries() -> None:
+    """A sequence is a positive or a negative, never both."""
+    _skip_if_missing(WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+    both = set(_registered("wildfire")) & set(_registered("fp"))
+    assert not both, f"{len(both)} folder(s) in both pools, e.g. {sorted(both)[:3]}"
+
+
+def test_every_raw_image_is_in_one_folder_only() -> None:
+    """No image content shared between registered folders, in any pool or split.
+
+    Repeats inside one folder are allowed: the camera does send unchanged frames.
+    """
+    _skip_if_missing(WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+    folders_by_hash: dict[str, set[str]] = collections.defaultdict(set)
+    for pool in ("wildfire", "fp"):
+        for folder in _registered(pool):
+            for img in (RAW / pool / "data" / folder / "images").glob("*.jpg"):
+                digest = hashlib.md5(img.read_bytes()).hexdigest()
+                folders_by_hash[digest].add(f"{pool}/{folder}")
+    shared = [sorted(f) for f in folders_by_hash.values() if len(f) > 1]
+    assert not shared, (
+        f"{len(shared)} image(s) held by several folders, e.g. {shared[:3]}"
+    )
