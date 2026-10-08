@@ -167,16 +167,18 @@ def without_known_images(
     plan: dict[str, dict[str, Any]],
     pools: list[Path],
 ) -> list[dict[str, Any]]:
-    """Drop the new alerts holding an image the pools or a planned folder
-    already have.
+    """Drop the new alerts holding an image the pools, a planned folder or an
+    earlier new alert already have.
 
     Overlapping platform alerts share frames, and add_data.py refuses a folder
     holding an image another folder already has. Planning such an alert would
     rematerialise it on every run and, for a false positive, burn its recurring
     object's slot on a sequence that never reaches the registry. Filtered before
-    selection so the object's next-best alert gets its turn. Known images are
-    the pools' and those of planned folders not ingested yet; only the ones
-    sized like a new image are hashed.
+    selection so the object's next-best alert gets its turn on this run, not
+    the next. Among new alerts smoke wins over a false positive, and a better
+    scored false positive over a worse one. Known images are the pools' and
+    those of planned folders not ingested yet; only the ones sized like a new
+    image are hashed.
     """
     by_name = {folder_name(alert): alert for alert in alerts}
     new = [alert for alert in usable if folder_name(alert) not in plan]
@@ -186,18 +188,25 @@ def without_known_images(
         if name in by_name:
             known += image_paths(export_dir, by_name[name])
     seen = {file_md5(p) for p in known if p.stat().st_size in sizes}
-    kept = []
-    for alert in usable:
+    dropped: set[str] = set()
+    for alert in sorted(
+        new,
+        key=lambda a: (
+            alert_kind(a) != "wildfire",
+            -(a.get("temporal_model_score") or -1.0),
+            a["platform_alert_id"],
+        ),
+    ):
         name = folder_name(alert)
-        if name not in plan and seen & {
-            file_md5(p) for p in image_paths(export_dir, alert)
-        }:
+        frames = {file_md5(p) for p in image_paths(export_dir, alert)}
+        if frames & seen:
             logging.warning(
                 f"{name}: shares an image with a planned folder, not planned"
             )
+            dropped.add(name)
             continue
-        kept.append(alert)
-    return kept
+        seen |= frames
+    return [alert for alert in usable if folder_name(alert) not in dropped]
 
 
 def image_paths(export_dir: Path, alert: dict[str, Any]) -> list[Path]:
@@ -410,10 +419,6 @@ def main() -> None:
             f"{export_kinds[name]}; kept as {plan[name]['kind']}"
         )
 
-    # Two new alerts can share a frame too; `without_known_images` only checked
-    # them against what was already planned. Smoke comes first in `chosen`, so a
-    # positive wins over a false positive.
-    seen: set[str] = set()
     added = 0
     for alert, kind, ro_id in chosen:
         name = folder_name(alert)
@@ -423,13 +428,6 @@ def main() -> None:
             # lifetime slot and shorting the quota, permanently and silently.
             continue
         if name not in plan:
-            frames = {file_md5(p) for p in image_paths(export_dir, alert)}
-            if frames & seen:
-                logging.warning(
-                    f"{name}: shares an image with another new alert, not planned"
-                )
-                continue
-            seen |= frames
             added += 1
             split = (
                 ledger.entries[ro_id]["split"]
