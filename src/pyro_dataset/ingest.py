@@ -39,6 +39,11 @@ class ValidationResult:
         return not self.has_naming_issues and not self.has_structural_issues
 
 
+def has_enough_labels(n_labelled: int, n_images: int) -> bool:
+    """At least one labelled frame, or two once the sequence has more than two."""
+    return n_labelled >= 2 or (n_labelled == 1 and n_images <= 2)
+
+
 def validate_sequence_folder(folder_path: Path) -> ValidationResult:
     """
     Validate a sequence folder before ingestion.
@@ -95,7 +100,7 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
         1 for f in dir_images.iterdir() if f.suffix.lower() in _IMAGE_EXTENSIONS
     )
     non_empty_labels = [f for f in dir_labels.glob("*.txt") if f.stat().st_size > 0]
-    if len(non_empty_labels) == 0 or (len(non_empty_labels) == 1 and total_images > 2):
+    if not has_enough_labels(len(non_empty_labels), total_images):
         structural.append(
             f"{len(non_empty_labels)} non-empty label file(s) for {total_images} image(s) "
             f"(need at least 1, or 2+ if images > 2)"

@@ -400,3 +400,39 @@ def test_an_alert_with_no_image_on_disk_is_never_planned(tmp_path):
     assert len(kinds(plan, "fp")) == 1
     ledger = json.loads((tmp_path / "ledger.json").read_text())
     assert len(ledger) == 1, "the imageless alert never became a recurring object"
+
+
+def test_a_smoke_alert_without_boxes_is_never_planned_nor_counted(tmp_path):
+    """An `industrial` or `other` smoke lane carries no box: its folder would
+    hold no label and add_data.py would reject it, so planning it leaves a
+    stale entry and pays FP quota for a positive that never arrives."""
+    boxless = make_alert(2, "smoke", "cam-b")
+    boxless["objects"][0]["smoke_types"] = ["industrial"]
+    for frame in boxless["objects"][0]["frames"]:
+        frame["boxes"] = []
+    export = tmp_path / "export"
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), boxless]
+        + [make_alert(10 + i, "fp", f"cam-f{i}") for i in range(3)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+
+    plan = read_plan(plan_path)
+    assert len(kinds(plan, "wildfire")) == 1
+    assert len(kinds(plan, "fp")) == 1, "the quota counts ingestible smoke only"
+
+
+def test_a_single_labelled_frame_in_a_long_alert_is_never_planned(tmp_path):
+    """add_data.py needs two labelled frames once a sequence has more than two."""
+    sparse = make_alert(2, "smoke", "cam-b", n_frames=4)
+    for frame in sparse["objects"][0]["frames"][1:]:
+        frame["boxes"] = []
+    export = tmp_path / "export"
+    write_export(export, [make_alert(1, "smoke", "cam-a"), sparse])
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 1

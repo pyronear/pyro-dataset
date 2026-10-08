@@ -49,10 +49,17 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from pyro_dataset.annotator.convert import alert_kind, camera_key, folder_name
+from pyro_dataset.annotator.convert import (
+    alert_kind,
+    camera_key,
+    folder_name,
+    frame_stem,
+    label_lines,
+)
 from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
 from pyro_dataset.annotator.same_fire import group_new_smoke
 from pyro_dataset.annotator.select import rank_objects, select_fp
+from pyro_dataset.ingest import has_enough_labels
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -108,19 +115,25 @@ def load_plan(path: Path) -> dict[str, dict[str, Any]]:
     return json.loads(path.read_text())
 
 
-def has_usable_image(export_dir: Path, alert: dict[str, Any]) -> bool:
-    """Whether at least one of the alert's frames has an image on disk.
+def is_ingestible(export_dir: Path, alert: dict[str, Any]) -> bool:
+    """Whether the folder this alert materialises into would pass `add_data.py`.
 
-    Checked here rather than while copying so that materialisation is a total
-    function of the plan. It also stops an unusable alert from consuming its
-    recurring object's one slot: a folder with no image is rejected
-    structurally by `add_data.py`, so planning it wastes the slot forever.
+    Mirrors `write_sequence`: one image per capture, only frames whose image is
+    on disk, labels of the alert's own kind. Checked here rather than while
+    copying so that materialisation is a total function of the plan, and so an
+    unusable alert neither consumes its recurring object's one slot nor counts
+    as smoke in the FP quota — a smoke lane annotated `industrial` or `other`
+    carries no box at all.
     """
-    return any(
-        frame.get("image_path") and (export_dir / frame["image_path"]).is_file()
-        for obj in alert["objects"]
-        for frame in obj["frames"]
-    )
+    labelled: dict[str, bool] = {}
+    for obj in alert["objects"]:
+        for frame in obj["frames"]:
+            stem = frame_stem(alert, frame)
+            if stem in labelled or not frame.get("image_path"):
+                continue
+            if (export_dir / frame["image_path"]).is_file():
+                labelled[stem] = bool(label_lines(alert, frame))
+    return has_enough_labels(sum(labelled.values()), len(labelled))
 
 
 def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
@@ -208,11 +221,12 @@ def main() -> None:
     alerts = load_manifest(export_dir)
     usable = []
     for alert in alerts:
-        if has_usable_image(export_dir, alert):
+        if is_ingestible(export_dir, alert):
             usable.append(alert)
         else:
             logging.warning(
-                f"alert {alert['platform_alert_id']}: no image on disk, not planned"
+                f"alert {alert['platform_alert_id']}: too few labelled images, "
+                "not planned"
             )
     smoke = [a for a in usable if alert_kind(a) == "wildfire"]
     fp_alerts = [a for a in usable if alert_kind(a) == "fp"]
