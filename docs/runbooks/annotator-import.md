@@ -402,7 +402,7 @@ Things that must never happen, whatever the shortcut looks like:
   object's `"split"` in the ledger **before its first ingest**, which is
   equivalent to `--force-train`.
 - Committing a lockfile diff that removes or reorders lines. Done once, in
-  v4.6.0, when a clean-up removed folders from the pool — which is why v4.6.0
+  v4.6.0, when a clean-up and a label review removed folders from the pool — which is why v4.6.0
   is a new baseline, not comparable with v4.5.x. Do not do it again: a folder
   that must leave the test pool is a new baseline, and has to be called one.
 - Regenerating any of the three state files from scratch: they are history, and

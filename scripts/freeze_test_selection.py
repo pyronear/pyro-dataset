@@ -7,9 +7,10 @@ state from deps, destroying the pinning it exists to provide. The build
 (`build_sequential_dataset.py`) copies the lockfile verbatim for test and
 performs no selection — so every release's test set is a byte-identical
 superset of the previous one, and models stay comparable across releases.
-One exception so far: v4.6.0 removed 8 frozen folders that the duplicate
-clean-up and the MIN_SEQUENCE_IMAGES rule took out of the pool, so it starts a
-new baseline and is not comparable with v4.5.x.
+One exception so far: v4.6.0 removed 15 frozen folders (8 the duplicate
+clean-up and the MIN_SEQUENCE_IMAGES rule took out of the pool, 7 a label
+review moved to wildfire or dropped as unsure), so it starts a new baseline and
+is not comparable with v4.5.x.
 
 Each run: the lockfile is loaded (or, once, bootstrapped from the built
 dataset — never recomputed), then every registered test FP not yet frozen is

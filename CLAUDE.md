@@ -145,8 +145,9 @@ What differs from the platform loop:
   copied verbatim by the build, which errors on any mismatch instead of
   re-selecting. Every release's test set is a superset of the previous one,
   so models stay comparable across releases — except across v4.6.0, which
-  removed 8 folders the duplicate clean-up and the 4-image minimum took out of
-  the pool and so starts a new baseline. Commit the lockfile with the
+  removed 15 folders (8 the duplicate clean-up and the 4-image minimum took
+  out of the pool, 7 a label review moved to wildfire or dropped as unsure)
+  and so starts a new baseline. Commit the lockfile with the
   ledger and plan from the same import. The lockfile holds **every**
   registered test FP — no 1:1 balance for test, since FPR does not depend on
   prevalence — so any ingest that adds test FP sequences, annotator or not,
