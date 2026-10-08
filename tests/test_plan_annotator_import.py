@@ -436,3 +436,28 @@ def test_a_single_labelled_frame_in_a_long_alert_is_never_planned(tmp_path):
     result = run_plan(export, plan_path, tmp_path / "ledger.json")
     assert result.returncode == 0, result.stderr
     assert len(kinds(read_plan(plan_path), "wildfire")) == 1
+
+
+def test_an_alert_sharing_an_image_with_a_planned_one_is_never_planned(tmp_path):
+    """Overlapping alerts share frames; add_data.py would refuse the second, so
+    planning it would leave it staged forever and burn its object's slot."""
+    export = tmp_path / "export"
+    alerts = [make_alert(1, "smoke", "cam-a")] + [
+        make_alert(10 + i, "fp", f"cam-f{i}") for i in range(2)
+    ]
+    write_export(export, alerts)
+    shared = export / "images" / "pyronear_french" / "11" / "0.jpg"
+    shared.write_bytes(
+        (export / "images" / "pyronear_french" / "10" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    ledger_path = tmp_path / "ledger.json"
+    result = run_plan(export, plan_path, ledger_path, ["--no-fp-quota"])
+    assert result.returncode == 0, result.stderr
+
+    assert len(kinds(read_plan(plan_path), "fp")) == 1
+    assert "shares an image" in result.stderr
+    ledger = json.loads(ledger_path.read_text())
+    recorded = [f for entry in ledger.values() for f in entry["ingested_folders"]]
+    assert len(recorded) == 1, "the skipped alert holds no slot"

@@ -42,6 +42,7 @@ Arguments:
 """
 
 import argparse
+import hashlib
 import json
 import logging
 import random
@@ -134,6 +135,16 @@ def is_ingestible(export_dir: Path, alert: dict[str, Any]) -> bool:
             if (export_dir / frame["image_path"]).is_file():
                 labelled[stem] = bool(label_lines(alert, frame))
     return has_enough_labels(sum(labelled.values()), len(labelled))
+
+
+def image_hashes(export_dir: Path, alert: dict[str, Any]) -> set[str]:
+    """Content hashes of the alert's images on disk."""
+    return {
+        hashlib.md5((export_dir / frame["image_path"]).read_bytes()).hexdigest()
+        for obj in alert["objects"]
+        for frame in obj["frames"]
+        if frame.get("image_path") and (export_dir / frame["image_path"]).is_file()
+    }
 
 
 def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
@@ -333,6 +344,16 @@ def main() -> None:
             f"{export_kinds[name]}; kept as {plan[name]['kind']}"
         )
 
+    # Overlapping platform alerts share frames, and add_data.py refuses a folder
+    # holding an image another folder already has. Planning such an alert here
+    # would rematerialise it on every run and, for a false positive, burn its
+    # recurring object's slot on a sequence that never reaches the registry.
+    by_name = {folder_name(alert): alert for alert in alerts}
+    seen: set[str] = set()
+    for name in plan:
+        if name in by_name:
+            seen |= image_hashes(export_dir, by_name[name])
+
     added = 0
     for alert, kind, ro_id in chosen:
         name = folder_name(alert)
@@ -342,6 +363,13 @@ def main() -> None:
             # lifetime slot and shorting the quota, permanently and silently.
             continue
         if name not in plan:
+            frames = image_hashes(export_dir, alert)
+            if frames & seen:
+                logging.warning(
+                    f"{name}: shares an image with a planned folder, not planned"
+                )
+                continue
+            seen |= frames
             added += 1
             split = (
                 ledger.entries[ro_id]["split"]
