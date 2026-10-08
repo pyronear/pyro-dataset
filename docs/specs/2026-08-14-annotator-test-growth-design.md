@@ -20,7 +20,10 @@ whose §4 ("Splits: train and val only") this design supersedes.
 > **Update 2026-10-08: v4.6.0 starts a new baseline.** The duplicate clean-up
 > (pyronear/pyro-dataset#48) removed test FP folders from the pool, and the
 > sequential datasets now leave out sequences under `MIN_SEQUENCE_IMAGES` (4)
-> images, so 8 frozen folders had to go: the lockfile shrank once, by hand, and
+> images, so 8 frozen folders had to go. A review of the test sequences the
+> temporal model disagreed with (wildfire under 0.2, fp over 0.2) then moved 2
+> fp folders to wildfire and dropped 5 unsure ones, and removed 3 wildfire
+> folders (2 unsure, 1 industrial smoke). The lockfile shrank once, by hand, and
 > `sequential_test` v4.6.0 is **not** a superset of v4.5.x. Metrics across that
 > boundary are not comparable; re-evaluate old models on v4.6.0. The append-only
 > rule holds again from v4.6.0 on, and `freeze_test_selection.py` now refuses a
