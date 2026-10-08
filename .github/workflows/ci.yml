@@ -63,40 +63,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The report is produced with the data and committed; this checks it passed
+      # and that dvc.lock still records the inputs it was produced from.
       - name: Check leakage test results
         run: |
-          python3 - <<'EOF'
-          import sys
-          import xml.etree.ElementTree as ET
-
-          path = "data/reporting/leakage_results.xml"
-          try:
-              tree = ET.parse(path)
-          except FileNotFoundError:
-              print(f"ERROR: {path} not found. Run `dvc repro test_data_leakage` and commit the result.")
-              sys.exit(1)
-
-          # pytest wraps its <testsuite> in a <testsuites> root that carries no
-          # counts; reading the root alone reports 0 tests and always passes.
-          root = tree.getroot()
-          suites = [root] if root.tag == "testsuite" else list(root.iter("testsuite"))
-          def total(key):
-              return sum(int(s.attrib.get(key, 0)) for s in suites)
-          failures, errors = total("failures"), total("errors")
-          tests, skipped = total("tests"), total("skipped")
-
-          print(f"Tests: {tests}, Skipped: {skipped}, Failures: {failures}, Errors: {errors}")
-
-          # A skip means the data was missing when the report was produced.
-          if not tests or skipped:
-              print("ERROR: the report must come from a run with every dataset present.")
-              sys.exit(1)
-
-          if failures or errors:
-              for tc in root.iter("testcase"):
-                  for bad in list(tc.iter("failure")) + list(tc.iter("error")):
-                      print(f"FAIL {tc.attrib.get('name')}: {bad.text}")
-              sys.exit(1)
-
-          print("All leakage tests passed.")
-          EOF
+          pip install pyyaml
+          python3 scripts/check_leakage_report.py
