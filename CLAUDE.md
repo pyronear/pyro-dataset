@@ -106,6 +106,8 @@ uv run python scripts/freeze_test_selection.py
 
 Run step 1 with `--dry-run` first: it reports the quota, how many recurring objects
 were found and how many still fool the temporal model, without writing anything.
+It needs both raw pools on disk (`dvc pull data/raw/wildfire data/raw/fp`): a new
+alert is checked by image content against everything already ingested.
 
 **The two halves split at the state boundary.** Planning carries accumulated state —
 the ledger, and the plan itself — so it stays a manual command: a stage regenerates
@@ -142,7 +144,9 @@ What differs from the platform loop:
   git-committed, appended to only by `scripts/freeze_test_selection.py`, and
   copied verbatim by the build, which errors on any mismatch instead of
   re-selecting. Every release's test set is a superset of the previous one,
-  so models stay comparable across releases. Commit the lockfile with the
+  so models stay comparable across releases — except across v4.6.0, which
+  removed 8 folders the duplicate clean-up and the 4-image minimum took out of
+  the pool and so starts a new baseline. Commit the lockfile with the
   ledger and plan from the same import. The lockfile holds **every**
   registered test FP — no 1:1 balance for test, since FPR does not depend on
   prevalence — so any ingest that adds test FP sequences, annotator or not,
