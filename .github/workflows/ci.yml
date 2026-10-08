@@ -93,7 +93,7 @@ jobs:
               sys.exit(1)
 
           if failures or errors:
-              for tc in suite.iter("testcase"):
+              for tc in root.iter("testcase"):
                   for bad in list(tc.iter("failure")) + list(tc.iter("error")):
                       print(f"FAIL {tc.attrib.get('name')}: {bad.text}")
               sys.exit(1)
