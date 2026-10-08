@@ -173,3 +173,38 @@ def test_a_planned_alert_missing_from_the_export_is_skipped(tmp_path):
     assert set(splits) == {kept}
     assert (fresh_out / "wildfire" / kept).is_dir()
     assert not (fresh_out / "fp" / gone).exists()
+
+
+def test_an_excluded_plan_entry_is_never_materialised_again(tmp_path):
+    """A sequence removed from the dataset after review stays in the plan,
+    flagged, so neither a re-plan nor a re-materialisation brings it back."""
+    export = small_export(tmp_path)
+    stage(tmp_path, export)
+    plan = tmp_path / "plan.json"
+    planned = json.loads(plan.read_text())
+    name = next(n for n, e in planned.items() if e["kind"] == "wildfire")
+    planned[name]["excluded"] = "not a wildfire"
+    plan.write_text(json.dumps(planned))
+
+    replan = subprocess.run(
+        [
+            sys.executable,
+            str(PLAN_SCRIPT),
+            "--export-dir",
+            str(export),
+            "--plan",
+            str(plan),
+            "--ledger",
+            str(tmp_path / "ledger.json"),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert replan.returncode == 0, replan.stderr
+    assert json.loads(plan.read_text())[name]["excluded"] == "not a wildfire"
+
+    fresh_out = tmp_path / "staging2"
+    result = run_materialise(export, plan, fresh_out)
+    assert result.returncode == 0, result.stderr
+    assert name not in json.loads((fresh_out / "splits.json").read_text())
+    assert not (fresh_out / "wildfire" / name).exists()

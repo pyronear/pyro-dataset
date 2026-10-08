@@ -153,6 +153,10 @@ def main() -> None:
     missing = 0
     for name in sorted(plan):
         entry = plan[name]
+        if entry.get("excluded"):
+            # Removed from the dataset after review (the reason is the value).
+            # Kept in the plan so a later planning run does not pick it again.
+            continue
         alert = alerts.get(name)
         if alert is None:
             # Staging is transient and the export is a full re-pull, so a
