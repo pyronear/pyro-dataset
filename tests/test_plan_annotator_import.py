@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tests.conftest import make_alert, small_export, write_export
+from tests.conftest import make_alert, make_raw, small_export, write_export
 
 SCRIPT = Path("scripts/plan_annotator_import.py")
 
@@ -19,6 +19,8 @@ def run_plan(export: Path, plan: Path, ledger: Path, extra: list[str] | None = N
             str(plan),
             "--ledger",
             str(ledger),
+            "--raw-dir",
+            str(make_raw(plan.parent / "raw")),
             *(extra or []),
         ],
         capture_output=True,
@@ -461,3 +463,41 @@ def test_an_alert_sharing_an_image_with_a_planned_one_is_never_planned(tmp_path)
     ledger = json.loads(ledger_path.read_text())
     recorded = [f for entry in ledger.values() for f in entry["ingested_folders"]]
     assert len(recorded) == 1, "the skipped alert holds no slot"
+
+
+def test_an_alert_repeating_an_image_already_in_a_pool_is_never_planned(tmp_path):
+    """The first export may be gone by the next import; the pools still hold
+    what it brought in, so they are what a new alert is checked against."""
+    export = tmp_path / "export"
+    write_export(export, [make_alert(1, "smoke", "cam-a")])
+    shared = export / "images" / "pyronear_french" / "1" / "0.jpg"
+    ingested = make_raw(tmp_path / "raw") / "fp" / "data" / "old" / "images"
+    ingested.mkdir(parents=True)
+    (ingested / "old.jpg").write_bytes(shared.read_bytes())
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "wildfire") == []
+    assert "shares an image" in result.stderr
+
+
+def test_a_frame_that_is_never_materialised_does_not_block_an_alert(tmp_path):
+    """Only the first frame of a capture is written; a second detection in the
+    same second is never part of the folder, so its image cannot clash."""
+    first = make_alert(1, "smoke", "cam-a")
+    second = make_alert(2, "smoke", "cam-b")
+    lane = second["objects"][0]
+    extra = dict(lane["frames"][0], detection_id=999)
+    extra["image_path"] = "images/pyronear_french/2/extra.jpg"
+    lane["frames"].insert(1, extra)
+    export = tmp_path / "export"
+    write_export(export, [first, second])
+    (export / extra["image_path"]).write_bytes(
+        (export / "images" / "pyronear_french" / "1" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 2

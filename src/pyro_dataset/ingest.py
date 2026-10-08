@@ -111,7 +111,7 @@ def validate_sequence_folder(folder_path: Path) -> ValidationResult:
     )
 
 
-def _md5(path: Path) -> str:
+def file_md5(path: Path) -> str:
     return hashlib.md5(path.read_bytes()).hexdigest()
 
 
@@ -137,14 +137,14 @@ def find_duplicate_images(
     }
     sizes = {p.stat().st_size for paths in incoming.values() for p in paths}
     seen = {
-        _md5(p)
+        file_md5(p)
         for pool in pool_dirs
         for p in pool.glob("*/images/*")
         if p.suffix.lower() in _IMAGE_EXTENSIONS and p.stat().st_size in sizes
     }
     duplicates: dict[str, list[str]] = {}
     for folder in folders:
-        hashes = {p.name: _md5(p) for p in incoming[folder]}
+        hashes = {p.name: file_md5(p) for p in incoming[folder]}
         clashing = sorted(name for name, h in hashes.items() if h in seen)
         if clashing:
             duplicates[folder] = clashing

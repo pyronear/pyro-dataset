@@ -88,7 +88,7 @@ Step-by-step operator runbook: `docs/runbooks/annotator-import.md`.
 
 ```bash
 # 1. Decide what to import (writes import_plan.json + the ledger, copies nothing)
-uv run python scripts/plan_annotator_import.py   # reads data/raw/pyro-annotator/export
+uv run python scripts/plan_annotator_import.py   # reads the export and the raw pools
 
 # 2. Copy the planned alerts into staging folders (a DVC stage)
 dvc repro materialise_annotator_sequences

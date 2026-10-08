@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tests.conftest import make_alert, small_export, write_export
+from tests.conftest import make_alert, make_raw, small_export, write_export
 
 PLAN_SCRIPT = Path("scripts/plan_annotator_import.py")
 SCRIPT = Path("scripts/materialise_annotator_sequences.py")
@@ -40,6 +40,8 @@ def stage(tmp_path: Path, export: Path) -> Path:
             str(plan),
             "--ledger",
             str(tmp_path / "ledger.json"),
+            "--raw-dir",
+            str(make_raw(tmp_path / "raw")),
         ],
         capture_output=True,
         text=True,

@@ -73,3 +73,10 @@ def small_export(tmp_path: Path) -> Path:
         [make_alert(1, "smoke", "cam-a"), make_alert(10, "fp", "cam-b")],
     )
     return export
+
+
+def make_raw(root: Path) -> Path:
+    """Empty wildfire and fp pools, as the planner expects them."""
+    for kind in ("wildfire", "fp"):
+        (root / kind / "data").mkdir(parents=True, exist_ok=True)
+    return root
