@@ -2893,9 +2893,7 @@
       0.431
     ],
     "camera": "adf_castell-de-subirats-01",
-    "ingested_folders": [
-      "adf_castell-de-subirats-01_11_2026-07-05T13-44-25"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:51573"
     ],
