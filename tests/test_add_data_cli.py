@@ -14,7 +14,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 
 
-def make_sequence_folder(root: Path, name: str) -> None:
+def make_sequence_folder(root: Path, name: str, content: bytes = b"x") -> None:
     """A folder ingest accepts: frame stems carry the camera key and a
     timestamp, per _FILE_RE."""
     camera_key = name.rsplit("_", 1)[0]
@@ -22,7 +22,7 @@ def make_sequence_folder(root: Path, name: str) -> None:
     (root / name / "labels").mkdir(parents=True)
     for i in range(3):
         stem = f"{camera_key}_2026-08-05T13-46-{8 + i:02d}"
-        (root / name / "images" / f"{stem}.jpg").write_bytes(b"x")
+        (root / name / "images" / f"{stem}.jpg").write_bytes(content)
         (root / name / "labels" / f"{stem}.txt").write_text("0 0.5 0.5 0.1 0.1\n")
 
 
@@ -84,3 +84,65 @@ def test_a_valid_split_copies_and_registers(tmp_path):
     )["sequences"]
     assert registry[0]["split"] == "train"
     assert registry[0]["source"] == "pyro-annotator"
+
+
+def test_a_folder_registered_in_the_other_pool_is_refused(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    folder = "sdis-91_cam-a_285_2026-08-05T13-46-08"
+    fp_raw = tmp_path / "data" / "raw" / "fp"
+    fp_raw.mkdir(parents=True)
+    (fp_raw / "registry.json").write_text(
+        json.dumps({"sequences": [{"folder": folder, "split": "train"}]})
+    )
+    result = run_add_data(tmp_path, src, splits)
+    assert result.returncode != 0
+    assert "already registered in" in result.stdout
+    assert list(pool.iterdir()) == []
+
+
+def test_a_folder_sharing_an_image_with_a_pool_is_refused(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    make_sequence_folder(
+        tmp_path / "data" / "raw" / "fp" / "data",
+        "sdis-91_cam-a_300_2026-08-05T13-46-00",
+    )
+    result = run_add_data(tmp_path, src, splits)
+    assert result.returncode != 0
+    assert "already in a pool by content" in result.stdout
+    assert list(pool.iterdir()) == []
+
+
+def test_two_incoming_folders_sharing_an_image_keep_only_the_first(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    second = "sdis-91_cam-a_285_2026-08-05T13-50-00"
+    make_sequence_folder(src, second)
+    splits.write_text(
+        json.dumps({"sdis-91_cam-a_285_2026-08-05T13-46-08": "train", second: "train"})
+    )
+    result = run_add_data(tmp_path, src, splits)
+    assert [p.name for p in pool.iterdir()] == ["sdis-91_cam-a_285_2026-08-05T13-46-08"]
+    assert second in result.stdout
+
+
+def test_distinct_images_are_accepted(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    make_sequence_folder(
+        tmp_path / "data" / "raw" / "fp" / "data",
+        "sdis-91_cam-a_300_2026-08-05T13-46-00",
+        content=b"other",
+    )
+    result = run_add_data(tmp_path, src, splits)
+    assert result.returncode == 0, result.stderr
+    assert len(list(pool.iterdir())) == 1
+
+
+def test_a_folder_with_a_png_is_neither_copied_nor_registered(tmp_path):
+    src, splits, pool = prepare(tmp_path, "train")
+    folder = next(src.iterdir())
+    for img in (folder / "images").iterdir():
+        img.rename(img.with_suffix(".png"))
+    result = run_add_data(tmp_path, src, splits)
+    assert result.returncode != 0
+    assert "non-.jpg file(s) in images/" in result.stdout
+    assert list(pool.iterdir()) == []
+    assert not (tmp_path / "data" / "raw" / "wildfire" / "registry.json").exists()

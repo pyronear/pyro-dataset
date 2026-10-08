@@ -122,7 +122,7 @@ tag.
 - **compute_fp_embeddings**: DINOv2 embeddings of the false-positive sequences, used to cluster them when selecting negatives. Refresh it after any ingest that adds FP sequences, or the new ones stay invisible to the selection.
 - **build_fp_yolo_dataset**: Samples false positive images using round-robin by max detection score. Quotas: 10% FP for train/val, 50% FP for test. Outputs to `data/processed/fp_yolo/`.
 - **merge_yolo_dataset**: Merges wildfire and FP images into two final datasets — `data/processed/yolo_train_val/` and `data/processed/yolo_test/`.
-- **build_sequential_dataset**: Builds the temporal datasets — `data/processed/sequential_train_val/` and `data/processed/sequential_test/` — at 50% FP in every split. The test half is copied verbatim from `data/raw/sequential_test_lock.json` and the stage errors rather than re-selecting when that lockfile is stale.
+- **build_sequential_dataset**: Builds the temporal datasets — `data/processed/sequential_train_val/` and `data/processed/sequential_test/` — at 50% FP in train and val, every registered FP in test, leaving out sequences under 4 images. The test FP half is copied verbatim from `data/raw/sequential_test_lock.json` and the stage errors rather than re-selecting when that lockfile is stale.
 - **test_data_leakage**: Runs `tests/test_data_leakage.py` against the real data: split leakage, recurring-object pinning, and lockfile-vs-quota consistency.
 - **build_toy_dataset**: A 5% sample of both datasets, for smoke-testing a training loop without moving 9 GB.
 - **visualize_yolo_train_val** / **visualize_yolo_test**: Render annotated samples into `data/reporting/viz/`.

@@ -56,6 +56,10 @@ go wrong.
              # data/processed/sequential_test
   ```
 
+  Both raw pools are required from step 2 on: the planner checks every new
+  alert's images by content against everything already ingested, and stops
+  with `data/raw/<pool>/data not found` without them.
+
 ## 1. Refresh the export
 
 The export is pulled by `make export-alerts` in the pyro-annotator repo — the
@@ -140,7 +144,12 @@ How to read it:
   means a registered folder was re-annotated to the opposite kind; the plan
   keeps the registered kind, and actually moving it is
   `scripts/move_fp_to_wildfire.py` / `scripts/move_wf_to_fp.py`, done
-  deliberately. `no image on disk` alerts are excluded and cost nothing.
+  deliberately. `too few images or labelled images` alerts are excluded and
+  cost nothing: `add_data.py` would reject them (fewer than 2 labelled frames)
+  or the sequential build would drop them (fewer than 4 frames). `shares an
+  image with a planned folder` means the alert overlaps one already ingested
+  or planned — the platform raises overlapping alerts — and is skipped before
+  selection, so its recurring object keeps its slot for the next candidate.
   `same-fire chain ... touches planned folders in ['train', 'val']` flags a
   fire that already straddles splits from before the guard existed.
 
@@ -247,6 +256,12 @@ come from the file the plan wrote, not from per-camera stratification, so every
 sequence lands in the split its recurring object (or same-fire group) was pinned
 to. Each command prints a per-camera table and the overall split distribution;
 `Skipping N already registered folder(s)` on a re-run is normal.
+
+A `DUPLICATES` section is not: it lists folders refused because their name is
+registered in the other pool or one of their images already exists in either
+pool by content. The planner checks the same thing, so after a fresh plan it
+should be empty; if it is not, the pools changed between plan and ingest —
+re-run the planner.
 
 Then record the grown pools in their DVC pointers:
 
@@ -372,6 +387,9 @@ Downstream repos then consume the release with
 | build: `test lockfile has N folders but the quota is M` | an ingest grew the test WF pool and the freeze was not (re)run | `dvc repro compute_fp_embeddings`, then `freeze_test_selection.py` |
 | freeze: `only N of M slots filled — the test FP pool is exhausted` | more test smoke than available test negatives | the build will refuse until more FP sequences reach the test split; import more FP data |
 | freeze: `lockfile holds N folders, which exceeds the quota` | the lockfile was hand-edited or a registry lost entries | never truncate; find out how it grew — `git log data/raw/sequential_test_lock.json` |
+| freeze: `N frozen folder(s) now hold fewer than 4 images` | images were removed from a test folder that is in the lockfile | restore the images: a frozen test folder's content is part of the baseline |
+| plan: `shares an image with a planned folder, not planned` | the alert overlaps one already ingested or planned | nothing; the recurring object's next candidate is tried instead |
+| add_data: `DUPLICATES — N folder(s) skipped` | a staged folder's name or an image's content is already in a pool | the pools changed since the plan was written; re-run the planner and materialise again |
 | plan: `--force-train ro_X: refused, it already has sequences in val` | the artefact is already pinned elsewhere; moving it would contaminate evaluation | accept it, or handle the registered sequences deliberately first |
 | plan: `changed kind in the export, fp -> wildfire; kept as fp` | re-annotation flipped an alert after its folder was registered | if the flip is right, `scripts/move_fp_to_wildfire.py` |
 | add_data: `folder(s) exist on disk but are not in registry` | an earlier run copied folders but died before writing the registry | delete those folders from `data/raw/<type>/data/` and re-run `add_data.py` — a plain re-run skips anything already on disk, registered or not |
@@ -383,7 +401,10 @@ Things that must never happen, whatever the shortcut looks like:
   `sequential_test_lock.json` — the single sanctioned exception is editing an
   object's `"split"` in the ledger **before its first ingest**, which is
   equivalent to `--force-train`.
-- Committing a lockfile diff that removes or reorders lines.
+- Committing a lockfile diff that removes or reorders lines. Done once, in
+  v4.6.0, when a clean-up removed folders from the pool — which is why v4.6.0
+  is a new baseline, not comparable with v4.5.x. Do not do it again: a folder
+  that must leave the test pool is a new baseline, and has to be called one.
 - Regenerating any of the three state files from scratch: they are history, and
   losing them re-rolls split decisions that models have already been evaluated
   on.

@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tests.conftest import make_alert, small_export, write_export
+from tests.conftest import make_alert, make_raw, small_export, write_export
 
 SCRIPT = Path("scripts/plan_annotator_import.py")
 
@@ -19,6 +19,8 @@ def run_plan(export: Path, plan: Path, ledger: Path, extra: list[str] | None = N
             str(plan),
             "--ledger",
             str(ledger),
+            "--raw-dir",
+            str(make_raw(plan.parent / "raw")),
             *(extra or []),
         ],
         capture_output=True,
@@ -400,3 +402,180 @@ def test_an_alert_with_no_image_on_disk_is_never_planned(tmp_path):
     assert len(kinds(plan, "fp")) == 1
     ledger = json.loads((tmp_path / "ledger.json").read_text())
     assert len(ledger) == 1, "the imageless alert never became a recurring object"
+
+
+def test_a_smoke_alert_without_boxes_is_never_planned_nor_counted(tmp_path):
+    """An `industrial` or `other` smoke lane carries no box: its folder would
+    hold no label and add_data.py would reject it, so planning it leaves a
+    stale entry and pays FP quota for a positive that never arrives."""
+    boxless = make_alert(2, "smoke", "cam-b")
+    boxless["objects"][0]["smoke_types"] = ["industrial"]
+    for frame in boxless["objects"][0]["frames"]:
+        frame["boxes"] = []
+    export = tmp_path / "export"
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), boxless]
+        + [make_alert(10 + i, "fp", f"cam-f{i}") for i in range(3)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+
+    plan = read_plan(plan_path)
+    assert len(kinds(plan, "wildfire")) == 1
+    assert len(kinds(plan, "fp")) == 1, "the quota counts ingestible smoke only"
+
+
+def test_a_single_labelled_frame_in_a_long_alert_is_never_planned(tmp_path):
+    """add_data.py needs two labelled frames once a sequence has more than two."""
+    sparse = make_alert(2, "smoke", "cam-b", n_frames=4)
+    for frame in sparse["objects"][0]["frames"][1:]:
+        frame["boxes"] = []
+    export = tmp_path / "export"
+    write_export(export, [make_alert(1, "smoke", "cam-a"), sparse])
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 1
+
+
+def test_an_alert_sharing_an_image_with_a_planned_one_is_never_planned(tmp_path):
+    """Overlapping alerts share frames; add_data.py would refuse the second, so
+    planning it would leave it staged forever and burn its object's slot."""
+    export = tmp_path / "export"
+    alerts = [make_alert(1, "smoke", "cam-a")] + [
+        make_alert(10 + i, "fp", f"cam-f{i}") for i in range(2)
+    ]
+    write_export(export, alerts)
+    shared = export / "images" / "pyronear_french" / "11" / "0.jpg"
+    shared.write_bytes(
+        (export / "images" / "pyronear_french" / "10" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    ledger_path = tmp_path / "ledger.json"
+    result = run_plan(export, plan_path, ledger_path, ["--no-fp-quota"])
+    assert result.returncode == 0, result.stderr
+
+    assert len(kinds(read_plan(plan_path), "fp")) == 1
+    assert "shares an image" in result.stderr
+    ledger = json.loads(ledger_path.read_text())
+    recorded = [f for entry in ledger.values() for f in entry["ingested_folders"]]
+    assert len(recorded) == 1, "the skipped alert holds no slot"
+
+
+def test_an_alert_repeating_an_image_already_in_a_pool_is_never_planned(tmp_path):
+    """The first export may be gone by the next import; the pools still hold
+    what it brought in, so they are what a new alert is checked against."""
+    export = tmp_path / "export"
+    write_export(export, [make_alert(1, "smoke", "cam-a")])
+    shared = export / "images" / "pyronear_french" / "1" / "0.jpg"
+    ingested = make_raw(tmp_path / "raw") / "fp" / "data" / "old" / "images"
+    ingested.mkdir(parents=True)
+    (ingested / "old.jpg").write_bytes(shared.read_bytes())
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "wildfire") == []
+    assert "shares an image" in result.stderr
+
+
+def test_a_frame_that_is_never_materialised_does_not_block_an_alert(tmp_path):
+    """Only the first frame of a capture is written; a second detection in the
+    same second is never part of the folder, so its image cannot clash."""
+    first = make_alert(1, "smoke", "cam-a")
+    second = make_alert(2, "smoke", "cam-b")
+    lane = second["objects"][0]
+    extra = dict(lane["frames"][0], detection_id=999)
+    extra["image_path"] = "images/pyronear_french/2/extra.jpg"
+    lane["frames"].insert(1, extra)
+    export = tmp_path / "export"
+    write_export(export, [first, second])
+    (export / extra["image_path"]).write_bytes(
+        (export / "images" / "pyronear_french" / "1" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 2
+
+
+def test_an_alert_shorter_than_the_sequential_minimum_is_never_planned(tmp_path):
+    """add_data.py would take it, the sequential build would drop it: for a
+    false positive that spends the object's one slot on YOLO alone."""
+    export = tmp_path / "export"
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-b", n_frames=3)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 1
+    assert "too few images" in result.stderr
+
+
+def test_an_object_whose_best_alert_is_already_in_a_pool_gets_its_next_alert(
+    tmp_path,
+):
+    """The pool check runs before selection, so a clash does not cost the
+    recurring object its slot: select_fp moves on to the next candidate."""
+    export = tmp_path / "export"
+    best, other = make_alert(10, "fp", "cam-f"), make_alert(11, "fp", "cam-f")
+    best["temporal_model_score"], other["temporal_model_score"] = 0.9, 0.5
+    write_export(export, [make_alert(1, "smoke", "cam-a"), best, other])
+    ingested = make_raw(tmp_path / "raw") / "fp" / "data" / "old" / "images"
+    ingested.mkdir(parents=True)
+    (ingested / "old.jpg").write_bytes(
+        (export / "images" / "pyronear_french" / "10" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "fp") == [
+        "sdis-91_cam-f_285_2026-08-05T13-11-00"
+    ]
+
+
+def test_a_clash_with_a_new_smoke_alert_falls_back_on_the_first_run(tmp_path):
+    """New alerts are deduplicated before selection too: with a quota of one,
+    the object's second alert is planned on this run, not after a rerun."""
+    export = tmp_path / "export"
+    best, other = make_alert(10, "fp", "cam-f"), make_alert(11, "fp", "cam-f")
+    best["temporal_model_score"], other["temporal_model_score"] = 0.9, 0.5
+    write_export(export, [make_alert(1, "smoke", "cam-a"), best, other])
+    (export / "images" / "pyronear_french" / "10" / "0.jpg").write_bytes(
+        (export / "images" / "pyronear_french" / "1" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    plan = read_plan(plan_path)
+    assert len(kinds(plan, "wildfire")) == 1, "smoke wins the shared frame"
+    assert kinds(plan, "fp") == ["sdis-91_cam-f_285_2026-08-05T13-11-00"]
+
+
+def test_two_alerts_sharing_a_folder_name_keep_the_latter(tmp_path):
+    """Second-resolution names collapse two alerts into one folder; the
+    materialiser keeps the latter, and so must the content check — dropping
+    one of the pair by name must not drop both."""
+    first, second = make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-a")
+    second["recorded_at"] = first["recorded_at"]
+    export = tmp_path / "export"
+    write_export(export, [first, second])
+    (export / "images" / "pyronear_french" / "2" / "0.jpg").write_bytes(
+        (export / "images" / "pyronear_french" / "1" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "wildfire") == [
+        "sdis-91_cam-a_285_2026-08-05T13-01-00"
+    ]
+    assert "share a folder name, keeping the latter" in result.stderr

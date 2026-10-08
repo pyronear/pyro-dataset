@@ -8979,9 +8979,7 @@
       0.529
     ],
     "camera": "sis-67_donon-sarrebourg-02",
-    "ingested_folders": [
-      "sis-67_donon-sarrebourg-02_276_2026-08-28T05-31-10"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:60987"
     ],
@@ -9235,9 +9233,7 @@
       0.296
     ],
     "camera": "sis-67_donon-sarrebourg-02",
-    "ingested_folders": [
-      "sis-67_donon-sarrebourg-02_317_2026-08-30T11-07-53"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:61552"
     ],

@@ -155,3 +155,13 @@ def test_naming_issue_is_not_structural(valid_folder):
     result = validate_sequence_folder(valid_folder)
     assert result.has_naming_issues
     assert not result.has_structural_issues
+
+
+@pytest.mark.parametrize(
+    "name", ["frame.png", "sdis83_brison_200_2024-01-15T10-33-00.JPG"]
+)
+def test_a_non_jpg_image_is_structural(valid_folder, name):
+    (valid_folder / "images" / name).touch()
+    result = validate_sequence_folder(valid_folder)
+    assert result.has_structural_issues
+    assert "non-.jpg file(s) in images/" in result.structural_issues[0]

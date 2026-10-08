@@ -7,11 +7,15 @@ state from deps, destroying the pinning it exists to provide. The build
 (`build_sequential_dataset.py`) copies the lockfile verbatim for test and
 performs no selection — so every release's test set is a byte-identical
 superset of the previous one, and models stay comparable across releases.
+One exception so far: v4.6.0 removed 8 frozen folders that the duplicate
+clean-up and the MIN_SEQUENCE_IMAGES rule took out of the pool, so it starts a
+new baseline and is not comparable with v4.5.x.
 
 Each run: the lockfile is loaded (or, once, bootstrapped from the built
 dataset — never recomputed), then every registered test FP not yet frozen is
-appended in registry order. Test takes all its negatives: the 1:1 balance only
-matters for training, and FPR is prevalence-free, so more negatives just give
+appended in registry order, unless it has fewer than MIN_SEQUENCE_IMAGES
+images. Test takes all its negatives: the 1:1 balance only matters for
+training, and FPR is prevalence-free, so more negatives just give
 a tighter estimate. Entries are never removed or reordered.
 
 See docs/specs/2026-08-14-annotator-test-growth-design.md.
@@ -36,6 +40,7 @@ import logging
 import sys
 from pathlib import Path
 
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
 from pyro_dataset.fp.lockfile import (
     extend_with_pins,
     load_lockfile,
@@ -99,7 +104,14 @@ def main() -> None:
     dry_run: bool = args["dry_run"]
 
     fp_sequences = load_registry(args["fp_registry"])
-    test_fp = [s["folder"] for s in fp_sequences if s["split"] == "test"]
+    registered = [s["folder"] for s in fp_sequences if s["split"] == "test"]
+    # Too short for the sequential build, which leaves them out of test too.
+    test_fp = [
+        folder
+        for folder in registered
+        if len(list((data_dir / folder / "images").glob("*.jpg")))
+        >= MIN_SEQUENCE_IMAGES
+    ]
     quota = len(test_fp)
 
     bootstrapped = not lockfile_path.is_file()
@@ -108,6 +120,17 @@ def main() -> None:
         if bootstrapped
         else load_lockfile(lockfile_path)
     )
+
+    # A frozen folder that lost images would otherwise surface as a baffling
+    # "exceeds the quota": the quota shrank under it. Trimming a frozen test
+    # folder changes the test set in place; the images must come back.
+    trimmed = [f for f in frozen if f in set(registered) - set(test_fp)]
+    if trimmed:
+        raise SystemExit(
+            f"{len(trimmed)} frozen folder(s) now hold fewer than "
+            f"{MIN_SEQUENCE_IMAGES} images, e.g. {trimmed[:3]} — a frozen test "
+            "folder must not lose images; restore them"
+        )
 
     try:
         folders = extend_with_pins(frozen, test_fp, quota)

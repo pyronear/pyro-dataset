@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from tests.conftest import make_alert, small_export, write_export
+from tests.conftest import make_alert, make_raw, small_export, write_export
 
 PLAN_SCRIPT = Path("scripts/plan_annotator_import.py")
 SCRIPT = Path("scripts/materialise_annotator_sequences.py")
@@ -40,6 +40,8 @@ def stage(tmp_path: Path, export: Path) -> Path:
             str(plan),
             "--ledger",
             str(tmp_path / "ledger.json"),
+            "--raw-dir",
+            str(make_raw(tmp_path / "raw")),
         ],
         capture_output=True,
         text=True,
@@ -54,8 +56,8 @@ def test_each_folder_has_images_labels_and_meta(tmp_path):
     out = stage(tmp_path, small_export(tmp_path))
 
     folder = next((out / "wildfire").iterdir())
-    assert len(list((folder / "images").glob("*.jpg"))) == 3
-    assert len(list((folder / "labels").glob("*.txt"))) == 3
+    assert len(list((folder / "images").glob("*.jpg"))) == 4
+    assert len(list((folder / "labels").glob("*.txt"))) == 4
     meta = json.loads((folder / "meta.json").read_text())
     assert meta["platform_alert_id"] == 1
     assert meta["lanes"][0]["track"], "meta.json carries the full track"

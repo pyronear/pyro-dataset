@@ -28,6 +28,8 @@ Arguments:
     --plan             Import plan to read and update
                        (default: data/raw/pyro-annotator/import_plan.json).
     --ledger           Recurring-object ledger (default: data/raw/pyro-annotator/recurring_objects.json).
+    --raw-dir          Directory holding the wildfire and fp pools, whose images a
+                       new alert may not repeat (default: data/raw).
     --max-per-object   Lifetime cap of sequences per recurring object (default: 1).
     --no-fp-quota      Take every new recurring object instead of capping false
                        positives at the smoke count. Safe while the builders' own
@@ -49,10 +51,18 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from pyro_dataset.annotator.convert import alert_kind, camera_key, folder_name
+from pyro_dataset.annotator.convert import (
+    alert_kind,
+    camera_key,
+    folder_name,
+    frame_stem,
+    label_lines,
+)
 from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
 from pyro_dataset.annotator.same_fire import group_new_smoke
 from pyro_dataset.annotator.select import rank_objects, select_fp
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
+from pyro_dataset.ingest import file_md5, has_enough_labels
 
 
 def make_cli_parser() -> argparse.ArgumentParser:
@@ -69,6 +79,12 @@ def make_cli_parser() -> argparse.ArgumentParser:
         "--ledger",
         type=Path,
         default=Path("data/raw/pyro-annotator/recurring_objects.json"),
+    )
+    parser.add_argument(
+        "--raw-dir",
+        type=Path,
+        default=Path("data/raw"),
+        help="Holds the wildfire and fp pools, checked for images already ingested.",
     )
     parser.add_argument("--max-per-object", type=int, default=1)
     parser.add_argument(
@@ -108,19 +124,97 @@ def load_plan(path: Path) -> dict[str, dict[str, Any]]:
     return json.loads(path.read_text())
 
 
-def has_usable_image(export_dir: Path, alert: dict[str, Any]) -> bool:
-    """Whether at least one of the alert's frames has an image on disk.
+def materialised_frames(
+    export_dir: Path, alert: dict[str, Any]
+) -> dict[str, dict[str, Any]]:
+    """The frames `write_sequence` keeps, by stem: per capture, the first frame
+    whose image is on disk."""
+    kept: dict[str, dict[str, Any]] = {}
+    for obj in alert["objects"]:
+        for frame in obj["frames"]:
+            stem = frame_stem(alert, frame)
+            if stem in kept or not frame.get("image_path"):
+                continue
+            if (export_dir / frame["image_path"]).is_file():
+                kept[stem] = frame
+    return kept
 
-    Checked here rather than while copying so that materialisation is a total
-    function of the plan. It also stops an unusable alert from consuming its
-    recurring object's one slot: a folder with no image is rejected
-    structurally by `add_data.py`, so planning it wastes the slot forever.
+
+def is_ingestible(export_dir: Path, alert: dict[str, Any]) -> bool:
+    """Whether the folder this alert materialises into would pass `add_data.py`.
+
+    Labels are of the alert's own kind. Checked here rather than while copying
+    so that materialisation is a total function of the plan, and so an unusable
+    alert neither consumes its recurring object's one slot nor counts as smoke
+    in the FP quota — a smoke lane annotated `industrial` or `other` carries no
+    box at all.
+
+    Also requires MIN_SEQUENCE_IMAGES frames: a shorter folder would pass
+    `add_data.py` but never reach the sequential datasets, so for a false
+    positive it would spend the object's slot on YOLO alone.
     """
-    return any(
-        frame.get("image_path") and (export_dir / frame["image_path"]).is_file()
-        for obj in alert["objects"]
-        for frame in obj["frames"]
+    frames = materialised_frames(export_dir, alert).values()
+    labelled = sum(1 for frame in frames if label_lines(alert, frame))
+    return len(frames) >= MIN_SEQUENCE_IMAGES and has_enough_labels(
+        labelled, len(frames)
     )
+
+
+def without_known_images(
+    export_dir: Path,
+    alerts: list[dict[str, Any]],
+    usable: list[dict[str, Any]],
+    plan: dict[str, dict[str, Any]],
+    pools: list[Path],
+) -> list[dict[str, Any]]:
+    """Drop the new alerts holding an image the pools, a planned folder or an
+    earlier new alert already have.
+
+    Overlapping platform alerts share frames, and add_data.py refuses a folder
+    holding an image another folder already has. Planning such an alert would
+    rematerialise it on every run and, for a false positive, burn its recurring
+    object's slot on a sequence that never reaches the registry. Filtered before
+    selection so the object's next-best alert gets its turn on this run, not
+    the next. Among new alerts smoke wins over a false positive, and a better
+    scored false positive over a worse one. Known images are the pools' and
+    those of planned folders not ingested yet; only the ones sized like a new
+    image are hashed.
+    """
+    by_name = {folder_name(alert): alert for alert in alerts}
+    new = [alert for alert in usable if folder_name(alert) not in plan]
+    sizes = {p.stat().st_size for alert in new for p in image_paths(export_dir, alert)}
+    known = [p for pool in pools for p in pool.glob("*/images/*.jpg")]
+    for name in plan:
+        if name in by_name:
+            known += image_paths(export_dir, by_name[name])
+    seen = {file_md5(p) for p in known if p.stat().st_size in sizes}
+    dropped: set[str] = set()
+    for alert in sorted(
+        new,
+        key=lambda a: (
+            alert_kind(a) != "wildfire",
+            -(a.get("temporal_model_score") or -1.0),
+            a["platform_alert_id"],
+        ),
+    ):
+        name = folder_name(alert)
+        frames = {file_md5(p) for p in image_paths(export_dir, alert)}
+        if frames & seen:
+            logging.warning(
+                f"{name}: shares an image with a planned folder, not planned"
+            )
+            dropped.add(name)
+            continue
+        seen |= frames
+    return [alert for alert in usable if folder_name(alert) not in dropped]
+
+
+def image_paths(export_dir: Path, alert: dict[str, Any]) -> list[Path]:
+    """The export images the alert's folder will hold."""
+    return [
+        export_dir / frame["image_path"]
+        for frame in materialised_frames(export_dir, alert).values()
+    ]
 
 
 def apply_force_train(ledger: Ledger, ro_ids: list[str]) -> None:
@@ -200,20 +294,41 @@ def main() -> None:
     logging.basicConfig(level=args["loglevel"].upper())
 
     export_dir: Path = args["export_dir"]
+    pools = [args["raw_dir"] / kind / "data" for kind in ("wildfire", "fp")]
+    for pool in pools:
+        if not pool.is_dir():
+            raise SystemExit(f"{pool} not found, run `dvc pull {pool.parent}`")
     plan_path: Path = args["plan"]
     ledger_path: Path = args["ledger"]
     dry_run: bool = args["dry_run"]
     rng = random.Random(args["random_seed"])
 
     alerts = load_manifest(export_dir)
+    plan = load_plan(plan_path)
     usable = []
     for alert in alerts:
-        if has_usable_image(export_dir, alert):
+        if is_ingestible(export_dir, alert):
             usable.append(alert)
         else:
             logging.warning(
-                f"alert {alert['platform_alert_id']}: no image on disk, not planned"
+                f"alert {alert['platform_alert_id']}: too few images or labelled "
+                "images, not planned"
             )
+    # Folder names are second-resolution, so two alerts on one camera view in
+    # the same second collapse into one folder. Keep the latter, as the
+    # materialiser does, before deduplicating by content: a name must stand
+    # for one alert there, or dropping one of the pair would drop both.
+    by_folder: dict[str, dict[str, Any]] = {}
+    for alert in usable:
+        name = folder_name(alert)
+        if name in by_folder:
+            logging.warning(
+                f"{name}: alerts {by_folder[name]['platform_alert_id']} and "
+                f"{alert['platform_alert_id']} share a folder name, keeping the latter"
+            )
+        by_folder[name] = alert
+    usable = list(by_folder.values())
+    usable = without_known_images(export_dir, alerts, usable, plan, pools)
     smoke = [a for a in usable if alert_kind(a) == "wildfire"]
     fp_alerts = [a for a in usable if alert_kind(a) == "fp"]
 
@@ -246,7 +361,6 @@ def main() -> None:
     ledger_folders = {
         folder for e in ledger.entries.values() for folder in e["ingested_folders"]
     }
-    plan = load_plan(plan_path)
     for name, entry in plan.items():
         if name not in ledger_folders and entry["split"] in split_counts:
             split_counts[entry["split"]] += 1

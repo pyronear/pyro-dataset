@@ -2,13 +2,14 @@
 Pytest configuration file for the pyro-dataset project.
 """
 
+import hashlib
 import json
 from pathlib import Path
 
 from PIL import Image
 
 
-def make_alert(alert_id: int, kind: str, camera: str, n_frames: int = 3) -> dict:
+def make_alert(alert_id: int, kind: str, camera: str, n_frames: int = 4) -> dict:
     """One export manifest entry with a single lane of `kind`."""
     is_smoke = kind == "smoke"
     box = {
@@ -56,7 +57,12 @@ def write_export(root: Path, alerts: list[dict]) -> None:
                 for frame in obj["frames"]:
                     path = root / frame["image_path"]
                     path.parent.mkdir(parents=True, exist_ok=True)
-                    Image.new("RGB", (32, 18), "black").save(path)
+                    # Distinct per frame, stable across rewrites: the planner
+                    # deduplicates alerts by image content.
+                    color = tuple(
+                        hashlib.md5(frame["image_path"].encode()).digest()[:3]
+                    )
+                    Image.new("RGB", (32, 18), color).save(path)
 
 
 def small_export(tmp_path: Path) -> Path:
@@ -67,3 +73,10 @@ def small_export(tmp_path: Path) -> Path:
         [make_alert(1, "smoke", "cam-a"), make_alert(10, "fp", "cam-b")],
     )
     return export
+
+
+def make_raw(root: Path) -> Path:
+    """Empty wildfire and fp pools, as the planner expects them."""
+    for kind in ("wildfire", "fp"):
+        (root / kind / "data").mkdir(parents=True, exist_ok=True)
+    return root

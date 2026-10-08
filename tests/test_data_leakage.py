@@ -12,6 +12,10 @@ Note: same-camera images across splits are acceptable (a camera can contribute
 to both train and test on different events). Only exact duplicates (images) or
 the same sequence event (sequential datasets) are flagged.
 
+Raw pools are also checked by content: a folder name may sit in one registry
+only, and an image (md5) in one folder only — overlapping platform alerts share
+frames under different names, which name-based checks cannot see.
+
 Datasets covered:
 - wildfire_yolo      – merged YOLO dataset (images/train, images/val, images/test)
 - yolo_train_val     – YOLO train/val (images/train, images/val)  \\ checked against
@@ -19,10 +23,14 @@ Datasets covered:
 - sequential_train_val + sequential_test – sequential datasets for wildfire and fp
 """
 
+import collections
+import hashlib
 import json
 from pathlib import Path
 
 import pytest
+
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
 
 PROCESSED = Path(__file__).parent.parent / "data" / "processed"
 
@@ -155,6 +163,19 @@ def test_sequential_no_image_leakage(
     )
 
 
+@pytest.mark.parametrize("split_dir", [SEQ_TRAIN_VAL, SEQ_TEST])
+def test_sequential_sequences_have_enough_images(split_dir: Path) -> None:
+    """The temporal model gets at least MIN_SEQUENCE_IMAGES frames per sequence."""
+    _skip_if_missing(split_dir)
+    short = sorted(
+        str(seq.relative_to(split_dir))
+        for seq in split_dir.glob("*/*/*")
+        if seq.is_dir()
+        and len(list((seq / "images").glob("*.jpg"))) < MIN_SEQUENCE_IMAGES
+    )
+    assert not short, f"{len(short)} short sequence(s), e.g. {short[:3]}"
+
+
 # ---------------------------------------------------------------------------
 # Registry-level consistency: recurring-object pinning and the test lockfile
 # ---------------------------------------------------------------------------
@@ -185,13 +206,62 @@ def test_no_recurring_object_spans_splits() -> None:
 
 
 def test_lockfile_holds_every_test_fp() -> None:
-    """The frozen negatives are exactly the registered test FPs."""
+    """The frozen negatives are exactly the registered test FPs long enough for
+    the sequential build."""
     _skip_if_missing(TEST_LOCKFILE_PATH, FP_REGISTRY_PATH)
     folders = json.loads(TEST_LOCKFILE_PATH.read_text())["folders"]
     fp_test = {
         s["folder"]
         for s in json.loads(FP_REGISTRY_PATH.read_text())["sequences"]
         if s["split"] == "test"
+        and len(list((RAW / "fp" / "data" / s["folder"] / "images").glob("*.jpg")))
+        >= MIN_SEQUENCE_IMAGES
     }
     assert len(folders) == len(set(folders))
     assert set(folders) == fp_test
+
+
+WF_REGISTRY_PATH = RAW / "wildfire" / "registry.json"
+
+
+def _registered(pool: str) -> list[str]:
+    registry = json.loads((RAW / pool / "registry.json").read_text())
+    return [s["folder"] for s in registry["sequences"]]
+
+
+def test_no_folder_in_both_registries() -> None:
+    """A sequence is a positive or a negative, never both."""
+    _skip_if_missing(WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+    both = set(_registered("wildfire")) & set(_registered("fp"))
+    assert not both, f"{len(both)} folder(s) in both pools, e.g. {sorted(both)[:3]}"
+
+
+def test_every_raw_image_is_in_one_folder_only() -> None:
+    """No image content shared between registered folders, in any pool or split.
+
+    Repeats inside one folder are allowed: the camera does send unchanged frames.
+    """
+    _skip_if_missing(WF_REGISTRY_PATH, FP_REGISTRY_PATH)
+    folders_by_hash: dict[str, set[str]] = collections.defaultdict(set)
+    for pool in ("wildfire", "fp"):
+        for folder in _registered(pool):
+            for img in (RAW / pool / "data" / folder / "images").glob("*.jpg"):
+                digest = hashlib.md5(img.read_bytes()).hexdigest()
+                folders_by_hash[digest].add(f"{pool}/{folder}")
+    shared = [sorted(f) for f in folders_by_hash.values() if len(f) > 1]
+    assert not shared, (
+        f"{len(shared)} image(s) held by several folders, e.g. {shared[:3]}"
+    )
+
+
+@pytest.mark.parametrize("pool", ["wildfire", "fp"])
+def test_pool_folders_are_exactly_the_registry(pool: str) -> None:
+    """An unregistered folder is invisible to the builders and to the checks
+    above, but add_data.py still compares new images against it."""
+    _skip_if_missing(RAW / pool / "registry.json")
+    on_disk = {p.name for p in (RAW / pool / "data").iterdir() if p.is_dir()}
+    registered = set(_registered(pool))
+    assert on_disk == registered, (
+        f"{pool}: unregistered {sorted(on_disk - registered)[:3]}, "
+        f"missing {sorted(registered - on_disk)[:3]}"
+    )
