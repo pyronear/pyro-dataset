@@ -7,6 +7,9 @@ state from deps, destroying the pinning it exists to provide. The build
 (`build_sequential_dataset.py`) copies the lockfile verbatim for test and
 performs no selection — so every release's test set is a byte-identical
 superset of the previous one, and models stay comparable across releases.
+One exception so far: v4.6.0 removed 8 frozen folders that the duplicate
+clean-up and the MIN_SEQUENCE_IMAGES rule took out of the pool, so it starts a
+new baseline and is not comparable with v4.5.x.
 
 Each run: the lockfile is loaded (or, once, bootstrapped from the built
 dataset — never recomputed), then every registered test FP not yet frozen is
@@ -101,12 +104,12 @@ def main() -> None:
     dry_run: bool = args["dry_run"]
 
     fp_sequences = load_registry(args["fp_registry"])
+    registered = [s["folder"] for s in fp_sequences if s["split"] == "test"]
     # Too short for the sequential build, which leaves them out of test too.
     test_fp = [
-        s["folder"]
-        for s in fp_sequences
-        if s["split"] == "test"
-        and len(list((data_dir / s["folder"] / "images").glob("*.jpg")))
+        folder
+        for folder in registered
+        if len(list((data_dir / folder / "images").glob("*.jpg")))
         >= MIN_SEQUENCE_IMAGES
     ]
     quota = len(test_fp)
@@ -117,6 +120,17 @@ def main() -> None:
         if bootstrapped
         else load_lockfile(lockfile_path)
     )
+
+    # A frozen folder that lost images would otherwise surface as a baffling
+    # "exceeds the quota": the quota shrank under it. Trimming a frozen test
+    # folder changes the test set in place; the images must come back.
+    trimmed = [f for f in frozen if f in set(registered) - set(test_fp)]
+    if trimmed:
+        raise SystemExit(
+            f"{len(trimmed)} frozen folder(s) now hold fewer than "
+            f"{MIN_SEQUENCE_IMAGES} images, e.g. {trimmed[:3]} — a frozen test "
+            "folder must not lose images; restore them"
+        )
 
     try:
         folders = extend_with_pins(frozen, test_fp, quota)

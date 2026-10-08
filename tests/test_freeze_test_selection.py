@@ -138,3 +138,13 @@ def test_a_sequence_too_short_for_the_build_is_never_frozen(tmp_path, monkeypatc
     monkeypatch.setattr(sys, "argv", world["argv"])
     module.main()
     assert read_lock(world) == ["f1"]
+
+
+def test_a_frozen_folder_that_lost_images_is_an_error(tmp_path, monkeypatch):
+    world = setup_world(tmp_path, fp_test_folders=["f1", "f2"])
+    world["lockfile"].write_text(json.dumps({"folders": ["f1", "f2"]}))
+    (world["fp_data"] / "f2" / "images" / "3.jpg").unlink()
+    monkeypatch.setattr(sys, "argv", world["argv"])
+    with pytest.raises(SystemExit, match="frozen folder.*fewer than"):
+        module.main()
+    assert read_lock(world) == ["f1", "f2"], "never rewritten"
