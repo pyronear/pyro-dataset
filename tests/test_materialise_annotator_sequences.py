@@ -56,8 +56,8 @@ def test_each_folder_has_images_labels_and_meta(tmp_path):
     out = stage(tmp_path, small_export(tmp_path))
 
     folder = next((out / "wildfire").iterdir())
-    assert len(list((folder / "images").glob("*.jpg"))) == 3
-    assert len(list((folder / "labels").glob("*.txt"))) == 3
+    assert len(list((folder / "images").glob("*.jpg"))) == 4
+    assert len(list((folder / "labels").glob("*.txt"))) == 4
     meta = json.loads((folder / "meta.json").read_text())
     assert meta["platform_alert_id"] == 1
     assert meta["lanes"][0]["track"], "meta.json carries the full track"

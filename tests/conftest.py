@@ -9,7 +9,7 @@ from pathlib import Path
 from PIL import Image
 
 
-def make_alert(alert_id: int, kind: str, camera: str, n_frames: int = 3) -> dict:
+def make_alert(alert_id: int, kind: str, camera: str, n_frames: int = 4) -> dict:
     """One export manifest entry with a single lane of `kind`."""
     is_smoke = kind == "smoke"
     box = {

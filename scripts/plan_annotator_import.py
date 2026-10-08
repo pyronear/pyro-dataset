@@ -61,6 +61,7 @@ from pyro_dataset.annotator.convert import (
 from pyro_dataset.annotator.recurring import Ledger, assign_new_split, main_bbox
 from pyro_dataset.annotator.same_fire import group_new_smoke
 from pyro_dataset.annotator.select import rank_objects, select_fp
+from pyro_dataset.constants import MIN_SEQUENCE_IMAGES
 from pyro_dataset.ingest import file_md5, has_enough_labels
 
 
@@ -147,10 +148,56 @@ def is_ingestible(export_dir: Path, alert: dict[str, Any]) -> bool:
     alert neither consumes its recurring object's one slot nor counts as smoke
     in the FP quota — a smoke lane annotated `industrial` or `other` carries no
     box at all.
+
+    Also requires MIN_SEQUENCE_IMAGES frames: a shorter folder would pass
+    `add_data.py` but never reach the sequential datasets, so for a false
+    positive it would spend the object's slot on YOLO alone.
     """
     frames = materialised_frames(export_dir, alert).values()
     labelled = sum(1 for frame in frames if label_lines(alert, frame))
-    return has_enough_labels(labelled, len(frames))
+    return len(frames) >= MIN_SEQUENCE_IMAGES and has_enough_labels(
+        labelled, len(frames)
+    )
+
+
+def without_known_images(
+    export_dir: Path,
+    alerts: list[dict[str, Any]],
+    usable: list[dict[str, Any]],
+    plan: dict[str, dict[str, Any]],
+    pools: list[Path],
+) -> list[dict[str, Any]]:
+    """Drop the new alerts holding an image the pools or a planned folder
+    already have.
+
+    Overlapping platform alerts share frames, and add_data.py refuses a folder
+    holding an image another folder already has. Planning such an alert would
+    rematerialise it on every run and, for a false positive, burn its recurring
+    object's slot on a sequence that never reaches the registry. Filtered before
+    selection so the object's next-best alert gets its turn. Known images are
+    the pools' and those of planned folders not ingested yet; only the ones
+    sized like a new image are hashed.
+    """
+    by_name = {folder_name(alert): alert for alert in alerts}
+    new = [alert for alert in usable if folder_name(alert) not in plan]
+    sizes = {p.stat().st_size for alert in new for p in image_paths(export_dir, alert)}
+    known = [p for pool in pools for p in pool.glob("*/images/*.jpg")]
+    for name in plan:
+        if name in by_name:
+            known += image_paths(export_dir, by_name[name])
+    seen = {file_md5(p) for p in known if p.stat().st_size in sizes}
+    kept = []
+    for alert in usable:
+        name = folder_name(alert)
+        if name not in plan and seen & {
+            file_md5(p) for p in image_paths(export_dir, alert)
+        }:
+            logging.warning(
+                f"{name}: shares an image with a planned folder, not planned"
+            )
+            continue
+        kept.append(alert)
+    return kept
 
 
 def image_paths(export_dir: Path, alert: dict[str, Any]) -> list[Path]:
@@ -248,15 +295,17 @@ def main() -> None:
     rng = random.Random(args["random_seed"])
 
     alerts = load_manifest(export_dir)
+    plan = load_plan(plan_path)
     usable = []
     for alert in alerts:
         if is_ingestible(export_dir, alert):
             usable.append(alert)
         else:
             logging.warning(
-                f"alert {alert['platform_alert_id']}: too few labelled images, "
-                "not planned"
+                f"alert {alert['platform_alert_id']}: too few images or labelled "
+                "images, not planned"
             )
+    usable = without_known_images(export_dir, alerts, usable, plan, pools)
     smoke = [a for a in usable if alert_kind(a) == "wildfire"]
     fp_alerts = [a for a in usable if alert_kind(a) == "fp"]
 
@@ -289,7 +338,6 @@ def main() -> None:
     ledger_folders = {
         folder for e in ledger.entries.values() for folder in e["ingested_folders"]
     }
-    plan = load_plan(plan_path)
     for name, entry in plan.items():
         if name not in ledger_folders and entry["split"] in split_counts:
             split_counts[entry["split"]] += 1
@@ -362,25 +410,10 @@ def main() -> None:
             f"{export_kinds[name]}; kept as {plan[name]['kind']}"
         )
 
-    # Overlapping platform alerts share frames, and add_data.py refuses a folder
-    # holding an image another folder already has. Planning such an alert here
-    # would rematerialise it on every run and, for a false positive, burn its
-    # recurring object's slot on a sequence that never reaches the registry.
-    # Known images are the pools' and those of planned folders not ingested yet;
-    # only the ones sized like a new image are hashed.
-    by_name = {folder_name(alert): alert for alert in alerts}
-    new_images = {
-        folder_name(alert): image_paths(export_dir, alert)
-        for alert, _, _ in chosen
-        if folder_name(alert) not in plan
-    }
-    sizes = {p.stat().st_size for paths in new_images.values() for p in paths}
-    known = [p for pool in pools for p in pool.glob("*/images/*.jpg")]
-    for name in plan:
-        if name in by_name:
-            known += image_paths(export_dir, by_name[name])
-    seen = {file_md5(p) for p in known if p.stat().st_size in sizes}
-
+    # Two new alerts can share a frame too; `without_known_images` only checked
+    # them against what was already planned. Smoke comes first in `chosen`, so a
+    # positive wins over a false positive.
+    seen: set[str] = set()
     added = 0
     for alert, kind, ro_id in chosen:
         name = folder_name(alert)
@@ -390,10 +423,10 @@ def main() -> None:
             # lifetime slot and shorting the quota, permanently and silently.
             continue
         if name not in plan:
-            frames = {file_md5(p) for p in new_images[name]}
+            frames = {file_md5(p) for p in image_paths(export_dir, alert)}
             if frames & seen:
                 logging.warning(
-                    f"{name}: shares an image with a planned folder, not planned"
+                    f"{name}: shares an image with another new alert, not planned"
                 )
                 continue
             seen |= frames

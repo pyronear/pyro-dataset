@@ -501,3 +501,41 @@ def test_a_frame_that_is_never_materialised_does_not_block_an_alert(tmp_path):
     result = run_plan(export, plan_path, tmp_path / "ledger.json")
     assert result.returncode == 0, result.stderr
     assert len(kinds(read_plan(plan_path), "wildfire")) == 2
+
+
+def test_an_alert_shorter_than_the_sequential_minimum_is_never_planned(tmp_path):
+    """add_data.py would take it, the sequential build would drop it: for a
+    false positive that spends the object's one slot on YOLO alone."""
+    export = tmp_path / "export"
+    write_export(
+        export,
+        [make_alert(1, "smoke", "cam-a"), make_alert(2, "smoke", "cam-b", n_frames=3)],
+    )
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert len(kinds(read_plan(plan_path), "wildfire")) == 1
+    assert "too few images" in result.stderr
+
+
+def test_an_object_whose_best_alert_is_already_in_a_pool_gets_its_next_alert(
+    tmp_path,
+):
+    """The pool check runs before selection, so a clash does not cost the
+    recurring object its slot: select_fp moves on to the next candidate."""
+    export = tmp_path / "export"
+    best, other = make_alert(10, "fp", "cam-f"), make_alert(11, "fp", "cam-f")
+    best["temporal_model_score"], other["temporal_model_score"] = 0.9, 0.5
+    write_export(export, [make_alert(1, "smoke", "cam-a"), best, other])
+    ingested = make_raw(tmp_path / "raw") / "fp" / "data" / "old" / "images"
+    ingested.mkdir(parents=True)
+    (ingested / "old.jpg").write_bytes(
+        (export / "images" / "pyronear_french" / "10" / "0.jpg").read_bytes()
+    )
+
+    plan_path = tmp_path / "plan.json"
+    result = run_plan(export, plan_path, tmp_path / "ledger.json")
+    assert result.returncode == 0, result.stderr
+    assert kinds(read_plan(plan_path), "fp") == [
+        "sdis-91_cam-f_285_2026-08-05T13-11-00"
+    ]
