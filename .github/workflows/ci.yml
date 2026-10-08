@@ -76,13 +76,21 @@ jobs:
               print(f"ERROR: {path} not found. Run `dvc repro test_data_leakage` and commit the result.")
               sys.exit(1)
 
-          suite = tree.getroot()
-          failures = int(suite.attrib.get("failures", 0))
-          errors = int(suite.attrib.get("errors", 0))
-          tests = int(suite.attrib.get("tests", 0))
-          skipped = int(suite.attrib.get("skipped", 0))
+          # pytest wraps its <testsuite> in a <testsuites> root that carries no
+          # counts; reading the root alone reports 0 tests and always passes.
+          root = tree.getroot()
+          suites = [root] if root.tag == "testsuite" else list(root.iter("testsuite"))
+          def total(key):
+              return sum(int(s.attrib.get(key, 0)) for s in suites)
+          failures, errors = total("failures"), total("errors")
+          tests, skipped = total("tests"), total("skipped")
 
           print(f"Tests: {tests}, Skipped: {skipped}, Failures: {failures}, Errors: {errors}")
+
+          # A skip means the data was missing when the report was produced.
+          if not tests or skipped:
+              print("ERROR: the report must come from a run with every dataset present.")
+              sys.exit(1)
 
           if failures or errors:
               for tc in suite.iter("testcase"):
