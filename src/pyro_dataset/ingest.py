@@ -17,7 +17,10 @@ _FOLDER_RE = re.compile(
 _FILE_RE = re.compile(
     r"^[a-zA-Z0-9-]+_[a-zA-Z0-9-]+_\d{1,3}_\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}\.[a-zA-Z]+$"
 )
-_IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+# JPEG only: every pool image is a .jpg, the annotator import writes .jpg, and the
+# builders, the freeze, the planner and the leakage tests all glob "*.jpg". A
+# .png accepted here would be invisible to every one of them.
+_IMAGE_EXTENSIONS = {".jpg"}
 
 
 @dataclasses.dataclass
