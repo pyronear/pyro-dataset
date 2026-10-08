@@ -65,6 +65,23 @@ names:
 """
 
 
+def find_collisions(wf: Path, fp: Path, splits: list[str]) -> list[str]:
+    """Files both datasets hold under one name — copying both would silently
+    keep the second and lose the first, label included."""
+    collisions = []
+    for split in splits:
+        for sub in ["images", "labels"]:
+            dirs = [wf / sub / split, fp / sub / split]
+            names = [
+                {f.name for f in d.iterdir() if not f.name.startswith(".")}
+                if d.is_dir()
+                else set()
+                for d in dirs
+            ]
+            collisions += [f"{sub}/{split}/{n}" for n in sorted(names[0] & names[1])]
+    return collisions
+
+
 def copy_split(sources: list[Path], dst: Path, dry_run: bool) -> int:
     count = 0
     for src in sources:
@@ -92,6 +109,13 @@ if __name__ == "__main__":
 
     splits_tv = ["train", "val"]
     splits_test = ["test"]
+
+    collisions = find_collisions(wf, fp, splits_tv + splits_test)
+    if collisions:
+        raise SystemExit(
+            f"{len(collisions)} file(s) exist in both {wf} and {fp}, "
+            f"e.g. {collisions[:3]}"
+        )
 
     if not dry_run:
         for out in (out_tv, out_test):
