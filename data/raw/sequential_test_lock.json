@@ -133,7 +133,6 @@
     "pyronear-sdis-77_croix-augas_265_2024-09-21T18-36-47",
     "pyronear-sdis-77_croix-augas_294_2025-05-01T18-33-39",
     "pyronear-sdis-77_croix-augas_316_2024-09-07T17-32-34",
-    "pyronear-sdis-77_croix-augas_59_2024-07-06T06-45-14",
     "pyronear-sdis-77_croix-augas_59_2024-07-06T22-38-23",
     "pyronear-sdis-77_croix-augas_8_2024-07-07T00-01-12",
     "pyronear-sdis-77_croix-augas_8_2024-07-24T18-47-40",
@@ -500,7 +499,6 @@
     "pyronear-sdis-07_brison_39_2023-10-28T08-54-40",
     "pyronear-sdis-07_brison_39_2023-10-26T16-59-05",
     "pyronear-sdis-07_marguerite_185_2024-02-12T09-49-29",
-    "pyronear-sdis-07_marguerite_185_2023-10-31T11-01-44",
     "pyronear-sdis-07_marguerite_185_2024-02-26T17-02-02",
     "pyronear-sdis-07_marguerite_185_2023-09-12T09-06-02",
     "pyronear-sdis-07_marguerite_185_2024-02-26T14-02-33",
@@ -713,7 +711,6 @@
     "pyronear-test_st-peray_322_2023-08-29T17-41-04",
     "pyronear-sdis-77_croix-augas-01_327_2025-08-22T14-02-04",
     "pyronear-sdis-77_croix-augas-01_60_2025-08-31T18-30-46",
-    "pyronear-sdis-77_croix-augas-01_60_2025-08-24T05-45-06",
     "pyronear-sdis-77_moret-sur-loing-01_189_2025-08-08T04-11-36",
     "pyronear-sdis-77_nemours-02_291_2025-08-24T17-41-41",
     "pyronear-sdis-77_videlles-01_109_2025-08-01T04-40-35",
@@ -806,7 +803,6 @@
     "sdis-77_moret-sur-loing-02_359_2026-05-05T14-54-44",
     "sdis-77_moret-sur-loing-02_359_2026-05-08T04-02-41",
     "sdis-77_moret-sur-loing-02_359_2026-05-10T17-41-14",
-    "sdis-77_moret-sur-loing-02_359_2026-05-10T19-39-47",
     "sdis-77_moret-sur-loing-02_89_2026-05-10T19-34-47",
     "sdis-77_nemours-01_100_2026-05-10T14-13-35",
     "sdis-77_nemours-01_147_2026-05-05T16-06-53",
@@ -845,7 +841,6 @@
     "sdis-77_nemours-02_25_2026-05-10T19-25-23",
     "sdis-77_nemours-02_25_2026-05-11T12-01-39",
     "sdis-77_nemours-02_25_2026-05-11T12-07-39",
-    "sdis-77_nemours-02_291_2026-05-05T16-22-52",
     "sdis-77_nemours-02_291_2026-05-10T08-09-48",
     "sdis-77_nemours-02_291_2026-05-10T17-16-47",
     "sdis-77_nemours-02_291_2026-05-10T18-01-16",
@@ -861,6 +856,7 @@
     "sdis-77_videlles-01_157_2026-05-10T15-55-43",
     "sdis-77_videlles-01_157_2026-05-10T17-14-32",
     "sdis-77_videlles-01_157_2026-05-10T18-15-27",
-    "sdis-77_videlles-02_80_2026-05-08T06-08-00"
+    "sdis-77_videlles-02_80_2026-05-08T06-08-00",
+    "pyronear-sdis-07_brison_020_2024-02-05T16-52-10"
   ]
 }

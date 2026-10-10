@@ -2670,9 +2670,7 @@
       0.486
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [
-      "sis-67_haguenau-02_130_2026-07-03T10-11-39"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:51008"
     ],
@@ -2947,9 +2945,7 @@
       0.51
     ],
     "camera": "sdis-77_croix-augas-02",
-    "ingested_folders": [
-      "sdis-77_croix-augas-02_91_2026-07-06T15-45-58"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:51882"
     ],
@@ -2964,9 +2960,7 @@
       0.338
     ],
     "camera": "sis-67_haguenau-01",
-    "ingested_folders": [
-      "sis-67_haguenau-01_89_2026-07-07T07-48-01"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:52016"
     ],
@@ -2981,9 +2975,7 @@
       0.5195000000000001
     ],
     "camera": "sdis-77_nemours-02",
-    "ingested_folders": [
-      "sdis-77_nemours-02_232_2026-07-07T09-54-38"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:52047"
     ],
@@ -3084,9 +3076,7 @@
       0.396
     ],
     "camera": "sdis-77_nemours-01",
-    "ingested_folders": [
-      "sdis-77_nemours-01_142_2026-07-08T11-29-16"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:52410"
     ],
@@ -3663,9 +3653,7 @@
       0.401
     ],
     "camera": "sdis-91_chateau-eau-milly-la-foret-02",
-    "ingested_folders": [
-      "sdis-91_chateau-eau-milly-la-foret-02_3_2026-07-24T14-49-01"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:55394"
     ],
@@ -4004,9 +3992,7 @@
       0.451
     ],
     "camera": "sis-67_haguenau-02",
-    "ingested_folders": [
-      "sis-67_haguenau-02_280_2026-07-29T14-01-45"
-    ],
+    "ingested_folders": [],
     "seen_alerts": [
       "pyronear_french:56158",
       "pyronear_french:59669"
