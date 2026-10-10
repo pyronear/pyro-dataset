@@ -964,11 +964,6 @@
     "recurring_object": "ro_00139",
     "split": "train"
   },
-  "sdis-77_croix-augas-02_91_2026-07-06T15-45-58": {
-    "kind": "fp",
-    "recurring_object": "ro_00133",
-    "split": "train"
-  },
   "sdis-77_moret-sur-loing-01_126_2026-07-16T07-57-53": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -1128,11 +1123,6 @@
     "kind": "wildfire",
     "recurring_object": null,
     "split": "test"
-  },
-  "sdis-77_nemours-01_142_2026-07-08T11-29-16": {
-    "kind": "fp",
-    "recurring_object": "ro_00141",
-    "split": "train"
   },
   "sdis-77_nemours-01_153_2026-07-27T12-54-37": {
     "kind": "wildfire",
@@ -1333,11 +1323,6 @@
     "kind": "wildfire",
     "recurring_object": null,
     "split": "val"
-  },
-  "sdis-77_nemours-02_232_2026-07-07T09-54-38": {
-    "kind": "fp",
-    "recurring_object": "ro_00135",
-    "split": "train"
   },
   "sdis-77_nemours-02_242_2026-07-07T08-48-33": {
     "kind": "wildfire",
@@ -1812,11 +1797,6 @@
   "sdis-91_chateau-eau-milly-la-foret-02_359_2026-07-28T09-18-36": {
     "kind": "fp",
     "recurring_object": "ro_00183",
-    "split": "train"
-  },
-  "sdis-91_chateau-eau-milly-la-foret-02_3_2026-07-24T14-49-01": {
-    "kind": "fp",
-    "recurring_object": "ro_00175",
     "split": "train"
   },
   "sdis-91_chateau-eau-milly-la-foret-02_42_2026-07-16T14-56-46": {
@@ -3449,11 +3429,6 @@
     "recurring_object": "ro_00370",
     "split": "val"
   },
-  "sis-67_col-saverne-02_5_2026-07-25T13-15-01": {
-    "kind": "wildfire",
-    "recurring_object": null,
-    "split": "test"
-  },
   "sis-67_col-saverne-02_67_2026-08-13T12-51-39": {
     "kind": "wildfire",
     "recurring_object": null,
@@ -4224,11 +4199,6 @@
     "recurring_object": null,
     "split": "test"
   },
-  "sis-67_haguenau-01_89_2026-07-07T07-48-01": {
-    "kind": "fp",
-    "recurring_object": "ro_00134",
-    "split": "train"
-  },
   "sis-67_haguenau-01_94_2026-07-05T08-08-41": {
     "kind": "fp",
     "recurring_object": "ro_00247",
@@ -4303,11 +4273,6 @@
     "kind": "fp",
     "recurring_object": "ro_00326",
     "split": "train"
-  },
-  "sis-67_haguenau-02_130_2026-07-03T10-11-39": {
-    "kind": "fp",
-    "recurring_object": "ro_00117",
-    "split": "val"
   },
   "sis-67_haguenau-02_132_2026-07-04T13-34-48": {
     "kind": "wildfire",
@@ -4607,11 +4572,6 @@
   "sis-67_haguenau-02_279_2026-08-03T17-18-45": {
     "kind": "wildfire",
     "recurring_object": null,
-    "split": "train"
-  },
-  "sis-67_haguenau-02_280_2026-07-29T14-01-45": {
-    "kind": "fp",
-    "recurring_object": "ro_00195",
     "split": "train"
   },
   "sis-67_haguenau-02_281_2026-09-11T06-52-53": {
